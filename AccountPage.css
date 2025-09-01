@@ -1,9 +1,10 @@
-ody {
+html,body {
             font-family: 'Livvic', Arial, sans-serif;
             background-color: #ffffff;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            overflow: hidden;
         }
         
         /* Layout components */
