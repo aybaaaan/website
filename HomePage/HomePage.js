@@ -35,38 +35,76 @@ function scrollMenu(direction) {
     container.style.transform = `translateX(${offset}px)`;
 }
 
-
-
-function addToCart(name, price) {
-    let item = cart.find(f => f.name === name);
-    if (item) {
-        item.qty++;
-    } else {
-        cart.push({ name, price, qty: 1 });
-    }
+function removeFromCart(name) {
+    cart = cart.filter(item => item.name !== name);
     renderCart();
-    toggleCart();
 }
 
-function renderCart() {
-    let cartItems = document.getElementById("cartItems");
+// Add delete button to each cart item in renderCart
+const originalRenderCart = renderCart;
+renderCart = function() {
+    const cartItems = document.getElementById("cartItems");
     let total = 0;
 
     if (cart.length === 0) {
-        cartItems.innerHTML = "<p>Your cart is empty!</p>";
+        cartItems.innerHTML = `<li class="empty">Your cart is empty!</li>`;
     } else {
         cartItems.innerHTML = cart.map(item => {
-            total += item.price * item.qty;
-            return `<div class="cart-item">
-                        <p>${item.name} x${item.qty}</p>
-                        <p>Php ${item.price * item.qty}</p>
-                    </div>`;
+            const itemTotal = item.price * item.qty;
+            total += itemTotal;
+            return `
+                <li class="cart-item">
+                    <p><strong>${item.name}</strong> x${item.qty}</p>
+                    <p>Php ${formatPHP(itemTotal)}</p>
+                    <button class="remove-btn" onclick="removeFromCart('${item.name.replace(/'/g, "\\'")}')">Delete</button>
+                </li>
+            `;
         }).join("");
     }
 
-    document.getElementById("cartTotal").textContent = `Total: Php ${total}`;
+    document.getElementById("cartTotal").textContent = `Total: Php ${formatPHP(total)}`;
+};
+function addToCart(name, price) {
+  // accept 100 or "Php 100"
+  const cleanPrice = Number(String(price).replace(/[^0-9.]/g, "")) || 0;
+
+  const existing = cart.find(i => i.name === name);
+  if (existing) {
+    existing.qty += 1;                 // same item → bump qty
+  } else {
+    cart.push({ name, price: cleanPrice, qty: 1 });
+  }
+
+  renderCart();
+  // open the cart (avoid toggle so it doesn't close by accident)
+  document.getElementById("cartSidebar").classList.add("active");
 }
 
+function renderCart() {
+  const cartItems = document.getElementById("cartItems");
+  let total = 0;
+
+  if (cart.length === 0) {
+    cartItems.innerHTML = `<li class="empty">Your cart is empty!</li>`;
+  } else {
+    cartItems.innerHTML = cart.map(item => {
+      const itemTotal = item.price * item.qty;
+      total += itemTotal;
+      return `
+        <li class="cart-item">
+          <p><strong>${item.name}</strong> x${item.qty}</p>
+          <p>Php ${formatPHP(itemTotal)}</p>
+        </li>
+      `;
+    }).join("");
+  }
+
+  document.getElementById("cartTotal").textContent = `Total: Php ${formatPHP(total)}`;
+}
+
+function formatPHP(n) {
+  return Number(n).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
 
 
 
