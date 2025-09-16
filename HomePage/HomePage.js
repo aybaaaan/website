@@ -1,11 +1,11 @@
 // ===================== CAROUSEL (HOME) =====================
 document.addEventListener('DOMContentLoaded', function() {
-      const slides = document.querySelectorAll('.carousel-slide');
-      const indicators = document.querySelectorAll('.indicator');
-      const prevButton = document.querySelector('.carousel-prev');
-      const nextButton = document.querySelector('.carousel-next');
-      let currentSlide = 0;
-      const totalSlides = slides.length;
+  const slides = document.querySelectorAll('.carousel-slide');
+  const indicators = document.querySelectorAll('.indicator');
+  const prevButton = document.querySelector('.carousel-prev');
+  const nextButton = document.querySelector('.carousel-next');
+  let currentSlide = 0;
+  const totalSlides = slides.length;
 
   function showSlide(index) {
     // Hide all slides and deactivate indicators
