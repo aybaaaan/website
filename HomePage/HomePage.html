@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="HomePage.css" />
-    <title>Food Restaurant Landing Page</title>
+    <title>Food Restaurant Home Page</title>
 </head>
 <body>
     <div class="main-container">
@@ -61,51 +61,92 @@
     </section>
 
         <!-- ================= MENU ================= -->
-            <section id="menu" class="menu-section">
+        <section id="menu" class="menu-section">
         <h2 class="menu-title">Menu</h2>
         
         <div class="menu-cards-container" id="menuCardsContainer">
             <div class="menu-cards" id="menuCards">
-                <div class="menu-card">
-                    <img src="https://imgs.search.brave.com/nXCU44AV204X_WV5UV6Fgy5nPDp026VUoUXdmMvDqKE/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS50aGVldmVyeWdp/cmwuY29tL3dwLWNv/bnRlbnQvdXBsb2Fk/cy8yMDE4LzA4L21l/ZGl0ZXJyYW5lYW4t/ZGlldC1yZWNpcGVz/LXlvdS1jYW4tbWVh/bC1wcmVwLTEuanBn" alt="Food 1">
-                    <div class="card-content">
-                        <h3 class="card-title">Meatball Herb Pasta</h3>
-                        <!--<p class="card-description">Description</p>-->
-                        <button class="order-btn" onclick="addToCart('Meatball Herb Pasta', 145)">Order</button>
-                    </div>
+
+            <!-- Food 1 -->
+            <div class="menu-card">
+                <img src="https://imgs.search.brave.com/nXCU44AV204X_WV5UV6Fgy5nPDp026VUoUXdmMvDqKE/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS50aGVldmVyeWdp/cmwuY29tL3dwLWNv/bnRlbnQvdXBsb2Fk/cy8yMDE4LzA4L21l/ZGl0ZXJyYW5lYW4t/ZGlldC1yZWNpcGVz/LXlvdS1jYW4tbWVh/bC1wcmVwLTEuanBn" 
+                    alt="Food 1">
+                <div class="card-content">
+                <h3 class="card-title">Meatball Herb Pasta</h3>
+                <button class="order-btn" 
+                    onclick="goToDetails(
+                    'Meatball Herb Pasta',
+                    145,
+                    'https://imgs.search.brave.com/nXCU44AV204X_WV5UV6Fgy5nPDp026VUoUXdmMvDqKE/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS50aGVldmVyeWdp/cmwuY29tL3dwLWNv/bnRlbnQvdXBsb2Fk/cy8yMDE4LzA4L21l/ZGl0ZXJyYW5lYW4t/ZGlldC1yZWNpcGVz/LXlvdS1jYW4tbWVh/bC1wcmVwLTEuanBn',
+                    'Savory meatballs with fresh herbs and pasta.'
+                    )">Order</button>
                 </div>
-                <div class="menu-card">
-                    <img src="https://imgs.search.brave.com/e0Zx7R1BpRxDWQ_G1NhY2Dlx-sc0eTe6RayAPEVHZxM/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS50aGVldmVyeWdp/cmwuY29tL3dwLWNv/bnRlbnQvdXBsb2Fk/cy8yMDE4LzA4L21l/ZGl0ZXJyYW5lYW4t/ZGlldC1yZWNpcGVz/LXlvdS1jYW4tbWVh/bC1wcmVwLTcuanBn" alt="Food 3">
-                    <div class="card-content">
-                        <h3 class="card-title">Mediterranean Shrimp</h3>
-                        <!--<p class="card-description">Description</p>-->
-                        <button class="order-btn" onclick="addToCart('Mediterranean Shrimp', 200)">Order</button>
-                    </div>
+            </div>
+
+            <!-- Food 2 -->
+            <div class="menu-card">
+                <img src="https://imgs.search.brave.com/e0Zx7R1BpRxDWQ_G1NhY2Dlx-sc0eTe6RayAPEVHZxM/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS50aGVldmVyeWdp/cmwuY29tL3dwLWNv/bnRlbnQvdXBsb2Fk/cy8yMDE4LzA4L21l/ZGl0ZXJyYW5lYW4t/ZGlldC1yZWNpcGVz/LXlvdS1jYW4tbWVh/bC1wcmVwLTcuanBn" 
+                    alt="Food 2">
+                <div class="card-content">
+                <h3 class="card-title">Mediterranean Shrimp</h3>
+                <button class="order-btn" 
+                    onclick="goToDetails(
+                    'Mediterranean Shrimp',
+                    200,
+                    'https://imgs.search.brave.com/e0Zx7R1BpRxDWQ_G1NhY2Dlx-sc0eTe6RayAPEVHZxM/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS50aGVldmVyeWdp/cmwuY29tL3dwLWNv/bnRlbnQvdXBsb2Fk/cy8yMDE4LzA4L21l/ZGl0ZXJyYW5lYW4t/ZGlldC1yZWNpcGVz/LXlvdS1jYW4tbWVh/bC1wcmVwLTcuanBn',
+                    'Juicy shrimp cooked Mediterranean style with spices.'
+                    )">Order</button>
                 </div>
-                <div class="menu-card">
-                    <img src="https://media.theeverygirl.com/wp-content/uploads/2018/08/mediterranean-diet-recipes-you-can-meal-prep-4.jpg" alt="Food 2">
-                    <div class="card-content">
-                        <h3 class="card-title">Ground Beef Stir Fry</h3>
-                        <!--<p class="card-description">Description</p>-->
-                        <button class="order-btn" onclick="addToCart('Ground Beef Stir Fry', 175)">Order</button>
-                    </div>
+            </div>
+
+            <!-- Food 3 -->
+            <div class="menu-card">
+                <img src="https://media.theeverygirl.com/wp-content/uploads/2018/08/mediterranean-diet-recipes-you-can-meal-prep-4.jpg" 
+                    alt="Food 3">
+                <div class="card-content">
+                <h3 class="card-title">Ground Beef Stir Fry</h3>
+                <button class="order-btn" 
+                    onclick="goToDetails(
+                    'Ground Beef Stir Fry',
+                    175,
+                    'https://media.theeverygirl.com/wp-content/uploads/2018/08/mediterranean-diet-recipes-you-can-meal-prep-4.jpg',
+                    'Stir-fried ground beef with veggies and Mediterranean seasoning.'
+                    )">Order</button>
                 </div>
-                <div class="menu-card">
-                    <img src="https://imgs.search.brave.com/Vpt9X8Z-ODEmqmdDV6Q7eAVSJDCthEtm3-mnuN_6yLQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/c25kaW1nLmNvbS9m/b29kL2ltYWdlL3Vw/bG9hZC93XzU1NSxo/XzQxNixjX2ZpdCxm/bF9wcm9ncmVzc2l2/ZSxxXzk1L3YxL2lt/Zy9yZWNpcGVzLzUz/LzcyLzQ5L01ZMFBX/RVduU0pLelh1Q3Ri/aUlQX01lZGl0ZXJy/YW5lYW4lMjBDaG9w/cGVkJTIwU2FsYWQt/OC5qcGc" alt="Food 4">
-                    <div class="card-content">
-                        <h3 class="card-title">Chopped Salad</h3>
-                        <!--<p class="card-description">Description</p> -->
-                        <button class="order-btn" onclick="addToCart('Chopped Salad', 220)">Order</button>
-                    </div>
+            </div>
+
+            <!-- Food 4 -->
+            <div class="menu-card">
+                <img src="https://imgs.search.brave.com/Vpt9X8Z-ODEmqmdDV6Q7eAVSJDCthEtm3-mnuN_6yLQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/c25kaW1nLmNvbS9m/b29kL2ltYWdlL3Vw/bG9hZC93XzU1NSxo/XzQxNixjX2ZpdCxm/bF9wcm9ncmVzc2l2/ZSxxXzk1L3YxL2lt/Zy9yZWNpcGVzLzUz/LzcyLzQ5L01ZMFBX/RVduU0pLelh1Q3Ri/aUlQX01lZGl0ZXJy/YW5lYW4lMjBDaG9w/cGVkJTIwU2FsYWQt/OC5qcGc" 
+                    alt="Food 4">
+                <div class="card-content">
+                <h3 class="card-title">Chopped Salad</h3>
+                <button class="order-btn" 
+                    onclick="goToDetails(
+                    'Chopped Salad',
+                    220,
+                    'https://imgs.search.brave.com/Vpt9X8Z-ODEmqmdDV6Q7eAVSJDCthEtm3-mnuN_6yLQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/c25kaW1nLmNvbS9m/b29kL2ltYWdlL3Vw/bG9hZC93XzU1NSxo/XzQxNixjX2ZpdCxm/bF9wcm9ncmVzc2l2/ZSxxXzk1L3YxL2lt/Zy9yZWNpcGVzLzUz/LzcyLzQ5L01ZMFBX/RVduU0pLelh1Q3Ri/aUlQX01lZGl0ZXJy/YW5lYW4lMjBDaG9w/cGVkJTIwU2FsYWQt/OC5qcGc',
+                    'Fresh chopped salad with veggies, herbs, and dressing.'
+                    )">Order</button>
                 </div>
-                <div class="menu-card">
-                    <img src="https://imgs.search.brave.com/0ERiwkay7a4di8k7zgOV_hAGrpfT7jGc0Ndn-lGjzUM/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/c25kaW1nLmNvbS9m/b29kL2ltYWdlL3Vw/bG9hZC93XzU1NSxo/XzQxNixjX2ZpdCxm/bF9wcm9ncmVzc2l2/ZSxxXzk1L3YxL2lt/Zy9yZWNpcGVzLzIy/Lzk5LzQ4LzBudHpH/SzNUVDgyNU5hUkxS/VkVqX2RlY2VtYmVy/JTIwYmF0Y2gtNS5q/cGc" alt="Food 5">
-                    <div class="card-content">
-                        <h3 class="card-title">Balsamic Mushrooms</h3>
-                        <!--<p class="card-description">Description</p>-->
-                        <button class="order-btn" onclick="addToCart('Balsamic Mushrooms', 180)">Order</button>
-                    </div>
+            </div>
+
+            <!-- Food 5 -->
+            <div class="menu-card">
+                <img src="https://imgs.search.brave.com/0ERiwkay7a4di8k7zgOV_hAGrpfT7jGc0Ndn-lGjzUM/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/c25kaW1nLmNvbS9m/b29kL2ltYWdlL3Vw/bG9hZC93XzU1NSxo/XzQxNixjX2ZpdCxm/bF9wcm9ncmVzc2l2/ZSxxXzk1L3YxL2lt/Zy9yZWNpcGVzLzIy/Lzk5LzQ4LzBudHpH/SzNUVDgyNU5hUkxS/VkVqX2RlY2VtYmVy/JTIwYmF0Y2gtNS5q/cGc" 
+                    alt="Food 5">
+                <div class="card-content">
+                <h3 class="card-title">Balsamic Mushrooms</h3>
+                <button class="order-btn" 
+                    onclick="goToDetails(
+                    'Balsamic Mushrooms',
+                    180,
+                    'https://imgs.search.brave.com/0ERiwkay7a4di8k7zgOV_hAGrpfT7jGc0Ndn-lGjzUM/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/c25kaW1nLmNvbS9m/b29kL2ltYWdlL3Vw/bG9hZC93XzU1NSxo/XzQxNixjX2ZpdCxm/bF9wcm9ncmVzc2l2/ZSxxXzk1L3YxL2lt/Zy9yZWNpcGVzLzIy/Lzk5LzQ4LzBudHpH/SzNUVDgyNU5hUkxS/VkVqX2RlY2VtYmVy/JTIwYmF0Y2gtNS5q/cGc',
+                    'Mushrooms sautéed with balsamic glaze and Mediterranean spices.'
+                    )">Order</button>
                 </div>
+            </div>
+
             </div>
         </div>
 
@@ -115,16 +156,6 @@
             <button class="scroll-btn" onclick="scrollMenu(1)">&#8250;</button>
         </div>
     </section>
-
-            
-           <!-- Unneccessary
-                <div class="menu-indicators">
-                <div class="indicator-line indicator-active"></div>
-                <div class="indicator-line indicator-inactive"></div>
-            </div>
-            -->
-            
-        </section>
         
         <!-- ================= ABOUT ================= -->
         <section id="about" class="sample-food-section">
@@ -186,7 +217,6 @@
         </div>
     </div>
 
-    ================= JAVASCRIPT ================= 
-    <script src="CustomerHomePage.js"></script>-->
+
 </body>
 </html>

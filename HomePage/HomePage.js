@@ -53,7 +53,53 @@ document.addEventListener('DOMContentLoaded', function() {
 
 let cart = [];
 
-//when clicking the cart icon
+//food details page
+
+//when clicking the Food Details button
+function goToDetails(name, price, img, desc) {
+  localStorage.setItem("foodName", name);
+  localStorage.setItem("foodPrice", price);
+  localStorage.setItem("foodImg", img);
+  localStorage.setItem("foodDesc", desc); // Placeholder description
+  window.location.href = "../FoodDetails/FoodDetails.html"; 
+}
+
+//back to menu from home
+document.addEventListener("DOMContentLoaded", () => {
+  const params = new URLSearchParams(window.location.search);
+  const active = params.get("active");
+
+  if (active === "menu") {
+    const menuLink = document.querySelector(".nav-item[href='#menu']");
+    if (menuLink) {
+      menuLink.classList.add("active");
+    }
+  }
+});
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  renderCart(); // kapag bumalik galing FoodDetails, cart will persist
+});
+
+function renderCart() {
+  const cartItemsContainer = document.getElementById("cartItems");
+  if (!cartItemsContainer) return;
+
+  cartItemsContainer.innerHTML = "";
+  const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+  cart.forEach(item => {
+    const li = document.createElement("li");
+    li.textContent = `${item.qty} x ${item.name} - Php ${item.price * item.qty}`;
+    cartItemsContainer.appendChild(li);
+  });
+}
+
+
+
+
+//when clicking the cart icons
 function toggleCart() {
     document.getElementById("cartSidebar").classList.toggle("active");
     //renderCart(); - no interface pa
@@ -89,8 +135,10 @@ function scrollMenu(direction) {
 }
 
 function removeFromCart(name) {
-    cart = cart.filter(item => item.name !== name);
-    renderCart();
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+  cart = cart.filter(item => item.name !== name);
+  localStorage.setItem("cart", JSON.stringify(cart));
+  renderCart();
 }
 
 // Add delete button to each cart item in renderCart
@@ -117,25 +165,32 @@ renderCart = function() {
 
     document.getElementById("cartTotal").textContent = `Total: Php ${formatPHP(total)}`;
 };
+
 function addToCart(name, price) {
-  // accept 100 or "Php 100"
   const cleanPrice = Number(String(price).replace(/[^0-9.]/g, "")) || 0;
+
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
   const existing = cart.find(i => i.name === name);
   if (existing) {
-    existing.qty += 1;                 // same item → bump qty
+    existing.qty += 1;
   } else {
     cart.push({ name, price: cleanPrice, qty: 1 });
   }
 
+  localStorage.setItem("cart", JSON.stringify(cart));
+
   renderCart();
-  // open the cart (avoid toggle so it doesn't close by accident)
   document.getElementById("cartSidebar").classList.add("active");
 }
+
 
 function renderCart() {
   const cartItems = document.getElementById("cartItems");
   let total = 0;
+
+  // always pull fresh from localStorage
+  const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
   if (cart.length === 0) {
     cartItems.innerHTML = `<li class="empty">Your cart is empty!</li>`;
@@ -147,6 +202,7 @@ function renderCart() {
         <li class="cart-item">
           <p><strong>${item.name}</strong> x${item.qty}</p>
           <p>Php ${formatPHP(itemTotal)}</p>
+          <button class="remove-btn" onclick="removeFromCart('${item.name.replace(/'/g, "\\'")}')">Delete</button>
         </li>
       `;
     }).join("");
