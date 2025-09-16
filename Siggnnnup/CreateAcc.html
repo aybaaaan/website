@@ -1,56 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login Account</title>
-    <link rel="stylesheet" href="LoginPage.css" />
-    <script type="module" src="LoginPage.js" defer></script>
+    <title>Create Account</title>
+    <link rel="stylesheet" href="CreateAcc.css" />
 </head>
-
 <body>
     <div class="main-container">
         <header class="header">
             <div class="logo">Mediterrnean In Velvet</div>
             
+            <button class="hamburger mobile-only">☰</button>
+            
+            <nav class="nav-menu desktop-only">
+                <a href="#" class="nav-item" role="menuitem">Home</a>
+                <a href="#" class="nav-item" role="menuitem">Menu</a>
+                <a href="#" class="nav-item" role="menuitem">About</a>
+                <a href="#" class="nav-item" role="menuitem">Contact</a>
+            </nav>
+            
+            <div class="header-actions">
+                <a href="#" class="action-btn" role="menuitem">Cart</a>
+                <a href="#" class="action-btn" role="menuitem">Account</a>
+            </div>
         </header>
-
+        
         <main class="Login-container">
-            <h1 class="form-title">Login to Your Account</h1>
-
+            <h1 class="form-title">Create Your Account</h1>
+            
             <div class="form-content">
                 <form class="form-fields">
-                    <input type="email" class="form-input" placeholder="Email/Username" id="email" required />
-                    <input type="password" class="form-input" placeholder="Password" id="password" required />
+                    <input type="email" class="form-input" placeholder="Email/Username" required />
+                    <input type="password" class="form-input" placeholder="Password" required />
                 </form>
-
-                <button type="submit" id="submit" class="signup-btn">LOG IN</button>
-
+                
+                <button type="submit" class="signup-btn">LOG IN</button>
+                
                 <p class="signup-link">
-                    Don't have an account?
-                    <a href="/SIGNUP/SignUpPage.html">Sign Up</a>
+                    Already Have An Account? <a href="#">Sign In</a>
                 </p>
             </div>
         </main>
-
+        
         <footer class="footer">
             <div class="footer-content">
                 <div class="footer-row">
                     <span class="footer-text">LOGO</span>
                     <span class="footer-text">Home</span>
                 </div>
-
+                
                 <div class="footer-row">
                     <span class="footer-text left">Contacts and links</span>
                     <span class="footer-text">Menu</span>
                 </div>
-
+                
                 <div class="footer-row">
                     <span class="footer-text left">number</span>
                     <span class="footer-text right">About</span>
                 </div>
-
+                
                 <div class="footer-row">
                     <span class="footer-text left">fb, x(twt), ig</span>
                     <span class="footer-text">Contact</span>
@@ -59,5 +68,4 @@
         </footer>
     </div>
 </body>
-
 </html>
