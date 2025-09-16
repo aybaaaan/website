@@ -1,20 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="HomePage.css" />
     <title>Food Restaurant Landing Page</title>
 </head>
+
 <body>
     <div class="main-container">
         <!-- ================= HEADER ================= -->
         <header class="header">
             <div class="header-content">
                 <div class="logo">Mediterranean In Velvet</div>
-                
+
                 <button class="hamburger" id="hamburgerBtn">☰</button>
-                
+
                 <nav class="nav-menu">
                     <a href="#home" class="nav-item">Home</a>
                     <a href="#menu" class="nav-item">Menu</a>
@@ -27,126 +29,132 @@
                 </div>
             </div>
         </header>
-        
+
         <!-- ================= HOME ================= -->
         <section id="home" class="home-section">
-        <div class="home-content">
-            <h1 class="food-title">Mediterranean</h1>
-
-             <div class="carousel-slide active">
-            <div class="sample-image">Mediterranean Signature Dish</div>
-          </div>
-          <div class="carousel-slide">
-            <div class="sample-image">Fresh Mediterranean Ingredients</div>
-          </div>
-          <div class="carousel-slide">
-            <div class="sample-image">Authentic Mediterranean Experience</div>
-          </div>
-
-
-           <!-- <p class="food-description">Description</p> -->
-        </div>
-            
-                      <!-- Navigation arrows -->
-          <button class="carousel-nav carousel-prev" aria-label="Previous image">‹</button>
-          <button class="carousel-nav carousel-next" aria-label="Next image">›</button>
-          
-          <!-- Indicators -->
-          <div class="carousel-indicators">
-            <span class="indicator active" data-slide="0"></span>
-            <span class="indicator" data-slide="1"></span>
-            <span class="indicator" data-slide="2"></span>
-          </div>
-        </div>
-    </section>
-
-        <!-- ================= MENU ================= -->
-            <section id="menu" class="menu-section">
-        <h2 class="menu-title">Menu</h2>
-        
-        <div class="menu-cards-container" id="menuCardsContainer">
-            <div class="menu-cards" id="menuCards">
-                <div class="menu-card">
-                    <img src="https://imgs.search.brave.com/nXCU44AV204X_WV5UV6Fgy5nPDp026VUoUXdmMvDqKE/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS50aGVldmVyeWdp/cmwuY29tL3dwLWNv/bnRlbnQvdXBsb2Fk/cy8yMDE4LzA4L21l/ZGl0ZXJyYW5lYW4t/ZGlldC1yZWNpcGVz/LXlvdS1jYW4tbWVh/bC1wcmVwLTEuanBn" alt="Food 1">
-                    <div class="card-content">
-                        <h3 class="card-title">Meatball Herb Pasta</h3>
-                        <!--<p class="card-description">Description</p>-->
-                        <button class="order-btn" onclick="addToCart('Meatball Herb Pasta', 145)">Order</button>
+            <div class="home-content">
+                <div class="carousel-container">
+                    <h1 class="food-title">Mediterranean</h1>
+                    <div class="carousel-item active">
+                        <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1470&q=80"
+                            alt="Delicious Dish 1">
+                    </div> 
+                    <div class="carousel-item">
+                        <img src="https://i.pinimg.com/1200x/cd/8a/cc/cd8acc2cd3e823abfc1b8b98a87a2c11.jpg"
+                            alt="Dish 2">
                     </div>
-                </div>
-                <div class="menu-card">
-                    <img src="https://imgs.search.brave.com/e0Zx7R1BpRxDWQ_G1NhY2Dlx-sc0eTe6RayAPEVHZxM/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS50aGVldmVyeWdp/cmwuY29tL3dwLWNv/bnRlbnQvdXBsb2Fk/cy8yMDE4LzA4L21l/ZGl0ZXJyYW5lYW4t/ZGlldC1yZWNpcGVz/LXlvdS1jYW4tbWVh/bC1wcmVwLTcuanBn" alt="Food 3">
-                    <div class="card-content">
-                        <h3 class="card-title">Mediterranean Shrimp</h3>
-                        <!--<p class="card-description">Description</p>-->
-                        <button class="order-btn" onclick="addToCart('Mediterranean Shrimp', 200)">Order</button>
-                    </div>
-                </div>
-                <div class="menu-card">
-                    <img src="https://media.theeverygirl.com/wp-content/uploads/2018/08/mediterranean-diet-recipes-you-can-meal-prep-4.jpg" alt="Food 2">
-                    <div class="card-content">
-                        <h3 class="card-title">Ground Beef Stir Fry</h3>
-                        <!--<p class="card-description">Description</p>-->
-                        <button class="order-btn" onclick="addToCart('Ground Beef Stir Fry', 175)">Order</button>
-                    </div>
-                </div>
-                <div class="menu-card">
-                    <img src="https://imgs.search.brave.com/Vpt9X8Z-ODEmqmdDV6Q7eAVSJDCthEtm3-mnuN_6yLQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/c25kaW1nLmNvbS9m/b29kL2ltYWdlL3Vw/bG9hZC93XzU1NSxo/XzQxNixjX2ZpdCxm/bF9wcm9ncmVzc2l2/ZSxxXzk1L3YxL2lt/Zy9yZWNpcGVzLzUz/LzcyLzQ5L01ZMFBX/RVduU0pLelh1Q3Ri/aUlQX01lZGl0ZXJy/YW5lYW4lMjBDaG9w/cGVkJTIwU2FsYWQt/OC5qcGc" alt="Food 4">
-                    <div class="card-content">
-                        <h3 class="card-title">Chopped Salad</h3>
-                        <!--<p class="card-description">Description</p> -->
-                        <button class="order-btn" onclick="addToCart('Chopped Salad', 220)">Order</button>
-                    </div>
-                </div>
-                <div class="menu-card">
-                    <img src="https://imgs.search.brave.com/0ERiwkay7a4di8k7zgOV_hAGrpfT7jGc0Ndn-lGjzUM/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/c25kaW1nLmNvbS9m/b29kL2ltYWdlL3Vw/bG9hZC93XzU1NSxo/XzQxNixjX2ZpdCxm/bF9wcm9ncmVzc2l2/ZSxxXzk1L3YxL2lt/Zy9yZWNpcGVzLzIy/Lzk5LzQ4LzBudHpH/SzNUVDgyNU5hUkxS/VkVqX2RlY2VtYmVy/JTIwYmF0Y2gtNS5q/cGc" alt="Food 5">
-                    <div class="card-content">
-                        <h3 class="card-title">Balsamic Mushrooms</h3>
-                        <!--<p class="card-description">Description</p>-->
-                        <button class="order-btn" onclick="addToCart('Balsamic Mushrooms', 180)">Order</button>
+
+                    <div class="carousel-item">
+                        <img src="https://i.pinimg.com/736x/ce/73/e0/ce73e0867e47f93d068762b6841f9856.jpg"
+                            alt="Dish 3">
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Arrows -->
-        <div class="menu-scroll-controls">
-            <button class="scroll-btn" onclick="scrollMenu(-1)">&#8249;</button>
-            <button class="scroll-btn" onclick="scrollMenu(1)">&#8250;</button>
-        </div>
-    </section>
+            <!-- Navigation arrows -->
+            <button class="carousel-nav carousel-prev" aria-label="Previous image">‹</button>
+            <button class="carousel-nav carousel-next" aria-label="Next image">›</button>
 
-            
-           <!-- Unneccessary
+            <!-- Indicators -->
+            <div class="carousel-indicators">
+                <span class="indicator active" data-slide="0"></span>
+                <span class="indicator" data-slide="1"></span>
+                <span class="indicator" data-slide="2"></span>
+            </div>
+        </section>
+
+        <!-- ================= MENU ================= -->
+        <section id="menu" class="menu-section">
+            <h2 class="menu-title">Menu</h2>
+
+            <div class="menu-cards-container" id="menuCardsContainer">
+                <div class="menu-cards" id="menuCards">
+                    <div class="menu-card">
+                        <img src="https://imgs.search.brave.com/nXCU44AV204X_WV5UV6Fgy5nPDp026VUoUXdmMvDqKE/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS50aGVldmVyeWdp/cmwuY29tL3dwLWNv/bnRlbnQvdXBsb2Fk/cy8yMDE4LzA4L21l/ZGl0ZXJyYW5lYW4t/ZGlldC1yZWNpcGVz/LXlvdS1jYW4tbWVh/bC1wcmVwLTEuanBn"
+                            alt="Food 1">
+                        <div class="card-content">
+                            <h3 class="card-title">Meatball Herb Pasta</h3>
+                            <!--<p class="card-description">Description</p>-->
+                            <button class="order-btn" onclick="addToCart('Meatball Herb Pasta', 145)">Order</button>
+                        </div>
+                    </div>
+                    <div class="menu-card">
+                        <img src="https://imgs.search.brave.com/e0Zx7R1BpRxDWQ_G1NhY2Dlx-sc0eTe6RayAPEVHZxM/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS50aGVldmVyeWdp/cmwuY29tL3dwLWNv/bnRlbnQvdXBsb2Fk/cy8yMDE4LzA4L21l/ZGl0ZXJyYW5lYW4t/ZGlldC1yZWNpcGVz/LXlvdS1jYW4tbWVh/bC1wcmVwLTcuanBn"
+                            alt="Food 3">
+                        <div class="card-content">
+                            <h3 class="card-title">Mediterranean Shrimp</h3>
+                            <!--<p class="card-description">Description</p>-->
+                            <button class="order-btn" onclick="addToCart('Mediterranean Shrimp', 200)">Order</button>
+                        </div>
+                    </div>
+                    <div class="menu-card">
+                        <img src="https://media.theeverygirl.com/wp-content/uploads/2018/08/mediterranean-diet-recipes-you-can-meal-prep-4.jpg"
+                            alt="Food 2">
+                        <div class="card-content">
+                            <h3 class="card-title">Ground Beef Stir Fry</h3>
+                            <!--<p class="card-description">Description</p>-->
+                            <button class="order-btn" onclick="addToCart('Ground Beef Stir Fry', 175)">Order</button>
+                        </div>
+                    </div>
+                    <div class="menu-card">
+                        <img src="https://imgs.search.brave.com/Vpt9X8Z-ODEmqmdDV6Q7eAVSJDCthEtm3-mnuN_6yLQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/c25kaW1nLmNvbS9m/b29kL2ltYWdlL3Vw/bG9hZC93XzU1NSxo/XzQxNixjX2ZpdCxm/bF9wcm9ncmVzc2l2/ZSxxXzk1L3YxL2lt/Zy9yZWNpcGVzLzUz/LzcyLzQ5L01ZMFBX/RVduU0pLelh1Q3Ri/aUlQX01lZGl0ZXJy/YW5lYW4lMjBDaG9w/cGVkJTIwU2FsYWQt/OC5qcGc"
+                            alt="Food 4">
+                        <div class="card-content">
+                            <h3 class="card-title">Chopped Salad</h3>
+                            <!--<p class="card-description">Description</p> -->
+                            <button class="order-btn" onclick="addToCart('Chopped Salad', 220)">Order</button>
+                        </div>
+                    </div>
+                    <div class="menu-card">
+                        <img src="https://imgs.search.brave.com/0ERiwkay7a4di8k7zgOV_hAGrpfT7jGc0Ndn-lGjzUM/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/c25kaW1nLmNvbS9m/b29kL2ltYWdlL3Vw/bG9hZC93XzU1NSxo/XzQxNixjX2ZpdCxm/bF9wcm9ncmVzc2l2/ZSxxXzk1L3YxL2lt/Zy9yZWNpcGVzLzIy/Lzk5LzQ4LzBudHpH/SzNUVDgyNU5hUkxS/VkVqX2RlY2VtYmVy/JTIwYmF0Y2gtNS5q/cGc"
+                            alt="Food 5">
+                        <div class="card-content">
+                            <h3 class="card-title">Balsamic Mushrooms</h3>
+                            <!--<p class="card-description">Description</p>-->
+                            <button class="order-btn" onclick="addToCart('Balsamic Mushrooms', 180)">Order</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Arrows -->
+            <div class="menu-scroll-controls">
+                <button class="scroll-btn" onclick="scrollMenu(-1)">&#8249;</button>
+                <button class="scroll-btn" onclick="scrollMenu(1)">&#8250;</button>
+            </div>
+        </section>
+
+
+        <!-- Unneccessary
                 <div class="menu-indicators">
                 <div class="indicator-line indicator-active"></div>
                 <div class="indicator-line indicator-inactive"></div>
             </div>
             -->
-            
+
         </section>
-        
+
         <!-- ================= ABOUT ================= -->
         <section id="about" class="sample-food-section">
             <h2>About Us</h2>
-            <p class="sample-food-text">Mediterranean in Velvet offers authentic flavors with modern touches. 
+            <p class="sample-food-text">Mediterranean in Velvet offers authentic flavors with modern touches.
                 Our goal is to bring comfort and taste to every plate we serve.</p>
         </section>
-        
+
         <!-- ================= FOOTER / CONTACT ================= -->
         <footer id="contact" class="footer">
             <div class="footer-content">
                 <div class="footer-brand">
                     <div class="footer-logo">Mediterranean In Velvet</div>
                 </div>
-                
+
                 <div class="footer-actions">
                     <div class="social-buttons">
                         <button class="social-btn">FB</button>
                         <button class="social-btn">IG</button>
                         <button class="support-btn">Customer Service</button>
                     </div>
-                    
+
                     <div class="contact-info">
                         <p class="contact-text">Wanna Contact us?</p>
                         <p class="contact-text">Number 018394101974109</p>
@@ -157,18 +165,18 @@
         </footer>
     </div>
 
-  <!-- Cart Sidebar -->
-  <div id="cartSidebar" class="cart-sidebar">
-    <button id="closeCart" class="close-btn">&times;</button>
-    <h2>Your Cart</h2>
-    <ul id="cartItems">
-      <li>No items in cart</li>
-    </ul>
-    <p id="cartTotal">Total: Php 0</p>
-    <button class="checkout-btn">Checkout</button>
-  </div>
+    <!-- Cart Sidebar -->
+    <div id="cartSidebar" class="cart-sidebar">
+        <button id="closeCart" class="close-btn">&times;</button>
+        <h2>Your Cart</h2>
+        <ul id="cartItems">
+            <li>No items in cart</li>
+        </ul>
+        <p id="cartTotal">Total: Php 0</p>
+        <button class="checkout-btn">Checkout</button>
+    </div>
 
-  <script src="HomePage.js"></script>
+    <script src="HomePage.js"></script>
 
     <!-- ================= REVIEW ORDER PAGE ================= -->
     <!--<div id="reviewOrderPage" class="review-order hidden">
@@ -189,4 +197,5 @@
     ================= JAVASCRIPT ================= 
     <script src="CustomerHomePage.js"></script>-->
 </body>
+
 </html>

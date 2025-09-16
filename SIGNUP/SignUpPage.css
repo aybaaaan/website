@@ -1,12 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel = "stylesheet" href="AccountPage.css" />
-    <title>LOGO - Create Account</title>
-    <style>
-        /* Reset and base styles */
+/* Reset and base styles */
         * {
             margin: 0;
             padding: 0;
@@ -25,7 +17,7 @@
         .main-container {
             display: flex;
             flex-direction: column;
-            justify-content: flex-start;
+            justify-content: cen;
             align-items: center;
             width: 100%;
             flex: 1;
@@ -202,19 +194,13 @@
         
         @media (min-width: 768px) {
             .registration-container {
-                width: 60%;
-                max-width: 500px;
-                padding: 38px;
-                gap: 22px;
+                
             }
         }
         
         @media (min-width: 1024px) {
             .registration-container {
-                width: 44%;
-                max-width: 600px;
-                padding: 48px;
-                gap: 28px;
+                
             }
         }
         
@@ -399,12 +385,12 @@
         
         /* Footer */
         .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
             width: 100%;
+            z-index: 100;
             background-color: #6e8e6b;
-            padding: 19px 34px 19px 50px;
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
         }
         
         @media (min-width: 768px) {
@@ -583,69 +569,3 @@
                 display: block;
             }
         }
-    </style>
-</head>
-<body>
-    <div class="main-container">
-        <header class="header">
-            <div class="logo">LOGO</div>
-            
-            <button class="hamburger mobile-only">☰</button>
-            
-            <nav class="nav-menu desktop-only">
-                <a href="#" class="nav-item" role="menuitem">Home</a>
-                <a href="#" class="nav-item" role="menuitem">Menu</a>
-                <a href="#" class="nav-item" role="menuitem">About</a>
-                <a href="#" class="nav-item" role="menuitem">Contact</a>
-            </nav>
-            
-            <div class="header-actions">
-                <a href="#" class="action-btn" role="menuitem">cart?</a>
-                <a href="#" class="action-btn" role="menuitem">account?</a>
-            </div>
-        </header>
-        
-        <main class="registration-container">
-            <h1 class="form-title">Create an Account</h1>
-            
-            <div class="form-content">
-                <form class="form-fields">
-                    <input type="email" class="form-input" placeholder="Email/Username" required />
-                    <input type="password" class="form-input" placeholder="Password" required />
-                    <input type="password" class="form-input" placeholder="Confirm Password" required />
-                </form>
-                
-                <button type="submit" class="signup-btn">SIGN UP</button>
-                
-                <p class="signin-link">
-                    Already had an account? <a href="#">Sign In</a>
-                </p>
-            </div>
-        </main>
-        
-        <footer class="footer">
-            <div class="footer-content">
-                <div class="footer-row">
-                    <span class="footer-text">LOGO</span>
-                    <span class="footer-text">Home</span>
-                </div>
-                
-                <div class="footer-row">
-                    <span class="footer-text left">Contacts and links</span>
-                    <span class="footer-text">Menu</span>
-                </div>
-                
-                <div class="footer-row">
-                    <span class="footer-text left">number</span>
-                    <span class="footer-text right">About</span>
-                </div>
-                
-                <div class="footer-row">
-                    <span class="footer-text left">fb, x(twt), ig</span>
-                    <span class="footer-text">Contact</span>
-                </div>
-            </div>
-        </footer>
-    </div>
-</body>
-</html>

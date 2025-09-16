@@ -1,56 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>LOGO - Login Account</title>
-    <link rel="stylesheet" href="LoginPage.css" />
-    <script type="module" src="LoginPage.js" defer></script>
+    <link rel = "stylesheet" href="SignUpPage.css" />
+    <script type="module" src="SignUpPage.js" defer></script>
+    <title>LOGO - Create Account</title>
+    
 </head>
-
 <body>
     <div class="main-container">
         <header class="header">
             <div class="logo">LOGO</div>
             
         </header>
-
-        <main class="Login-container">
-            <h1 class="form-title">Login to Your Account</h1>
-
+        
+        <main class="registration-container">
+            <h1 class="form-title">Create an Account</h1>
+            
             <div class="form-content">
                 <form class="form-fields">
                     <input type="email" class="form-input" placeholder="Email/Username" id="email" required />
                     <input type="password" class="form-input" placeholder="Password" id="password" required />
+                    <input type="password" class="form-input" placeholder="Confirm Password" id="confirmpassword" required />
                 </form>
-
-                <button type="submit" id="submit" class="signup-btn">LOG IN</button>
-
-                <p class="signup-link">
-                    Don't have an account?
-                    <a href="/SIGNUP/SignUpPage.html">Sign Up</a>
+                
+                <button type="submit" id="submit" class="signup-btn">SIGN UP</button>
+                
+                <p class="signin-link">
+                    Already have an account? <a href="/LOGIN/LoginPage.html">Sign In</a>
+                    
                 </p>
             </div>
         </main>
-
+        
         <footer class="footer">
             <div class="footer-content">
                 <div class="footer-row">
                     <span class="footer-text">LOGO</span>
                     <span class="footer-text">Home</span>
                 </div>
-
+                
                 <div class="footer-row">
                     <span class="footer-text left">Contacts and links</span>
                     <span class="footer-text">Menu</span>
                 </div>
-
+                
                 <div class="footer-row">
                     <span class="footer-text left">number</span>
                     <span class="footer-text right">About</span>
                 </div>
-
+                
                 <div class="footer-row">
                     <span class="footer-text left">fb, x(twt), ig</span>
                     <span class="footer-text">Contact</span>
@@ -59,5 +59,4 @@
         </footer>
     </div>
 </body>
-
 </html>

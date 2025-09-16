@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-      const slides = document.querySelectorAll('.carousel-slide');
+      const slides = document.querySelectorAll('.carousel-item');
       const indicators = document.querySelectorAll('.indicator');
       const prevButton = document.querySelector('.carousel-prev');
       const nextButton = document.querySelector('.carousel-next');
