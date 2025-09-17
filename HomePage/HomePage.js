@@ -1,5 +1,5 @@
 // ===================== CAROUSEL (HOME) =====================
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   const slides = document.querySelectorAll('.carousel-slide');
   const indicators = document.querySelectorAll('.indicator');
   const prevButton = document.querySelector('.carousel-prev');
@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Hide all slides and deactivate indicators
     slides.forEach(slide => slide.classList.remove('active'));
     indicators.forEach(indicator => indicator.classList.remove('active'));
-    
+
     // Show current slide and activate indicator
     slides[index].classList.add('active');
     indicators[index].classList.add('active');
@@ -33,14 +33,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Event listeners for indicators
   indicators.forEach((indicator, index) => {
-    indicator.addEventListener('click', function() {
+    indicator.addEventListener('click', function () {
       currentSlide = index;
       showSlide(currentSlide);
     });
   });
 
   // Keyboard navigation
-  document.addEventListener('keydown', function(event) {
+  document.addEventListener('keydown', function (event) {
     if (event.key === 'ArrowLeft') {
       prevSlide();
     } else if (event.key === 'ArrowRight') {
@@ -57,8 +57,8 @@ function goToDetails(name, price, img, desc) {
   localStorage.setItem("foodName", name);
   localStorage.setItem("foodPrice", price);
   localStorage.setItem("foodImg", img);
-  localStorage.setItem("foodDesc", desc); 
-  window.location.href = "../FoodDetails/FoodDetails.html"; 
+  localStorage.setItem("foodDesc", desc);
+  window.location.href = "../FoodDetails/FoodDetails.html";
 }
 
 // ===================== MENU NAVIGATION =====================
@@ -165,14 +165,51 @@ const totalCards = 5;
 function scrollMenu(direction) {
   const container = document.getElementById("menuCards");
   const maxIndex = totalCards - visibleCards;
-  
+
   currentIndex += direction;
   if (currentIndex < 0) currentIndex = 0;
   if (currentIndex > maxIndex) currentIndex = maxIndex;
-  
+
   const offset = -currentIndex * cardWidth;
   container.style.transform = `translateX(${offset}px)`;
 }
+// ===================== ACCOUNT DROPDOWN =====================
+document.addEventListener("DOMContentLoaded", () => {
+  const accountBtn = document.getElementById("accountBtn");
+  const accountMenu = document.getElementById("accountMenu");
+  const logoutBtn = document.getElementById("logoutBtn");
+  const cancelLogout = document.getElementById("cancelLogout");
+
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      logoutPopup.style.display = "flex"; 
+    });
+  }
+
+  if (cancelLogout) {
+    cancelLogout.addEventListener("click", () => {
+      logoutPopup.style.display = "none"; // close popup
+    });
+  }
+  if (confirmLogout) {
+    confirmLogout.addEventListener("click", () => {
+      window.location.href = "/LOGIN/LoginPage.html"; // adjust if needed
+    });
+  }
+  
+  accountBtn.addEventListener("click", () => {
+    accountMenu.classList.toggle("active");
+  });
+
+  // Close dropdown when clicking outside
+  document.addEventListener("click", (event) => {
+    if (!accountBtn.contains(event.target) && !accountMenu.contains(event.target)) {
+      accountMenu.classList.remove("active");
+    }
+  });
+});
+
 
 // ===================== FUTURE REVIEW ORDER FEATURE =====================
 // wala pa to
