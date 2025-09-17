@@ -194,12 +194,17 @@
         
         @media (min-width: 768px) {
             .registration-container {
-                
+                max-width: 500px;
+                padding: 38px;
+                gap: 22px;
             }
         }
         
         @media (min-width: 1024px) {
             .registration-container {
+                max-width: 600px;
+                padding: 48px;
+                gap: 27px;
                 
             }
         }
