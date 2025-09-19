@@ -1,62 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Checkout Page</title>
   <link rel="stylesheet" href="CheckoutPage.css">
 </head>
-<body>
-  <!-- Header -->
-  <header class="header">
-    <div class="logo">LOGO</div>
-    <nav class="nav">
-      <a href="/HomePage/HomePage.html#home">Home</a>
-      <a href="/HomePage/HomePage.html#menu">Menu</a>
-      <a href="/HomePage/HomePage.html#about">About</a>
-      <a href="/HomePage/HomePage.html#contact">Contact</a>
-    </nav>
-  </header>
 
-  <!-- Checkout Section -->
+<body>
+  <header class="header">
+    <div class="logo">Mediterranean In Velvet</div>
+    <nav class="nav"> <a href="/HomePage/HomePage.html#home">Home</a> <a href="/HomePage/HomePage.html#menu">Menu</a> <a
+        href="/HomePage/HomePage.html#about">About</a> <a href="/HomePage/HomePage.html#contact">Contact</a> </nav>
+  </header>
   <section class="checkout-container">
     <div class="checkout-card">
-      <a href="index.html" class="back-btn">Back</a>
       <h2>Review Your Order</h2>
-      
-      <div id="orderItem" class="order-item">
-        <img id="foodImage" src="https://via.placeholder.com/100" alt="Food Picture" />
-        <div class="details">
-          <h3 id="foodName">Name of food</h3>
-          <p id="foodDesc">Food's details</p>
-          <div class="quantity-control">
-            <button id="decreaseBtn">-</button>
-            <span id="quantity">1</span>
-            <button id="increaseBtn">+</button>
-          </div>
-          <p class="price">Php <span id="price">00.00</span></p>
-        </div>
-        <button id="removeBtn" class="remove-btn">X</button>
-      </div>
-
+      <div id="checkoutContainer" class="checkout-items"></div>
       <div class="checkout-actions">
         <div class="totals">
-          <p>Subtotal: Php <span id="subtotal">00.00</span></p>
-          <p>Total: Php <span id="total">00.00</span></p>
+          <p>Subtotal: Php <span id="subtotal">0.00</span></p>
+          <p>Total: Php <span id="total">0.00</span></p>
         </div>
-        <div class="actions-row">
-          <button id="addMoreBtn" class="yellow-btn">Add more items</button>
-          <button id="proceedBtn" class="green-btn">Proceed to Checkout</button>
-        </div>
+        <div class="actions-row"> <button id="addMoreBtn" class="yellow-btn">Add more items</button> <button
+            id="proceedBtn" class="green-btn">Proceed to Checkout</button> </div>
       </div>
     </div>
   </section>
-
-  <!-- Footer -->
-  <footer class="footer">
-    Mediterranean in Velvet
-  </footer>
-
+  <footer class="footer">Mediterranean in Velvet</footer>
   <script src="CheckoutPage.js"></script>
 </body>
+
 </html>
