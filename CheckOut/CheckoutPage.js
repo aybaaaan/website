@@ -86,7 +86,7 @@ function renderOrders() {
 
 // Add more items
 addMoreBtn.addEventListener("click", () => {
-  window.location.href = "/HomePage/Homepage.html#menu";
+  window.location.href = "/HomePage/Homepage.html?cart=open#menu";
 });
 
 // Proceed to checkout
