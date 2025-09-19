@@ -156,6 +156,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("closeCart").addEventListener("click", closeCart);
 });
 
+
 // ===================== MENU CAROUSEL (HORIZONTAL) =====================
 let currentIndex = 0;
 const cardWidth = 320; // 300px + 20px gap
