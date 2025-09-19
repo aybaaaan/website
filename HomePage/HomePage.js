@@ -1,20 +1,20 @@
 // ===================== CAROUSEL (HOME) =====================
-document.addEventListener('DOMContentLoaded', function () {
-  const slides = document.querySelectorAll('.carousel-slide');
-  const indicators = document.querySelectorAll('.indicator');
-  const prevButton = document.querySelector('.carousel-prev');
-  const nextButton = document.querySelector('.carousel-next');
+document.addEventListener("DOMContentLoaded", function () {
+  const slides = document.querySelectorAll(".carousel-slide");
+  const indicators = document.querySelectorAll(".indicator");
+  const prevButton = document.querySelector(".carousel-prev");
+  const nextButton = document.querySelector(".carousel-next");
   let currentSlide = 0;
   const totalSlides = slides.length;
 
   function showSlide(index) {
     // Hide all slides and deactivate indicators
-    slides.forEach(slide => slide.classList.remove('active'));
-    indicators.forEach(indicator => indicator.classList.remove('active'));
+    slides.forEach((slide) => slide.classList.remove("active"));
+    indicators.forEach((indicator) => indicator.classList.remove("active"));
 
     // Show current slide and activate indicator
-    slides[index].classList.add('active');
-    indicators[index].classList.add('active');
+    slides[index].classList.add("active");
+    indicators[index].classList.add("active");
   }
 
   function nextSlide() {
@@ -28,22 +28,22 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // Event listeners for navigation buttons
-  nextButton.addEventListener('click', nextSlide);
-  prevButton.addEventListener('click', prevSlide);
+  nextButton.addEventListener("click", nextSlide);
+  prevButton.addEventListener("click", prevSlide);
 
   // Event listeners for indicators
   indicators.forEach((indicator, index) => {
-    indicator.addEventListener('click', function () {
+    indicator.addEventListener("click", function () {
       currentSlide = index;
       showSlide(currentSlide);
     });
   });
 
   // Keyboard navigation
-  document.addEventListener('keydown', function (event) {
-    if (event.key === 'ArrowLeft') {
+  document.addEventListener("keydown", function (event) {
+    if (event.key === "ArrowLeft") {
       prevSlide();
-    } else if (event.key === 'ArrowRight') {
+    } else if (event.key === "ArrowRight") {
       nextSlide();
     }
   });
@@ -76,7 +76,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // ===================== FORMAT PRICE =====================
 function formatPHP(n) {
-  return Number(n).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  return Number(n).toLocaleString("en-PH", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
 }
 
 // ===================== RENDER CART =====================
@@ -90,26 +93,33 @@ function renderCart() {
   if (cart.length === 0) {
     cartItems.innerHTML = `<li class="empty">Your cart is empty!</li>`;
   } else {
-    cartItems.innerHTML = cart.map(item => {
-      const itemTotal = item.price * item.qty;
-      total += itemTotal;
-      return `
+    cartItems.innerHTML = cart
+      .map((item) => {
+        const itemTotal = item.price * item.qty;
+        total += itemTotal;
+        return `
         <li class="cart-item">
           <p><strong>${item.name}</strong> x${item.qty}</p>
           <p>Php ${formatPHP(itemTotal)}</p>
-          <button class="remove-btn" onclick="removeFromCart('${item.name.replace(/'/g, "\\'")}')">Delete</button>
+          <button class="remove-btn" onclick="removeFromCart('${item.name.replace(
+            /'/g,
+            "\\'"
+          )}')">Delete</button>
         </li>
       `;
-    }).join("");
+      })
+      .join("");
   }
 
-  document.getElementById("cartTotal").textContent = `Total: Php ${formatPHP(total)}`;
+  document.getElementById("cartTotal").textContent = `Total: Php ${formatPHP(
+    total
+  )}`;
 }
 
 // ===================== REMOVE ITEM =====================
 function removeFromCart(name) {
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
-  cart = cart.filter(item => item.name !== name);
+  cart = cart.filter((item) => item.name !== name);
   localStorage.setItem("cart", JSON.stringify(cart));
   renderCart();
 }
@@ -119,7 +129,7 @@ function addToCart(name, price) {
   const cleanPrice = Number(String(price).replace(/[^0-9.]/g, "")) || 0;
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-  const existing = cart.find(i => i.name === name);
+  const existing = cart.find((i) => i.name === name);
   if (existing) {
     existing.qty += 1;
   } else {
@@ -158,17 +168,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // ===================== MENU CAROUSEL (HORIZONTAL) =====================
 let currentIndex = 0;
-const cardWidth = 320; // 300px + 20px gap
-const visibleCards = 3;
-const totalCards = 5;
 
 function scrollMenu(direction) {
+  const cards = document.querySelectorAll(".menu-card");
   const container = document.getElementById("menuCards");
-  const maxIndex = totalCards - visibleCards;
+
+  if (cards.length === 0) return;
+
+  const cardWidth = cards[0].offsetWidth + 16; // card + gap
+  const totalCards = cards.length;
+
+  const visibleCards = Math.floor(
+    document.querySelector(".menu-cards-container").offsetWidth / cardWidth
+  );
 
   currentIndex += direction;
+
+  // prevent scrolling too far
   if (currentIndex < 0) currentIndex = 0;
-  if (currentIndex > maxIndex) currentIndex = maxIndex;
+  if (currentIndex > totalCards - visibleCards) {
+    currentIndex = totalCards - visibleCards;
+  }
 
   const offset = -currentIndex * cardWidth;
   container.style.transform = `translateX(${offset}px)`;
@@ -183,7 +203,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (logoutBtn) {
     logoutBtn.addEventListener("click", (e) => {
       e.preventDefault();
-      logoutPopup.style.display = "flex"; 
+      logoutPopup.style.display = "flex";
     });
   }
 
@@ -197,19 +217,21 @@ document.addEventListener("DOMContentLoaded", () => {
       window.location.href = "/LOGIN/LoginPage.html"; // adjust if needed
     });
   }
-  
+
   accountBtn.addEventListener("click", () => {
     accountMenu.classList.toggle("active");
   });
 
   // Close dropdown when clicking outside
   document.addEventListener("click", (event) => {
-    if (!accountBtn.contains(event.target) && !accountMenu.contains(event.target)) {
+    if (
+      !accountBtn.contains(event.target) &&
+      !accountMenu.contains(event.target)
+    ) {
       accountMenu.classList.remove("active");
     }
   });
 });
-
 
 // ===================== FUTURE REVIEW ORDER FEATURE =====================
 // wala pa to
