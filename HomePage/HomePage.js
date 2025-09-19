@@ -166,6 +166,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("closeCart").addEventListener("click", closeCart);
 });
 
+
 // ===================== MENU CAROUSEL (HORIZONTAL) =====================
 let currentIndex = 0;
 
