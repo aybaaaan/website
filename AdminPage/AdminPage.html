@@ -1,106 +1,151 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Dashboard</title>
-  <link rel="stylesheet" href="AdminPage.css">
-  <script type="module" src="AdminPage.js" defer></script>
-</head>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="AdminPage.css" />
+    <script type="module" src="AdminPage.js" defer></script>
+  </head>
 
-<body>
-  <!-- Top bar -->
-  <header>
-    <div class="logo">Mediterranean In Velvet | Admin</div>
-    <button id="btn-logout">LOG OUT</button>
-  </header>
+  <body>
+    <!-- Top bar -->
+    <header>
+      <div class="logo">Mediterranean In Velvet | Admin</div>
+      <button id="btn-logout">LOG OUT</button>
+    </header>
 
-  <div class="container">
-    <!-- Sidebar -->
-    <aside>
-      <h3>Dashboard</h3>
-      <button id="btn-analytics" onclick="showSection('section-analytics')">Data Analytics</button>
-      <button id="btn-menu" onclick="showSection('section-menu')">Edit Menu and Background</button>
-      <button id="btn-orders" onclick="showSection('section-orders')">Orders</button>
-    </aside>
+    <div class="container">
+      <!-- Sidebar -->
+      <aside>
+        <h3>Dashboard</h3>
+        <button id="btn-analytics" onclick="showSection('section-analytics')">
+          Data Analytics
+        </button>
+        <button id="btn-menu" onclick="showSection('section-menu')">
+          Edit Menu and Background
+        </button>
+        <button id="btn-orders" onclick="showSection('section-orders')">
+          Orders
+        </button>
+      </aside>
 
-    <!-- Main content -->
-    <main>
-      <!-- Data Analytics -->
-      <section id="section-analytics" class="active">
-        <div class="card"><h4>Total Sales</h4><p>Graph / Statistics</p></div>
-        <div class="card"><h4>Total Orders</h4><p>Graph / Statistics</p></div>
-        <div class="card"><h4>Data Chart</h4><p>Graph / Statistics</p></div>
-      </section>
+      <!-- Main content -->
+      <main>
+        <!-- Data Analytics -->
+        <section id="section-analytics" class="active">
+          <div class="card">
+            <h4>Total Sales</h4>
+            <p>Graph / Statistics</p>
+          </div>
+          <div class="card">
+            <h4>Total Orders</h4>
+            <p>Graph / Statistics</p>
+          </div>
+          <div class="card">
+            <h4>Data Chart</h4>
+            <p>Graph / Statistics</p>
+          </div>
+        </section>
 
-      <!-- Edit Menu -->
-      <section id="section-menu">
-        <h4>Edit Menu</h4>
+        <!-- Edit Menu -->
+        <section id="section-menu">
+          <h4>Edit Menu</h4>
           <div class="grid">
-            <div class="picture-box"><img src="https://imgs.search.brave.com/nXCU44AV204X_WV5UV6Fgy5nPDp026VUoUXdmMvDqKE/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS50aGVldmVyeWdp/cmwuY29tL3dwLWNv/bnRlbnQvdXBsb2Fk/cy8yMDE4LzA4L21l/ZGl0ZXJyYW5lYW4t/ZGlldC1yZWNpcGVz/LXlvdS1jYW4tbWVh/bC1wcmVwLTEuanBn" alt="Menu Item"></div>
-            <div class="picture-box"><img src="https://imgs.search.brave.com/e0Zx7R1BpRxDWQ_G1NhY2Dlx-sc0eTe6RayAPEVHZxM/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS50aGVldmVyeWdp/cmwuY29tL3dwLWNv/bnRlbnQvdXBsb2Fk/cy8yMDE4LzA4L21l/ZGl0ZXJyYW5lYW4t/ZGlldC1yZWNpcGVz/LXlvdS1jYW4tbWVh/bC1wcmVwLTcuanBn"></div>
-            <div class="picture-box"><img src="https://media.theeverygirl.com/wp-content/uploads/2018/08/mediterranean-diet-recipes-you-can-meal-prep-4.jpg" alt="Menu Item"></div>
-            <div class="picture-box"><img src="https://imgs.search.brave.com/Vpt9X8Z-ODEmqmdDV6Q7eAVSJDCthEtm3-mnuN_6yLQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/c25kaW1nLmNvbS9m/b29kL2ltYWdlL3Vw/bG9hZC93XzU1NSxo/XzQxNixjX2ZpdCxm/bF9wcm9ncmVzc2l2/ZSxxXzk1L3YxL2lt/Zy9yZWNpcGVzLzUz/LzcyLzQ5L01ZMFBX/RVduU0pLelh1Q3Ri/aUlQX01lZGl0ZXJy/YW5lYW4lMjBDaG9w/cGVkJTIwU2FsYWQt/OC5qcGc" alt="Menu Item"></div>
-            <div class="picture-box"><img src="https://imgs.search.brave.com/0ERiwkay7a4di8k7zgOV_hAGrpfT7jGc0Ndn-lGjzUM/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/c25kaW1nLmNvbS9m/b29kL2ltYWdlL3Vw/bG9hZC93XzU1NSxo/XzQxNixjX2ZpdCxm/bF9wcm9ncmVzc2l2/ZSxxXzk1L3YxL2lt/Zy9yZWNpcGVzLzIy/Lzk5LzQ4LzBudHpH/SzNUVDgyNU5hUkxS/VkVqX2RlY2VtYmVy/JTIwYmF0Y2gtNS5q/cGc" alt="Menu Item"></div>
+            <div class="picture-box">
+              <img
+                src="https://imgs.search.brave.com/nXCU44AV204X_WV5UV6Fgy5nPDp026VUoUXdmMvDqKE/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS50aGVldmVyeWdp/cmwuY29tL3dwLWNv/bnRlbnQvdXBsb2Fk/cy8yMDE4LzA4L21l/ZGl0ZXJyYW5lYW4t/ZGlldC1yZWNpcGVz/LXlvdS1jYW4tbWVh/bC1wcmVwLTEuanBn"
+                alt="Menu Item"
+              />
+            </div>
+            <div class="picture-box">
+              <img
+                src="https://imgs.search.brave.com/e0Zx7R1BpRxDWQ_G1NhY2Dlx-sc0eTe6RayAPEVHZxM/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS50aGVldmVyeWdp/cmwuY29tL3dwLWNv/bnRlbnQvdXBsb2Fk/cy8yMDE4LzA4L21l/ZGl0ZXJyYW5lYW4t/ZGlldC1yZWNpcGVz/LXlvdS1jYW4tbWVh/bC1wcmVwLTcuanBn"
+              />
+            </div>
+            <div class="picture-box">
+              <img
+                src="https://media.theeverygirl.com/wp-content/uploads/2018/08/mediterranean-diet-recipes-you-can-meal-prep-4.jpg"
+                alt="Menu Item"
+              />
+            </div>
+            <div class="picture-box">
+              <img
+                src="https://imgs.search.brave.com/Vpt9X8Z-ODEmqmdDV6Q7eAVSJDCthEtm3-mnuN_6yLQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/c25kaW1nLmNvbS9m/b29kL2ltYWdlL3Vw/bG9hZC93XzU1NSxo/XzQxNixjX2ZpdCxm/bF9wcm9ncmVzc2l2/ZSxxXzk1L3YxL2lt/Zy9yZWNpcGVzLzUz/LzcyLzQ5L01ZMFBX/RVduU0pLelh1Q3Ri/aUlQX01lZGl0ZXJy/YW5lYW4lMjBDaG9w/cGVkJTIwU2FsYWQt/OC5qcGc"
+                alt="Menu Item"
+              />
+            </div>
+            <div class="picture-box">
+              <img
+                src="https://imgs.search.brave.com/0ERiwkay7a4di8k7zgOV_hAGrpfT7jGc0Ndn-lGjzUM/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/c25kaW1nLmNvbS9m/b29kL2ltYWdlL3Vw/bG9hZC93XzU1NSxo/XzQxNixjX2ZpdCxm/bF9wcm9ncmVzc2l2/ZSxxXzk1L3YxL2lt/Zy9yZWNpcGVzLzIy/Lzk5LzQ4LzBudHpH/SzNUVDgyNU5hUkxS/VkVqX2RlY2VtYmVy/JTIwYmF0Y2gtNS5q/cGc"
+                alt="Menu Item"
+              />
+            </div>
             <div class="picture-box plus">+</div>
           </div>
 
-        <h4 style="margin-top:20px;">Edit Homepage</h4>
+          <h4 style="margin-top: 20px">Edit Homepage</h4>
           <div class="grid">
-            
-            <div class="picture-box"><img src="https://imgs.search.brave.com/qwpZN5_Purot1GZWJoFNbNlNT1xNrco54atkeNOGNG8/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/cHJlbWl1bS1waG90/by90YWJsZS13aXRo/LW1hbnktcGxhdGVz/LWZvb2QtaW5jbHVk/aW5nLWZvb2QtZHJp/bmtzXzg2MjQ2Mi0x/MDM5MC5qcGc_c2Vt/dD1haXNfaHlicmlk/Jnc9NzQwJnE9ODA" alt="Homepage Banner"></div>
+            <div class="picture-box">
+              <img
+                src="https://imgs.search.brave.com/qwpZN5_Purot1GZWJoFNbNlNT1xNrco54atkeNOGNG8/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/cHJlbWl1bS1waG90/by90YWJsZS13aXRo/LW1hbnktcGxhdGVz/LWZvb2QtaW5jbHVk/aW5nLWZvb2QtZHJp/bmtzXzg2MjQ2Mi0x/MDM5MC5qcGc_c2Vt/dD1haXNfaHlicmlk/Jnc9NzQwJnE9ODA"
+                alt="Homepage Banner"
+              />
+            </div>
             <div class="picture-box plus">+</div>
-
-
           </div>
-      </section>
+        </section>
 
-      <!-- Orders -->
-      <section id="section-orders">
-      <div class="card">
-        <h4>Customer's Name Order</h4>
-        <div class="grid">
-          <div class="picture-box">
-            <img src="https://imgs.search.brave.com/0ERiwkay7a4di8k7zgOV_hAGrpfT7jGc0Ndn-lGjzUM/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/c25kaW1nLmNvbS9m/b29kL2ltYWdlL3Vw/bG9hZC93XzU1NSxo/XzQxNixjX2ZpdCxm/bF9wcm9ncmVzc2l2/ZSxxXzk1L3YxL2lt/Zy9yZWNpcGVzLzIy/Lzk5LzQ4LzBudHpH/SzNUVDgyNU5hUkxS/VkVqX2RlY2VtYmVy/JTIwYmF0Y2gtNS5q/cGc" 
-                alt="Food Image">
+        <!-- Orders -->
+        <section id="section-orders">
+          <div class="card">
+            <h4>Customer's Name Order</h4>
+            <div class="grid">
+              <div class="picture-box">
+                <img
+                  src="https://imgs.search.brave.com/0ERiwkay7a4di8k7zgOV_hAGrpfT7jGc0Ndn-lGjzUM/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/c25kaW1nLmNvbS9m/b29kL2ltYWdlL3Vw/bG9hZC93XzU1NSxo/XzQxNixjX2ZpdCxm/bF9wcm9ncmVzc2l2/ZSxxXzk1L3YxL2lt/Zy9yZWNpcGVzLzIy/Lzk5LzQ4LzBudHpH/SzNUVDgyNU5hUkxS/VkVqX2RlY2VtYmVy/JTIwYmF0Y2gtNS5q/cGc"
+                  alt="Food Image"
+                />
+              </div>
+              <div>
+                <p><b>Name of food</b></p>
+                <p>12:21 pm | August 18, 2025</p>
+                <p>Quantity: 1</p>
+                <p>Subtotal: Php 140.00</p>
+              </div>
+            </div>
           </div>
-          <div>
-            <p><b>Name of food</b></p>
-            <p>12:21 pm | August 18, 2025</p>
-            <p>Quantity: 1</p>
-            <p>Subtotal: Php 140.00</p>
-          </div>
-        </div>
-      </div>
-      
-      <div class="card">
-        <h4>Customer's Name Order</h4>
-        <div class="grid">
-          <div class="picture-box">
-            <img src="https://imgs.search.brave.com/Vpt9X8Z-ODEmqmdDV6Q7eAVSJDCthEtm3-mnuN_6yLQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/c25kaW1nLmNvbS9m/b29kL2ltYWdlL3Vw/bG9hZC93XzU1NSxo/XzQxNixjX2ZpdCxm/bF9wcm9ncmVzc2l2/ZSxxXzk1L3YxL2lt/Zy9yZWNpcGVzLzUz/LzcyLzQ5L01ZMFBX/RVduU0pLelh1Q3Ri/aUlQX01lZGl0ZXJy/YW5lYW4lMjBDaG9w/cGVkJTIwU2FsYWQt/OC5qcGc" 
-                alt="Food Image 2">
-          </div>
-          <div>
-            <p><b>Name of food</b></p>
-            <p>3:53 pm | August 19, 2025</p>
-            <p>Quantity: 5</p>
-            <p>Subtotal: Php 1,425.00</p>
-          </div>
-        </div>
-      </div>
 
-        <button class="btn-done">Done</button>
-      </section>
-    </main>
-  </div>
+          <div class="card">
+            <h4>Customer's Name Order</h4>
+            <div class="grid">
+              <div class="picture-box">
+                <img
+                  src="https://imgs.search.brave.com/Vpt9X8Z-ODEmqmdDV6Q7eAVSJDCthEtm3-mnuN_6yLQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/c25kaW1nLmNvbS9m/b29kL2ltYWdlL3Vw/bG9hZC93XzU1NSxo/XzQxNixjX2ZpdCxm/bF9wcm9ncmVzc2l2/ZSxxXzk1L3YxL2lt/Zy9yZWNpcGVzLzUz/LzcyLzQ5L01ZMFBX/RVduU0pLelh1Q3Ri/aUlQX01lZGl0ZXJy/YW5lYW4lMjBDaG9w/cGVkJTIwU2FsYWQt/OC5qcGc"
+                  alt="Food Image 2"
+                />
+              </div>
+              <div>
+                <p><b>Name of food</b></p>
+                <p>3:53 pm | August 19, 2025</p>
+                <p>Quantity: 5</p>
+                <p>Subtotal: Php 1,425.00</p>
+              </div>
+            </div>
+          </div>
 
-  <script>
-    function showSection(id) {
-      document.querySelectorAll("main section").forEach(sec => {
-        sec.classList.remove("active");
-      });
-      document.getElementById(id).classList.add("active");
-    }
-  </script>
-</body>
+          <button class="btn-done">Done</button>
+        </section>
+      </main>
+    </div>
+
+    <script>
+      function showSection(id) {
+        document.querySelectorAll("main section").forEach((sec) => {
+          sec.classList.remove("active");
+        });
+        document.getElementById(id).classList.add("active");
+      }
+    </script>
+  </body>
 </html>
