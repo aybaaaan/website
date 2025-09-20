@@ -35,5 +35,5 @@ function addToCartFromDetails() {
   localStorage.setItem("cart", JSON.stringify(cart));
 
   // Redirect back to HomePage and open cart sidebar
-  window.location.href = "../HomePage/HomePage.html?cart=open";
+window.location.href = "../HomePage/HomePage.html?cart=open#menu";
 }

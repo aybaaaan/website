@@ -234,6 +234,20 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
+// ===================== LINK HOMEPAGE CHECKOUT BUTTON =====================
+document.querySelectorAll(".checkout-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    if (cart.length === 0) {
+      alert("Your cart is empty! Please add items first.");
+    } else {
+      window.location.href = "/Checkout/CheckoutPage.html";
+    }
+  });
+});
+
+
+
 // ===================== FUTURE REVIEW ORDER FEATURE =====================
 // wala pa to
 
