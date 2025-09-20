@@ -1,9 +1,10 @@
 // ===================== CAROUSEL (HOME) =====================
 document.addEventListener("DOMContentLoaded", function () {
-  const slides = document.querySelectorAll(".carousel-slide");
+  const slides = document.querySelectorAll(".carousel-item");
   const indicators = document.querySelectorAll(".indicator");
   const prevButton = document.querySelector(".carousel-prev");
   const nextButton = document.querySelector(".carousel-next");
+
   let currentSlide = 0;
   const totalSlides = slides.length;
 
@@ -49,7 +50,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   // Optional: Auto-advance slides every 5 seconds
-  setInterval(nextSlide, 5000);
+  // setInterval(nextSlide, 5000);
 });
 
 // ===================== FOOD DETAILS PAGE =====================
@@ -166,7 +167,6 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("closeCart").addEventListener("click", closeCart);
 });
 
-
 // ===================== MENU CAROUSEL (HORIZONTAL) =====================
 let currentIndex = 0;
 
@@ -176,7 +176,7 @@ function scrollMenu(direction) {
 
   if (cards.length === 0) return;
 
-  const cardWidth = cards[0].offsetWidth + 16; // card + gap
+  const cardWidth = cards[0].offsetWidth + 12; // card + gap
   const totalCards = cards.length;
 
   const visibleCards = Math.floor(

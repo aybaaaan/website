@@ -85,7 +85,7 @@ body {
   font-size: 12px;
   font-weight: bold;
   font-family: sans-serif;
-  box-shadow: 3px 3px 10px #614d29;
+  box-shadow: 3px 3px 10px #333332;
   color: #000;
   text-decoration: none;
   transition: background-color 0.3s ease;
@@ -139,7 +139,7 @@ body {
 
 /* Hover effect: subtle background */
 .dropdown-menu a:hover {
-  background-color: #f7f7f7;
+  background-color: #f3f2f2;
   color: #111;
 }
 
@@ -281,13 +281,12 @@ body {
 .home-section::before {
   content: "";
   position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.4);
-}
-
-.home-content {
-  position: relative;
-  z-index: -1;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.3); /* black with 50% opacity */
+  z-index: 1;
 }
 
 /* ==== CAROUSEL BUTTONS ==== */
@@ -309,22 +308,43 @@ body {
 }
 
 .carousel-item img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  /* Makes image cover the screen */
+  overflow-wrap: anywhere;
+  min-width: 100%;
+  min-height: 100%;
+  object-fit: cover; /* Makes image cover the screen */
+}
+
+.carousel-item-caption {
+  position: absolute;
+  display: block;
+  top: 50%;
+  left: 35%;
+  transform: translateX(-50%);
+  color: #fff;
+  font-size: 3rem;
+  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.7);
+  z-index: 1;
+}
+
+.carousel-item-caption p {
+  font-size: 23px;
+}
+.caption2 {
+  font-size: 22px;
 }
 
 .food-title {
   position: absolute;
-  left: 100px;
-  transform: translateY(500px);
-  color: rgb(209, 107, 107);
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  color: white;
   font-size: 3rem;
   text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.7);
-  z-index: 2;
+  z-index: 3;
 }
 
+/* ====== Arrows ====== */
 .carousel-nav {
   position: absolute;
   top: 50%;
@@ -363,6 +383,7 @@ body {
   right: 20px;
 }
 
+/* ====== Indicators (dots) ====== */
 .carousel-indicators {
   position: absolute;
   bottom: 20px;
@@ -387,6 +408,9 @@ body {
   background-color: #ffcf78;
   border-color: #ffcf78;
   transform: scale(1.2);
+  height: 12px;
+  width: 20px;
+  border-radius: 20px;
 }
 
 .indicator:hover {
@@ -435,7 +459,7 @@ body {
 .menu-section {
   background: #6e8e6b;
   width: 100%;
-  padding: 80px 20px;
+  padding: 75px 20px;
   text-align: center;
 }
 
@@ -449,8 +473,8 @@ body {
 /* Container (carousel area) */
 .menu-cards-container {
   overflow: hidden;
-  width: 100%;
-  max-width: 1000px;
+  min-width: 100%;
+  min-height: 100%;
   margin: 0 auto;
   position: relative;
 }
@@ -459,7 +483,7 @@ body {
 .menu-cards {
   display: flex;
   transition: transform 0.4s ease-in-out;
-  gap: 30px;
+  gap: 0px;
 }
 
 /* Individual food card */
@@ -713,7 +737,7 @@ body {
   }
 
   .menu-cards {
-    gap: 30px;
+    gap: 20px;
   }
 
   .sample-food-text {
@@ -750,18 +774,18 @@ body {
 
   .menu-cards {
     display: flex;
-    transition: transform 0.3s ease;
+    transition: transform 0.6s ease;
   }
 
   .menu-card {
     background-color: #d9d9d9;
     border-radius: 8px;
-    width: 300px;
+    width: 400px;
     /* fixed size */
-    height: 300px;
+    height: 450px;
     /* square */
     flex-shrink: 0;
-    margin-right: 20px;
+    margin-right: px;
     overflow: hidden;
     position: relative;
     display: flex;
@@ -779,7 +803,6 @@ body {
 
 @media (min-width: 1280px) {
   .menu-card {
-    width: calc(33.333% - 20px);
   }
 }
 
