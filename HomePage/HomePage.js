@@ -246,6 +246,67 @@ document.querySelectorAll(".checkout-btn").forEach(btn => {
   });
 });
 
+// ===================== HAMBURGER MENU =====================
+document.addEventListener("DOMContentLoaded", () => {
+  const hamburgerBtn = document.getElementById("hamburgerBtn");
+  const mobileNav = document.getElementById("mobileNav");
+  const accountBtn = document.getElementById("accountBtn");
+  const cartBtn = document.getElementById("cartBtn");
+
+  // Close dropdown when Account button is clicked
+  if (accountBtn) {
+    accountBtn.addEventListener("click", () => {
+      mobileNav.classList.remove("active");
+    });
+  }
+
+  // Close dropdown when Cart button is clicked
+  if (cartBtn) {
+    cartBtn.addEventListener("click", () => {
+      mobileNav.classList.remove("active");
+    });
+  }
+
+  hamburgerBtn.addEventListener("click", () => {
+    mobileNav.classList.toggle("active");
+  });
+
+  // Close menu when clicking a link
+  document.querySelectorAll("#mobileNav a").forEach(link => {
+    link.addEventListener("click", () => {
+      mobileNav.classList.remove("active");
+    });
+  });
+});
+// ===================== CLOSE DROPDOWN ONLY WHEN GOING DESKTOP =====================
+window.addEventListener("resize", () => {
+  const mobileNav = document.getElementById("mobileNav");
+  const hamburgerBtn = document.getElementById("hamburgerBtn");
+
+  // If window is wide enough to show desktop nav
+  if (window.innerWidth >= 768) {
+    mobileNav.classList.remove("active"); // close dropdown
+  }
+});
+// Close hamburger dropdown when clicking outside
+document.addEventListener("click", (event) => {
+  const hamburgerBtn = document.getElementById("hamburgerBtn");
+  const mobileNav = document.getElementById("mobileNav");
+
+  if (
+    mobileNav.classList.contains("active") &&
+    !hamburgerBtn.contains(event.target) &&
+    !mobileNav.contains(event.target)
+  ) {
+    mobileNav.classList.remove("active");
+  }
+});
+
+
+
+
+
+
 
 
 // ===================== FUTURE REVIEW ORDER FEATURE =====================

@@ -122,12 +122,20 @@ body {
   display: block;
   padding: 10px 18px;
   text-decoration: none;
-  color: #1a1b22;
+  color: #222222;
   font-size: 14px;
   font-weight: 500;
   transition: background 0.2s ease, color 0.2s ease;
   position: relative;
   font-family: "Segoe UI", sans-serif;
+}
+.dropdown-menu a:last-child {
+  border-bottom: none; /* no border on last item */
+}
+/* Hover effect: subtle background */
+.dropdown-menu a:hover {
+  background-color: #ffcf78;
+  color: #111;
 }
 
 /* Modern subtle divider */
@@ -139,21 +147,15 @@ body {
   margin: 10px 0; /* full inset spacing */
 }
 
-/* Hover effect: subtle background */
-.dropdown-menu a:hover {
-  background-color: #f3f2f2;
-  color: #111;
-}
-
 /* Special Log Out styling */
 .dropdown-menu .logout-option {
-  color: #e74c3c; /* modern red */
+  color: #d63422; /* modern red */
   font-weight: 600;
   text-align: right;
 }
 
 .dropdown-menu .logout-option:hover {
-  background-color: #fff5f5; /* light red hover */
+  background-color: #ffdfdf; /* light red hover */
   color: #c0392b;
 }
 
@@ -201,7 +203,7 @@ body {
 .popup-box p {
   margin-bottom: 16px;
   font-size: 15px;
-  color: #161515;
+  color: #000000;
 }
 
 /* Buttons */
@@ -230,17 +232,17 @@ body {
 .cancel-btn {
   flex: 1;
   padding: 8px;
-  background: #f0f0f0;
+  background: #ffcf78;
   border: none;
   border-radius: 6px;
-  color: #333;
+  color: #222222;
   font-weight: 500;
   cursor: pointer;
   transition: background 0.2s;
 }
 
 .cancel-btn:hover {
-  background: #ddd;
+  background: #e6b252;
 }
 
 .hamburger {
@@ -249,10 +251,15 @@ body {
   border: none;
   cursor: pointer;
   display: none;
-  color: #000000;
+  color: #ffcf78;
+  box-shadow: 2px 3px 6px #424040;
   position: absolute;
   left: 20px;
   z-index: 2;
+}
+
+.hamburger:hover {
+  color: #e6b252;
 }
 
 @media (max-width: 768px) {
@@ -267,6 +274,68 @@ body {
     /* Add space between the logo and the hamburger */
   }
 }
+/* Mobile nav hidden by default */
+.mobile-nav {
+  display: none;
+  flex-direction: column;
+  background-color: #ffffff;
+  position: absolute;
+  top: 60px;       /* just below header */
+  left: 20px;     /* align under hamburger */
+  width: 180px;    /* smaller width */
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0px 6px 12px rgba(41, 37, 37, 0.2);
+  z-index: 999;
+}
+
+.mobile-nav a {
+  padding: 12px 16px;
+  text-decoration: none;
+  color: #000000;
+  font-size: 15px;
+  font-family: "Segoe UI", sans-serif;
+  font-weight: 500;
+}
+
+.mobile-nav a:hover {
+  background-color: #ffcf78;
+  color: #000;
+}
+.mobile-nav a::after {
+  content: "";
+  display: block;
+  height: 1px;
+  background-color: #ffcf78; /* yellow divider */
+  margin: 6px 0;
+}
+
+
+
+/* Show when active */
+.mobile-nav.active {
+  display: flex;
+}
+/* Default: mobile first */
+.hamburger {
+  display: block; /* show hamburger */
+}
+
+.mobile-nav {
+  display: none; /* hidden until clicked */
+}
+
+/* On larger screens (e.g. 768px and up) */
+@media (min-width: 768px) {
+  .hamburger {
+    display: none; /* hide hamburger */
+  }
+
+  .mobile-nav {
+    display: none !important; /* force dropdown hidden */
+  }
+}
+
 
 /* ==== HOME SECTION ==== */
 
