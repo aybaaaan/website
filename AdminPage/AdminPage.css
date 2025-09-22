@@ -27,19 +27,19 @@ header .logo {
 
 /* Logout button */
 #btn-logout {
-  background: #ffcf78;
+  background: #d63422;
   border: none;
   padding: 8px 15px;
   border-radius: 5px;
   cursor: pointer;
   font-weight: bold;
   text-decoration: none; /* para kahit <a> gamitin, mukhang button pa rin */
-  color: black;
+  color: rgb(230, 227, 227);
   display: inline-block;
 }
 
 #btn-logout:hover {
-  background: #ffcf78cc;
+  background: #be2b1b;
 }
 
 /* Main layout */
@@ -192,6 +192,7 @@ section.active {
   margin-top: 15px;
 }
 
+
 /* Individual order card design */
 .order-card {
   background: #d6d6d6;
@@ -292,7 +293,7 @@ section.active {
 }
 
 .modal-actions button {
-  padding: 8px 15px;
+  padding: 8px 30px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -301,18 +302,19 @@ section.active {
 
 /* Cancel button */
 #cancel-logout {
-  background: #ccc;
+  background: #ffcf78;
 }
 
 #cancel-logout:hover {
-  background: #bbb;
+  background: #ffcf78cc;
 }
 
 /* Confirm button */
 #confirm-logout {
-  background: #ffcf78;
+  background: #d63422;
+  color: #fff;
 }
 
 #confirm-logout:hover {
-  background: #ffcf78cc;
+  background: #be2b1b;
 }
