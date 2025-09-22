@@ -1,138 +1,143 @@
 * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: Arial, sans-serif;
-    }
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
 
-    body {
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-    }
+body {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
 
-    /* Top bar */
-    header {
-      background-color: #bb771fcc;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px 20px;
-    }
+/* Top bar */
+header {
+  background-color: #bb771fcc;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+}
 
-    header .logo {
-      font-weight: bold;
-      font-size: 18px;
-    }
+header .logo {
+  font-weight: bold;
+  font-size: 18px;
+}
 
-    #btn-logout {
-      background: #ffcf78;
-      border: none;
-      padding: 8px 15px;
-      border-radius: 5px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-    #btn-logout:hover {
-      background: #ffcf78cc; 
-    }
+/* Logout button */
+#btn-logout {
+  background: #ffcf78;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  text-decoration: none; /* para kahit <a> gamitin, mukhang button pa rin */
+  color: black;
+  display: inline-block;
+}
 
-    /* Main layout */
-    .container {
-      flex: 1;
-      display: flex;
-    }
+#btn-logout:hover {
+  background: #ffcf78cc;
+}
 
-    /* Sidebar */
-    aside {
-      background: #e0e0e0;
-      width: 220px;
-      padding: 20px 10px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
+/* Main layout */
+.container {
+  flex: 1;
+  display: flex;
+}
 
-    aside h3 {
-      margin-bottom: 15px;
-      font-size: 18px;
-    }
+/* Sidebar */
+aside {
+  background: #e0e0e0;
+  width: 220px;
+  padding: 20px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
 
-    aside button {
-      background: #ffcf78;
-      border: none;
-      padding: 12px;
-      text-align: left;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 14px;
-      font-weight: bold;
-      transition: background 0.3s ease; 
-    }
+aside h3 {
+  margin-bottom: 15px;
+  font-size: 18px;
+}
 
-    aside button:hover {
-      background: #ffb347; 
-    }
+aside button {
+  background: #ffcf78;
+  border: none;
+  padding: 12px;
+  text-align: left;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  transition: background 0.3s ease; 
+}
 
-    /* Main content area */
-    main {
-      flex: 1;
-      background: #5f7d5f;
-      padding: 20px;
-      overflow-y: auto;
-      position: relative;
-    }
+aside button:hover {
+  background: #ffb347; 
+}
 
-    section {
-      display: none;
-      animation: slideIn 0.4s ease forwards;
-    }
+/* Main content area */
+main {
+  flex: 1;
+  background: #5f7d5f;
+  padding: 20px;
+  overflow-y: auto;
+  position: relative;
+}
 
-    section.active {
-      display: block;
-    }
+section {
+  display: none;
+  animation: slideIn 0.4s ease forwards;
+}
 
-    /* Slide animation */
-    @keyframes slideIn {
-      from {
-        opacity: 0;
-        transform: translateX(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateX(0);
-      }
-    }
+section.active {
+  display: block;
+}
 
-    .card {
-      background: #d6d6d6;
-      border-radius: 8px;
-      padding: 20px;
-      margin-bottom: 20px;
-    }
+/* Slide animation */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 15px;
-    }
+.card {
+  background: #d6d6d6;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
 
-        /* Reusable Done button */
-    .btn-done {
-      background: #4CAF50;
-      color: #fff;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: background 0.3s ease, transform 0.2s ease;
-    }
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 15px;
+}
 
-    .btn-done:hover {
-      background: #45a049;
-      transform: scale(1.05);
-    }
+/* Reusable Done button */
+.btn-done {
+  background: #4CAF50;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.btn-done:hover {
+  background: #45a049;
+  transform: scale(1.05);
+}
 
 .picture-box {
   background: #fff;
@@ -177,4 +182,137 @@
 .picture-box.plus:hover {
   background: #ffcf78;
   color: #000;
+}
+
+/* Container for all orders */
+#ordersContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* spacing between order cards */
+  margin-top: 15px;
+}
+
+/* Individual order card design */
+.order-card {
+  background: #d6d6d6;
+  border-radius: 8px;
+  display: flex;
+  align-items: flex-start;
+  padding: 15px;
+  gap: 15px; /* space between image and details */
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  animation: fadeIn 0.3s ease;
+}
+
+/* Order image (food picture) */
+.order-card img {
+  width: 120px;
+  height: 120px;
+  border-radius: 8px;
+  object-fit: cover; /* crop image nicely */
+  flex-shrink: 0; /* prevents shrinking */
+}
+
+/* Container for text details */
+.order-details {
+  flex: 1; /* occupy remaining width */
+}
+
+/* Customer name */
+.order-details h3 {
+  margin-bottom: 8px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+/* Other details (food, quantity, time, total) */
+.order-details p {
+  font-size: 14px;
+  margin: 3px 0;
+}
+
+/* Done button styling */
+.order-card .btn-done {
+  background: #4CAF50;
+  color: #fff;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-top: 10px;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+/* Hover effect for Done button */
+.order-card .btn-done:hover {
+  background: #45a049;
+  transform: scale(1.05);
+}
+
+/* Simple fade animation for new orders */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ===================================================
+   LOGOUT CONFIRMATION MODAL
+   =================================================== */
+
+/* Modal background overlay */
+.modal {
+  display: none; /* hidden by default */
+  position: fixed;
+  z-index: 999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+/* Modal box */
+.modal-content {
+  background: #fff;
+  margin: 15% auto;
+  padding: 20px;
+  border-radius: 10px;
+  width: 280px;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  font-family: Arial, sans-serif;
+}
+
+/* Buttons inside modal */
+.modal-actions {
+  margin-top: 15px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.modal-actions button {
+  padding: 8px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+/* Cancel button */
+#cancel-logout {
+  background: #ccc;
+}
+
+#cancel-logout:hover {
+  background: #bbb;
+}
+
+/* Confirm button */
+#confirm-logout {
+  background: #ffcf78;
+}
+
+#confirm-logout:hover {
+  background: #ffcf78cc;
 }
