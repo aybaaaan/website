@@ -90,14 +90,96 @@ addMoreBtn.addEventListener("click", () => {
 });
 
 // Proceed to checkout
+// ===================== MODAL LOGIC =====================
+const modal = document.getElementById("checkoutModal");
+const closeModal = document.getElementById("closeModal");
+const deliveryTab = document.getElementById("deliveryTab");
+const formFields = document.getElementById("formFields");
+const checkoutForm = document.getElementById("checkoutForm");
+
+// Default: Delivery fields
+function renderDeliveryFields() {
+  formFields.innerHTML = `
+    <input type="text" placeholder="Name" required>
+    <input type="text" placeholder="Address" required>
+    <input type="text" placeholder="Contact Number" required>
+    <label class="payment-label">Payment Method:</label>
+    <select required>
+      <option value="" disabled selected>Select Payment</option>
+      <option value="cod">Cash on Delivery</option>
+      <option value="gcash">GCash QR Code</option>
+    </select>
+  `;
+}
+
+// Toggle tabs
+// Delivery tab
+deliveryTab.addEventListener("click", () => {
+  deliveryTab.classList.add("active");
+  pickupTab.classList.remove("active");
+  formFields.innerHTML = `
+    <input type="text" placeholder="Name" required>
+    <input type="text" placeholder="Address" required>
+    <input type="text" placeholder="Contact Number" required>
+    <label class="payment-label">Payment Method:</label>
+    <select required>
+      <option value="" disabled selected>Select Payment</option>
+      <option value="cod">Cash on Delivery</option>
+      <option value="gcash">GCash QR Code</option>
+    </select>
+  `;
+});
+
+// Open modal on Proceed button
 proceedBtn.addEventListener("click", () => {
   if (orders.length === 0) {
     alert("Your order is empty!");
     return;
   }
-  alert("Submitting your order to the client...");
-  // Here you can add code to send orders to the server if needed
+
+  modal.style.display = "flex";
+  renderDeliveryFields(); // default tab
+  deliveryTab.classList.add("active");
+  pickupTab.classList.remove("active");
 });
+
+// Close modal
+closeModal.addEventListener("click", () => {
+  modal.style.display = "none";
+});
+
+// Close when clicking outside
+window.addEventListener("click", (e) => {
+  if (e.target === modal) modal.style.display = "none";
+});
+
+// Submit order
+document.getElementById("checkoutForm").addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  // Show success popup instead of clearing immediately
+  const successModal = document.getElementById("successModal");
+  successModal.style.display = "flex";
+});
+
+// Handle return home button
+document.getElementById("returnHomeBtn").addEventListener("click", () => {
+  // Clear orders
+  orders = [];
+  localStorage.removeItem("cart");
+
+  // Reset checkout display
+  checkoutContainer.innerHTML = "<p>Your cart is empty!</p>";
+  subtotalEl.textContent = "0.00";
+  totalEl.textContent = "0.00";
+
+  // Close success popup
+  document.getElementById("successModal").style.display = "none";
+
+  // Redirect to homepage
+  window.location.href = "/HomePage/HomePage.html#home";
+});
+
 
 // Initialize checkout page
 renderOrders();

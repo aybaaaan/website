@@ -27,6 +27,31 @@
             id="proceedBtn" class="green-btn">Proceed to Checkout</button> </div>
       </div>
     </div>
+    <!-- ====== Checkout Modal ====== -->
+    <div id="checkoutModal" class="modal">
+      <div class="modal-content">
+        <span id="closeModal" class="close-btn">&times;</span>
+        <h2>Checkout Options</h2>
+        <div class="tab-buttons">
+          <button id="deliveryTab" class="tab-btn active">Delivery</button>
+
+        </div>
+        <form id="checkoutForm">
+          <div id="formFields"></div>
+          <button type="submit" class="green-btn">Submit Order</button>
+        </form>
+      </div>
+    </div>
+    <!-- Success Popup -->
+    <div id="successModal" class="modal">
+      <div class="modal-content">
+        <h2>Order Submitted!</h2>
+        <p>Thank you for your order.</p>
+        <button id="returnHomeBtn" class="yellow-btn">Return to Home</button>
+      </div>
+    </div>
+
+
   </section>
   <footer class="footer">Mediterranean in Velvet</footer>
   <script src="CheckoutPage.js"></script>
