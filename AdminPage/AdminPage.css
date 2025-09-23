@@ -72,11 +72,11 @@ aside button {
   cursor: pointer;
   font-size: 14px;
   font-weight: bold;
-  transition: background 0.3s ease; 
+  transition: background 0.3s ease;
 }
 
 aside button:hover {
-  background: #ffb347; 
+  background: #ffb347;
 }
 
 /* Main content area */
@@ -116,29 +116,9 @@ section.active {
   margin-bottom: 20px;
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 15px;
-}
+/* styles.css */
 
-/* Reusable Done button */
-.btn-done {
-  background: #4CAF50;
-  color: #fff;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background 0.3s ease, transform 0.2s ease;
-}
-
-.btn-done:hover {
-  background: #45a049;
-  transform: scale(1.05);
-}
-
+/* ==== Picture Box Styles ==== */
 .picture-box {
   background: #fff;
   border: 2px dashed #aaa;
@@ -192,6 +172,22 @@ section.active {
   margin-top: 15px;
 }
 
+/* Reusable Done button */
+.btn-done {
+  background: #4caf50;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.btn-done:hover {
+  background: #45a049;
+  transform: scale(1.05);
+}
 
 /* Individual order card design */
 .order-card {
@@ -201,7 +197,7 @@ section.active {
   align-items: flex-start;
   padding: 15px;
   gap: 15px; /* space between image and details */
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
   animation: fadeIn 0.3s ease;
 }
 
@@ -234,7 +230,7 @@ section.active {
 
 /* Done button styling */
 .order-card .btn-done {
-  background: #4CAF50;
+  background: #4caf50;
   color: #fff;
   border: none;
   padding: 10px 16px;
@@ -253,8 +249,14 @@ section.active {
 
 /* Simple fade animation for new orders */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* ===================================================

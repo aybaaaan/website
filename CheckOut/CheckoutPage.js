@@ -34,7 +34,9 @@ function renderOrders() {
       <div class="details">
         <h3>${item.name}</h3>
         <p>Qty: <span class="quantity">${item.qty}</span></p>
-        <p>Price: Php <span class="priceNum">${(item.price * item.qty).toFixed(2)}</span></p>
+        <p>Price: Php <span class="priceNum">${(item.price * item.qty).toFixed(
+          2
+        )}</span></p>
         <div class="quantity-control">
           <button class="decreaseBtn">-</button>
           <button class="increaseBtn">+</button>
@@ -77,7 +79,8 @@ function renderOrders() {
       orderDiv.remove();
       updateTotals();
       localStorage.setItem("cart", JSON.stringify(orders));
-      if (orders.length === 0) checkoutContainer.innerHTML = "<p>Your cart is empty!</p>";
+      if (orders.length === 0)
+        checkoutContainer.innerHTML = "<p>Your cart is empty!</p>";
     });
   });
 
@@ -113,22 +116,6 @@ function renderDeliveryFields() {
 }
 
 // Toggle tabs
-// Delivery tab
-deliveryTab.addEventListener("click", () => {
-  deliveryTab.classList.add("active");
-  pickupTab.classList.remove("active");
-  formFields.innerHTML = `
-    <input type="text" placeholder="Name" required>
-    <input type="text" placeholder="Address" required>
-    <input type="text" placeholder="Contact Number" required>
-    <label class="payment-label">Payment Method:</label>
-    <select required>
-      <option value="" disabled selected>Select Payment</option>
-      <option value="cod">Cash on Delivery</option>
-      <option value="gcash">GCash QR Code</option>
-    </select>
-  `;
-});
 
 // Open modal on Proceed button
 proceedBtn.addEventListener("click", () => {
@@ -139,8 +126,6 @@ proceedBtn.addEventListener("click", () => {
 
   modal.style.display = "flex";
   renderDeliveryFields(); // default tab
-  deliveryTab.classList.add("active");
-  pickupTab.classList.remove("active");
 });
 
 // Close modal
@@ -179,7 +164,6 @@ document.getElementById("returnHomeBtn").addEventListener("click", () => {
   // Redirect to homepage
   window.location.href = "/HomePage/HomePage.html#home";
 });
-
 
 // Initialize checkout page
 renderOrders();
