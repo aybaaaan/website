@@ -3,7 +3,10 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebas
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
-import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -12,7 +15,7 @@ const firebaseConfig = {
   projectId: "webusiteu",
   storageBucket: "webusiteu.firebasestorage.app",
   messagingSenderId: "974146331400",
-  appId: "1:974146331400:web:a0590d7dc71dd3c00f02bd"
+  appId: "1:974146331400:web:a0590d7dc71dd3c00f02bd",
 };
 
 // Initialize Firebase
@@ -30,14 +33,14 @@ submit.addEventListener("click", function (event) {
 
   signInWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
-      // Signed up 
+      // Signed up
       const user = userCredential.user;
-       if (user.email === "admin123@miv.com" && password === "admin123") {
+      if (user.email === "admin123@miv.com" && password === "admin123") {
         alert("Admin login successful");
         window.location.href = "/AdminPage/AdminPage.html"; // redirect to Admin page
       } else {
         alert("User login successful");
-        window.location.href = "/HomePage/HomePage.html"; // redirect to Home page
+        window.location.href = "/usersPage/HomePage/HomePage.html"; // redirect to Home page
       }
     })
     .catch((error) => {

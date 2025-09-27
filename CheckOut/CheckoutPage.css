@@ -403,10 +403,11 @@ select {
 
 #successModal .modal-content {
   background: #fff;
+  position: absolute;
   padding: 30px 40px;
   border-radius: 12px;
   text-align: center;
-  width: 90%;
+  width: 100%;
   max-width: 400px;
 }
 

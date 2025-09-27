@@ -1,14 +1,19 @@
 // Load food details when the page opens
 document.addEventListener("DOMContentLoaded", () => {
-  document.getElementById("foodName").textContent = localStorage.getItem("foodName") || "Food Name";
-  document.getElementById("foodPrice").textContent = localStorage.getItem("foodPrice") || "0";
-  document.getElementById("foodDesc").textContent = localStorage.getItem("foodDesc") || "This is a delicious Mediterranean dish.";
-  document.getElementById("foodImage").src = localStorage.getItem("foodImg") || "";
+  document.getElementById("foodName").textContent =
+    localStorage.getItem("foodName") || "Food Name";
+  document.getElementById("foodPrice").textContent =
+    localStorage.getItem("foodPrice") || "0";
+  document.getElementById("foodDesc").textContent =
+    localStorage.getItem("foodDesc") ||
+    "This is a delicious Mediterranean dish.";
+  document.getElementById("foodImage").src =
+    localStorage.getItem("foodImg") || "";
 });
 
 // Go back to HomePage (menu section)
 function goBack() {
-  window.location.href = "../HomePage/HomePage.html#menu";
+  window.location.href = "../usersPage/HomePage/HomePage.html#menu";
 }
 
 function addToCartFromDetails() {
@@ -25,7 +30,7 @@ function addToCartFromDetails() {
 
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-  const existing = cart.find(item => item.name === name);
+  const existing = cart.find((item) => item.name === name);
   if (existing) {
     existing.qty += qty;
   } else {
@@ -35,5 +40,5 @@ function addToCartFromDetails() {
   localStorage.setItem("cart", JSON.stringify(cart));
 
   // Redirect back to HomePage and open cart sidebar
-window.location.href = "../HomePage/HomePage.html?cart=open#menu";
+  window.location.href = "../usersPage/HomePage/HomePage.html?cart=open#menu";
 }

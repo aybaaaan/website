@@ -1,68 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="LoginPage.css" />
     <script type="module" src="LoginPage.js" defer></script>
     <title>Login Account</title>
-</head>
+  </head>
 
-<body>
+  <body>
     <div class="background-image"></div>
     <div class="main-container">
-        <header class="header">
-            <div class="logo">Mediterranean In Velvet</div>
-            
-        </header>
+      <header class="header">
+        <a href="/guestPage/nonLogHP.html" class="logo"
+          >Mediterranean In Velvet</a
+        >
+      </header>
 
-        <main class="login-account-container">
-            <h1 class="form-title">Login to Your Account</h1>
+      <main class="login-account-container">
+        <h1 class="form-title">Login to Your Account</h1>
 
-            <div class="form-content">
-                <form class="form-fields">
-                    <input type="email" class="form-input" placeholder="Email/Username" id="email" required />
-                    <input type="password" class="form-input" placeholder="Password" id="password" required />
+        <div class="form-content">
+          <form class="form-fields">
+            <input
+              type="email"
+              class="form-input"
+              placeholder="Email/Username"
+              id="email"
+              required
+            />
+            <input
+              type="password"
+              class="form-input"
+              placeholder="Password"
+              id="password"
+              required
+            />
+          </form>
 
-                </form>
+          <button type="submit" id="submit" class="signup-btn">LOG IN</button>
 
-                <button type="submit" id="submit" class="signup-btn">LOG IN</button>
+          <p class="signup-link">
+            Don't have an account? <a href="/SIGNUP/SignUpPage.html">Sign Up</a>
+          </p>
+        </div>
+      </main>
 
-                <p class="signup-link">
-                    Don't have an account? <a href="/SIGNUP/SignUpPage.html">Sign Up</a>
-                    
-                </p>
+      <footer class="footer">
+        <div class="footer-content">
+          <div class="footer-logo-container">
+            <span class="footer-logo">LOGO</span>
+          </div>
+
+          <div class="footer-nav-menu">
+            <div class="footer-title-nav">Navigation</div>
+            <a href="#home" class="text-nav">Home</a>
+            <a href="#about" class="text-nav">About</a>
+            <a href="#menu" class="text-nav">Menu</a>
+            <a href="#contact" class="text-nav">Contact</a>
+          </div>
+
+          <div class="footer-social-contact">
+            <div class="footer-title">Social Media</div>
+            <div class="icons">
+              <span class="footer-logo-social"
+                ><img
+                  src="https://www.freepnglogos.com/uploads/facebook-logo-icon/facebook-logo-icon-file-facebook-icon-svg-wikimedia-commons-4.png" />
+                <a href="#"></a
+              ></span>
+              <span class="footer-logo-social"
+                ><img
+                  src="https://www.freepnglogos.com/uploads/instagram-icon/instagram-photo-logo-brand-1.png" />
+                <a href="#"></a
+              ></span>
+              <span class="footer-logo-social"
+                ><img
+                  src="https://www.freepnglogos.com/uploads/twitter-x-logo-png/twitter-x-logo-png-9.png" />
+                <a href="#"></a
+              ></span>
             </div>
-        </main>
-
-        <footer class="footer">
-            <div class="footer-content">
-                <div class="footer-logo-container">
-                    <span class="footer-logo">LOGO</span>
-                </div>
-                
-                <div class="footer-nav-menu">
-                    <div class="footer-title-nav">Navigation</div>
-                    <a href="#home" class="text-nav">Home</a>
-                    <a href="#about" class="text-nav">About</a>
-                    <a href="#menu" class="text-nav">Menu</a>
-                    <a href="#contact" class="text-nav">Contact</a>
-                    
-                    
-                </div>
-                
-                
-                <div class="footer-social-contact">
-                    <div class="footer-title">Social Media</div>
-                    <div class="icons">
-                    <span class="footer-logo-social"><img src ="https://www.freepnglogos.com/uploads/facebook-logo-icon/facebook-logo-icon-file-facebook-icon-svg-wikimedia-commons-4.png"> <a href="#"></a></span>
-                    <span class="footer-logo-social"><img src ="https://www.freepnglogos.com/uploads/instagram-icon/instagram-photo-logo-brand-1.png"> <a href="#"></a></span>
-                    <span class="footer-logo-social"><img src ="https://www.freepnglogos.com/uploads/twitter-x-logo-png/twitter-x-logo-png-9.png">  <a href="#"></a></span>
-                    </div>
-                </div>
-            </div>
-        </footer>
+          </div>
+        </div>
+      </footer>
     </div>
-</body>
-
+  </body>
 </html>

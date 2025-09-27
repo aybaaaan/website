@@ -89,7 +89,7 @@ function renderOrders() {
 
 // Add more items
 addMoreBtn.addEventListener("click", () => {
-  window.location.href = "/HomePage/Homepage.html?cart=open#menu";
+  window.location.href = "../usersPage/HomePage/HomePage.html?cart=open#menu";
 });
 
 // Proceed to checkout
@@ -138,15 +138,6 @@ window.addEventListener("click", (e) => {
   if (e.target === modal) modal.style.display = "none";
 });
 
-// Submit order
-document.getElementById("checkoutForm").addEventListener("submit", (e) => {
-  e.preventDefault();
-
-  // Show success popup instead of clearing immediately
-  const successModal = document.getElementById("successModal");
-  successModal.style.display = "flex";
-});
-
 // Handle return home button
 document.getElementById("returnHomeBtn").addEventListener("click", () => {
   // Clear orders
@@ -162,7 +153,7 @@ document.getElementById("returnHomeBtn").addEventListener("click", () => {
   document.getElementById("successModal").style.display = "none";
 
   // Redirect to homepage
-  window.location.href = "/HomePage/HomePage.html#home";
+  window.location.href = "../usersPage/HomePage/HomePage.html#home";
 });
 
 // Initialize checkout page

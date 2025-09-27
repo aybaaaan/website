@@ -181,7 +181,7 @@
     <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
   import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
-
+  import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
   const firebaseConfig = {
     apiKey: "AIzaSyAvQnRa_q4JlxVgcifjFtKM4i2ckHTJInc",
     authDomain: "webusiteu.firebaseapp.com",
@@ -276,6 +276,17 @@
   });
 }
   });
+
+// LOG OUT FUNCTIONALITY
+const auth = getAuth();
+
+if (confirmLogout) {
+  confirmLogout.addEventListener("click", () => {
+    signOut(auth).then(() => {
+      window.location.href = "/guestPage/nonLogHP.html"; // after logout → guest page
+    });
+  });
+}
 
   window.showSlide = showSlide; // allow indicators to work
 </script>

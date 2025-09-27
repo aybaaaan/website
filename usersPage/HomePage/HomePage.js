@@ -59,7 +59,7 @@ function goToDetails(name, price, img, desc) {
   localStorage.setItem("foodPrice", price);
   localStorage.setItem("foodImg", img);
   localStorage.setItem("foodDesc", desc);
-  window.location.href = "../FoodDetails/FoodDetails.html";
+  window.location.href = "/FoodDetails/FoodDetails.html";
 }
 
 // ===================== MENU NAVIGATION =====================
@@ -213,11 +213,6 @@ document.addEventListener("DOMContentLoaded", () => {
       logoutPopup.style.display = "none"; // close popup
     });
   }
-  if (confirmLogout) {
-    confirmLogout.addEventListener("click", () => {
-      window.location.href = "/LOGIN/LoginPage.html"; // adjust if needed
-    });
-  }
 
   accountBtn.addEventListener("click", () => {
     accountMenu.classList.toggle("active");
@@ -235,7 +230,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // ===================== LINK HOMEPAGE CHECKOUT BUTTON =====================
-document.querySelectorAll(".checkout-btn").forEach(btn => {
+document.querySelectorAll(".checkout-btn").forEach((btn) => {
   btn.addEventListener("click", () => {
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
     if (cart.length === 0) {
@@ -272,7 +267,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // Close menu when clicking a link
-  document.querySelectorAll("#mobileNav a").forEach(link => {
+  document.querySelectorAll("#mobileNav a").forEach((link) => {
     link.addEventListener("click", () => {
       mobileNav.classList.remove("active");
     });
@@ -301,13 +296,6 @@ document.addEventListener("click", (event) => {
     mobileNav.classList.remove("active");
   }
 });
-
-
-
-
-
-
-
 
 // ===================== FUTURE REVIEW ORDER FEATURE =====================
 // wala pa to
