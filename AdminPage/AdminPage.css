@@ -89,7 +89,7 @@ main {
 }
 
 section {
-  display: none;
+  display: block;
   animation: slideIn 0.4s ease forwards;
 }
 
@@ -118,11 +118,15 @@ section.active {
 
 /* styles.css */
 
+/* ===================================================
+   EDIT MENU AND BACKGROUND SECTION
+   =================================================== */
+
 /* ==== Picture Box Styles ==== */
 .picture-box {
   background: #fff;
   border: 2px dashed #aaa;
-  width: 100%;
+  width: 100%px;
   height: 120px;
   display: flex;
   justify-content: center;
@@ -163,6 +167,53 @@ section.active {
   background: #ffcf78;
   color: #000;
 }
+
+.overlay {
+  position: absolute;
+  top: 0;
+  background: rgba(43, 2, 2, 0.5);
+  color: #fff;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.3s ease;
+}
+
+.picture-box:hover .overlay {
+  padding: 15px 80px;
+  width: 100%;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+#p-itemname {
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.btn-edit,
+.btn-delete {
+  position: relative;
+  background: #20ad25;
+  color: #fff;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.btn-edit:hover,
+.btn-delete:hover {
+  background: #1e9c22;
+}
+
+/** ===================================================
+   ORDERS SECTION
+   =================================================== */
 
 /* Container for all orders */
 #ordersContainer {

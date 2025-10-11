@@ -17,7 +17,7 @@
     </header>
 
     <div class="container">
-      <!-- Sidebar -->
+      <!-- Sidebar (BUTTONS) -->
       <aside>
         <h3>Dashboard</h3>
         <button onclick="showSection('section-analytics')">
@@ -29,7 +29,7 @@
         <button onclick="showSection('section-orders')">Orders</button>
       </aside>
 
-      <!-- Main content -->
+      <!-- Main content (IN EACH BUTTONS) -->
       <main>
         <!-- Data Analytics -->
         <section id="section-analytics" class="active">
@@ -58,7 +58,7 @@
 
         <!-- Orders -->
         <section id="section-orders">
-          <h4>Orders from Firebase</h4>
+          <h4>Orders List</h4>
           <div id="ordersContainer"></div>
         </section>
       </main>
@@ -99,7 +99,7 @@
     <!-- Section Switcher -->
     <script src="AdminPage.js"></script>
 
-    <!-- EDIT MENU AND BACKGROUND ======================================================= -->
+    <!-- EDIT MENU AND BACKGROUND SCRIPT ======================================================= -->
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
       import {
@@ -194,17 +194,19 @@
             box.innerHTML = `
               <img src="${item.url}" alt="${item.name}">
               <div class="overlay">
-                <p>${item.name}</p>
-                <p>${item.desc}</p>
-                <p>₱${item.price || 0}</p>
-                <button onclick="editItem('${refPath.key}','${key}','${
-              item.url
-            }','${item.name}','${item.desc}','${
+                <p class="item-name">${item.name}</p>
+                <p class="item-desc">${item.desc}</p>
+                <p class="item-price">₱${item.price || 0}</p>
+                <div class="buttons">
+                <button class="btn-edit" onclick="editItem('${
+                  refPath.key
+                }','${key}','${item.url}','${item.name}','${item.desc}','${
               item.price || 0
             }')">Edit</button>
-                <button onclick="deleteItem('${
+                <button class="btn-delete" onclick="deleteItem('${
                   refPath.key
                 }','${key}')">Delete</button>
+                 </div>
               </div>
             `;
             container.appendChild(box);
