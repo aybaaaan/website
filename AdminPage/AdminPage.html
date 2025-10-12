@@ -65,6 +65,7 @@
     </div>
 
     <!-- Add/Edit Modal -->
+
     <div id="itemModal" class="modal">
       <div class="modal-content">
         <h3 id="modalTitle">Add Item</h3>
@@ -74,10 +75,33 @@
           placeholder="Image URL"
           oninput="previewImage(event)"
         />
+        <br />
+        <p>Image Preview</p>
         <img id="preview" src="" width="150" style="margin-top: 10px" /><br />
-        <input type="text" id="imageName" placeholder="Name" />
-        <input type="text" id="imageDesc" placeholder="Description" />
-        <input type="number" id="imagePrice" placeholder="Price (₱)" />
+        <br />
+        <p>Name</p>
+        <input
+          class="imageName"
+          type="text"
+          id="imageName"
+          placeholder="Name"
+        />
+        <br />
+        <p>Description</p>
+        <input
+          class="imageDesc"
+          type="text"
+          id="imageDesc"
+          placeholder="Description"
+        />
+        <br />
+        <p>Price</p>
+        <input
+          class="imagePrice"
+          type="number"
+          id="imagePrice"
+          placeholder="Price (₱)"
+        />
         <div class="modal-actions">
           <button id="saveItem">Save</button>
           <button onclick="closeModal()">Cancel</button>
@@ -131,7 +155,7 @@
       const menuGrid = document.getElementById("menuGrid");
       const homeGrid = document.getElementById("homeGrid");
 
-      // Modal logic
+      // ADD ITEM Modal logic =================================
       let currentSection = "menu";
       let editKey = null;
 
@@ -153,6 +177,19 @@
 
       window.previewImage = (event) => {
         document.getElementById("preview").src = event.target.value;
+      };
+
+      // EDIT ITEM Modal Logic ==============================
+      window.editItem = (section, key, url, name, desc, price) => {
+        currentSection = section;
+        editKey = key;
+        document.getElementById("modalTitle").innerText = "Edit Item";
+        document.getElementById("imageUrl").value = url;
+        document.getElementById("imageName").value = name;
+        document.getElementById("imageDesc").value = desc;
+        document.getElementById("imagePrice").value = price;
+        document.getElementById("preview").src = url;
+        document.getElementById("itemModal").style.display = "block";
       };
 
       // Save item (add or update)
@@ -181,7 +218,12 @@
         closeModal();
       });
 
-      // Render items
+      // Delete item ==========================================
+      window.deleteItem = (section, key) => {
+        remove(ref(db, section + "/" + key));
+      };
+
+      // Render items =========================================
       function renderItems(refPath, container) {
         onValue(refPath, (snapshot) => {
           container.innerHTML = "";
@@ -189,29 +231,45 @@
             const item = child.val();
             const key = child.key;
 
+            // Create the wrapper for each item
+            const itemWrapper = document.createElement("div");
+            itemWrapper.classList.add("item-wrapper"); // new wrapper for picture + buttons
+
+            // Create picture box
             const box = document.createElement("div");
             box.classList.add("picture-box");
             box.innerHTML = `
-              <img src="${item.url}" alt="${item.name}">
-              <div class="overlay">
-                <p class="item-name">${item.name}</p>
-                <p class="item-desc">${item.desc}</p>
-                <p class="item-price">₱${item.price || 0}</p>
-                <div class="buttons">
-                <button class="btn-edit" onclick="editItem('${
-                  refPath.key
-                }','${key}','${item.url}','${item.name}','${item.desc}','${
+        <img src="${item.url}" alt="${item.name}">
+        <div class="overlay">
+          <p class="item-name">${item.name}</p>
+          <p class="item-desc">${item.desc}</p>
+          <p class="item-price">₱${item.price || 0}</p>
+        </div>
+      `;
+
+            // Create buttons div (separate from the picture)
+            const buttonsDiv = document.createElement("div");
+            buttonsDiv.classList.add("buttons");
+            buttonsDiv.innerHTML = `
+        <button class="btn-edit" onclick="editItem('${refPath.key}','${key}','${
+              item.url
+            }','${item.name}','${item.desc}','${
               item.price || 0
             }')">Edit</button>
-                <button class="btn-delete" onclick="deleteItem('${
-                  refPath.key
-                }','${key}')">Delete</button>
-                 </div>
-              </div>
-            `;
-            container.appendChild(box);
+        <button class="btn-delete" onclick="deleteItem('${
+          refPath.key
+        }','${key}')">Delete</button>
+      `;
+
+            // Append both to wrapper
+            itemWrapper.appendChild(box);
+            itemWrapper.appendChild(buttonsDiv);
+
+            // Add wrapper to container
+            container.appendChild(itemWrapper);
           });
-          // keep plus box at the end
+
+          // Keep the "+" add box at the end
           const plus = document.createElement("div");
           plus.classList.add("picture-box", "plus");
           plus.innerText = "+";
@@ -222,23 +280,6 @@
 
       renderItems(menuRef, menuGrid);
       renderItems(homeRef, homeGrid);
-
-      // Expose edit/delete
-      window.editItem = (section, key, url, name, desc, price) => {
-        currentSection = section;
-        editKey = key;
-        document.getElementById("modalTitle").innerText = "Edit Item";
-        document.getElementById("imageUrl").value = url;
-        document.getElementById("imageName").value = name;
-        document.getElementById("imageDesc").value = desc;
-        document.getElementById("imagePrice").value = price;
-        document.getElementById("preview").src = url;
-        document.getElementById("itemModal").style.display = "block";
-      };
-
-      window.deleteItem = (section, key) => {
-        remove(ref(db, section + "/" + key));
-      };
 
       // ORDERS LIST ===============================================
       const ordersRef = ref(db, "Order");
@@ -252,13 +293,15 @@
           row.classList.add("order-card");
 
           row.innerHTML = `
-            <img src="${
-              data.foodImage || "https://via.placeholder.com/120"
-            }" alt="Food" />
+            
             <div class="order-details">
               <h3>${data.name || "Unknown"}</h3>
-              <p><strong>Email:</strong> ${data.emailid || "N/A"}</p>
+              <p class ="p-emailid"><strong>Email:</strong> ${
+                data.emailid || "N/A"
+              }</p>
+              <p><strong>Contact :</strong> ${data.contact || "N/A"}</p>
               <p><strong>Food:</strong> ${data.foodName || "N/A"}</p>
+              <p><strong>Food2:</strong> ${data.food1 || "N/A"}</p>
               <p><strong>Quantity:</strong> ${data.quantity || 1}</p>
               <p><strong>Time:</strong> ${new Date(
                 parseInt(child.key)
