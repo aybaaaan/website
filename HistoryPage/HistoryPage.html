@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Order History</title>
+  <link rel="stylesheet" href="HistoryPage.css" />
+</head>
+<body>
+  <header class="header">
+    <div class="logo">Mediterranean In Velvet</div>
+
+    <nav class="nav" id="nav-menu">
+      <a href="/usersPage/HomePage/HomePage.html#home">Home</a>
+      <a href="/usersPage/HomePage/HomePage.html#menu">Menu</a>
+      <a href="/usersPage/HomePage/HomePage.html#about">About</a>
+      <a href="/usersPage/HomePage/HomePage.html#contact">Contact</a>
+    </nav>
+
+    <div class="hamburger" id="hamburger">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </header>
+
+  <section class="history-container">
+    <div class="history-header">
+      <h1>History List of Orders</h1>
+      <button onclick="window.location.href='/usersPage/HomePage/HomePage.html#home'" class="back-btn">← Back</button>
+    </div>
+
+    <div class="order-list">
+      <div class="order-card">
+        <img src="https://via.placeholder.com/140x140" alt="Food Image" />
+        <div class="order-info">
+          <h3>Meatball Herb Pasta</h3>
+          <p>Quantity: 2</p>
+          <p>Price: ₱220 each</p>
+          <p class="subtotal">Subtotal: ₱440</p>
+          <p class="order-date">Date: October 10, 2025</p>
+        </div>
+        <button class="reorder-btn" onclick="reorder('Meatball Herb Pasta', 2, 220)">Reorder</button>
+      </div>
+
+      <div class="order-card">
+        <img src="https://via.placeholder.com/140x140" alt="Food Image" />
+        <div class="order-info">
+          <h3>Mediterranean Shrimp</h3>
+          <p>Quantity: 1</p>
+          <p>Price: ₱250 each</p>
+          <p class="subtotal">Subtotal: ₱250</p>
+          <p class="order-date">Date: October 6, 2025</p>
+        </div>
+        <button class="reorder-btn" onclick="reorder('Mediterranean Shrimp', 1, 250)">Reorder</button>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">Mediterranean In Velvet</footer>
+
+  <script>
+    // Hamburger toggle
+    const hamburger = document.getElementById('hamburger');
+    const navMenu = document.getElementById('nav-menu');
+
+    hamburger.addEventListener('click', () => {
+      navMenu.classList.toggle('active');
+      hamburger.classList.toggle('active');
+    });
+
+    // Reorder function
+    function reorder(name, qty, price) {
+      let cart = JSON.parse(localStorage.getItem("cart")) || [];
+      const existing = cart.find(item => item.name === name);
+      if (existing) existing.qty += qty;
+      else cart.push({ name, qty, price });
+      localStorage.setItem("cart", JSON.stringify(cart));
+      alert(`${qty} x ${name} added to your cart!`);
+      window.location.href = "/Checkout/CheckoutPage.html";
+    }
+  </script>
+</body>
+</html>

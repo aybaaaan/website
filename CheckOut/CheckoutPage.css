@@ -86,8 +86,9 @@ body::before {
 
 /* Back Button */
 .back-btn {
-  display: inline-block;
-  margin-bottom: 15px;
+  display: block;         /* ensures it doesn’t overlap other content */
+  text-align: right;      /* move it to the right */
+  margin-bottom: 15px;    /* spacing below */
   text-decoration: none;
   color: #6e8e6b;
   font-weight: bold;
