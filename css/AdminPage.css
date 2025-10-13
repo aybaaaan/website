@@ -395,6 +395,8 @@ section.active {
   background-color: rgba(0, 0, 0, 0.4);
   justify-content: center;
   align-items: center;
+  overflow-y: auto; 
+  padding: 20px;
 }
 
 /* Modal box */
@@ -488,6 +490,45 @@ section.active {
 .modal-actions button:last-child:hover {
   background-color: #ff6655;
   transform: scale(1.03);
+}
+
+/* ===== Responsive Adjustments ===== */
+
+/* FOR TABLETS */
+@media (max-width: 768px) {
+  .modal-content {
+    width: 90%;
+    padding: 18px;
+    font-size: 0.95rem;
+  }
+
+  .modal-actions {
+    flex-direction: column;
+  }
+
+  .modal-actions button {
+    width: 100%;
+  }
+}
+
+/* FOR PHONES */
+@media (max-width: 480px) {
+  .modal-content {
+    width: 100%;
+    padding: 16px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+  }
+
+  #imageDesc {
+    font-size: 0.85rem;
+    min-height: 100px;
+  }
+
+  .modal-actions button {
+    font-size: 0.9rem;
+    padding: 8px 0;
+  }
 }
 
 /* ===== Animation ===== */
