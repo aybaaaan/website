@@ -146,7 +146,7 @@ window.addEventListener("click", (e) => {
   if (e.target === modal) modal.style.display = "none";
 });
 
-// ✅ SINGLE Submit Handler
+// SINGLE Submit Handler
 checkoutForm.addEventListener("submit", async (e) => {
   e.preventDefault();
 
