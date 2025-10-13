@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Checkout Page</title>
+    <link rel="stylesheet" href="/css/CheckoutPage.css" />
+  </head>
+
+  <body>
+    <header class="header">
+      <div class="logo">Mediterranean In Velvet</div>
+      <nav class="nav">
+        <a href="/pages/HomePage.html#home">Home</a>
+        <a href="/pages/HomePage.html#menu">Menu</a>
+        <a href="/pages/HomePage.html#about">About</a>
+        <a href="/pages/HomePage.html#contact">Contact</a>
+      </nav>
+    </header>
+    <section class="checkout-container">
+      <div class="checkout-card">
+        <h2>Review Your Order</h2>
+        <a href="/pages/HomePage.html#home" class="back-btn">&larr; Back</a>
+        <div id="checkoutContainer" class="checkout-items"></div>
+        <div class="checkout-actions">
+          <div class="totals">
+            <p>Subtotal: Php <span id="subtotal">0.00</span></p>
+            <p>Total: Php <span id="total">0.00</span></p>
+          </div>
+          <div class="actions-row">
+            <button id="addMoreBtn" class="yellow-btn">Add more items</button>
+            <button id="proceedBtn" class="green-btn">
+              Proceed to Checkout
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- ====== Checkout Modal ====== -->
+      <!-- Checkout Modal -->
+      <div id="checkoutModal" class="modal">
+        <div class="modal-content">
+          <span id="closeModal" class="close">&times;</span>
+          <h3>Enter Delivery Details</h3>
+
+          <form id="checkoutForm">
+            <input type="text" id="name" placeholder="Full Name" required />
+            <input type="text" id="address" placeholder="Address" required />
+            <input
+              type="tel"
+              id="contact"
+              placeholder="Contact Number"
+              required
+            />
+
+            <label>Payment Method:</label>
+            <select id="payment" required>
+              <option value="" disabled selected>Select Payment</option>
+              <option value="CASH_ON_DELIVERY">Cash on Delivery</option>
+              <option value="GCASH">GCash QR Code</option>
+            </select>
+
+            <button type="submit" id="submit">Place Order</button>
+          </form>
+        </div>
+      </div>
+      <!-- Success Popup -->
+      <div id="successModal" class="modal">
+        <div class="modal-content">
+          <h3>Order Successful!</h3>
+          <p>Your order has been placed successfully.</p>
+          <button id="returnHomeBtn">Return Home</button>
+        </div>
+      </div>
+    </section>
+    <footer class="footer">Mediterranean in Velvet</footer>
+
+    <!-- JavaScript Files -->
+    <script type="module" src="/script/CheckoutPage.js"></script>
+  </body>
+</html>

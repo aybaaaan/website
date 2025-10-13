@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="HomePage.css" />
+    <link rel="stylesheet" href="/css/HomePage.css" />
     <title>Food Restaurant Home Page</title>
 </head>
 
@@ -37,7 +37,7 @@
                         <a href="javascript:void(0)" class="action-btn" id="accountBtn">Account</a>
                         <div id="accountMenu" class="dropdown-menu">
                             <a href="#">My Information</a>
-                              <a href="/HistoryPage/HistoryPage.html" class="order-history">Order History</a>
+                              <a href="/pages/HistoryPage.html" class="order-history">Order History</a>
                             <a href="#" class="logout-option" id="logoutBtn">Log Out</a>
                         </div>
                     </div>
@@ -176,7 +176,7 @@
         </div>
     </div>
 
-    <script src="HomePage.js"></script>
+    <script src="/script/HomePage.js"></script>
 
     <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
@@ -283,7 +283,7 @@ const auth = getAuth();
 if (confirmLogout) {
   confirmLogout.addEventListener("click", () => {
     signOut(auth).then(() => {
-      window.location.href = "/guestPage/nonLogHP.html"; // after logout → guest page
+      window.location.href = "/guest/nonLogHP.html"; // after logout → guest page
     });
   });
 }

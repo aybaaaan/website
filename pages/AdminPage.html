@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="/css/AdminPage.css" />
+  </head>
+
+  <body>
+    <!-- Top bar -->
+    <header>
+      <div class="logo">Mediterranean In Velvet | Admin</div>
+      <div class="header-actions">
+        <a href="#" id="btn-logout">LOG OUT</a>
+      </div>
+    </header>
+
+    <div class="container">
+      <!-- Sidebar (BUTTONS) -->
+      <aside>
+        <h3>Dashboard</h3>
+        <button onclick="showSection('section-analytics')">
+          Data Analytics
+        </button>
+        <button onclick="showSection('section-menu')">
+          Edit Menu and Background
+        </button>
+        <button onclick="showSection('section-orders')">Orders</button>
+      </aside>
+
+      <!-- Main content (IN EACH BUTTONS) -->
+      <main>
+        <!-- Data Analytics -->
+        <section id="section-analytics" class="active">
+          <div class="card">
+            <h4>Total Sales</h4>
+            <p>Graph / Statistics</p>
+          </div>
+        </section>
+
+        <!-- Edit Menu -->
+        <section id="section-menu">
+          <h4>Edit Menu</h4>
+          <div class="grid" id="menuGrid">
+            <!-- Firebase items will render here -->
+            <div class="picture-box plus" onclick="openAddModal()">+</div>
+          </div>
+
+          <h4 style="margin-top: 20px">Edit Homepage</h4>
+          <div class="grid" id="homeGrid">
+            <!-- Firebase homepage items will render here -->
+            <div class="picture-box plus" onclick="openAddModal('homepage')">
+              +
+            </div>
+          </div>
+        </section>
+
+        <!-- Orders -->
+        <section id="section-orders">
+          <h4>Orders List</h4>
+          <div id="ordersContainer"></div>
+        </section>
+      </main>
+    </div>
+
+    <!-- Add/Edit Modal -->
+
+    <div id="itemModal" class="modal">
+      <div class="modal-content">
+        <h3 id="modalTitle">Add Item</h3>
+        <input
+          type="text"
+          id="imageUrl"
+          placeholder="Image URL"
+          oninput="previewImage(event)"
+        />
+        <br />
+        <p>Image Preview</p>
+        <img id="preview" src="" width="150" style="margin-top: 10px" /><br />
+        <br />
+        <p>Name</p>
+        <input
+          class="imageName"
+          type="text"
+          id="imageName"
+          placeholder="Name"
+        />
+        <br />
+        <p>Description</p>
+        <textarea id="imageDesc" placeholder="Description"> </textarea>
+        <br />
+        <p>Price</p>
+        <input
+          class="imagePrice"
+          type="number"
+          id="imagePrice"
+          placeholder="Price (₱)"
+        />
+        <div class="modal-actions">
+          <button id="saveItem">Save</button>
+          <button onclick="closeModal()">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Logout Modal -->
+    <div id="logoutModal" class="modal">
+      <div class="modal-content">
+        <p>Are you sure you want to log out?</p>
+        <div class="modal-actions">
+          <button id="cancel-logout">Cancel</button>
+          <button id="confirm-logout">Confirm</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section Switcher -->
+    <script type="module" src="/script/AdminPage.js"></script>
+  </body>
+</html>

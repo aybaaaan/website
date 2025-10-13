@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // Go back to HomePage (menu section)
 function goBack() {
-  window.location.href = "../usersPage/HomePage/HomePage.html#menu";
+  window.location.href = "/pages/HomePage.html#menu";
 }
 
 function addToCartFromDetails() {
@@ -40,5 +40,5 @@ function addToCartFromDetails() {
   localStorage.setItem("cart", JSON.stringify(cart));
 
   // Redirect back to HomePage and open cart sidebar
-  window.location.href = "../usersPage/HomePage/HomePage.html?cart=open#menu";
+  window.location.href = "/pages/HomePage.html?cart=open#menu";
 }

@@ -37,10 +37,10 @@ submit.addEventListener("click", function (event) {
       const user = userCredential.user;
       if (user.email === "admin123@miv.com" && password === "admin123") {
         alert("Admin login successful");
-        window.location.href = "/AdminPage/AdminPage.html"; // redirect to Admin page
+        window.location.href = "/pages/AdminPage.html"; // redirect to Admin page
       } else {
         alert("User login successful");
-        window.location.href = "/usersPage/HomePage/HomePage.html"; // redirect to Home page
+        window.location.href = "/pages/HomePage.html"; // redirect to Home page
       }
     })
     .catch((error) => {

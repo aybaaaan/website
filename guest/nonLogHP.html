@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="/usersPage/HomePage/HomePage.css" />
+    <link rel="stylesheet" href="/css/HomePage.css" />
     <title>Food Restaurant Home Page</title>
 </head>
 
@@ -34,7 +34,7 @@
                 <div class="header-actions">
                     <a href="javascript:void(0)" class="action-btn" onclick="toggleCart()">Cart</a>
                     <div class="signup-button">
-                        <a href="/SIGNUP/SignUpPage.html" class="action-btn" id="signupBtn">Sign Up</a>
+                        <a href="/pages/SignUpPage.html" class="action-btn" id="signupBtn">Sign Up</a>
                     
                         </div>
                     </div>
@@ -161,7 +161,7 @@
             <li>No items in cart</li>
         </ul>
         <p id="cartTotal">Total: Php 0</p>
-        <button class="checkout-btn" onclick="alert('Please log in to checkout!'); window.location.href='/LOGIN/LoginPage.html';">Checkout</button>
+        <button class="checkout-btn" onclick="alert('Please log in to checkout!'); window.location.href='/pages/LoginPage.html';">Checkout</button>
     </div>
     <div id="logoutPopup" class="popup-overlay">
         <div class="popup-box">
@@ -173,7 +173,7 @@
         </div>
     </div>
 
-    <script src="/usersPage/HomePage/HomePage.js"></script>
+    <script src="/script/HomePage.js"></script>
 
     <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";

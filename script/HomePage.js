@@ -59,7 +59,7 @@ function goToDetails(name, price, img, desc) {
   localStorage.setItem("foodPrice", price);
   localStorage.setItem("foodImg", img);
   localStorage.setItem("foodDesc", desc);
-  window.location.href = "/FoodDetails/FoodDetails.html";
+  window.location.href = "/pages/FoodDetails.html";
 }
 
 // ===================== MENU NAVIGATION =====================
@@ -236,7 +236,7 @@ document.querySelectorAll(".checkout-btn").forEach((btn) => {
     if (cart.length === 0) {
       alert("Your cart is empty! Please add items first.");
     } else {
-      window.location.href = "/Checkout/CheckoutPage.html";
+      window.location.href = "/pages/CheckoutPage.html";
     }
   });
 });

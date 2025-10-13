@@ -15,7 +15,7 @@ function updateTotals() {
   totalEl.textContent = subtotal.toFixed(2);
 }
 
-// Render all orders dynamically
+// Render orders dynamically
 function renderOrders() {
   checkoutContainer.innerHTML = "";
 
@@ -76,85 +76,123 @@ function renderOrders() {
     // Remove item
     removeBtn.addEventListener("click", () => {
       orders.splice(index, 1);
-      orderDiv.remove();
-      updateTotals();
       localStorage.setItem("cart", JSON.stringify(orders));
-      if (orders.length === 0)
-        checkoutContainer.innerHTML = "<p>Your cart is empty!</p>";
+      renderOrders();
     });
   });
 
   updateTotals();
 }
 
-// Add more items
-addMoreBtn.addEventListener("click", () => {
-  window.location.href = "../usersPage/HomePage/HomePage.html?cart=open#menu";
-});
-
-// Proceed to checkout
 // ===================== MODAL LOGIC =====================
 const modal = document.getElementById("checkoutModal");
 const closeModal = document.getElementById("closeModal");
-const deliveryTab = document.getElementById("deliveryTab");
-const formFields = document.getElementById("formFields");
 const checkoutForm = document.getElementById("checkoutForm");
+const formFields = document.getElementById("formFields");
 
-// Default: Delivery fields
 function renderDeliveryFields() {
   formFields.innerHTML = `
-    <input type="text" placeholder="Name" required>
-    <input type="text" placeholder="Address" required>
-    <input type="text" placeholder="Contact Number" required>
+    <input id="name" type="text" placeholder="Name" required>
+    <input id="address" type="text" placeholder="Address" required>
+    <input id="contact" type="text" placeholder="Contact Number" required>
     <label class="payment-label">Payment Method:</label>
-    <select required>
+    <select id="payment" required>
       <option value="" disabled selected>Select Payment</option>
-      <option value="cod">Cash on Delivery</option>
-      <option value="gcash">GCash QR Code</option>
+      <option value="CASH_ON_DELIVERY">Cash on Delivery</option>
+      <option value="GCASH">GCash QR Code</option>
     </select>
+    <button type="submit" id="placeOrderBtn">Place Order</button>
   `;
 }
 
-// Toggle tabs
+// ===================== FIREBASE CONFIG =====================
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+import {
+  getDatabase,
+  ref,
+  push,
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
 
-// Open modal on Proceed button
+const firebaseConfig = {
+  apiKey: "AIzaSyAvQnRa_q4JlxVgcifjFtKM4i2ckHTJInc",
+  authDomain: "webusiteu.firebaseapp.com",
+  databaseURL:
+    "https://webusiteu-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "webusiteu",
+  storageBucket: "webusiteu.firebasestorage.app",
+  messagingSenderId: "974146331400",
+  appId: "1:974146331400:web:a0590d7dc71dd3c00f02bd",
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+const ordersRef = ref(db, "Order");
+
+// ===================== EVENT HANDLERS =====================
 proceedBtn.addEventListener("click", () => {
   if (orders.length === 0) {
-    alert("Your order is empty!");
+    alert("Your cart is empty!");
     return;
   }
-
   modal.style.display = "flex";
-  renderDeliveryFields(); // default tab
+  renderDeliveryFields();
 });
 
-// Close modal
 closeModal.addEventListener("click", () => {
   modal.style.display = "none";
 });
 
-// Close when clicking outside
 window.addEventListener("click", (e) => {
   if (e.target === modal) modal.style.display = "none";
 });
 
-// Handle return home button
-document.getElementById("returnHomeBtn").addEventListener("click", () => {
-  // Clear orders
-  orders = [];
-  localStorage.removeItem("cart");
+// ✅ SINGLE Submit Handler
+checkoutForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
 
-  // Reset checkout display
-  checkoutContainer.innerHTML = "<p>Your cart is empty!</p>";
-  subtotalEl.textContent = "0.00";
-  totalEl.textContent = "0.00";
+  const name = document.getElementById("name").value.trim();
+  const address = document.getElementById("address").value.trim();
+  const contact = document.getElementById("contact").value.trim();
+  const payment = document.getElementById("payment").value;
 
-  // Close success popup
-  document.getElementById("successModal").style.display = "none";
+  if (!name || !address || !contact || !payment) {
+    alert("Please fill out all fields.");
+    return;
+  }
 
-  // Redirect to homepage
-  window.location.href = "../usersPage/HomePage/HomePage.html#home";
+  const orderData = {
+    name,
+    address,
+    contact,
+    payment,
+    orders,
+    total: parseFloat(totalEl.textContent),
+    timestamp: Date.now(),
+    status: "Pending",
+  };
+
+  try {
+    await push(ordersRef, orderData);
+    alert("Order placed successfully!");
+
+    // Clear cart and reset
+    localStorage.removeItem("cart");
+    orders = [];
+    renderOrders();
+    modal.style.display = "none";
+
+    document.getElementById("successModal").style.display = "flex";
+  } catch (err) {
+    console.error(err);
+    alert("Failed to place order. Please try again.");
+  }
 });
 
-// Initialize checkout page
+// Return Home Button
+document.getElementById("returnHomeBtn").addEventListener("click", () => {
+  document.getElementById("successModal").style.display = "none";
+  window.location.href = "/pages/HomePage.html#home";
+});
+
+// Initialize checkout
 renderOrders();
