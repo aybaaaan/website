@@ -287,61 +287,153 @@ section.active {
 
 /* Individual order card design */
 .order-card {
-  background: #d6d6d6;
-  border-radius: 8px;
+  background: #f8f8f8;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 15px 20px;
   display: flex;
-  align-items: flex-start;
-  padding: 15px;
-  gap: 15px; /* space between image and details */
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  flex-direction: column;
+  gap: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   animation: fadeIn 0.3s ease;
 }
 
-/* Order image (food picture) */
-.order-card img {
-  width: 120px;
-  height: 120px;
-  border-radius: 8px;
-  object-fit: cover; /* crop image nicely */
-  flex-shrink: 0; /* prevents shrinking */
-}
-
-/* Container for text details */
-.order-details {
-  flex: 1; /* occupy remaining width */
-}
-
-/* Customer name */
 .order-details h3 {
-  margin-bottom: 8px;
   font-size: 18px;
   font-weight: bold;
+  margin-bottom: 5px;
 }
 
-/* Other details (food, quantity, time, total) */
 .order-details p {
+  margin: 2px 0;
   font-size: 14px;
-  margin: 3px 0;
 }
 
-/* Done button styling */
-.order-card .btn-done {
-  background: #4caf50;
+.order-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+/* Dropdown section */
+.food-section {
+  margin-top: 10px;
+}
+
+.food-toggle {
+  background: #5f7d5f;
   color: #fff;
   border: none;
-  padding: 10px 16px;
   border-radius: 5px;
+  padding: 6px 12px;
+  font-weight: 600;
   cursor: pointer;
-  font-weight: bold;
-  margin-top: 10px;
   transition: background 0.3s ease, transform 0.2s ease;
 }
 
-/* Hover effect for Done button */
-.order-card .btn-done:hover {
+.food-toggle:hover {
+  background: #5f7d5f;
+  transform: scale(1.05);
+}
+
+/* Scrollable food list (hidden by default) */
+.order-food-list {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  margin-top: 5px;
+  padding: 0 10px;
+}
+
+.order-food-list.active {
+  max-height: 150px; /* scrollable height */
+  overflow-y: auto;
+  padding: 8px 10px;
+}
+
+.order-food-list ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.order-food-list li {
+  font-size: 14px;
+  padding: 4px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.order-food-list li:last-child {
+  border-bottom: none;
+}
+
+/* Buttons */
+.btn-confirm, .btn-delete {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.btn-confirm {
+  background: #4caf50;
+  color: #fff;
+}
+
+.btn-confirm:hover {
   background: #45a049;
   transform: scale(1.05);
 }
+
+.btn-delete {
+  background: #e53935;
+  color: #fff;
+}
+
+.btn-delete:hover {
+  background: #c62828;
+  transform: scale(1.05);
+}
+
+/* ===== Scrollable Orders Section Box ===== */
+#section-orders {
+  background: #f0f0f0;
+  border: 1.5px solid #ccc;
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 20px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+  max-height: 600px; /* Height fits ~3 order cards */
+  overflow-y: auto; /* Scrollable vertically */
+}
+
+/* Optional — add smooth scrollbar */
+#section-orders::-webkit-scrollbar {
+  width: 8px;
+}
+
+#section-orders::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+#section-orders::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Orders container inside */
+#ordersContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
 
 /* Simple fade animation for new orders */
 @keyframes fadeIn {

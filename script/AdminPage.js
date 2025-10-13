@@ -217,27 +217,49 @@ onValue(ordersRef, (snapshot) => {
       : "N/A";
 
     row.innerHTML = `
-      <div class="order-details">
-        <h3>${data.name || "Unknown"}</h3>
-        <p><strong>Address:</strong> ${data.address || "N/A"}</p>
-        <p><strong>Contact:</strong> ${data.contact || "N/A"}</p>
-        <p><strong>Payment Method:</strong> ${data.payment || "N/A"}</p>
-
-        <p><strong>Ordered Items:</strong></p>
+  <div class="order-details">
+    <h3>${data.name || "Unknown"}</h3>
+    <p><strong>Address:</strong> ${data.address || "N/A"}</p>
+    <p><strong>Contact:</strong> ${data.contact || "N/A"}</p>
+    <p><strong>Payment Method:</strong> ${data.payment || "N/A"}</p>
+    
+    <div class="food-section">
+      <button class="food-toggle">Order Details ▼</button>
+      <div class="order-food-list">
         <ul>${foodListHTML}</ul>
-
-        <p><strong>Total:</strong> ₱${
-          data.total ? data.total.toFixed(2) : "0.00"
-        }</p>
-        <p><strong>Time:</strong> ${formattedTime}</p>
-
-        <button class="btn-done">Mark as Done</button>
       </div>
-    `;
+    </div>
 
-    row.querySelector(".btn-done").addEventListener("click", () => {
-      alert(`Order for ${data.name} marked as done!`);
-      // You can also add logic here to remove it from Firebase if needed
+    <p><strong>Total:</strong> ₱${
+      data.total ? data.total.toFixed(2) : "0.00"
+    }</p>
+    <p><strong>Time:</strong> ${formattedTime}</p>
+  </div>
+
+  <div class="order-actions">
+    <button class="btn-confirm">Confirm</button>
+    <button class="btn-delete">Delete</button>
+  </div>
+`;
+
+    const foodToggle = row.querySelector(".food-toggle");
+    const foodList = row.querySelector(".order-food-list");
+    foodToggle.addEventListener("click", () => {
+      foodList.classList.toggle("active");
+      foodToggle.textContent = foodList.classList.contains("active")
+        ? "Order Details ▲"
+        : "Order Details ▼";
+    });
+
+    row.querySelector(".btn-confirm").addEventListener("click", () => {
+      alert(`Order for ${data.name} marked as confirmed!`);
+    });
+
+    row.querySelector(".btn-delete").addEventListener("click", () => {
+      const confirmDelete = confirm(`Delete order for ${data.name}?`);
+      if (confirmDelete) {
+        remove(ref(db, "Order/" + child.key));
+      }
     });
 
     ordersContainer.appendChild(row);
