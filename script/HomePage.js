@@ -245,6 +245,9 @@ document.querySelectorAll(".checkout-btn").forEach((btn) => {
 document.addEventListener("DOMContentLoaded", () => {
   const hamburgerBtn = document.getElementById("hamburgerBtn");
   const mobileNav = document.getElementById("mobileNav");
+
+  window.scrollMenu = scrollMenu; // allow buttons to work
+
   const accountBtn = document.getElementById("accountBtn");
   const cartBtn = document.getElementById("cartBtn");
 
@@ -295,39 +298,137 @@ document.addEventListener("click", (event) => {
   ) {
     mobileNav.classList.remove("active");
   }
+
+  if (
+    mobileNav.classList.contains("active") &&
+    !hamburgerBtn.contains(event.target) &&
+    !mobileNav.contains(event.target)
+  ) {
+    mobileNav.classList.remove("active");
+  }
 });
 
-// ===================== FUTURE REVIEW ORDER FEATURE =====================
-// wala pa to
+window.goToDetails = goToDetails;
+window.addToCart = addToCart;
+window.removeFromCart = removeFromCart;
+window.toggleCart = toggleCart;
+window.closeCart = closeCart;
 
-/*function goToReview() {
-    document.getElementById("cartSidebar").classList.remove("active");
-    document.getElementById("reviewOrderPage").classList.remove("hidden");
-    renderReview();
-}*/
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+import {
+  getDatabase,
+  ref,
+  onValue,
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
+import {
+  getAuth,
+  signOut,
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+const firebaseConfig = {
+  apiKey: "AIzaSyAvQnRa_q4JlxVgcifjFtKM4i2ckHTJInc",
+  authDomain: "webusiteu.firebaseapp.com",
+  databaseURL:
+    "https://webusiteu-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "webusiteu",
+  storageBucket: "webusiteu.firebasestorage.app",
+  messagingSenderId: "974146331400",
+  appId: "1:974146331400:web:a0590d7dc71dd3c00f02bd",
+};
 
-/*function closeReview() {
-    document.getElementById("reviewOrderPage").classList.add("hidden");
-}*/
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
 
-/*function renderReview() {
-    let reviewItems = document.getElementById("reviewItems");
-    let total = 0;
+let currentSlide = 0;
 
-    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+function showSlide(index) {
+  const items = document.querySelectorAll(".carousel-item");
+  const indicators = document.querySelectorAll(".indicator");
+  if (items.length === 0) return;
 
-    if (cart.length === 0) {
-        reviewItems.innerHTML = "<p>No items yet.</p>";
-    } else {
-        reviewItems.innerHTML = cart.map(item => {
-            total += item.price * item.qty;
-            return `<div class="review-item">
-                        <span>${item.name}</span>
-                        <span>Qty: ${item.qty}</span>
-                        <span>Php ${item.price * item.qty}</span>
-                    </div>`;
-        }).join("");
-    }
+  if (index >= items.length) currentSlide = 0;
+  else if (index < 0) currentSlide = items.length - 1;
+  else currentSlide = index;
 
-    document.getElementById("reviewTotal").textContent = `Total: Php ${total}`;
-}*/
+  items.forEach((item, i) => {
+    item.classList.toggle("active", i === currentSlide);
+    indicators[i]?.classList.toggle("active", i === currentSlide);
+  });
+}
+
+window.nextSlide = function () {
+  showSlide(currentSlide + 1);
+};
+window.prevSlide = function () {
+  showSlide(currentSlide - 1);
+};
+
+// ================== LOAD HOMEPAGE CAROUSEL ==================
+onValue(ref(db, "homepage"), (snapshot) => {
+  const data = snapshot.val();
+  const carousel = document.getElementById("carousel");
+  const indicators = document.getElementById("indicators");
+  carousel.innerHTML = "";
+  indicators.innerHTML = "";
+
+  if (data) {
+    Object.values(data).forEach((item, index) => {
+      carousel.innerHTML += `
+          <div class="carousel-item ${index === 0 ? "active" : ""}">
+            <img src="${item.url}" alt="${item.name}" />
+            <div class="carousel-item-caption">
+              <h1>${item.name}</h1>
+              <p>${item.desc}</p>
+            </div>
+          </div>
+        `;
+
+      indicators.innerHTML += `
+          <span class="indicator ${index === 0 ? "active" : ""}" 
+                data-slide="${index}" onclick="showSlide(${index})"></span>
+        `;
+    });
+    currentSlide = 0;
+    showSlide(currentSlide);
+  }
+});
+
+// ================== LOAD MENU CARDS ==================
+onValue(ref(db, "menu"), (snapshot) => {
+  const data = snapshot.val();
+  const menuContainer = document.getElementById("menuCards");
+  menuContainer.innerHTML = "";
+
+  if (data) {
+    Object.values(data).forEach((item) => {
+      menuContainer.innerHTML += `
+      <div class="menu-card">
+        <img src="${item.url}" alt="${item.name}">
+        <div class="card-content">
+          <h3 class="card-title">${item.name}</h3>
+          <p>${item.desc}</p>
+          <p class="card-price">₱${item.price || 0}</p>
+          <button class="order-btn" onclick="goToDetails(
+            '${item.name}',
+            '${item.price || 0}',
+            '${item.url}',
+            '${item.desc}'
+          )">Order</button>
+        </div>
+      </div>
+    `;
+    });
+  }
+});
+
+// LOG OUT FUNCTIONALITY
+const auth = getAuth();
+
+if (confirmLogout) {
+  confirmLogout.addEventListener("click", () => {
+    signOut(auth).then(() => {
+      window.location.href = "/guest/nonLogHP.html"; // after logout → guest page
+    });
+  });
+}
+
+window.showSlide = showSlide; // allow indicators to work
