@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin Dashboard</title>
     <link rel="stylesheet" href="/css/AdminPage.css" />
-  </head>
 
   <body>
     <!-- Top bar -->
@@ -20,16 +19,13 @@
       <!-- Sidebar (BUTTONS) -->
       <aside>
         <h3>Dashboard</h3>
-        <button onclick="showSection('section-analytics')">
-          Data Analytics
-        </button>
-        <button onclick="showSection('section-menu')">
-          Edit Menu and Background
-        </button>
-        <button onclick="showSection('section-orders')">Orders</button>
+        <!-- Each button is now an anchor link to a section -->
+        <a href="#section-analytics"><button>Data Analytics</button></a>
+        <a href="#section-menu"><button>Edit Menu and Background</button></a>
+        <a href="#section-orders"><button>Orders</button></a>
       </aside>
 
-      <!-- Main content (IN EACH BUTTONS) -->
+      <!-- Main content -->
       <main>
         <!-- Data Analytics -->
         <section id="section-analytics" class="active">
@@ -65,7 +61,6 @@
     </div>
 
     <!-- Add/Edit Modal -->
-
     <div id="itemModal" class="modal">
       <div class="modal-content">
         <h3 id="modalTitle">Add Item</h3>
@@ -88,7 +83,7 @@
         />
         <br />
         <p>Description</p>
-        <textarea id="imageDesc" placeholder="Description"> </textarea>
+        <textarea id="imageDesc" placeholder="Description"></textarea>
         <br />
         <p>Price</p>
         <input
@@ -115,7 +110,7 @@
       </div>
     </div>
 
-    <!-- Section Switcher -->
+    <!-- Script (optional, if you have Firebase or other logic) -->
     <script type="module" src="/script/AdminPage.js"></script>
   </body>
 </html>
