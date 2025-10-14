@@ -33,10 +33,12 @@ function renderOrders() {
     orderDiv.innerHTML = `
       <div class="details">
         <h3>${item.name}</h3>
-        <p>Qty: <span class="quantity">${item.qty}</span></p>
-        <p>Price: Php <span class="priceNum">${(item.price * item.qty).toFixed(
-          2
-        )}</span></p>
+        <p class="details-qty">Qty: <span class="quantity">${
+          item.qty
+        }</span></p>
+        <p class="details-price">Price: Php <span class="priceNum">${(
+          item.price * item.qty
+        ).toFixed(2)}</span></p>
         <div class="quantity-control">
           <button class="decreaseBtn">-</button>
           <button class="increaseBtn">+</button>
@@ -113,6 +115,11 @@ import {
   push,
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
 
+import {
+  getAuth,
+  onAuthStateChanged,
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+
 const firebaseConfig = {
   apiKey: "AIzaSyAvQnRa_q4JlxVgcifjFtKM4i2ckHTJInc",
   authDomain: "webusiteu.firebaseapp.com",
@@ -126,9 +133,44 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
+const auth = getAuth(app);
 const ordersRef = ref(db, "Order");
 
+// ===================== AUTH STATE TRACKER =====================
+let currentUser = null;
+
+onAuthStateChanged(auth, (user) => {
+  currentUser = user;
+  if (user) {
+    console.log("Logged in as:", user.email);
+  } else {
+    console.log("No user logged in.");
+  }
+});
+
+// ===================== NAVIGATION HELPERS =====================
+function goToMenuPage() {
+  if (currentUser) {
+    // Logged-in users → HomePage.html
+    window.location.href = "/pages/HomePage.html#menu";
+  } else {
+    // Guests → index.html
+    window.location.href = "/guest/index.html#menu";
+  }
+}
+
 // ===================== EVENT HANDLERS =====================
+
+addMoreBtn.addEventListener("click", goToMenuPage);
+
+const backBtn = document.getElementById("backBtn");
+if (backBtn) {
+  backBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    goToMenuPage();
+  });
+}
+
 proceedBtn.addEventListener("click", () => {
   if (orders.length === 0) {
     alert("Your cart is empty!");
@@ -150,6 +192,13 @@ window.addEventListener("click", (e) => {
 checkoutForm.addEventListener("submit", async (e) => {
   e.preventDefault();
 
+  if (!currentUser) {
+    alert("You must be logged in to place an order.");
+    window.location.href = "/pages/LoginPage.html";
+    modal.style.display = "none";
+    return;
+  }
+
   const name = document.getElementById("name").value.trim();
   const address = document.getElementById("address").value.trim();
   const contact = document.getElementById("contact").value.trim();
@@ -161,6 +210,8 @@ checkoutForm.addEventListener("submit", async (e) => {
   }
 
   const orderData = {
+    userId: currentUser.uid,
+    userEmail: currentUser.email,
     name,
     address,
     contact,
@@ -175,12 +226,10 @@ checkoutForm.addEventListener("submit", async (e) => {
     await push(ordersRef, orderData);
     alert("Order placed successfully!");
 
-    // Clear cart and reset
     localStorage.removeItem("cart");
     orders = [];
     renderOrders();
     modal.style.display = "none";
-
     document.getElementById("successModal").style.display = "flex";
   } catch (err) {
     console.error(err);

@@ -86,9 +86,9 @@ body::before {
 
 /* Back Button */
 .back-btn {
-  display: block;         /* ensures it doesn’t overlap other content */
-  text-align: right;      /* move it to the right */
-  margin-bottom: 15px;    /* spacing below */
+  display: block; /* ensures it doesn’t overlap other content */
+  text-align: right; /* move it to the right */
+  margin-bottom: 15px; /* spacing below */
   text-decoration: none;
   color: #6e8e6b;
   font-weight: bold;
@@ -152,28 +152,41 @@ body::before {
   border-radius: 6px;
   cursor: pointer;
   font-size: 16px;
+  box-shadow: #00000033 2px 3px 6px 0px;
 }
 
 .quantity-control button:hover {
   background: #4a6a47;
 }
 
-.price {
+.details-qty {
   font-weight: bold;
   font-size: 16px;
-  color: #6e8e6b;
+  color: #000000;
+  padding: 10px 0px;
+}
+
+.details-price {
+  font-weight: bold;
+  font-size: 16px;
+  color: #000000;
+  padding: 10px 0px;
+  border-bottom: 2px solid #d3d3d3;
 }
 
 /* Remove Button */
-.remove-btn {
+.removeBtn {
+  background-color: #bd2525;
   border: none;
-  background: #e74c3c;
-  color: white;
+  border-radius: 6px;
+  margin-top: 10px;
+  padding: 4px 12px;
+  font-size: 14px;
   font-weight: bold;
-  border-radius: 50%;
-  width: 30px;
-  height: 30px;
+  color: #ffffff;
   cursor: pointer;
+  top: 10px;
+  right: 10px;
 }
 
 /* ====== Checkout Actions ====== */
@@ -193,13 +206,13 @@ body::before {
   gap: 10px; /* spacing between buttons */
 }
 
-.yellow-btn,
-.green-btn {
+.addmore-btn,
+.proceed-btn {
   flex: 0 0 auto; /* natural size, do not stretch */
 }
 
 /* Button Styles */
-.yellow-btn {
+.addmore-btn {
   background: #ffcf78;
   border: none;
   padding: 12px 20px;
@@ -210,7 +223,7 @@ body::before {
   transition: all 0.2s ease;
 }
 
-.green-btn {
+.proceed-btn {
   background: #6e8e6b;
   border: none;
   padding: 12px 20px;
@@ -222,12 +235,12 @@ body::before {
   transition: all 0.2s ease;
 }
 
-.yellow-btn:hover {
+.addmore-btn:hover {
   background: #f0c068;
   transform: scale(1.05);
 }
 
-.green-btn:hover {
+.proceed-btn:hover {
   background: #4a6a47;
   transform: scale(1.05);
 }
@@ -285,7 +298,7 @@ body::before {
     align-items: stretch;
   }
 
-  .yellow-btn,
+  .addmore-btn,
   .green-btn {
     width: 100%; /* full width on mobile */
   }
@@ -306,44 +319,48 @@ body::before {
 
 .modal-content {
   background: #fff;
-  padding: 25px;
+  padding: 46px;
   border-radius: 14px;
   width: 90%;
-  max-width: 500px;
+  max-width: 550px;
   position: relative;
   animation: fadeIn 0.3s ease-in-out;
 }
 
-.close-btn {
+.deliv-details {
+  margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: 700;
+  color: #011100;
+}
+
+.close {
   position: absolute;
   top: 10px;
   right: 15px;
-  font-size: 22px;
+  font-size: 26px;
   font-weight: bold;
   cursor: pointer;
-  color: #333;
+  color: #160000;
 }
 
-.tab-buttons {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 20px;
-  gap: 10px;
-}
-
-.tab-btn {
-  padding: 10px 18px;
+.submit-btn {
+  background: #6e8e6b;
   border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  background: #eee;
+  border-radius: 10px;
+  padding: 12px 20px;
+  font-size: 16px;
   font-weight: bold;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-.tab-btn.active {
-  background: #ffcf78;
-  color: rgb(0, 0, 0);
+.submit-btn:hover {
+  background: #4a6a47;
+  transform: scale(1.05);
 }
+/* ====== Checkout Form ====== */
 #checkoutForm {
   display: flex;
   flex-direction: column;

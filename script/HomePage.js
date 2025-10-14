@@ -101,11 +101,11 @@ function renderCart() {
         return `
         <li class="cart-item">
           <p><strong>${item.name}</strong> x${item.qty}</p>
-          <p>Php ${formatPHP(itemTotal)}</p>
+          <p class="cart-price">Php ${formatPHP(itemTotal)}</p>
           <button class="remove-btn" onclick="removeFromCart('${item.name.replace(
             /'/g,
             "\\'"
-          )}')">Delete</button>
+          )}')">Remove</button>
         </li>
       `;
       })
@@ -426,7 +426,7 @@ const auth = getAuth();
 if (confirmLogout) {
   confirmLogout.addEventListener("click", () => {
     signOut(auth).then(() => {
-      window.location.href = "/guest/nonLogHP.html"; // after logout → guest page
+      window.location.href = "/guest/index.html"; // after logout → guest page
     });
   });
 }

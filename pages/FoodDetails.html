@@ -9,7 +9,7 @@
   <body>
     <div class="background-image"></div>
     <div class="food-details-container">
-      <button onclick="goBack()" class="back-btn">← Back</button>
+      <a href="" id="backBtn" class="back-btn">&larr; Back</a>
 
       <div class="food-details">
         <img id="foodImage" src="" alt="Food Item" class="food-img" />
@@ -23,13 +23,11 @@
             <input type="number" id="qty" min="1" value="1" />
           </div>
 
-          <button onclick="addToCartFromDetails()" class="order-btn">
-            Add to Cart
-          </button>
+          <button id="addBtn" class="order-btn">Add to Cart</button>
         </div>
       </div>
     </div>
 
-    <script src="/script/FoodDetails.js"></script>
+    <script type="module" src="/script/FoodDetails.js"></script>
   </body>
 </html>

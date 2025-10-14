@@ -20,7 +20,7 @@
     <section class="checkout-container">
       <div class="checkout-card">
         <h2>Review Your Order</h2>
-        <a href="/pages/HomePage.html#home" class="back-btn">&larr; Back</a>
+        <a href="" id="backBtn" class="back-btn">&larr; Back</a>
         <div id="checkoutContainer" class="checkout-items"></div>
         <div class="checkout-actions">
           <div class="totals">
@@ -28,8 +28,8 @@
             <p>Total: Php <span id="total">0.00</span></p>
           </div>
           <div class="actions-row">
-            <button id="addMoreBtn" class="yellow-btn">Add more items</button>
-            <button id="proceedBtn" class="green-btn">
+            <button id="addMoreBtn" class="addmore-btn">Add more items</button>
+            <button id="proceedBtn" class="proceed-btn">
               Proceed to Checkout
             </button>
           </div>
@@ -40,7 +40,7 @@
       <div id="checkoutModal" class="modal">
         <div class="modal-content">
           <span id="closeModal" class="close">&times;</span>
-          <h3>Enter Delivery Details</h3>
+          <h3 class="deliv-details">Enter Delivery Details</h3>
 
           <form id="checkoutForm">
             <input type="text" id="name" placeholder="Full Name" required />
@@ -59,7 +59,9 @@
               <option value="GCASH">GCash QR Code</option>
             </select>
 
-            <button type="submit" id="submit">Place Order</button>
+            <button class="submit-btn" type="submit" id="submit">
+              Place Order
+            </button>
           </form>
         </div>
       </div>
