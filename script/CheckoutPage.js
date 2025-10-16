@@ -172,6 +172,13 @@ if (backBtn) {
 }
 
 proceedBtn.addEventListener("click", () => {
+  if (!currentUser) {
+    alert("You must be logged in to place an order.");
+    window.location.href = "/pages/LoginPage.html";
+    modal.style.display = "none";
+    return;
+  }
+
   if (orders.length === 0) {
     alert("Your cart is empty!");
     return;
@@ -191,13 +198,6 @@ window.addEventListener("click", (e) => {
 // SINGLE Submit Handler
 checkoutForm.addEventListener("submit", async (e) => {
   e.preventDefault();
-
-  if (!currentUser) {
-    alert("You must be logged in to place an order.");
-    window.location.href = "/pages/LoginPage.html";
-    modal.style.display = "none";
-    return;
-  }
 
   const name = document.getElementById("name").value.trim();
   const address = document.getElementById("address").value.trim();
