@@ -43,6 +43,10 @@ header.scrolled {
   z-index: 5;
 }
 
+.nav-menu a:hover {
+  color: #ffcf78;
+}
+
 .header-content {
   display: flex;
   justify-content: space-between;
@@ -291,6 +295,10 @@ header.scrolled {
   height: 100%;
   background: rgba(0, 0, 0, 0.3); /* black with 50% opacity */
   z-index: 1;
+}
+
+.home-section:hover::before {
+  background: rgba(0, 0, 0, 0.4); /* darken on hover */
 }
 
 /* ==== CAROUSEL BUTTONS ==== */
