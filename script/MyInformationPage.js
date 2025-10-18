@@ -29,12 +29,11 @@ const auth = getAuth(app);
 const emailEl = document.getElementById("email");
 const nameInput = document.getElementById("name");
 const phoneInput = document.getElementById("phone");
-const saveBtn = document.getElementById("saveBtn");
-// ================= PHONE INPUT VALIDATION =================
+const editBtn = document.getElementById("editBtn");
 
+// ================= PHONE INPUT VALIDATION =================
 phoneInput.addEventListener("input", (e) => {
-  // Allow only numbers
-  e.target.value = e.target.value.replace(/\D/g, "");
+  e.target.value = e.target.value.replace(/\D/g, ""); // Only numbers
 });
 
 // ================= AUTH STATE =================
@@ -48,39 +47,71 @@ onAuthStateChanged(auth, async (user) => {
   // Display email from Firebase Auth
   emailEl.textContent = user.email;
 
-  // Fetch Firestore user info
+  // Firestore Reference
   const userRef = doc(db, "users", user.uid);
   const snap = await getDoc(userRef);
 
   if (snap.exists()) {
     const data = snap.data();
-    nameInput.value = data.name || "";
-    phoneInput.value = data.phone || "";
+
+    // Default name (if empty, use part before @gmail.com)
+    nameInput.value =
+      data.name && data.name.trim() !== ""
+        ? data.name
+        : user.email.split("@")[0];
+
+    // Default phone (if empty, show Not set)
+    phoneInput.value = data.phone && data.phone.trim() !== "" ? data.phone : "Not set";
   } else {
     console.log("No user document found, creating one...");
     await setDoc(userRef, {
       email: user.email,
-      name: "",
-      phone: "",
+      name: user.email.split("@")[0],
+      phone: "Not set",
     });
+
+    nameInput.value = user.email.split("@")[0];
+    phoneInput.value = "Not set";
   }
 });
 
-// ================= SAVE CHANGES =================
-saveBtn.addEventListener("click", async () => {
+// ================= EDIT / SAVE TOGGLE =================
+let editing = false;
+
+editBtn.addEventListener("click", async () => {
   const user = auth.currentUser;
   if (!user) return alert("You are not logged in.");
 
-  const userRef = doc(db, "users", user.uid);
-  await setDoc(userRef, {
-    email: user.email,
-    name: nameInput.value,
-    phone: phoneInput.value,
-  });
+  if (!editing) {
+    // Switch to edit mode
+    editing = true;
+    nameInput.disabled = false;
+    phoneInput.disabled = false;
+    editBtn.textContent = "Save Changes";
+    nameInput.focus();
+  } else {
+    // Save changes
+    editing = false;
+    nameInput.disabled = true;
+    phoneInput.disabled = true;
+    editBtn.textContent = "Edit Profile";
 
-  alert("Profile updated successfully!");
+    const userRef = doc(db, "users", user.uid);
+    await setDoc(
+      userRef,
+      {
+        email: user.email,
+        name: nameInput.value.trim() || user.email.split("@")[0],
+        phone: phoneInput.value.trim() || "Not set",
+      },
+      { merge: true }
+    );
+
+    alert("Profile updated successfully!");
+  }
 });
 
+// ================= HAMBURGER MENU =================
 const hamburger = document.getElementById("hamburger");
 const navMenu = document.getElementById("nav-menu");
 

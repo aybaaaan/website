@@ -269,3 +269,40 @@ body {
     width: 28px;
   }
 }
+/* ===== Buttons Styling ===== */
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 25px;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  padding: 10px 22px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+/* Edit / Save Button */
+#editBtn,
+#saveBtn {
+  background: #a0522d;
+  color: #fff;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+}
+
+#editBtn:hover,
+#saveBtn:hover {
+  background: #8b4513;
+  transform: translateY(-2px);
+}
+
+/* Disabled input look */
+input:disabled {
+  background-color: #f4f4f4;
+  color: #777;
+}
+
