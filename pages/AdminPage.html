@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin Dashboard</title>
     <link rel="stylesheet" href="/css/AdminPage.css" />
-
+  </head>
   <body>
     <!-- Top bar -->
     <header>
@@ -19,7 +19,6 @@
       <!-- Sidebar (BUTTONS) -->
       <aside>
         <h3>Dashboard</h3>
-        <!-- Each button is now an anchor link to a section -->
         <a href="#section-analytics"><button>Data Analytics</button></a>
         <a href="#section-menu"><button>Edit Menu and Background</button></a>
         <a href="#section-orders"><button>Orders</button></a>
@@ -39,16 +38,12 @@
         <section id="section-menu">
           <h4>Edit Menu</h4>
           <div class="grid" id="menuGrid">
-            <!-- Firebase items will render here -->
             <div class="picture-box plus" onclick="openAddModal()">+</div>
           </div>
 
           <h4 style="margin-top: 20px">Edit Homepage</h4>
           <div class="grid" id="homeGrid">
-            <!-- Firebase homepage items will render here -->
-            <div class="picture-box plus" onclick="openAddModal('homepage')">
-              +
-            </div>
+            <div class="picture-box plus" onclick="openAddModal('homepage')">+</div>
           </div>
         </section>
 
@@ -64,34 +59,22 @@
     <div id="itemModal" class="modal">
       <div class="modal-content">
         <h3 id="modalTitle">Add Item</h3>
-        <input
-          type="text"
-          id="imageUrl"
-          placeholder="Image URL"
-          oninput="previewImage(event)"
-        />
-        <br />
+
+        <p>Choose Image (PNG or JPG)</p>
+        <input type="file" id="imageFile" accept="image/png, image/jpeg" /><br />
+
         <p>Image Preview</p>
         <img id="preview" src="" width="150" style="margin-top: 10px" /><br />
-        <br />
+
         <p>Name</p>
-        <input
-          class="imageName"
-          type="text"
-          id="imageName"
-          placeholder="Name"
-        />
-        <br />
+        <input class="imageName" type="text" id="imageName" placeholder="Name" /><br />
+
         <p>Description</p>
-        <textarea id="imageDesc" placeholder="Description"></textarea>
-        <br />
+        <textarea id="imageDesc" placeholder="Description"></textarea><br />
+
         <p>Price</p>
-        <input
-          class="imagePrice"
-          type="number"
-          id="imagePrice"
-          placeholder="Price (₱)"
-        />
+        <input class="imagePrice" type="number" id="imagePrice" placeholder="Price (₱)" /><br />
+
         <div class="modal-actions">
           <button id="saveItem">Save</button>
           <button onclick="closeModal()">Cancel</button>
@@ -110,7 +93,7 @@
       </div>
     </div>
 
-    <!-- Script (optional, if you have Firebase or other logic) -->
+    <!-- Script -->
     <script type="module" src="/script/AdminPage.js"></script>
   </body>
 </html>
