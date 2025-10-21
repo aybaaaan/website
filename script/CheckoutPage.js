@@ -95,8 +95,11 @@ const formFields = document.getElementById("formFields");
 function renderDeliveryFields() {
   formFields.innerHTML = `
     <input id="name" type="text" placeholder="Name" required>
+    
     <input id="address" type="text" placeholder="Address" required>
-    <input id="contact" type="text" placeholder="Contact Number" required>
+
+    <input id="contact" type="number" placeholder="Contact Number" "required>
+
     <label class="payment-label">Payment Method:</label>
     <select id="payment" required>
       <option value="" disabled selected>Select Payment</option>
@@ -217,7 +220,10 @@ function showPopup(message, redirectUrl = null) {
 proceedBtn.addEventListener("click", () => {
   if (!currentUser) {
     if (modal) modal.style.display = "none";
-    showPopup("You must be logged in to place an order.", "/pages/LoginPage.html");
+    showPopup(
+      "You must be logged in to place an order.",
+      "/pages/LoginPage.html"
+    );
     return;
   }
 
@@ -238,7 +244,6 @@ closeModal.addEventListener("click", () => {
 window.addEventListener("click", (e) => {
   if (e.target === modal) modal.style.display = "none";
 });
-
 
 // SINGLE Submit Handler
 /*checkoutForm.addEventListener("submit", async (e) => {
@@ -332,7 +337,6 @@ document.getElementById("returnHomeBtn").addEventListener("click", () => {
   document.getElementById("successModal").style.display = "none";
   window.location.href = "/pages/HomePage.html#home";
 });
-
 
 // Initialize checkout
 renderOrders();

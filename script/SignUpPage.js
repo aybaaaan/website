@@ -50,7 +50,7 @@ submit.addEventListener("click", (event) => {
   // Firebase signup
   createUserWithEmailAndPassword(auth, email, password)
     .then(() => {
-      showSuccess("Sign Up Successful! Redirecting...");
+      showSuccess("Sign Up Successful!");
       setTimeout(() => {
         window.location.href = "/pages/LoginPage.html";
       }, 1500);

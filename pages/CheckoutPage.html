@@ -49,6 +49,7 @@
               type="tel"
               id="contact"
               placeholder="Contact Number"
+              oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,11)"
               required
             />
 
@@ -76,18 +77,22 @@
     </section>
     <footer class="footer">Mediterranean in Velvet</footer>
 
-
-
-  <!-- Login Required Popup -->
-  <div id="loginPopup" class="popup-modal" aria-hidden="true">
-    <div class="popup-content" role="dialog" aria-modal="true" aria-labelledby="loginPopupMsg">
-      <p id="loginPopupMsg" class="popup-message">You must be logged in to place an order.</p>
-      <div class="popup-actions">
-        <button class="popup-btn confirm" id="popupOkBtn">OK</button>
+    <!-- Login Required Popup -->
+    <div id="loginPopup" class="popup-modal" aria-hidden="true">
+      <div
+        class="popup-content"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="loginPopupMsg"
+      >
+        <p id="loginPopupMsg" class="popup-message">
+          You must be logged in to place an order.
+        </p>
+        <div class="popup-actions">
+          <button class="popup-btn confirm" id="popupOkBtn">OK</button>
+        </div>
       </div>
     </div>
-  </div>
-
 
     <!-- JavaScript Files -->
     <script type="module" src="/script/CheckoutPage.js"></script>
