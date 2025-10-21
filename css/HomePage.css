@@ -297,10 +297,6 @@ header.scrolled {
   z-index: 1;
 }
 
-.home-section:hover::before {
-  background: rgba(0, 0, 0, 0.4); /* darken on hover */
-}
-
 /* ==== CAROUSEL BUTTONS ==== */
 .carousel-container {
   margin-top: 78px; /* adjust this based on your header height */
