@@ -26,21 +26,39 @@
               id="email"
               required
             />
-            <input
-              type="password"
-              class="form-input"
-              placeholder="Password"
-              id="password"
-              required
-            />
-            <input
-              type="password"
-              class="form-input"
-              placeholder="Confirm Password"
-              id="confirmpassword"
-              required
-            />
-            <p id="error-message">Invalid email or password!</p>
+            <div
+              style="display: flex; align-items: center; gap: 8px; width: 100%"
+            >
+              <input
+                type="password"
+                class="form-input"
+                placeholder="Password"
+                id="password"
+                required
+              />
+              <input
+                type="checkbox"
+                onclick="password.type = this.checked ? 'text' : 'password'"
+              />
+              <span style="color: #ffcf78">👁</span>
+            </div>
+            <div
+              style="display: flex; align-items: center; gap: 8px; width: 100%"
+            >
+              <input
+                type="password"
+                class="form-input"
+                placeholder="Confirm Password"
+                id="confirmpassword"
+                required
+              />
+              <p id="error-message">Invalid email or password!</p>
+              <input
+                type="checkbox"
+                onclick="confirmpassword.type = this.checked ? 'text' : 'confirmpassword'"
+              />
+              <span style="color: #ffcf78">👁</span>
+            </div>
           </form>
 
           <button type="submit" id="submit" class="signup-btn">SIGN UP</button>

@@ -27,13 +27,20 @@
               id="email"
               required
             />
-            <input
-              type="password"
-              class="form-input"
-              placeholder="Password"
-              id="password"
-              required
-            />
+            <div style="display: flex; align-items: center; gap: 8px; width: 100%;">
+              <input
+                type="password"
+                class="form-input"
+                placeholder="Password"
+                id="password"
+                required
+              />
+              <input
+                type="checkbox"
+                onclick="password.type = this.checked ? 'text' : 'password'"
+              />
+              <span style="color: #ffcf78;">👁</span>
+            </div>
           </form>
 
           <button type="submit" id="submit" class="signup-btn">LOG IN</button>
