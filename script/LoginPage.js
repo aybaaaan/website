@@ -25,27 +25,53 @@ const auth = getAuth(app);
 // input fields
 
 // submit button
+function showSuccess(msg) {
+  const messageBox = document.getElementById("error-message");
+  messageBox.textContent = msg;
+  messageBox.style.backgroundColor = "rgba(76, 175, 80, 0.95)"; // green
+  messageBox.classList.add("show");
+
+  setTimeout(() => {
+    messageBox.classList.remove("show");
+  }, 3000);
+}
+
+function showError(msg) {
+  const messageBox = document.getElementById("error-message");
+  messageBox.textContent = msg;
+  messageBox.style.backgroundColor = "rgba(244, 67, 54, 0.95)"; // red
+  messageBox.classList.add("show");
+
+  setTimeout(() => {
+    messageBox.classList.remove("show");
+  }, 3000);
+}
+
 const submit = document.getElementById("submit");
 submit.addEventListener("click", function (event) {
   event.preventDefault();
+
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 
   signInWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
-      // Signed up
       const user = userCredential.user;
+
       if (user.email === "admin123@miv.com" && password === "admin123") {
-        alert("Admin login successful");
-        window.location.href = "/pages/AdminPage.html"; // redirect to Admin page
+        showSuccess("Admin login successful!");
+        setTimeout(() => {
+          window.location.href = "/pages/AdminPage.html";
+        }, 1200);
       } else {
-        alert("User login successful");
-        window.location.href = "/pages/HomePage.html"; // redirect to Home page
+        showSuccess("User login successful!");
+        setTimeout(() => {
+          window.location.href = "/pages/HomePage.html";
+        }, 1200);
       }
     })
     .catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      alert(errorMessage);
+      showError(error.message);
     });
 });
+

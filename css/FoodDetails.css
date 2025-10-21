@@ -130,6 +130,49 @@ body {
   transform: scale(1.05);
 }
 
+
+/*CUSTOM POPUP*/
+.custom-popup {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.popup-content {
+  background: white;
+  padding: 20px 30px;
+  border-radius: 10px;
+  text-align: center;
+  width: 300px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.popup-content p {
+  color: #333;
+  margin-bottom: 15px;
+  font-size: 15px;
+}
+
+.popup-content button {
+  background-color: #f7c948;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  color: #333;
+  transition: background-color 0.2s ease;
+}
+
+.popup-content button:hover {
+  background-color: #f0b429;
+}
+
+
 /* ==== ANIMATION ==== */
 @keyframes fadeIn {
   from {

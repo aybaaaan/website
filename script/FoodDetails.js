@@ -71,10 +71,12 @@ function addToCartFromDetails() {
   const qty = parseInt(qtyInput.value, 10);
 
   if (!qty || qty < 1) {
-    alert("Please enter a valid quantity.");
-    qtyInput.focus();
+    showPopup("Please enter a valid quantity.", () => {
+      qtyInput.focus();
+    });
     return;
   }
+
 
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
@@ -101,6 +103,33 @@ document.addEventListener("DOMContentLoaded", () => {
     addBtn.addEventListener("click", addToCartFromDetails);
   }
 });
+
+
+
+function showPopup(message, callback) {
+  // Remove any existing popup first
+  const existingPopup = document.querySelector(".custom-popup");
+  if (existingPopup) existingPopup.remove();
+
+  // Create the popup
+  const popup = document.createElement("div");
+  popup.classList.add("custom-popup");
+  popup.innerHTML = `
+    <div class="popup-content">
+      <p>${message}</p>
+      <button id="popup-ok">OK</button>
+    </div>
+  `;
+  document.body.appendChild(popup);
+
+  // Handle OK button
+  document.getElementById("popup-ok").addEventListener("click", () => {
+    popup.remove();
+    if (callback) callback(); // optional callback (like focus)
+  });
+}
+
+
 
 // ✅ Make available to inline HTML
 window.addToCartFromDetails = addToCartFromDetails;

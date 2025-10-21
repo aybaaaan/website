@@ -8,6 +8,7 @@ hamburger.addEventListener("click", () => {
 });
 
 // Reorder function
+/*  No function?
 function reorder(name, qty, price) {
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
   const existing = cart.find((item) => item.name === name);
@@ -17,6 +18,7 @@ function reorder(name, qty, price) {
   alert(`${qty} x ${name} added to your cart!`);
   window.location.href = "/pages/CheckoutPage.html";
 }
+*/
 
 // ===================== IMPORTS =====================
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
@@ -118,5 +120,16 @@ window.reorder = function (name, qty, price) {
   const cart = JSON.parse(localStorage.getItem("cart")) || [];
   cart.push({ name, qty, price });
   localStorage.setItem("cart", JSON.stringify(cart));
-  alert(`${name} has been added to your cart again!`);
+
+  // Show popup
+  const popup = document.getElementById("reorderPopup");
+  const message = document.getElementById("reorderMessage");
+  const okBtn = document.getElementById("reorderOkBtn");
+
+  message.textContent = `${name} has been added to your cart again!`;
+  popup.style.display = "flex";
+
+  okBtn.onclick = () => {
+    popup.style.display = "none";
+  };
 };

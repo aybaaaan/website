@@ -183,6 +183,50 @@ body {
   transition: 0.3s ease;
 }
 
+
+/* Reorder Popup */
+.popup-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.popup-content {
+  background: #fff;
+  padding: 25px;
+  border-radius: 10px;
+  text-align: center;
+  width: 280px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+}
+
+.popup-content p {
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+#reorderOkBtn {
+  background-color: #f7c600;
+  color: #000;
+  border: none;
+  padding: 10px 25px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+#reorderOkBtn:hover {
+  background-color: #ffda33;
+}
+
+
+
+
+
 /* Animate hamburger to X */
 .hamburger.active span:nth-child(1) {
   transform: rotate(45deg) translate(5px, 6px);
