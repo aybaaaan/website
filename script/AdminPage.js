@@ -92,6 +92,16 @@ window.openAddModal = (section = "menu") => {
   document.getElementById("imagePrice").value = "";
   document.getElementById("modalTitle").innerText = "Add Item";
   document.getElementById("itemModal").style.display = "block";
+
+  // ✅ Show or hide price input depending on section
+  const priceField =
+    document.getElementById("imagePrice").closest(".input-group") ||
+    document.getElementById("imagePrice");
+  if (section === "menu") {
+    priceField.style.display = "block";
+  } else {
+    priceField.style.display = "none";
+  }
 };
 
 // ===============================
@@ -153,10 +163,20 @@ window.editItem = (section, key, url, name, desc, price) => {
   document.getElementById("modalTitle").innerText = "Edit Item";
   document.getElementById("imageName").value = name;
   document.getElementById("imageDesc").value = desc;
-  document.getElementById("imagePrice").value = price;
+  document.getElementById("imagePrice").value = price || "";
   preview.src = url;
   base64Image = url;
   document.getElementById("itemModal").style.display = "block";
+
+  // ✅ Show or hide price input depending on section
+  const priceField =
+    document.getElementById("imagePrice").closest(".input-group") ||
+    document.getElementById("imagePrice");
+  if (section === "menu") {
+    priceField.style.display = "block";
+  } else {
+    priceField.style.display = "none";
+  }
 };
 
 // ===============================
@@ -188,10 +208,23 @@ function renderItems(refPath, container) {
       const details = document.createElement("div");
       details.classList.add("item-details");
       details.innerHTML = `
-      <p class="item-name">${item.name}</p>
-      <p class="item-desc">${item.desc}</p>
-      <p class="item-price">₱${item.price || 0}</p>
+      
       `;
+
+      if (refPath.key === "menu") {
+        // Show price for menu items
+        details.innerHTML = `
+    <p class="item-name">${item.name}</p>
+    <p class="item-desc">${item.desc}</p>
+    <p class="item-price">₱${item.price || 0}</p>
+  `;
+      } else {
+        // Hide price for homepage items
+        details.innerHTML = `
+    <p class="item-name">${item.name}</p>
+    <p class="item-desc">${item.desc}</p>
+  `;
+      }
 
       // append everything in order
       itemWrapper.appendChild(box);
