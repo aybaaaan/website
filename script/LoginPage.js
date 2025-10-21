@@ -25,12 +25,37 @@ const auth = getAuth(app);
 const submit = document.getElementById("submit");
 const errorMessage = document.getElementById("error-message");
 
+// Success popup function
+function showSuccess(msg) {
+  const popup = document.getElementById("error-message");
+  popup.textContent = msg;
+  popup.style.backgroundColor = "rgba(76, 175, 80, 0.95)";
+  popup.classList.add("show");
+
+  setTimeout(() => {
+    popup.classList.remove("show");
+  }, 3000);
+}
+
+// Error popup function (optional)
+function showError(msg) {
+  const popup = document.getElementById("error-message");
+  popup.textContent = msg;
+  popup.style.backgroundColor = "rgba(244, 67, 54, 0.95)";
+  popup.classList.add("show");
+
+  setTimeout(() => {
+    popup.classList.remove("show");
+  }, 3000);
+}
+
+// ================= LOGIN =================
 submit.addEventListener("click", (event) => {
   event.preventDefault();
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 
-  // Reset error
+  // Reset message
   errorMessage.textContent = "";
   errorMessage.classList.remove("show");
 
@@ -43,17 +68,20 @@ submit.addEventListener("click", (event) => {
   signInWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       const user = userCredential.user;
+
       if (user.email === "admin123@miv.com" && password === "admin123") {
-        alert("Admin login successful");
-        window.location.href = "/pages/AdminPage.html"; // redirect to Admin page
+        showSuccess("Admin login successful");
+        setTimeout(() => {
+          window.location.href = "/pages/AdminPage.html";
+        }, 1500);
       } else {
-        alert("User login successful");
-        window.location.href = "/pages/HomePage.html"; // redirect to Home page
+        showSuccess("User login successful");
+        setTimeout(() => {
+          window.location.href = "/pages/HomePage.html";
+        }, 1500);
       }
     })
     .catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      alert(errorMessage);
+      showError("Invalid email or password. Please try again.");
     });
 });
