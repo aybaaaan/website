@@ -146,6 +146,33 @@ body {
   }
 }
 
+/* ===== Error Message Style ===== */
+/* Popup Error Message */
+#error-message {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(255, 77, 77, 0.95);
+  color: #fff;
+  font-size: 0.95em;
+  font-weight: 600;
+  padding: 10px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease, top 0.4s ease;
+  z-index: 9999;
+}
+
+/* Show state */
+#error-message.show {
+  opacity: 1;
+  top: 40px; /* slightly slides down when visible */
+  pointer-events: auto;
+}
+
 .form-title {
   font-size: 24px;
   font-weight: 700;
