@@ -1,14 +1,11 @@
-// Import the functions you need from the SDKs you need
+// Import Firebase SDKs
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
 import {
   getAuth,
   createUserWithEmailAndPassword,
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 
-// Your web app's Firebase configuration
+// Firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyAvQnRa_q4JlxVgcifjFtKM4i2ckHTJInc",
   authDomain: "webusiteu.firebaseapp.com",
@@ -22,26 +19,74 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-// input fields
-
-// submit button
+// DOM Elements
 const submit = document.getElementById("submit");
-submit.addEventListener("click", function (event) {
-  event.preventDefault();
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
+const errorMessage = document.getElementById("error-message");
 
+submit.addEventListener("click", (event) => {
+  event.preventDefault();
+
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+  const confirmPassword = document.getElementById("confirmpassword").value;
+
+  // Reset error state
+  errorMessage.textContent = "";
+  errorMessage.classList.remove("show");
+
+  // Validation
+  if (!email || !password || !confirmPassword) {
+    return showError("Please fill in all fields.");
+  }
+
+  if (password !== confirmPassword) {
+    return showError("Passwords do not match. Please try again.");
+  }
+
+  if (password.length < 6) {
+    return showError("Password must be at least 6 characters.");
+  }
+
+  // Firebase signup
   createUserWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-      // Signed up
-      const user = userCredential.user;
-      alert("Sign Up Successful");
-      window.location.href = "/pages/LoginPage.html";
-      // ...
+    .then(() => {
+      showSuccess("Sign Up Successful! Redirecting...");
+      setTimeout(() => {
+        window.location.href = "/pages/LoginPage.html";
+      }, 1500);
     })
     .catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      alert(errorMessage);
+      // Handle specific Firebase email error
+      if (error.code === "auth/invalid-email") {
+        showError("Please enter a valid email address (example@domain.com).");
+      } else if (error.code === "auth/email-already-in-use") {
+        showError("This email is already registered. Please sign in instead.");
+      } else {
+        showError(error.message);
+      }
     });
 });
+
+function showError(msg) {
+  const errorMessage = document.getElementById("error-message");
+  errorMessage.textContent = msg;
+  errorMessage.style.backgroundColor = "rgba(255, 77, 77, 0.95)";
+  errorMessage.classList.add("show");
+
+  // Hide automatically after 3 seconds
+  setTimeout(() => {
+    errorMessage.classList.remove("show");
+  }, 3000);
+}
+
+function showSuccess(msg) {
+  const errorMessage = document.getElementById("error-message");
+  errorMessage.textContent = msg;
+  errorMessage.style.backgroundColor = "rgba(76, 175, 80, 0.95)";
+  errorMessage.classList.add("show");
+
+  // Hide automatically after 3 seconds
+  setTimeout(() => {
+    errorMessage.classList.remove("show");
+  }, 3000);
+}
