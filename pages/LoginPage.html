@@ -27,7 +27,9 @@
               id="email"
               required
             />
-            <div style="display: flex; align-items: center; gap: 8px; width: 100%;">
+            <div
+              style="display: flex; align-items: center; gap: 8px; width: 100%"
+            >
               <input
                 type="password"
                 class="form-input"
@@ -39,14 +41,18 @@
                 type="checkbox"
                 onclick="password.type = this.checked ? 'text' : 'password'"
               />
-              <span style="color: #ffcf78;">👁</span>
+              <span style="color: #ffcf78">👁</span>
             </div>
           </form>
 
           <button type="submit" id="submit" class="signup-btn">LOG IN</button>
 
+          <!-- Popup Error/Success Message -->
+          <p id="error-message" class="popup-message"></p>
+
           <p class="signup-link">
-            Don't have an account? <a href="/pages/SignUpPage.html">Sign Up</a>
+            Don't have an account?
+            <a href="/pages/SignUpPage.html">Sign Up</a>
           </p>
         </div>
       </main>
