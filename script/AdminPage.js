@@ -1,24 +1,34 @@
-// Section switching
+// ===============================
+// SECTION SWITCHING
+// ===============================
 function showSection(id) {
   document.querySelectorAll("main section").forEach(sec => sec.classList.remove("active"));
   document.getElementById(id).classList.add("active");
 }
 
-// Logout modal logic
+// ===============================
+// LOGOUT MODAL LOGIC
+// ===============================
 const logoutBtn = document.getElementById("btn-logout");
-const logoutModal = document.getElementById("logoutModal");
+const logoutModal = document.getElementById("logoutModal"); // fixed ID
 const cancelLogout = document.getElementById("cancel-logout");
 const confirmLogout = document.getElementById("confirm-logout");
 
 logoutBtn.addEventListener("click", e => {
   e.preventDefault();
-  logoutModal.style.display = "block";
+  logoutModal.style.display = "flex";
 });
+
 cancelLogout.addEventListener("click", () => logoutModal.style.display = "none");
 confirmLogout.addEventListener("click", () => window.location.href = "/pages/LoginPage.html");
-window.addEventListener("click", e => { if (e.target === logoutModal) logoutModal.style.display = "none"; });
 
-// Firebase setup
+window.addEventListener("click", e => {
+  if (e.target === logoutModal) logoutModal.style.display = "none";
+});
+
+// ===============================
+// FIREBASE SETUP
+// ===============================
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
 import { getDatabase, ref, onValue, push, update, remove } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
 
@@ -43,14 +53,18 @@ const menuGrid = document.getElementById("menuGrid");
 const homeGrid = document.getElementById("homeGrid");
 const ordersContainer = document.getElementById("ordersContainer");
 
-// Modal variables
+// ===============================
+// ITEM MODAL VARIABLES
+// ===============================
 let currentSection = "menu";
 let editKey = null;
 let base64Image = "";
 const fileInput = document.getElementById("imageFile");
 const preview = document.getElementById("preview");
 
-// Open modal
+// ===============================
+// OPEN ADD ITEM MODAL
+// ===============================
 window.openAddModal = (section = "menu") => {
   currentSection = section;
   editKey = null;
@@ -64,10 +78,14 @@ window.openAddModal = (section = "menu") => {
   document.getElementById("itemModal").style.display = "block";
 };
 
-// Close modal
+// ===============================
+// CLOSE ITEM MODAL
+// ===============================
 window.closeModal = () => document.getElementById("itemModal").style.display = "none";
 
-// Preview selected file
+// ===============================
+// IMAGE PREVIEW HANDLER
+// ===============================
 fileInput.addEventListener("change", e => {
   const file = e.target.files[0];
   if (file) {
@@ -80,37 +98,33 @@ fileInput.addEventListener("change", e => {
   }
 });
 
-// Save item
+// ===============================
+// SAVE ITEM (ADD OR EDIT)
+// ===============================
 document.getElementById("saveItem").addEventListener("click", () => {
   const name = document.getElementById("imageName").value.trim();
   const desc = document.getElementById("imageDesc").value.trim();
   const price = document.getElementById("imagePrice").value.trim();
 
-  if (!base64Image || !name || !desc || !price)
-    return alert("Please fill all fields and select an image.");
+  if (!base64Image || !name || !desc || !price) {
+    showFillFieldsModal(); // ✅ replaced alert()
+    return;
+  }
 
   const sectionRef = currentSection === "menu" ? menuRef : homeRef;
 
   if (editKey) {
-    update(ref(db, currentSection + "/" + editKey), {
-      url: base64Image,
-      name,
-      desc,
-      price
-    });
+    update(ref(db, `${currentSection}/${editKey}`), { url: base64Image, name, desc, price });
   } else {
-    push(sectionRef, {
-      url: base64Image,
-      name,
-      desc,
-      price
-    });
+    push(sectionRef, { url: base64Image, name, desc, price });
   }
 
   closeModal();
 });
 
-// Edit item
+// ===============================
+// EDIT ITEM
+// ===============================
 window.editItem = (section, key, url, name, desc, price) => {
   currentSection = section;
   editKey = key;
@@ -123,10 +137,14 @@ window.editItem = (section, key, url, name, desc, price) => {
   document.getElementById("itemModal").style.display = "block";
 };
 
-// Delete item
-window.deleteItem = (section, key) => remove(ref(db, section + "/" + key));
+// ===============================
+// DELETE ITEM
+// ===============================
+window.deleteItem = (section, key) => remove(ref(db, `${section}/${key}`));
 
-// Render items
+// ===============================
+// RENDER MENU AND HOME ITEMS
+// ===============================
 function renderItems(refPath, container) {
   onValue(refPath, snapshot => {
     container.innerHTML = "";
@@ -160,6 +178,7 @@ function renderItems(refPath, container) {
       container.appendChild(itemWrapper);
     });
 
+    // ADD BUTTON
     const plus = document.createElement("div");
     plus.classList.add("picture-box", "plus");
     plus.innerText = "+";
@@ -171,7 +190,7 @@ function renderItems(refPath, container) {
 renderItems(menuRef, menuGrid);
 renderItems(homeRef, homeGrid);
 
-// Render Orders
+// RENDER ORDERS
 onValue(ordersRef, snapshot => {
   ordersContainer.innerHTML = "";
   snapshot.forEach(child => {
@@ -182,9 +201,11 @@ onValue(ordersRef, snapshot => {
     let foodListHTML = "";
     if (data.orders && Array.isArray(data.orders)) {
       data.orders.forEach(item => {
-        foodListHTML += `<li>${item.name} — Qty: ${item.qty} — ₱${(item.price*item.qty).toFixed(2)}</li>`;
+        foodListHTML += `<li>${item.name} — Qty: ${item.qty} — ₱${(item.price * item.qty).toFixed(2)}</li>`;
       });
-    } else foodListHTML = "<li>No food items found.</li>";
+    } else {
+      foodListHTML = "<li>No food items found.</li>";
+    }
 
     const formattedTime = data.timestamp ? new Date(data.timestamp).toLocaleString() : "N/A";
 
@@ -219,12 +240,83 @@ onValue(ordersRef, snapshot => {
       foodToggle.textContent = foodList.classList.contains("active") ? "Order Details ▲" : "Order Details ▼";
     });
 
-    row.querySelector(".btn-confirm").addEventListener("click", () => alert(`Order for ${data.name} marked as confirmed!`));
-
-    row.querySelector(".btn-delete").addEventListener("click", () => {
-      if (confirm(`Delete order for ${data.name}?`)) remove(ref(db, "Order/" + child.key));
+    row.querySelector(".btn-confirm").addEventListener("click", () => {
+      showCustomerOrderPopup(`Order for ${data.name} marked as confirmed!`);
     });
+
+   row.querySelector(".btn-delete").addEventListener("click", () => {
+  showDeleteConfirmPopup(`Are you sure you want to delete the order for ${data.name}?`, child.key);
+  });
+
 
     ordersContainer.appendChild(row);
   });
 });
+
+// CUSTOM POPUP MODALS (REPLACE ALERTS)
+
+// Fill Fields / Image Modal
+const fillFieldsModal = document.getElementById("fill-fields-images");
+const closeFillFields = document.getElementById("close-fill-fields");
+
+function showFillFieldsModal() {
+  fillFieldsModal.style.display = "flex";
+}
+
+closeFillFields.addEventListener("click", () => {
+  fillFieldsModal.style.display = "none";
+});
+
+window.addEventListener("click", e => {
+  if (e.target === fillFieldsModal) fillFieldsModal.style.display = "none";
+});
+
+// Customer Order Confirmation Modal
+const customerOrderModal = document.getElementById("customer-order-popup");
+const customerOrderMessage = document.getElementById("customer-order-message");
+const closeCustomerOrder = document.getElementById("close-customer-order");
+
+function showCustomerOrderPopup(message) {
+  customerOrderMessage.textContent = message;
+  customerOrderModal.style.display = "flex";
+}
+
+closeCustomerOrder.addEventListener("click", () => {
+  customerOrderModal.style.display = "none";
+});
+
+window.addEventListener("click", e => {
+  if (e.target === customerOrderModal) customerOrderModal.style.display = "none";
+});
+
+
+// DELETE CONFIRMATION MODAL
+
+const deleteConfirmModal = document.getElementById("delete-confirm-modal");
+const deleteConfirmMessage = document.getElementById("delete-confirm-message");
+const cancelDelete = document.getElementById("cancel-delete");
+const confirmDelete = document.getElementById("confirm-delete");
+
+let orderKeyToDelete = null;
+
+function showDeleteConfirmPopup(message, orderKey) {
+  deleteConfirmMessage.textContent = message;
+  orderKeyToDelete = orderKey;
+  deleteConfirmModal.style.display = "flex";
+}
+
+cancelDelete.addEventListener("click", () => {
+  deleteConfirmModal.style.display = "none";
+  orderKeyToDelete = null;
+});
+
+confirmDelete.addEventListener("click", () => {
+  if (orderKeyToDelete) remove(ref(db, "Order/" + orderKeyToDelete));
+  deleteConfirmModal.style.display = "none";
+  orderKeyToDelete = null;
+});
+
+window.addEventListener("click", e => {
+  if (e.target === deleteConfirmModal) deleteConfirmModal.style.display = "none";
+});
+

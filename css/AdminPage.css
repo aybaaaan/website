@@ -591,6 +591,12 @@ section.active {
   box-shadow: 0 0 4px rgba(255, 204, 0, 0.5);
 }
 
+/* Specific modal width adjustments */
+#fill-fields-images .modal-content,
+#customer-order-popup .modal-content {
+  width: 380px;
+}
+
 /* ===== Image Preview ===== */
 #preview {
   border-radius: 8px;
@@ -636,6 +642,20 @@ section.active {
 .modal-actions button:last-child:hover {
   background-color: #ff6655;
   transform: scale(1.03);
+}
+
+/*Style for Pop ups*/
+#fill-fields-images .modal-content,
+#customer-order-popup .modal-content {
+  width: 380px;
+}
+
+#close-customer-order{
+  background:#45a049;
+}
+
+#cancel-delete{
+  background:#ffb347;
 }
 
 /* ===== Animation ===== */

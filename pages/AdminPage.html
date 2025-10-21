@@ -93,6 +93,39 @@
       </div>
     </div>
 
+    <!--Pop Up-->
+
+  <!-- Fill Fields or Image Modal -->
+  <div id="fill-fields-images" class="modal">
+    <div class="modal-content">
+      <p>Please fill all fields and select an image.</p>
+      <div class="modal-actions">
+        <button id="close-fill-fields">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Customer Order Confirmation Modal -->
+  <div id="customer-order-popup" class="modal">
+    <div class="modal-content">
+      <p id="customer-order-message"></p>
+      <div class="modal-actions">
+        <button id="close-customer-order">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Confirmation Modal -->
+<div id="delete-confirm-modal" class="modal">
+  <div class="modal-content">
+    <p id="delete-confirm-message"></p>
+    <div class="modal-actions">
+      <button id="cancel-delete">Cancel</button>
+      <button id="confirm-delete">Delete</button>
+    </div>
+  </div>
+</div>
+
     <!-- Script -->
     <script type="module" src="/script/AdminPage.js"></script>
   </body>
