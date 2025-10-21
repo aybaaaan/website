@@ -2,7 +2,9 @@
 // SECTION SWITCHING
 // ===============================
 function showSection(id) {
-  document.querySelectorAll("main section").forEach(sec => sec.classList.remove("active"));
+  document
+    .querySelectorAll("main section")
+    .forEach((sec) => sec.classList.remove("active"));
   document.getElementById(id).classList.add("active");
 }
 
@@ -14,15 +16,21 @@ const logoutModal = document.getElementById("logoutModal"); // fixed ID
 const cancelLogout = document.getElementById("cancel-logout");
 const confirmLogout = document.getElementById("confirm-logout");
 
-logoutBtn.addEventListener("click", e => {
+logoutBtn.addEventListener("click", (e) => {
   e.preventDefault();
   logoutModal.style.display = "flex";
 });
 
-cancelLogout.addEventListener("click", () => logoutModal.style.display = "none");
-confirmLogout.addEventListener("click", () => window.location.href = "/pages/LoginPage.html");
+cancelLogout.addEventListener(
+  "click",
+  () => (logoutModal.style.display = "none")
+);
+confirmLogout.addEventListener(
+  "click",
+  () => (window.location.href = "/pages/LoginPage.html")
+);
 
-window.addEventListener("click", e => {
+window.addEventListener("click", (e) => {
   if (e.target === logoutModal) logoutModal.style.display = "none";
 });
 
@@ -30,16 +38,24 @@ window.addEventListener("click", e => {
 // FIREBASE SETUP
 // ===============================
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
-import { getDatabase, ref, onValue, push, update, remove } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
+import {
+  getDatabase,
+  ref,
+  onValue,
+  push,
+  update,
+  remove,
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAvQnRa_q4JlxVgcifjFtKM4i2ckHTJInc",
   authDomain: "webusiteu.firebaseapp.com",
-  databaseURL: "https://webusiteu-default-rtdb.asia-southeast1.firebasedatabase.app",
+  databaseURL:
+    "https://webusiteu-default-rtdb.asia-southeast1.firebasedatabase.app",
   projectId: "webusiteu",
   storageBucket: "webusiteu.firebasestorage.app",
   messagingSenderId: "974146331400",
-  appId: "1:974146331400:web:a0590d7dc71dd3c00f02bd"
+  appId: "1:974146331400:web:a0590d7dc71dd3c00f02bd",
 };
 
 const app = initializeApp(firebaseConfig);
@@ -81,16 +97,17 @@ window.openAddModal = (section = "menu") => {
 // ===============================
 // CLOSE ITEM MODAL
 // ===============================
-window.closeModal = () => document.getElementById("itemModal").style.display = "none";
+window.closeModal = () =>
+  (document.getElementById("itemModal").style.display = "none");
 
 // ===============================
 // IMAGE PREVIEW HANDLER
 // ===============================
-fileInput.addEventListener("change", e => {
+fileInput.addEventListener("change", (e) => {
   const file = e.target.files[0];
   if (file) {
     const reader = new FileReader();
-    reader.onload = event => {
+    reader.onload = (event) => {
       base64Image = event.target.result;
       preview.src = base64Image;
     };
@@ -114,7 +131,12 @@ document.getElementById("saveItem").addEventListener("click", () => {
   const sectionRef = currentSection === "menu" ? menuRef : homeRef;
 
   if (editKey) {
-    update(ref(db, `${currentSection}/${editKey}`), { url: base64Image, name, desc, price });
+    update(ref(db, `${currentSection}/${editKey}`), {
+      url: base64Image,
+      name,
+      desc,
+      price,
+    });
   } else {
     push(sectionRef, { url: base64Image, name, desc, price });
   }
@@ -146,31 +168,47 @@ window.deleteItem = (section, key) => remove(ref(db, `${section}/${key}`));
 // RENDER MENU AND HOME ITEMS
 // ===============================
 function renderItems(refPath, container) {
-  onValue(refPath, snapshot => {
+  onValue(refPath, (snapshot) => {
     container.innerHTML = "";
-    snapshot.forEach(child => {
+    snapshot.forEach((child) => {
       const item = child.val();
       const key = child.key;
 
       const itemWrapper = document.createElement("div");
       itemWrapper.classList.add("item-wrapper");
 
+      // IMAGE BOX (just the image)
       const box = document.createElement("div");
       box.classList.add("picture-box");
       box.innerHTML = `
-        <img src="${item.url}" alt="${item.name}">
-        <div class="overlay">
-          <p class="item-name">${item.name}</p>
-          <p class="item-desc">${item.desc}</p>
-          <p class="item-price">₱${item.price || 0}</p>
-        </div>
+      <img src="${item.url}" alt="${item.name}">
       `;
+
+      // DETAILS (outside the picture-box)
+      const details = document.createElement("div");
+      details.classList.add("item-details");
+      details.innerHTML = `
+      <p class="item-name">${item.name}</p>
+      <p class="item-desc">${item.desc}</p>
+      <p class="item-price">₱${item.price || 0}</p>
+      `;
+
+      // append everything in order
+      itemWrapper.appendChild(box);
+      itemWrapper.appendChild(details);
+
+      // then append itemWrapper to container
+      container.appendChild(itemWrapper);
 
       const buttonsDiv = document.createElement("div");
       buttonsDiv.classList.add("buttons");
       buttonsDiv.innerHTML = `
-        <button class="btn-edit" onclick="editItem('${refPath.key}','${key}','${item.url}','${item.name}','${item.desc}','${item.price || 0}')">Edit</button>
-        <button class="btn-delete" onclick="deleteItem('${refPath.key}','${key}')">Delete</button>
+        <button class="btn-edit" onclick="editItem('${refPath.key}','${key}','${
+        item.url
+      }','${item.name}','${item.desc}','${item.price || 0}')">Edit</button>
+        <button class="btn-delete" onclick="deleteItem('${
+          refPath.key
+        }','${key}')">Delete</button>
       `;
 
       itemWrapper.appendChild(box);
@@ -191,23 +229,27 @@ renderItems(menuRef, menuGrid);
 renderItems(homeRef, homeGrid);
 
 // RENDER ORDERS
-onValue(ordersRef, snapshot => {
+onValue(ordersRef, (snapshot) => {
   ordersContainer.innerHTML = "";
-  snapshot.forEach(child => {
+  snapshot.forEach((child) => {
     const data = child.val();
     const row = document.createElement("div");
     row.classList.add("order-card");
 
     let foodListHTML = "";
     if (data.orders && Array.isArray(data.orders)) {
-      data.orders.forEach(item => {
-        foodListHTML += `<li>${item.name} — Qty: ${item.qty} — ₱${(item.price * item.qty).toFixed(2)}</li>`;
+      data.orders.forEach((item) => {
+        foodListHTML += `<li>${item.name} — Qty: ${item.qty} — ₱${(
+          item.price * item.qty
+        ).toFixed(2)}</li>`;
       });
     } else {
       foodListHTML = "<li>No food items found.</li>";
     }
 
-    const formattedTime = data.timestamp ? new Date(data.timestamp).toLocaleString() : "N/A";
+    const formattedTime = data.timestamp
+      ? new Date(data.timestamp).toLocaleString()
+      : "N/A";
 
     row.innerHTML = `
       <div class="order-details">
@@ -223,7 +265,9 @@ onValue(ordersRef, snapshot => {
           </div>
         </div>
 
-        <p><strong>Total:</strong> ₱${data.total ? data.total.toFixed(2) : "0.00"}</p>
+        <p><strong>Total:</strong> ₱${
+          data.total ? data.total.toFixed(2) : "0.00"
+        }</p>
         <p><strong>Time:</strong> ${formattedTime}</p>
       </div>
 
@@ -237,17 +281,21 @@ onValue(ordersRef, snapshot => {
     const foodList = row.querySelector(".order-food-list");
     foodToggle.addEventListener("click", () => {
       foodList.classList.toggle("active");
-      foodToggle.textContent = foodList.classList.contains("active") ? "Order Details ▲" : "Order Details ▼";
+      foodToggle.textContent = foodList.classList.contains("active")
+        ? "Order Details ▲"
+        : "Order Details ▼";
     });
 
     row.querySelector(".btn-confirm").addEventListener("click", () => {
       showCustomerOrderPopup(`Order for ${data.name} marked as confirmed!`);
     });
 
-   row.querySelector(".btn-delete").addEventListener("click", () => {
-  showDeleteConfirmPopup(`Are you sure you want to delete the order for ${data.name}?`, child.key);
-  });
-
+    row.querySelector(".btn-delete").addEventListener("click", () => {
+      showDeleteConfirmPopup(
+        `Are you sure you want to delete the order for ${data.name}?`,
+        child.key
+      );
+    });
 
     ordersContainer.appendChild(row);
   });
@@ -267,7 +315,7 @@ closeFillFields.addEventListener("click", () => {
   fillFieldsModal.style.display = "none";
 });
 
-window.addEventListener("click", e => {
+window.addEventListener("click", (e) => {
   if (e.target === fillFieldsModal) fillFieldsModal.style.display = "none";
 });
 
@@ -285,10 +333,10 @@ closeCustomerOrder.addEventListener("click", () => {
   customerOrderModal.style.display = "none";
 });
 
-window.addEventListener("click", e => {
-  if (e.target === customerOrderModal) customerOrderModal.style.display = "none";
+window.addEventListener("click", (e) => {
+  if (e.target === customerOrderModal)
+    customerOrderModal.style.display = "none";
 });
-
 
 // DELETE CONFIRMATION MODAL
 
@@ -316,7 +364,7 @@ confirmDelete.addEventListener("click", () => {
   orderKeyToDelete = null;
 });
 
-window.addEventListener("click", e => {
-  if (e.target === deleteConfirmModal) deleteConfirmModal.style.display = "none";
+window.addEventListener("click", (e) => {
+  if (e.target === deleteConfirmModal)
+    deleteConfirmModal.style.display = "none";
 });
-
