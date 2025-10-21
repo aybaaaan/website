@@ -327,6 +327,16 @@ body::before {
   animation: fadeIn 0.3s ease-in-out;
 }
 
+.modal-actions button {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  background-color: #2c3e50;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
 .deliv-details {
   margin-bottom: 20px;
   font-size: 24px;
@@ -438,4 +448,67 @@ select {
   margin-bottom: 20px;
   font-size: 15px;
   color: #333;
+}
+
+#returnHomeBtn {
+  background-color: #ffcf78; /* yellow */
+  color: #333;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 20px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+#returnHomeBtn:hover {
+  background-color: #f0b429; /* darker yellow */
+}
+
+/* ====== Reusable Popup Alert (for login, delete, etc.) ====== */
+/* Reusable popup (already provided earlier) */
+.popup-modal {
+  display: none;
+  position: fixed;
+  z-index: 2000;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+}
+.popup-content {
+  background: #fff;
+  padding: 1.8rem;
+  border-radius: 14px;
+  text-align: center;
+  width: 320px;
+  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.25);
+  animation: fadeIn 0.2s ease;
+}
+.popup-message {
+  color: #222;
+  font-size: 16px;
+  margin-bottom: 1.4rem;
+  line-height: 1.4;
+}
+.popup-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+.popup-btn {
+  border: none;
+  border-radius: 8px;
+  padding: 0.6rem 1.5rem;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+.popup-btn.confirm {
+  background: #ffcf78;
+  color: #000;
+}
+.popup-btn.confirm:hover {
+  background: #f0c068;
 }

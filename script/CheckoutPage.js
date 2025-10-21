@@ -171,22 +171,66 @@ if (backBtn) {
   });
 }
 
+//login kineme
+// ========== Reusable popup (for alerts) ==========
+function showPopup(message, redirectUrl = null) {
+  let popup = document.getElementById("customPopup");
+  if (!popup) {
+    popup = document.createElement("div");
+    popup.id = "customPopup";
+    popup.className = "popup-modal";
+    popup.innerHTML = `
+      <div class="popup-content">
+        <p class="popup-message"></p>
+        <div class="popup-actions">
+          <button class="popup-btn confirm" id="popupOkBtn">OK</button>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(popup);
+  }
+
+  const messageEl = popup.querySelector(".popup-message");
+  const okBtn = popup.querySelector("#popupOkBtn");
+
+  messageEl.textContent = message;
+  popup.style.display = "flex";
+
+  okBtn.onclick = () => {
+    popup.style.display = "none";
+    if (redirectUrl) {
+      setTimeout(() => {
+        window.location.href = redirectUrl;
+      }, 150);
+    }
+  };
+
+  // Close when clicking outside
+  window.onclick = (e) => {
+    if (e.target === popup) {
+      popup.style.display = "none";
+    }
+  };
+}
+
+// ========== Login and Cart Validation ==========
 proceedBtn.addEventListener("click", () => {
   if (!currentUser) {
-    alert("You must be logged in to place an order.");
-    window.location.href = "/pages/LoginPage.html";
-    modal.style.display = "none";
+    if (modal) modal.style.display = "none";
+    showPopup("You must be logged in to place an order.", "/pages/LoginPage.html");
     return;
   }
 
   if (orders.length === 0) {
-    alert("Your cart is empty!");
+    showPopup("Your cart is empty!");
     return;
   }
+
   modal.style.display = "flex";
   renderDeliveryFields();
 });
 
+// ========== Modal Close Logic ==========
 closeModal.addEventListener("click", () => {
   modal.style.display = "none";
 });
@@ -195,8 +239,9 @@ window.addEventListener("click", (e) => {
   if (e.target === modal) modal.style.display = "none";
 });
 
+
 // SINGLE Submit Handler
-checkoutForm.addEventListener("submit", async (e) => {
+/*checkoutForm.addEventListener("submit", async (e) => {
   e.preventDefault();
 
   const name = document.getElementById("name").value.trim();
@@ -236,12 +281,58 @@ checkoutForm.addEventListener("submit", async (e) => {
     alert("Failed to place order. Please try again.");
   }
 });
+*/
 
-// Return Home Button
+// SINGLE Submit Handler
+checkoutForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const name = document.getElementById("name").value.trim();
+  const address = document.getElementById("address").value.trim();
+  const contact = document.getElementById("contact").value.trim();
+  const payment = document.getElementById("payment").value;
+
+  if (!name || !address || !contact || !payment) {
+    alert("Please fill out all fields.");
+    return;
+  }
+
+  const orderData = {
+    userId: currentUser.uid,
+    userEmail: currentUser.email,
+    name,
+    address,
+    contact,
+    payment,
+    orders,
+    total: parseFloat(totalEl.textContent),
+    timestamp: Date.now(),
+    status: "Pending",
+  };
+
+  try {
+    await push(ordersRef, orderData);
+
+    // Clear cart and close checkout modal
+    localStorage.removeItem("cart");
+    orders = [];
+    renderOrders();
+    modal.style.display = "none";
+
+    // Show success popup
+    document.getElementById("successModal").style.display = "flex";
+  } catch (err) {
+    console.error(err);
+    alert("Failed to place order. Please try again.");
+  }
+});
+
+// Return Home button handler
 document.getElementById("returnHomeBtn").addEventListener("click", () => {
   document.getElementById("successModal").style.display = "none";
   window.location.href = "/pages/HomePage.html#home";
 });
+
 
 // Initialize checkout
 renderOrders();

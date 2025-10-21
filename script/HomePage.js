@@ -244,13 +244,23 @@ document.addEventListener("DOMContentLoaded", () => {
 document.querySelectorAll(".checkout-btn").forEach((btn) => {
   btn.addEventListener("click", () => {
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
     if (cart.length === 0) {
-      alert("Your cart is empty! Please add items first.");
+      // Show popup instead of alert
+      const popup = document.getElementById("emptyCartPopup");
+      const okBtn = document.getElementById("emptyCartOkBtn");
+
+      popup.style.display = "flex";
+
+      okBtn.onclick = () => {
+        popup.style.display = "none";
+      };
     } else {
       window.location.href = "/pages/CheckoutPage.html";
     }
   });
 });
+
 
 // ===================== HAMBURGER MENU =====================
 document.addEventListener("DOMContentLoaded", () => {

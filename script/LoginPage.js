@@ -19,17 +19,43 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-// DOM elements
+// input fields
+
+// submit button
 const submit = document.getElementById("submit");
 const errorMessage = document.getElementById("error-message");
 
+// Success popup function
+function showSuccess(msg) {
+  const popup = document.getElementById("error-message");
+  popup.textContent = msg;
+  popup.style.backgroundColor = "rgba(76, 175, 80, 0.95)";
+  popup.classList.add("show");
+
+  setTimeout(() => {
+    popup.classList.remove("show");
+  }, 3000);
+}
+
+// Error popup function (optional)
+function showError(msg) {
+  const popup = document.getElementById("error-message");
+  popup.textContent = msg;
+  popup.style.backgroundColor = "rgba(244, 67, 54, 0.95)";
+  popup.classList.add("show");
+
+  setTimeout(() => {
+    popup.classList.remove("show");
+  }, 3000);
+}
+
+// ================= LOGIN =================
 submit.addEventListener("click", (event) => {
   event.preventDefault();
-
-  const email = document.getElementById("email").value.trim();
+  const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 
-  // Reset error
+  // Reset message
   errorMessage.textContent = "";
   errorMessage.classList.remove("show");
 
@@ -43,57 +69,19 @@ submit.addEventListener("click", (event) => {
     .then((userCredential) => {
       const user = userCredential.user;
 
-      // Admin login
       if (user.email === "admin123@miv.com" && password === "admin123") {
-        showSuccess("Admin login successful!");
+        showSuccess("Admin login successful");
         setTimeout(() => {
           window.location.href = "/pages/AdminPage.html";
         }, 1500);
       } else {
-        showSuccess("Login successful!");
+        showSuccess("User login successful");
         setTimeout(() => {
           window.location.href = "/pages/HomePage.html";
         }, 1500);
       }
     })
     .catch((error) => {
-      console.log(error.code); // helpful for debugging
-
-      if (error.code === "auth/invalid-email") {
-        showError("Please enter a valid email address (example@domain.com).");
-      } else if (error.code === "auth/user-not-found") {
-        showError("No account found with this email.");
-      } else if (
-        error.code === "auth/wrong-password" ||
-        error.code === "auth/invalid-credential"
-      ) {
-        showError("Incorrect email or password. Please try again.");
-      } else {
-        showError("An unexpected error occurred. Please try again later.");
-      }
+      showError("Invalid email or password. Please try again.");
     });
 });
-
-function showError(msg) {
-  const errorMessage = document.getElementById("error-message");
-  errorMessage.textContent = msg;
-  errorMessage.style.backgroundColor = "rgba(255, 77, 77, 0.95)";
-  errorMessage.classList.add("show");
-
-  // Auto hide after 3 seconds
-  setTimeout(() => {
-    errorMessage.classList.remove("show");
-  }, 3000);
-}
-
-function showSuccess(msg) {
-  const errorMessage = document.getElementById("error-message");
-  errorMessage.textContent = msg;
-  errorMessage.style.backgroundColor = "rgba(76, 175, 80, 0.95)";
-  errorMessage.classList.add("show");
-
-  // Auto hide after 3 seconds
-  setTimeout(() => {
-    errorMessage.classList.remove("show");
-  }, 3000);
-}

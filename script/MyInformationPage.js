@@ -76,11 +76,24 @@ onAuthStateChanged(auth, async (user) => {
 });
 
 // ================= EDIT / SAVE TOGGLE =================
+function showSuccess(msg) {
+  const errorMessage = document.getElementById("error-message");
+  errorMessage.textContent = msg;
+  errorMessage.style.backgroundColor = "rgba(76, 175, 80, 0.95)";
+  errorMessage.classList.add("show");
+
+  // Hide automatically after 3 seconds
+  setTimeout(() => {
+    errorMessage.classList.remove("show");
+  }, 3000);
+}
+
+
 let editing = false;
 
 editBtn.addEventListener("click", async () => {
   const user = auth.currentUser;
-  if (!user) return alert("You are not logged in.");
+  if (!user) return showSuccess("You are not logged in.");
 
   if (!editing) {
     // Switch to edit mode
@@ -107,9 +120,11 @@ editBtn.addEventListener("click", async () => {
       { merge: true }
     );
 
-    alert("Profile updated successfully!");
+    // ✅ Replace alert with popup
+    showSuccess("Profile updated successfully!");
   }
 });
+
 
 // ================= HAMBURGER MENU =================
 const hamburger = document.getElementById("hamburger");

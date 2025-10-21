@@ -145,6 +145,36 @@ body {
   margin-top: auto;
 }
 
+/* ====== Popup Message ====== */
+.popup-message {
+  position: fixed;
+  top: 80px; /* adjust this if you want it higher/lower */
+  left: 50%;
+  transform: translateX(-50%) scale(0.9);
+  background-color: rgba(76, 175, 80, 0.95);
+  color: white;
+  padding: 14px 24px;
+  border-radius: 10px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  z-index: 10000;
+  font-size: 16px;
+  text-align: center;
+  min-width: 250px;
+}
+
+.popup-message.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) scale(1);
+}
+
+
+
+
+
+
 /* === HAMBURGER MENU === */
 .hamburger {
   display: none;
