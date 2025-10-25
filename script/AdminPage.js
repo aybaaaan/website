@@ -207,9 +207,6 @@ function renderItems(refPath, container) {
       // DETAILS (outside the picture-box)
       const details = document.createElement("div");
       details.classList.add("item-details");
-      details.innerHTML = `
-      
-      `;
 
       if (refPath.key === "menu") {
         // Show price for menu items
@@ -227,7 +224,6 @@ function renderItems(refPath, container) {
       }
 
       // append everything in order
-      itemWrapper.appendChild(box);
       itemWrapper.appendChild(details);
 
       // then append itemWrapper to container
@@ -266,6 +262,39 @@ onValue(ordersRef, (snapshot) => {
   ordersContainer.innerHTML = "";
   snapshot.forEach((child) => {
     const data = child.val();
+
+    // ==================== FORMAT DATE AND TIME =======================
+    // get delivery date and time
+    const deliveryDate = data.deliveryDate || "N/A"; // ✅ added
+    let deliveryTime = "N/A";
+    if (data.deliveryTime) {
+      // 12-hour format with AM/PM
+      const [hour, minute] = data.deliveryTime.split(":").map(Number);
+      const dateObj = new Date();
+      dateObj.setHours(hour, minute);
+      deliveryTime = dateObj.toLocaleTimeString("en-PH", {
+        hour: "numeric",
+        minute: "2-digit",
+        hour12: true,
+      });
+    }
+    // get order date and time
+    let orderDate = "N/A";
+    let orderTime = "N/A";
+
+    if (data.timestamp) {
+      const dateObj = new Date(data.timestamp);
+      orderDate = dateObj.toLocaleDateString("en-PH", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      });
+      orderTime = dateObj.toLocaleTimeString("en-PH", {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+    }
+
     const row = document.createElement("div");
     row.classList.add("order-card");
 
@@ -279,10 +308,6 @@ onValue(ordersRef, (snapshot) => {
     } else {
       foodListHTML = "<li>No food items found.</li>";
     }
-
-    const formattedTime = data.timestamp
-      ? new Date(data.timestamp).toLocaleString()
-      : "N/A";
 
     row.innerHTML = `
       <div class="order-details">
@@ -301,7 +326,8 @@ onValue(ordersRef, (snapshot) => {
         <p><strong>Total:</strong> ₱${
           data.total ? data.total.toFixed(2) : "0.00"
         }</p>
-        <p><strong>Time:</strong> ${formattedTime}</p>
+        <p><strong>Delivery Date:</strong> ${deliveryDate}</p>
+        <p><strong>Delivery Time:</strong> ${deliveryTime}</p>
       </div>
 
       <div class="order-actions">

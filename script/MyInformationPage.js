@@ -29,6 +29,7 @@ const auth = getAuth(app);
 const emailEl = document.getElementById("email");
 const nameInput = document.getElementById("name");
 const phoneInput = document.getElementById("phone");
+const addressInput = document.getElementById("address");
 const editBtn = document.getElementById("editBtn");
 
 // ================= PHONE INPUT VALIDATION =================
@@ -61,7 +62,12 @@ onAuthStateChanged(auth, async (user) => {
         : user.email.split("@")[0];
 
     // Default phone (if empty, show Not set)
-    phoneInput.value = data.phone && data.phone.trim() !== "" ? data.phone : "Not set";
+    phoneInput.value =
+      data.phone && data.phone.trim() !== "" ? data.phone : "Not set";
+
+    // Default address (if empty, show Not set)
+    addressInput.value =
+      data.address && data.address.trim() !== "" ? data.address : "Not set";
   } else {
     console.log("No user document found, creating one...");
     await setDoc(userRef, {
@@ -72,6 +78,7 @@ onAuthStateChanged(auth, async (user) => {
 
     nameInput.value = user.email.split("@")[0];
     phoneInput.value = "Not set";
+    addressInput.value = "Not set";
   }
 });
 
@@ -88,7 +95,6 @@ function showSuccess(msg) {
   }, 3000);
 }
 
-
 let editing = false;
 
 editBtn.addEventListener("click", async () => {
@@ -100,6 +106,7 @@ editBtn.addEventListener("click", async () => {
     editing = true;
     nameInput.disabled = false;
     phoneInput.disabled = false;
+    addressInput.disabled = false;
     editBtn.textContent = "Save Changes";
     nameInput.focus();
   } else {
@@ -107,6 +114,7 @@ editBtn.addEventListener("click", async () => {
     editing = false;
     nameInput.disabled = true;
     phoneInput.disabled = true;
+    addressInput.disabled = true;
     editBtn.textContent = "Edit Profile";
 
     const userRef = doc(db, "users", user.uid);
@@ -116,6 +124,7 @@ editBtn.addEventListener("click", async () => {
         email: user.email,
         name: nameInput.value.trim() || user.email.split("@")[0],
         phone: phoneInput.value.trim() || "Not set",
+        address: addressInput.value.trim() || "Not set",
       },
       { merge: true }
     );
@@ -124,7 +133,6 @@ editBtn.addEventListener("click", async () => {
     showSuccess("Profile updated successfully!");
   }
 });
-
 
 // ================= HAMBURGER MENU =================
 const hamburger = document.getElementById("hamburger");

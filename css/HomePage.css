@@ -276,9 +276,6 @@ header.scrolled {
   background-color: #ffda33;
 }
 
-
-
-
 /* === HAMBURGER MENU === */
 .hamburger {
   display: none;
@@ -888,7 +885,7 @@ header.scrolled {
   .nav-menu {
     display: none;
     flex-direction: column;
-    align-items: center;
+    align-items: left;
     background: #4c6849;
     width: 100%;
     position: absolute;
@@ -984,6 +981,7 @@ header.scrolled {
     display: none;
   }
   .nav-menu {
+    align-items: left;
     display: block;
   }
   .header-actions {
@@ -1028,6 +1026,7 @@ header.scrolled {
   .logo {
     font-size: 32px;
   }
+
   .food-title {
     font-size: 48px;
   }

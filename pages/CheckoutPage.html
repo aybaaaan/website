@@ -43,7 +43,7 @@
           <h3 class="deliv-details">Enter Delivery Details</h3>
 
           <form id="checkoutForm">
-            <input type="text" id="name" placeholder="Full Name" required />
+            <input type="text" id="name" placeholder="Name" required />
             <input type="text" id="address" placeholder="Address" required />
             <input
               type="tel"
@@ -52,6 +52,12 @@
               oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,11)"
               required
             />
+
+            <label for="delivery-date">Delivery Date:</label>
+            <input type="date" id="delivery-date" required min="" />
+
+            <label for="delivery-time">Delivery Time:</label>
+            <input type="time" id="delivery-time" required />
 
             <label>Payment Method:</label>
             <select id="payment" required>
@@ -66,6 +72,25 @@
           </form>
         </div>
       </div>
+
+      <!-- Invalid Time Popup -->
+      <div id="timePopup" class="popup-modal" aria-hidden="true">
+        <div
+          class="popup-content"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="timePopupMsg"
+        >
+          <p id="timePopupMsg" class="popup-message">
+            Invalid delivery time. Please select a time between 9:00 AM and 8:00
+            PM, at least 20 minutes from now.
+          </p>
+          <div class="popup-actions">
+            <button class="popup-btn confirm" id="timePopupOkBtn">OK</button>
+          </div>
+        </div>
+      </div>
+
       <!-- Success Popup -->
       <div id="successModal" class="modal">
         <div class="modal-content">
