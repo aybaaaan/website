@@ -17,7 +17,7 @@ body {
 
 /* ====== Header ====== */
 .header {
-  background: #4c1130;
+  background: linear-gradient(to right, #4c1130da, #741b47da);
   color: white;
   display: flex;
   justify-content: space-between;
@@ -159,7 +159,7 @@ body {
 /* ====== Footer ====== */
 .footer {
   text-align: center;
-  background: #4c1130;
+  background: linear-gradient(to right, #4c1130da, #741b47da);
   color: white;
   padding: 14px;
   font-size: 14px;

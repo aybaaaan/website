@@ -41,7 +41,7 @@ body {
 /* Header */
 .header {
   width: 100%;
-  background-color: #4c1130;
+  background: linear-gradient(to right, #4c1130da, #741b47da);
   padding: 12px 24px;
   display: flex;
   justify-content: space-between;
@@ -352,12 +352,11 @@ body {
 /* Footer */
 .footer {
   margin-top: auto;
-
   width: 100%;
   padding: 26px 45px 26px 67px;
   display: flex;
   z-index: -1;
-  background-color: #4c1130;
+  background: linear-gradient(to right, #4c1130da, #741b47da);
   box-shadow: #0000003f 0px -6px 6px;
 }
 
