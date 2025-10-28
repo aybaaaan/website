@@ -146,14 +146,16 @@ body {
   padding: 14px 28px;
   font-size: 17px;
   border-radius: 10px;
-  background: #c27ba0;
+  background: #a64d79;
+  color: #fffefe;
+  font-weight: 500;
   border: none;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .reorder-btn:hover {
-  background: #a64d79;
+  transform: scale(1.07);
 }
 
 /* ====== Footer ====== */
@@ -210,8 +212,8 @@ body {
 }
 
 #reorderOkBtn {
-  background-color: #c27ba0;
-  color: #000;
+  background-color: #a64d79;
+  color: #ffffff;
   border: none;
   padding: 10px 25px;
   border-radius: 5px;
@@ -220,7 +222,7 @@ body {
 }
 
 #reorderOkBtn:hover {
-  background-color: #a64d79;
+  transform: scale(1.05);
 }
 
 
