@@ -1,9 +1,11 @@
+// ==== HEADER SCROLL EFFECT ====
+const headerContainer = document.querySelector(".header-container");
+
 window.addEventListener("scroll", () => {
-  const header = document.querySelector("header");
   if (window.scrollY > 50) {
-    header.classList.add("scrolled");
+    headerContainer.classList.add("scrolled");
   } else {
-    header.classList.remove("scrolled");
+    headerContainer.classList.remove("scrolled");
   }
 });
 
@@ -261,7 +263,6 @@ document.querySelectorAll(".checkout-btn").forEach((btn) => {
   });
 });
 
-
 // ===================== HAMBURGER MENU =====================
 document.addEventListener("DOMContentLoaded", () => {
   const hamburger = document.getElementById("hamburger");
@@ -269,10 +270,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (!hamburger || !navMenu) return;
 
-  // Toggle open/close
+  // ==== HAMBURGER MENU TOGGLE ====
   hamburger.addEventListener("click", () => {
     hamburger.classList.toggle("active");
     navMenu.classList.toggle("active");
+
+    // Toggle header color when menu is open
+    headerContainer.classList.toggle("menu-open");
   });
 
   // Close menu when clicking a link
@@ -371,9 +375,12 @@ onValue(ref(db, "homepage"), (snapshot) => {
       carousel.innerHTML += `
           <div class="carousel-item ${index === 0 ? "active" : ""}">
             <img src="${item.url}" alt="${item.name}" />
-            <div class="carousel-item-caption">
-              <h1>${item.name}</h1>
-              <p>${item.desc}</p>
+            <div class="carousel-item-caption-container">
+              <div class="carousel-item-caption">
+                <h1>Featured Dishes</h1>
+                <h2>${item.name}</h2>
+                <p class ="item-desc">${item.desc}</p>
+              </div>
             </div>
           </div>
         `;
@@ -401,7 +408,7 @@ onValue(ref(db, "menu"), (snapshot) => {
         <img src="${item.url}" alt="${item.name}">
         <div class="card-content">
           <h3 class="card-title">${item.name}</h3>
-          <p>${item.desc}</p>
+          <p class="card-desc">${item.desc}</p>
           <p class="card-price">₱${item.price || 0}</p>
           <button class="order-btn" onclick="goToDetails(
             '${item.name}',

@@ -1,16 +1,4 @@
-// ===============================
-// SECTION SWITCHING
-// ===============================
-function showSection(id) {
-  document
-    .querySelectorAll("main section")
-    .forEach((sec) => sec.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
-}
-
-// ===============================
 // LOGOUT MODAL LOGIC
-// ===============================
 const logoutBtn = document.getElementById("btn-logout");
 const logoutModal = document.getElementById("logoutModal"); // fixed ID
 const cancelLogout = document.getElementById("cancel-logout");
@@ -34,9 +22,7 @@ window.addEventListener("click", (e) => {
   if (e.target === logoutModal) logoutModal.style.display = "none";
 });
 
-// ===============================
 // FIREBASE SETUP
-// ===============================
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
 import {
   getDatabase,
@@ -69,18 +55,23 @@ const menuGrid = document.getElementById("menuGrid");
 const homeGrid = document.getElementById("homeGrid");
 const ordersContainer = document.getElementById("ordersContainer");
 
-// ===============================
 // ITEM MODAL VARIABLES
-// ===============================
 let currentSection = "menu";
 let editKey = null;
 let base64Image = "";
 const fileInput = document.getElementById("imageFile");
 const preview = document.getElementById("preview");
 
-// ===============================
+const priceInput = document.getElementById("imagePrice");
+
+// Make sure only numbers and one decimal point are allowed
+priceInput.addEventListener("input", (e) => {
+  e.target.value = e.target.value
+    .replace(/[^\d.]/g, "") // allow only digits and a single dot
+    .replace(/(\..*?)\..*/g, "$1"); // prevent multiple dots
+});
+
 // OPEN ADD ITEM MODAL
-// ===============================
 window.openAddModal = (section = "menu") => {
   currentSection = section;
   editKey = null;
@@ -93,7 +84,7 @@ window.openAddModal = (section = "menu") => {
   document.getElementById("modalTitle").innerText = "Add Item";
   document.getElementById("itemModal").style.display = "block";
 
-  // ✅ Show or hide price input depending on section
+  // Show or hide price input depending on section
   const priceField =
     document.getElementById("imagePrice").closest(".input-group") ||
     document.getElementById("imagePrice");
@@ -104,15 +95,11 @@ window.openAddModal = (section = "menu") => {
   }
 };
 
-// ===============================
 // CLOSE ITEM MODAL
-// ===============================
 window.closeModal = () =>
   (document.getElementById("itemModal").style.display = "none");
 
-// ===============================
 // IMAGE PREVIEW HANDLER
-// ===============================
 fileInput.addEventListener("change", (e) => {
   const file = e.target.files[0];
   if (file) {
@@ -125,16 +112,14 @@ fileInput.addEventListener("change", (e) => {
   }
 });
 
-// ===============================
 // SAVE ITEM (ADD OR EDIT)
-// ===============================
 document.getElementById("saveItem").addEventListener("click", () => {
   const name = document.getElementById("imageName").value.trim();
   const desc = document.getElementById("imageDesc").value.trim();
   const price = document.getElementById("imagePrice").value.trim();
 
-  if (!base64Image || !name || !desc || !price) {
-    showFillFieldsModal(); // ✅ replaced alert()
+  if (!base64Image || !name || !desc || (currentSection === "menu" && !price)) {
+    showFillFieldsModal();
     return;
   }
 
@@ -154,9 +139,7 @@ document.getElementById("saveItem").addEventListener("click", () => {
   closeModal();
 });
 
-// ===============================
 // EDIT ITEM
-// ===============================
 window.editItem = (section, key, url, name, desc, price) => {
   currentSection = section;
   editKey = key;
@@ -179,14 +162,10 @@ window.editItem = (section, key, url, name, desc, price) => {
   }
 };
 
-// ===============================
 // DELETE ITEM
-// ===============================
 window.deleteItem = (section, key) => remove(ref(db, `${section}/${key}`));
 
-// ===============================
 // RENDER MENU AND HOME ITEMS
-// ===============================
 function renderItems(refPath, container) {
   onValue(refPath, (snapshot) => {
     container.innerHTML = "";
@@ -227,7 +206,6 @@ function renderItems(refPath, container) {
       itemWrapper.appendChild(details);
 
       // then append itemWrapper to container
-      container.appendChild(itemWrapper);
 
       const buttonsDiv = document.createElement("div");
       buttonsDiv.classList.add("buttons");
