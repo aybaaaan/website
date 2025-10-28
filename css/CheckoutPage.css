@@ -29,7 +29,7 @@ body::before {
 
 /* ====== Header ====== */
 .header {
-  background: #6e8e6b;
+  background: 	#741b47;
   color: white;
   display: flex;
   justify-content: space-between;
@@ -54,7 +54,7 @@ body::before {
 }
 
 .header .nav a:hover {
-  color: #ffcf78;
+  color: 	#c27ba0;
 }
 
 /* ====== Checkout Container ====== */
@@ -90,7 +90,7 @@ body::before {
   text-align: right; /* move it to the right */
   margin-bottom: 15px; /* spacing below */
   text-decoration: none;
-  color: #6e8e6b;
+  color: #a64d79;
   font-weight: bold;
   font-size: 16px;
   transition: transform 0.2s ease;
@@ -98,7 +98,7 @@ body::before {
 
 .back-btn:hover {
   transform: translateX(-4px);
-  color: #4a6a47;
+  color: #a64d79;
 }
 
 /* ====== Order Item ====== */
@@ -147,16 +147,18 @@ body::before {
   width: 28px;
   height: 28px;
   border: none;
-  background: #6e8e6b;
-  color: white;
+  background: 	#ead1dc;
+  color: 	#741b47;
   border-radius: 6px;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 18px;
+  font-weight: 700;
   box-shadow: #00000033 2px 3px 6px 0px;
 }
 
 .quantity-control button:hover {
-  background: #4a6a47;
+  background:#a64d79;
+  color:	#ead1dc;
 }
 
 .details-qty {
@@ -188,6 +190,10 @@ body::before {
   top: 10px;
   right: 10px;
 }
+.removeBtn:hover {
+  background-color: #bd2525;
+  transform: scale(1.06);
+}
 
 /* ====== Checkout Actions ====== */
 .checkout-actions {
@@ -213,8 +219,9 @@ body::before {
 
 /* Button Styles */
 .addmore-btn {
-  background: #ffcf78;
+  background: 	#ead1dc;
   border: none;
+  color: 	#4c1130;
   padding: 12px 20px;
   font-weight: bold;
   cursor: pointer;
@@ -224,7 +231,7 @@ body::before {
 }
 
 .proceed-btn {
-  background: #6e8e6b;
+  background: 	#a64d79;
   border: none;
   padding: 12px 20px;
   font-weight: bold;
@@ -236,12 +243,14 @@ body::before {
 }
 
 .addmore-btn:hover {
-  background: #f0c068;
+  background: #a64d79;
+  color: #f8f0f4;
   transform: scale(1.05);
 }
 
 .proceed-btn:hover {
-  background: #4a6a47;
+  background: #ead1dc;
+  color: #4c1130;
   transform: scale(1.05);
 }
 
@@ -257,7 +266,7 @@ body::before {
 /* ====== Footer ====== */
 .footer {
   text-align: center;
-  background: #6e8e6b;
+  background: 	#741b47;
   color: white;
   padding: 14px;
   font-size: 14px;
@@ -355,7 +364,7 @@ body::before {
 }
 
 .submit-btn {
-  background: #6e8e6b;
+  background: #a64d79;
   border: none;
   border-radius: 10px;
   padding: 12px 20px;
@@ -367,7 +376,8 @@ body::before {
 }
 
 .submit-btn:hover {
-  background: #4a6a47;
+  background: #ead1dc;
+  color: #4c1130;
   transform: scale(1.05);
 }
 /* ====== Checkout Form ====== */
@@ -461,10 +471,6 @@ select {
   transition: background-color 0.2s ease;
 }
 
-#returnHomeBtn:hover {
-  background-color: #f0b429; /* darker yellow */
-}
-
 /* ====== Reusable Popup Alert (for login, delete, etc.) ====== */
 /* Reusable popup (already provided earlier) */
 .popup-modal {
@@ -506,9 +512,10 @@ select {
   transition: background-color 0.2s;
 }
 .popup-btn.confirm {
-  background: #ffcf78;
-  color: #000;
+  background: #a64d79;
+  color: #fffcfc;
 }
 .popup-btn.confirm:hover {
-  background: #f0c068;
+  background:  #ead1dc;
+  color: #4c1130;
 }

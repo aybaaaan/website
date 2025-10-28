@@ -11,17 +11,9 @@ body {
   height: 100vh;
 }
 
-/* Top bar */
-header {
-  background-color: #bb771fcc;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 20px;
-}
-
 header .logo {
   font-weight: bold;
+  color: #ead1dc;
   font-size: 18px;
 }
 
@@ -40,6 +32,7 @@ header .logo {
 
 #btn-logout:hover {
   background: #be2b1b;
+  transform: scale(1.03);
 }
 
 /* Main layout */
@@ -54,7 +47,7 @@ header {
   left: 0;
   width: 100%;
   height: 60px;
-  background-color: #bb771fcc;
+  background-color: 	#4c1130;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -81,7 +74,7 @@ aside {
   box-sizing: border-box;
   overflow-y: auto;
   z-index: 999;
-  border-right: 2px solid #ccc; /* para visually clean */
+  border-right: 2px solid #741b47; /* para visually clean */
 }
 
 /* Main content */
@@ -97,13 +90,14 @@ main {
 /* Sidebar */
 aside {
   width: 220px;
-  background-color: #e5e5e5;
+  background-color: 	#a64d79;
   padding: 10px;
   box-sizing: border-box;
 }
 
 aside h3 {
   margin-bottom: 15px;
+  color: #ead1dc;
   font-size: 18px;
   font-weight: bold;
 }
@@ -117,8 +111,9 @@ aside a {
 aside button {
   width: 100%;
   height: 45px;
-  background-color: #ffd175;
+  background-color: #ead1dc;
   border: none;
+  color: #4c1130;
   border-radius: 8px;
   font-weight: bold;
   font-size: 14px;
@@ -129,13 +124,15 @@ aside button {
 }
 
 aside button:hover {
-  background-color: #f9c75c;
+  background-color:  #741b47;
+  color: 	#ead1dc;
+  transform: scale(1.03);
 }
 
 /* Main content area */
 main {
   flex: 1;
-  background: #5f7d5f;
+  background: 	hsl(333, 21%, 92%);
   padding: 20px;
   overflow-y: auto;
   position: relative;
@@ -169,8 +166,9 @@ section.active {
 }
 
 .card {
-  background: #d6d6d6;
+  background: 	#c27ba0;
   border-radius: 8px;
+  color: #fff;
   padding: 20px;
   margin-bottom: 20px;
 }
@@ -188,8 +186,9 @@ section.active {
   font-weight: bold;
   padding: 1rem 12px;
   padding-top: 20px;
-  color: #f8f2ea;
-  border-top: #ffffff 2px solid;
+  color: #4c1130;
+  border-top: #741b47 2px solid;
+  margin-top: 2rem;
 }
 
 .picture-box {
@@ -215,16 +214,17 @@ section.active {
 
 /* Plus box special style */
 .picture-box.plus {
-  background: #e9e9e8;
+  background: #c27ba0;
+  width: 20rem;
   font-size: 40px;
   padding: 20px;
   font-weight: bold;
-  color: #242222;
+  color: #ffecf4;
 }
 
 .picture-box.plus:hover {
-  background: #ffcf78;
-  color: #000;
+  background: #ead1dc;
+  color: 	#4c1130;
 }
 
 .item-details {
@@ -258,7 +258,7 @@ section.active {
   align-items: center; /* vertically center image, text, and buttons */
   justify-content: space-between; /* even space between image, text, and buttons */
   gap: 20px; /* small gap between elements */
-  background: #7b9a7b; /* optional background for contrast */
+  background: 	#c27ba0; /* optional background for contrast */
   padding: 15px 20px;
   border-radius: 10px;
   margin-bottom: 20px;
@@ -327,7 +327,7 @@ section.active {
 }
 
 .food-toggle {
-  background: #5f7d5f;
+  background: 		#a64d79;
   color: #fff;
   border: none;
   border-radius: 5px;
@@ -338,7 +338,7 @@ section.active {
 }
 
 .food-toggle:hover {
-  background: #5f7d5f;
+  background: #a64d79;
   transform: scale(1.05);
 }
 
@@ -423,8 +423,8 @@ section.active {
 /*Home Page and Menu Buttons */
 .btn-edit {
   position: relative;
-  background: #ffb347;
-  color: #fff;
+  background: #ead1dc;
+  color: 	#4c1130;
   padding: 8px 12px;
   border: none;
   border-radius: 5px;
@@ -446,7 +446,7 @@ section.active {
 }
 
 .btn-edit:hover {
-  background: #f8b456;
+  background: #ead1dc;
   transform: scale(1.05);
 }
 .btn-delete:hover {
@@ -543,7 +543,7 @@ section.active {
 
 /* Modal box */
 .modal-content {
-  background: #fff;
+  background: #f0e5ea;
   margin: 15% auto;
   padding: 20px;
   border-radius: 10px;
@@ -621,12 +621,12 @@ section.active {
 }
 
 #saveItem {
-  background-color: #ffb347;
+  background-color: #a64d79;
   color: #ffffff;
 }
 
 #saveItem:hover {
-  background-color: #4caf50;
+  background-color: #a64d79;
   transform: scale(1.03);
 }
 
@@ -646,11 +646,15 @@ section.active {
 }
 
 #close-customer-order {
-  background: #45a049;
+  background: #4e8051;
 }
 
 #cancel-delete {
-  background: #ffb347;
+  background: #a64d79;
+}
+#cancel-delete:hover {
+  background: #a64d79;
+  transform: scale(1.03);
 }
 
 /* ===== Animation ===== */
@@ -704,11 +708,12 @@ section.active {
 }
 /* Cancel button */
 #cancel-logout {
-  background: #ffb347;
+  background: #a64d79;
 }
 
 #cancel-logout:hover {
-  background: #d18923;
+  background: #a64d79;
+  transform: scale(1.03);
 }
 
 /* Confirm button */
