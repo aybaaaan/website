@@ -5,6 +5,7 @@
   box-sizing: border-box;
 }
 
+
 body {
   font-family: "Livvic", Arial, sans-serif;
   background: url("https://imgs.search.brave.com/qwpZN5_Purot1GZWJoFNbNlNT1xNrco54atkeNOGNG8/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/cHJlbWl1bS1waG90/by90YWJsZS13aXRo/LW1hbnktcGxhdGVz/LWZvb2QtaW5jbHVk/aW5nLWZvb2QtZHJp/bmtzXzg2MjQ2Mi0x/MDM5MC5qcGc_c2Vt/dD1haXNfaHlicmlk/Jnc9NzQwJnE9ODA")
@@ -41,7 +42,7 @@ body {
 /* Header */
 .header {
   width: 100%;
-  background-color: #6e8e6b;
+  background: linear-gradient(to right, #4c1130da, #741b47da);
   padding: 12px 24px;
   display: flex;
   justify-content: space-between;
@@ -90,7 +91,7 @@ body {
 .create-account-container {
   width: 90%;
   max-width: 400px;
-  background-color: #6e8e6b;
+  background-color: rgba(166, 77, 121, 0.8);
   border-radius: 40px;
   padding: 29px;
   box-shadow: #0000003f 0px 6px 6px;
@@ -98,14 +99,6 @@ body {
   flex-direction: column;
   gap: 17px;
   align-items: center;
-}
-.create-account-container {
-  background-color: rgba(
-    110,
-    142,
-    107,
-    0.801
-  ); /* same green with 85% opacity */
 }
 
 @media (min-width: 768px) {
@@ -245,7 +238,7 @@ body {
 
 .form-input:focus {
   background-color: #e5e5e5;
-  outline: 2px solid #ffcf78;
+  outline: 2px solid #ead1dc;
   outline-offset: 2px;
 }
 
@@ -254,13 +247,13 @@ body {
 }
 
 .signup-btn {
-  background-color: #ffcf78;
+  background-color: #741b47;
   border-radius: 14px;
   padding: 9px 20px;
   font-size: 11px;
   font-weight: 700;
   line-height: 14px;
-  color: #000000;
+  color: #ffffff;
   border: none;
   cursor: pointer;
   margin-top: 20px;
@@ -286,8 +279,9 @@ body {
 }
 
 .signup-btn:hover {
-  background-color: #f0b84a;
+  background-color: #ead1dc;
   transform: scale(1.05);
+  color:black
 }
 
 .signup-btn:active {
@@ -327,18 +321,17 @@ body {
 }
 
 .signin-link a:hover {
-  color: #ffcf78;
+  color: #ead1dc;
 }
 
 /* Footer */
 .footer {
   margin-top: auto;
-
   width: 100%;
   padding: 26px 45px 26px 67px;
   display: flex;
   z-index: -1;
-  background-color: #6e8e6b;
+  background: linear-gradient(to right, #4c1130da, #741b47da);
   box-shadow: #0000003f 0px -6px 6px;
 }
 
@@ -373,7 +366,7 @@ body {
   font-size: 25px;
   font-weight: 700;
   line-height: 26px;
-  color: #98c717;
+  color: #c27ba0;
 }
 
 .footer-title-nav {

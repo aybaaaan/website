@@ -17,7 +17,7 @@ body {
 
 /* ====== Header ====== */
 .header {
-  background: #6e8e6b;
+  background: linear-gradient(to right, #4c1130da, #741b47da);
   color: white;
   display: flex;
   justify-content: space-between;
@@ -43,7 +43,7 @@ body {
 }
 
 .header .nav a:hover {
-  color: #ffcf78;
+  color: #741b47;
 }
 
 /* ====== History Container ====== */
@@ -71,7 +71,7 @@ body {
 }
 
 .back-btn {
-  background: #6e8e6b;
+  background: #a64d79;
   color: white;
   border: none;
   padding: 12px 25px;
@@ -81,7 +81,7 @@ body {
 }
 
 .back-btn:hover {
-  background: #4a6a47;
+  background: #741b47;
 }
 
 /* ====== Orders ====== */
@@ -133,7 +133,7 @@ body {
 
 .order-info .subtotal {
   font-weight: bold;
-  color: #5a7a5a;
+  color: #741b47;
 }
 
 .order-info .order-date {
@@ -146,20 +146,20 @@ body {
   padding: 14px 28px;
   font-size: 17px;
   border-radius: 10px;
-  background: #ffcf78;
+  background: #c27ba0;
   border: none;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .reorder-btn:hover {
-  background: #f0c068;
+  background: #a64d79;
 }
 
 /* ====== Footer ====== */
 .footer {
   text-align: center;
-  background: #6e8e6b;
+  background: linear-gradient(to right, #4c1130da, #741b47da);
   color: white;
   padding: 14px;
   font-size: 14px;
@@ -210,7 +210,7 @@ body {
 }
 
 #reorderOkBtn {
-  background-color: #f7c600;
+  background-color: #c27ba0;
   color: #000;
   border: none;
   padding: 10px 25px;
@@ -220,7 +220,7 @@ body {
 }
 
 #reorderOkBtn:hover {
-  background-color: #ffda33;
+  background-color: #a64d79;
 }
 
 
@@ -278,7 +278,7 @@ body {
     display: none;
     flex-direction: column;
     align-items: center;
-    background: #6e8e6b;
+    background: #4c1130;
     width: 100%;
     position: absolute;
     top: 65px;
@@ -304,8 +304,7 @@ body {
   }
 
   .nav a:hover {
-    background: #4a6a47;
-    color: #ffcf78;
+    background: #a64d79;
   }
 
   @keyframes dropdownFade {

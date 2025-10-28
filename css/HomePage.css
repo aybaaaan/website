@@ -670,7 +670,7 @@ body {
   width: 100%;
   padding: 26px 45px 26px 67px;
   display: flex;
-  background-color: #4c1130;
+  background: linear-gradient(to right, #4c1130da, #741b47da);
   z-index: -1;
   box-shadow: #0000003f 0px -6px 6px;
 }
