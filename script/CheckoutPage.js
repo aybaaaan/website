@@ -361,6 +361,22 @@ checkoutForm.addEventListener("submit", async (e) => {
     showTimePopup("Delivery time must be between 9:00 AM and 8:00 PM.");
     return;
   }
+
+  // Get the user's current local date and time (when they clicked SUBMIT)
+  const currentTime = new Date();
+
+  // Format nicely for saving (optional, but recommended)
+  const userOrderDate = currentTime.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  });
+  const userOrderTime = currentTime.toLocaleTimeString("en-US", {
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  });
+
   const orderData = {
     userId: currentUser.uid,
     userEmail: currentUser.email,
@@ -372,6 +388,8 @@ checkoutForm.addEventListener("submit", async (e) => {
     payment,
     orders,
     total: parseFloat(totalEl.textContent),
+    orderDate: userOrderDate,
+    orderTime: userOrderTime,
     timestamp: new Date(),
     status: "Pending",
   };

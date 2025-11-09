@@ -27,11 +27,47 @@
 
       <!-- Main content -->
       <main>
+
+        <section id="user-analytics" class="active">
+          <div class="card">
+            <h4 class="title-tag">User Analytics</h4>
+            <div class="chart">
+              <h2>User Signups</h2>
+
+              <div style="margin-bottom: 10px">
+                <button id="btn-signups-today">Today</button>
+                <button id="btn-signups-week">Week</button>
+                <button id="btn-signups-month">Month</button>
+              </div>
+
+              <canvas id="usersChart" height="300"></canvas>
+            </div>
+          </div>
+
         <!-- Data Analytics -->
         <section id="section-analytics" class="active">
           <div class="card">
-            <h4>Total Sales</h4>
-            <p>Graph / Statistics</p>
+            <h4 class="title-tag">Data Analytics</h4>
+            <div class="chart">
+              <h2>Analytics</h2>
+
+              <div style="margin-bottom: 10px">
+                <label for="data-type">Select Data Type:</label>
+                <select id="data-type">
+                  <option value="sales">Sales</option>
+                  <option value="orders">Orders</option>
+                  <option value="revenue">Revenue</option>
+                </select>
+              </div>
+
+              <div class="chart-controls">
+                <button id="btn-today">Today</button>
+                <button id="btn-week">This Week</button>
+                <button id="btn-month" class="active">This Month</button>
+              </div>
+
+              <canvas id="dataChart" height="300"></canvas>
+            </div>
           </div>
         </section>
 
@@ -142,6 +178,7 @@
     </div>
 
     <!-- Script -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script type="module" src="/script/AdminPage.js"></script>
   </body>
 </html>

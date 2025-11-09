@@ -31,7 +31,14 @@ import {
   push,
   update,
   remove,
+  get,
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
+
+import {
+  getFirestore,
+  collection,
+  getDocs,
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAvQnRa_q4JlxVgcifjFtKM4i2ckHTJInc",
@@ -46,6 +53,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
+const firestore = getFirestore(app);
 
 const menuRef = ref(db, "menu");
 const homeRef = ref(db, "homepage");
@@ -293,6 +301,9 @@ onValue(ordersRef, (snapshot) => {
         <p><strong>Address:</strong> ${data.address || "N/A"}</p>
         <p><strong>Contact:</strong> ${data.contact || "N/A"}</p>
         <p><strong>Payment Method:</strong> ${data.payment || "N/A"}</p>
+        <p><strong>Order Date and Time:</strong> ${data.orderDate}, ${
+      data.orderTime
+    }</p>
 
         <div class="food-section">
           <button class="food-toggle">Order Details ▼</button>
@@ -405,3 +416,133 @@ window.addEventListener("click", (e) => {
   if (e.target === deleteConfirmModal)
     deleteConfirmModal.style.display = "none";
 });
+
+// ================== CHART.JS SETUP
+// SALES ANALYTICS CHART
+const ctx = document.getElementById("dataChart");
+let chart;
+let currentRange = "month"; // default range
+let currentType = "sales";
+
+// ===== RANGE HANDLER =====
+function getStartDate(range) {
+  const now = new Date();
+  if (range === "today") return new Date(now.setHours(0, 0, 0, 0));
+  if (range === "week")
+    return new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate() - now.getDay()
+    );
+  if (range === "month") return new Date(now.getFullYear(), now.getMonth(), 1);
+  return new Date(0);
+}
+
+// ============ FETCH SALES DATA ============
+async function getChartData(range, type = "sales") {
+  const snapshot = await get(ref(db, "Order"));
+  if (!snapshot.exists()) return { labels: [], data: [] };
+
+  const orders = snapshot.val();
+  const startDate = getStartDate(range);
+  const counts = {};
+
+  if (type === "sales") {
+    // Revenue per individual order
+    const labels = [];
+    const data = [];
+    for (const key in orders) {
+      const order = orders[key];
+      if (!order.orderID || !order.total) continue;
+
+      const date = new Date(order.orderDate);
+      if (date >= startDate) {
+        labels.push(order.orderID); // each order as a label
+        data.push(Number(order.total)); // revenue for that order
+      }
+    }
+    return { labels, data };
+  } else {
+    // Existing logic for sales (total per day) or orders count
+    for (const key in orders) {
+      const order = orders[key];
+      if (!order.orderDate) continue;
+
+      const date = new Date(order.orderDate);
+      if (date >= startDate) {
+        const label = date.toLocaleDateString("en-US", {
+          month: "short",
+          day: "numeric",
+        });
+        if (type === "revenue") {
+          if (!order.total) continue;
+          counts[label] = (counts[label] || 0) + Number(order.total);
+        } else if (type === "orders") {
+          counts[label] = (counts[label] || 0) + 1;
+        }
+      }
+    }
+    return { labels: Object.keys(counts), data: Object.values(counts) };
+  }
+}
+
+// --- RENDER CHART ---
+// --- RENDER CHART ---
+async function renderChart() {
+  const res = await getChartData(currentRange, currentType);
+
+  // Determine the label based on type
+  let datasetLabel = "";
+  if (currentType === "sales") datasetLabel = "Sales (₱)";
+  else if (currentType === "orders") datasetLabel = "Number of Orders";
+  else if (currentType === "revenue") datasetLabel = "Revenue (₱)";
+
+  if (chart) {
+    chart.data.labels = res.labels;
+    chart.data.datasets[0].data = res.data;
+    chart.data.datasets[0].label = datasetLabel;
+    chart.update();
+  } else {
+    chart = new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: res.labels,
+        datasets: [
+          {
+            label: datasetLabel,
+            data: res.data,
+            backgroundColor: "#3b82f6",
+            borderWidth: 1,
+          },
+        ],
+      },
+      options: {
+        scales: { y: { beginAtZero: true } },
+        maintainAspectRatio: false,
+      },
+    });
+  }
+}
+
+// ============ BUTTON EVENTS ============
+document.getElementById("btn-today").addEventListener("click", () => {
+  currentRange = "today";
+  renderChart();
+});
+document.getElementById("btn-week").addEventListener("click", () => {
+  currentRange = "week";
+  renderChart();
+});
+document.getElementById("btn-month").addEventListener("click", () => {
+  currentRange = "month";
+  renderChart();
+});
+
+// ============ TYPE TOGGLE ============
+document.getElementById("data-type").addEventListener("change", (e) => {
+  currentType = e.target.value; // "sales" or "orders"
+  renderChart();
+});
+
+// ============ INITIAL RENDER ============
+renderChart();

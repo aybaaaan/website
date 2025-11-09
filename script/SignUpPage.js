@@ -4,6 +4,12 @@ import {
   getAuth,
   createUserWithEmailAndPassword,
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+import {
+  getDatabase,
+  ref,
+  set,
+  serverTimestamp,
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
 
 // Firebase config
 const firebaseConfig = {
@@ -13,11 +19,13 @@ const firebaseConfig = {
   storageBucket: "webusiteu.firebasestorage.app",
   messagingSenderId: "974146331400",
   appId: "1:974146331400:web:a0590d7dc71dd3c00f02bd",
+  databaseURL: "https://webusiteu-default-rtdb.firebaseio.com/", // add this if missing
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const db = getDatabase(app);
 
 // DOM Elements
 const submit = document.getElementById("submit");
@@ -49,14 +57,23 @@ submit.addEventListener("click", (event) => {
 
   // Firebase signup
   createUserWithEmailAndPassword(auth, email, password)
-    .then(() => {
+    .then((userCredential) => {
+      const user = userCredential.user;
+
+      // Store user in Realtime Database with timestamp
+      set(ref(db, "Users/" + user.uid), {
+        email: email,
+        contactNumber: "",
+        name: "",
+        createdAt: serverTimestamp(), // <-- important line!
+      });
+
       showSuccess("Sign Up Successful!");
       setTimeout(() => {
         window.location.href = "/pages/LoginPage.html";
       }, 1500);
     })
     .catch((error) => {
-      // Handle specific Firebase email error
       if (error.code === "auth/invalid-email") {
         showError("Please enter a valid email address (example@domain.com).");
       } else if (error.code === "auth/email-already-in-use") {
@@ -67,26 +84,19 @@ submit.addEventListener("click", (event) => {
     });
 });
 
+// ===============================
+// Error / Success Functions
+// ===============================
 function showError(msg) {
-  const errorMessage = document.getElementById("error-message");
   errorMessage.textContent = msg;
   errorMessage.style.backgroundColor = "rgba(255, 77, 77, 0.95)";
   errorMessage.classList.add("show");
-
-  // Hide automatically after 3 seconds
-  setTimeout(() => {
-    errorMessage.classList.remove("show");
-  }, 3000);
+  setTimeout(() => errorMessage.classList.remove("show"), 3000);
 }
 
 function showSuccess(msg) {
-  const errorMessage = document.getElementById("error-message");
   errorMessage.textContent = msg;
   errorMessage.style.backgroundColor = "rgba(76, 175, 80, 0.95)";
   errorMessage.classList.add("show");
-
-  // Hide automatically after 3 seconds
-  setTimeout(() => {
-    errorMessage.classList.remove("show");
-  }, 3000);
+  setTimeout(() => errorMessage.classList.remove("show"), 3000);
 }

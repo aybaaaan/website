@@ -17,6 +17,22 @@ header .logo {
   font-size: 18px;
 }
 
+.chart {
+  max-width: 900px;
+  height: 450px;
+  padding: 50px;
+  margin: 0 auto;
+}
+
+.chart .chart_types {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.chart .chart_types button {
+  padding: 10px 24px;
+}
+
 /* Logout button */
 #btn-logout {
   background: #d63422;
@@ -47,7 +63,7 @@ header {
   left: 0;
   width: 100%;
   height: 60px;
-  background-color: 	#4c1130;
+  background-color: #4c1130;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -90,7 +106,7 @@ main {
 /* Sidebar */
 aside {
   width: 220px;
-  background-color: 	#a64d79;
+  background-color: #a64d79;
   padding: 10px;
   box-sizing: border-box;
 }
@@ -124,15 +140,15 @@ aside button {
 }
 
 aside button:hover {
-  background-color:  #741b47;
-  color: 	#ead1dc;
+  background-color: #741b47;
+  color: #ead1dc;
   transform: scale(1.03);
 }
 
 /* Main content area */
 main {
   flex: 1;
-  background: 	hsl(333, 21%, 92%);
+  background: hsl(333, 21%, 92%);
   padding: 20px;
   overflow-y: auto;
   position: relative;
@@ -166,7 +182,7 @@ section.active {
 }
 
 .card {
-  background: 	#c27ba0;
+  background: #ffffff;
   border-radius: 8px;
   color: #fff;
   padding: 20px;
@@ -214,17 +230,17 @@ section.active {
 
 /* Plus box special style */
 .picture-box.plus {
-  background: #c27ba0;
+  background: #f8f4f6;
   width: 20rem;
   font-size: 40px;
   padding: 20px;
   font-weight: bold;
-  color: #ffecf4;
+  color: #070707;
 }
 
 .picture-box.plus:hover {
   background: #ead1dc;
-  color: 	#4c1130;
+  color: #4c1130;
 }
 
 .item-details {
@@ -234,20 +250,20 @@ section.active {
 }
 
 .item-name {
-  color: #ffffff;
+  color: #000000;
   font-size: 28px;
   font-weight: bold;
 }
 
 .item-desc {
-  color: #ffffff;
+  color: #050505;
   font-size: 14px;
   margin-top: 5px;
 }
 
 .item-price {
   padding-top: 20px;
-  color: #ffffff;
+  color: #000000;
   font-size: 20px;
   margin-top: 5px;
   font-weight: bold;
@@ -258,7 +274,7 @@ section.active {
   align-items: center; /* vertically center image, text, and buttons */
   justify-content: space-between; /* even space between image, text, and buttons */
   gap: 20px; /* small gap between elements */
-  background: 	#c27ba0; /* optional background for contrast */
+  background: #ffffff; /* optional background for contrast */
   padding: 15px 20px;
   border-radius: 10px;
   margin-bottom: 20px;
@@ -327,7 +343,7 @@ section.active {
 }
 
 .food-toggle {
-  background: 		#a64d79;
+  background: #a64d79;
   color: #fff;
   border: none;
   border-radius: 5px;
@@ -424,7 +440,7 @@ section.active {
 .btn-edit {
   position: relative;
   background: #ead1dc;
-  color: 	#4c1130;
+  color: #4c1130;
   padding: 8px 12px;
   border: none;
   border-radius: 5px;
