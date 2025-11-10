@@ -393,9 +393,7 @@ section.active {
 }
 
 /* Buttons */
-.btn-edit,
-.btn-confirm,
-.btn-delete {
+.btn-edit, .btn-delete {
   padding: 8px 16px;
   border: none;
   border-radius: 5px;
@@ -404,19 +402,36 @@ section.active {
   transition: background 0.3s ease, transform 0.2s ease;
 }
 
-.btn-confirm {
-  background: #4caf50;
-  color: #fff;
+/* ===== Dropdown for Order Status ===== */
+.order-status-dropdown {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #fff;
+  color: #333;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.btn-confirm:hover {
-  background: #45a049;
-  transform: scale(1.05);
+.order-status-dropdown:hover {
+  border-color: #a64d79;
 }
-
-.btn-delete {
-  background: #e53935;
-  color: #fff;
+.order-status-dropdown:focus {
+  outline: none;
+  border-color: #a64d79;
+  box-shadow: 0 0 5px rgba(166, 77, 121, 0.5);
+}
+.order-status-dropdown option[value=""] {
+  color: #999;
+}
+.status-label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #000000;
+  font-size: 14px;
 }
 
 /* Reusable Done button */
@@ -465,7 +480,7 @@ section.active {
   background: #ead1dc;
   transform: scale(1.05);
 }
-.btn-delete:hover {
+.btn-cancelled:hover {
   background: #c62828;
   transform: scale(1.05);
 }

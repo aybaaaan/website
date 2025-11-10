@@ -318,10 +318,14 @@ onValue(ordersRef, (snapshot) => {
         <p><strong>Delivery Date:</strong> ${deliveryDate}</p>
         <p><strong>Delivery Time:</strong> ${deliveryTime}</p>
       </div>
-
+      
       <div class="order-actions">
-        <button class="btn-confirm">Confirm</button>
-        <button class="btn-delete">Delete</button>
+        <label class="status-label" for="order-status">Status:</label>
+        <select class="order-status-dropdown" id="order-status">
+          <option value="for-delivery">For Delivery</option>
+          <option value="cancelled">Cancelled</option>
+          <option value="pending" selected>Pending</option>
+        </select>
       </div>
     `;
 
@@ -334,15 +338,35 @@ onValue(ordersRef, (snapshot) => {
         : "Order Details ▼";
     });
 
-    row.querySelector(".btn-confirm").addEventListener("click", () => {
-      showCustomerOrderPopup(`Order for ${data.name} marked as confirmed!`);
+    document.querySelectorAll(".order-status-dropdown").forEach((dropdown) => {
+      const setTextColor = () => {
+        switch (dropdown.value) {
+          case "for-delivery":
+            dropdown.style.color = "green";
+            break;
+          case "cancelled":
+            dropdown.style.color = "#cc3232";
+            break;
+          case "pending":
+            dropdown.style.color = "grey";
+            break;
+          default:
+            dropdown.style.color = "#000";
+        }
+      };
+
+      // Initial
+      setTextColor();
+
+      // When selection changes
+      dropdown.addEventListener("change", setTextColor);
     });
 
-    row.querySelector(".btn-delete").addEventListener("click", () => {
-      showDeleteConfirmPopup(
-        `Are you sure you want to delete the order for ${data.name}?`,
-        child.key
-      );
+    document.querySelectorAll(".order-status-dropdown").forEach((dropdown) => {
+      dropdown.addEventListener("change", (e) => {
+        const newStatus = e.target.value;
+        console.log(`Order status changed to: ${newStatus}`);
+      });
     });
 
     ordersContainer.appendChild(row);
