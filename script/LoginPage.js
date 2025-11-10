@@ -3,6 +3,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebas
 import {
   getAuth,
   signInWithEmailAndPassword,
+  signOut,
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 
 // Firebase config
@@ -19,43 +20,37 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-// input fields
-
-// submit button
+// DOM Elements
 const submit = document.getElementById("submit");
 const errorMessage = document.getElementById("error-message");
 
-// Success popup function
+// ===============================
+// UI Feedback Functions
+// ===============================
 function showSuccess(msg) {
-  const popup = document.getElementById("error-message");
-  popup.textContent = msg;
-  popup.style.backgroundColor = "rgba(76, 175, 80, 0.95)";
-  popup.classList.add("show");
-
-  setTimeout(() => {
-    popup.classList.remove("show");
-  }, 3000);
+  errorMessage.textContent = msg;
+  errorMessage.style.backgroundColor = "rgba(76, 175, 80, 0.95)";
+  errorMessage.classList.add("show");
+  setTimeout(() => errorMessage.classList.remove("show"), 3000);
 }
 
-// Error popup function (optional)
 function showError(msg) {
-  const popup = document.getElementById("error-message");
-  popup.textContent = msg;
-  popup.style.backgroundColor = "rgba(244, 67, 54, 0.95)";
-  popup.classList.add("show");
-
-  setTimeout(() => {
-    popup.classList.remove("show");
-  }, 3000);
+  errorMessage.textContent = msg;
+  errorMessage.style.backgroundColor = "rgba(244, 67, 54, 0.95)";
+  errorMessage.classList.add("show");
+  setTimeout(() => errorMessage.classList.remove("show"), 3000);
 }
 
-// ================= LOGIN =================
+// ===============================
+// LOGIN LOGIC
+// ===============================
 submit.addEventListener("click", (event) => {
   event.preventDefault();
-  const email = document.getElementById("email").value;
+
+  const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value;
 
-  // Reset message
+  // Reset error message
   errorMessage.textContent = "";
   errorMessage.classList.remove("show");
 
@@ -69,19 +64,36 @@ submit.addEventListener("click", (event) => {
     .then((userCredential) => {
       const user = userCredential.user;
 
-      if (user.email === "admin123@miv.com" && password === "admin123") {
-        showSuccess("Admin login successful");
-        setTimeout(() => {
-          window.location.href = "/pages/AdminPage.html";
-        }, 1500);
-      } else {
-        showSuccess("User login successful");
-        setTimeout(() => {
-          window.location.href = "/pages/HomePage.html";
-        }, 1500);
-      }
+      // ✅ Reload to get latest emailVerified status
+      user.reload().then(() => {
+        // 🚫 Block if not verified
+        if (!user.emailVerified) {
+          showError(
+            "Please verify your email before logging in. Check your inbox or spam folder."
+          );
+          signOut(auth); // sign them out immediately
+          return;
+        }
+
+        // ✅ Allow login if verified
+        if (user.email === "admin123@miv.com" && password === "admin123") {
+          showSuccess("Admin login successful!");
+          setTimeout(() => {
+            window.location.href = "/pages/AdminPage.html";
+          }, 1500);
+        } else {
+          showSuccess("User login successful!");
+          setTimeout(() => {
+            window.location.href = "/pages/HomePage.html";
+          }, 1500);
+        }
+      });
     })
     .catch((error) => {
-      showError("Invalid email or password. Please try again.");
+      if (error.code === "auth/invalid-email") {
+        showError("Invalid email format.");
+      } else {
+        showError("Login failed: Invalid Email or Password.");
+      }
     });
 });

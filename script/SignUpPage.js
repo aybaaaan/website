@@ -3,6 +3,8 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebas
 import {
   getAuth,
   createUserWithEmailAndPassword,
+  sendEmailVerification,
+  signOut,
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 import {
   getDatabase,
@@ -19,7 +21,7 @@ const firebaseConfig = {
   storageBucket: "webusiteu.firebasestorage.app",
   messagingSenderId: "974146331400",
   appId: "1:974146331400:web:a0590d7dc71dd3c00f02bd",
-  databaseURL: "https://webusiteu-default-rtdb.firebaseio.com/", // add this if missing
+  databaseURL: "https://webusiteu-default-rtdb.firebaseio.com/",
 };
 
 // Initialize Firebase
@@ -60,18 +62,32 @@ submit.addEventListener("click", (event) => {
     .then((userCredential) => {
       const user = userCredential.user;
 
-      // Store user in Realtime Database with timestamp
-      set(ref(db, "Users/" + user.uid), {
-        email: email,
-        contactNumber: "",
-        name: "",
-        createdAt: serverTimestamp(), // <-- important line!
-      });
+      // Step 1: Send email verification
+      sendEmailVerification(user)
+        .then(() => {
+          showSuccess(
+            "Verification email sent! Please check your inbox or spam and verify before logging in."
+          );
 
-      showSuccess("Sign Up Successful!");
-      setTimeout(() => {
-        window.location.href = "/pages/LoginPage.html";
-      }, 1500);
+          // Step 2: Save user to database (optional, before sign out)
+          set(ref(db, "Users/" + user.uid), {
+            email: email,
+            contactNumber: "",
+            name: "",
+            createdAt: serverTimestamp(),
+            emailVerified: false, // optional tracking field
+          });
+
+          // Step 3: Sign out user until verified
+          setTimeout(() => {
+            signOut(auth).then(() => {
+              window.location.href = "/pages/LoginPage.html";
+            });
+          }, 2500);
+        })
+        .catch((error) => {
+          showError("Failed to send verification email: " + error.message);
+        });
     })
     .catch((error) => {
       if (error.code === "auth/invalid-email") {
@@ -91,12 +107,12 @@ function showError(msg) {
   errorMessage.textContent = msg;
   errorMessage.style.backgroundColor = "rgba(255, 77, 77, 0.95)";
   errorMessage.classList.add("show");
-  setTimeout(() => errorMessage.classList.remove("show"), 3000);
+  setTimeout(() => errorMessage.classList.remove("show"), 4000);
 }
 
 function showSuccess(msg) {
   errorMessage.textContent = msg;
   errorMessage.style.backgroundColor = "rgba(76, 175, 80, 0.95)";
   errorMessage.classList.add("show");
-  setTimeout(() => errorMessage.classList.remove("show"), 3000);
+  setTimeout(() => errorMessage.classList.remove("show"), 4000);
 }

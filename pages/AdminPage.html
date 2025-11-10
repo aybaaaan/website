@@ -19,7 +19,7 @@
       <!-- Sidebar (BUTTONS) -->
       <aside>
         <h3>Dashboard</h3>
-        <a href="#section-analytics"><button>Data Analytics</button></a>
+        <a href="#user-analytics"><button>Data Analytics</button></a>
         <a href="#section-homepage"><button>Edit Homepage Image</button></a>
         <a href="#section-menu"><button>Edit Menu Image</button></a>
         <a href="#section-orders"><button>Orders</button></a>
@@ -27,22 +27,23 @@
 
       <!-- Main content -->
       <main>
-
+        <!-- Add this HTML somewhere in your page -->
         <section id="user-analytics" class="active">
           <div class="card">
             <h4 class="title-tag">User Analytics</h4>
             <div class="chart">
-              <h2>User Signups</h2>
+              <h2>User Logins</h2>
 
               <div style="margin-bottom: 10px">
-                <button id="btn-signups-today">Today</button>
-                <button id="btn-signups-week">Week</button>
-                <button id="btn-signups-month">Month</button>
+                <button id="btn-logins-today">Today</button>
+                <button id="btn-logins-week">Week</button>
+                <button id="btn-logins-month">Month</button>
               </div>
 
               <canvas id="usersChart" height="300"></canvas>
             </div>
           </div>
+        </section>
 
         <!-- Data Analytics -->
         <section id="section-analytics" class="active">

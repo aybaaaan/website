@@ -417,7 +417,29 @@ window.addEventListener("click", (e) => {
     deleteConfirmModal.style.display = "none";
 });
 
-// ================== CHART.JS SETUP
+// ===================== USER LOGINS CHART =====================
+const userChart = document.getElementById("usersChart").getContext("2d");
+let usersChart = new Chart(userChart, {
+  type: "bar",
+  data: {
+    labels: [],
+    datasets: [
+      {
+        label: "User Logins",
+        data: [],
+        backgroundColor: "#4CAF50",
+      },
+    ],
+  },
+  options: {
+    responsive: true,
+    scales: { y: { beginAtZero: true, ticks: { precision: 0 } } },
+  },
+});
+
+// ====== no fetch user logins data from Firestore yet ======
+
+// ================== DATA CHART ==================
 // SALES ANALYTICS CHART
 const ctx = document.getElementById("dataChart");
 let chart;
@@ -486,7 +508,6 @@ async function getChartData(range, type = "sales") {
   }
 }
 
-// --- RENDER CHART ---
 // --- RENDER CHART ---
 async function renderChart() {
   const res = await getChartData(currentRange, currentType);
