@@ -321,13 +321,41 @@ onValue(ordersRef, (snapshot) => {
       
       <div class="order-actions">
         <label class="status-label" for="order-status">Status:</label>
-        <select class="order-status-dropdown" id="order-status">
+        <select class="order-status-dropdown">
           <option value="for-delivery">For Delivery</option>
           <option value="cancelled">Cancelled</option>
           <option value="pending" selected>Pending</option>
         </select>
       </div>
     `;
+
+    const statusDropdown = row.querySelector(".order-status-dropdown");
+
+    const setTextColor = () => {
+      switch (statusDropdown.value) {
+        case "for-delivery":
+          statusDropdown.style.color = "green";
+          break;
+        case "cancelled":
+          statusDropdown.style.color = "#cc3232";
+          break;
+        case "pending":
+          statusDropdown.style.color = "grey";
+          break;
+        default:
+          statusDropdown.style.color = "#000";
+      }
+    };
+
+    // Initial color
+    setTextColor();
+
+    // On change
+    statusDropdown.addEventListener("change", () => {
+      setTextColor();
+      const newStatus = statusDropdown.value;
+      console.log(`Order status changed to: ${newStatus}`);
+    });
 
     const foodToggle = row.querySelector(".food-toggle");
     const foodList = row.querySelector(".order-food-list");
@@ -336,37 +364,6 @@ onValue(ordersRef, (snapshot) => {
       foodToggle.textContent = foodList.classList.contains("active")
         ? "Order Details ▲"
         : "Order Details ▼";
-    });
-
-    document.querySelectorAll(".order-status-dropdown").forEach((dropdown) => {
-      const setTextColor = () => {
-        switch (dropdown.value) {
-          case "for-delivery":
-            dropdown.style.color = "green";
-            break;
-          case "cancelled":
-            dropdown.style.color = "#cc3232";
-            break;
-          case "pending":
-            dropdown.style.color = "grey";
-            break;
-          default:
-            dropdown.style.color = "#000";
-        }
-      };
-
-      // Initial
-      setTextColor();
-
-      // When selection changes
-      dropdown.addEventListener("change", setTextColor);
-    });
-
-    document.querySelectorAll(".order-status-dropdown").forEach((dropdown) => {
-      dropdown.addEventListener("change", (e) => {
-        const newStatus = e.target.value;
-        console.log(`Order status changed to: ${newStatus}`);
-      });
     });
 
     ordersContainer.appendChild(row);
