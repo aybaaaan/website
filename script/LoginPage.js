@@ -97,3 +97,21 @@ submit.addEventListener("click", (event) => {
       }
     });
 });
+
+//password visibility toggle
+const passwordWrappers = document.querySelectorAll('.password-wrapper');
+
+passwordWrappers.forEach(wrapper => {
+  const input = wrapper.querySelector('input');
+  const icon = wrapper.querySelector('span');
+
+  icon.addEventListener('click', () => {
+    if (input.type === 'password') {
+      input.type = 'text';        // show password
+      icon.style.color = '#741b47'; // change color (example: DodgerBlue)
+    } else {
+      input.type = 'password';     // hide password
+      icon.style.color = '#000000'; // revert to original black
+    }
+  });
+});

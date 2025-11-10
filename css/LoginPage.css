@@ -231,6 +231,17 @@ body {
   }
 }
 
+/*Input Field Eye Icon Design*/
+/* Hide native browser eye icon */
+input[type="password"]::-webkit-password-toggle-button {
+  display: none;
+  -webkit-appearance: none;
+}
+
+input[type="password"]::-ms-reveal {
+  display: none;
+}
+
 .form-input {
   width: 100%;
   background-color: #d9d9d9;
@@ -244,6 +255,30 @@ body {
   outline: none;
   transition: background-color 0.3s ease;
 }
+
+.password-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.password-wrapper .form-input {
+  padding-right: 30px; /* space for icon */
+}
+
+.password-wrapper span {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #ead1dc;
+  transition: transform 0.2s ease;
+}
+
+.password-wrapper span:hover {
+  transform: translateY(-50%) scale(1.2);
+}
+
 
 @media (min-width: 768px) {
   .form-input {
