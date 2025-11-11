@@ -322,9 +322,10 @@ onValue(ordersRef, (snapshot) => {
       <div class="order-actions">
         <label class="status-label" for="order-status">Status:</label>
         <select class="order-status-dropdown">
-          <option value="for-delivery">For Delivery</option>
-          <option value="cancelled">Cancelled</option>
-          <option value="pending" selected>Pending</option>
+          <option value="for-delivery" ${data.status === "for-delivery" ? "selected" : ""}>For Delivery</option>
+          <option value="cancelled" ${data.status?.toLowerCase() === "cancelled" ? "selected" : ""}>Cancelled</option>
+          <option value="delivered" ${data.status?.toLowerCase() === "delivered" ? "selected" : ""}>Delivered</option>
+          <option value="pending" ${!data.status || data.status?.toLowerCase() === "pending" ? "selected" : ""}>Pending</option>
         </select>
       </div>
     `;
@@ -342,6 +343,9 @@ onValue(ordersRef, (snapshot) => {
         case "pending":
           statusDropdown.style.color = "grey";
           break;
+        case "delivered":
+          statusDropdown.style.color = "#a64d79";
+          break;
         default:
           statusDropdown.style.color = "#000";
       }
@@ -354,7 +358,12 @@ onValue(ordersRef, (snapshot) => {
     statusDropdown.addEventListener("change", () => {
       setTextColor();
       const newStatus = statusDropdown.value;
-      console.log(`Order status changed to: ${newStatus}`);
+      const orderKey = child.key; // make sure you have the key of the order
+      update(ref(db, `Order/${orderKey}`), { status: newStatus })
+      .then(() => {
+      console.log(`Order status updated to ${newStatus} in Firebase`);
+    })
+    .catch((err) => console.error(err));
     });
 
     const foodToggle = row.querySelector(".food-toggle");

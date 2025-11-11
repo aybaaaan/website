@@ -79,6 +79,11 @@ onAuthStateChanged(auth, (user) => {
           })} ${order.deliveryTime ? `at ${order.deliveryTime}` : ""}`
         : "Date not available";
 
+        let statusColor = "grey";
+        if (order.status === "for-delivery") statusColor = "green";
+        else if (order.status === "cancelled") statusColor = "#cc3232";
+        else if (order.status === "delivered") statusColor = "#a64d79";
+
       // Reverse items (stack-like behavior)
       const reversedItems = [...order.orders].reverse();
 
@@ -92,6 +97,9 @@ onAuthStateChanged(auth, (user) => {
               <p>Price: ₱${item.price} each</p>
               <p class="subtotal">Subtotal: ₱${(item.price * item.qty).toFixed(2)}</p>
               <p class="order-date">Date Received: ${displayDate}</p>
+              <p class="order-status" style="color: ${statusColor}; font-weight: 600;">
+                Status: ${order.status || "pending"}
+              </p>
             </div>
             <button class="reorder-btn" onclick="reorder('${item.name}', ${item.qty}, ${item.price})">
               Reorder

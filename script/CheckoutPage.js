@@ -391,7 +391,7 @@ checkoutForm.addEventListener("submit", async (e) => {
     orderDate: userOrderDate,
     orderTime: userOrderTime,
     timestamp: new Date(),
-    status: "Pending",
+    status: "pending",
   };
 
   try {
