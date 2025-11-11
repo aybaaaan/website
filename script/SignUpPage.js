@@ -21,7 +21,8 @@ const firebaseConfig = {
   storageBucket: "webusiteu.firebasestorage.app",
   messagingSenderId: "974146331400",
   appId: "1:974146331400:web:a0590d7dc71dd3c00f02bd",
-  databaseURL: "https://webusiteu-default-rtdb.firebaseio.com/",
+  databaseURL:
+    "https://webusiteu-default-rtdb.asia-southeast1.firebasedatabase.app",
 };
 
 // Initialize Firebase
@@ -70,11 +71,11 @@ submit.addEventListener("click", (event) => {
           );
 
           // Step 2: Save user to database (optional, before sign out)
-          set(ref(db, "Users/" + user.uid), {
+          set(ref(db, "Logins/" + user.uid), {
             email: email,
             contactNumber: "",
             name: "",
-            createdAt: serverTimestamp(),
+            createdAt: new Date().toLocaleString(),
             emailVerified: false, // optional tracking field
           });
 
@@ -118,21 +119,19 @@ function showSuccess(msg) {
 }
 
 //password visibility toggle
-const passwordWrappers = document.querySelectorAll('.password-wrapper');
+const passwordWrappers = document.querySelectorAll(".password-wrapper");
 
-passwordWrappers.forEach(wrapper => {
-  const input = wrapper.querySelector('input');
-  const icon = wrapper.querySelector('span');
+passwordWrappers.forEach((wrapper) => {
+  const input = wrapper.querySelector("input");
+  const icon = wrapper.querySelector("span");
 
-  icon.addEventListener('click', () => {
-    if (input.type === 'password') {
-      input.type = 'text';        // show password
-      icon.style.color = '#741b47'; // change color (example: DodgerBlue)
+  icon.addEventListener("click", () => {
+    if (input.type === "password") {
+      input.type = "text"; // show password
+      icon.style.color = "#741b47"; // change color (example: DodgerBlue)
     } else {
-      input.type = 'password';     // hide password
-      icon.style.color = '#000000'; // revert to original black
+      input.type = "password"; // hide password
+      icon.style.color = "#000000"; // revert to original black
     }
   });
 });
-
-

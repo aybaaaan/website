@@ -17,22 +17,6 @@ header .logo {
   font-size: 18px;
 }
 
-.chart {
-  max-width: 900px;
-  height: 450px;
-  padding: 50px;
-  margin: 0 auto;
-}
-
-.chart .chart_types {
-  text-align: center;
-  margin-bottom: 30px;
-}
-
-.chart .chart_types button {
-  padding: 10px 24px;
-}
-
 /* Logout button */
 #btn-logout {
   background: #d63422;
@@ -181,19 +165,99 @@ section.active {
   }
 }
 
-.card {
-  background: #ffffff;
-  border-radius: 8px;
-  color: #fff;
-  padding: 20px;
+/* ============== FOR DATA ANALYTICS ========================== */
+
+.chart {
+  text-align: center;
+  margin-bottom: 120px;
+  height: 450px;
+  padding: 10px;
+  margin: 2 auto;
+}
+
+.chart h2 {
+  color: #0c0c0c;
+  font-size: 30px;
   margin-bottom: 20px;
 }
 
-/* styles.css */
+.card {
+  background: #ffffff;
+  border-radius: 8px;
+  color: #0c0c0c;
+  padding: 20px;
+  margin: 10px;
+}
+.data-label {
+  font-weight: bold;
+  margin-right: 6px;
+  font-size: 18px;
+}
 
-/* ===================================================
-   EDIT MENU AND BACKGROUND SECTION
-   =================================================== */
+.data-type-option {
+  margin-left: 10px;
+  padding: 6px 10px;
+  border: 1.5px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.user-section,
+.data-section {
+  background: #a64d79;
+  border: 1.5px solid #ccc;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+}
+
+#btn-logins-today,
+#btn-logins-week,
+#btn-logins-month {
+  position: relative;
+  background: #ead1dc;
+  color: #4c1130;
+  padding: 8px 12px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+#btn-logins-today:hover,
+#btn-logins-week:hover,
+#btn-logins-month:hover {
+  background: #ead1dc;
+  transform: scale(1.05);
+}
+
+#btn-today,
+#btn-week,
+#btn-month {
+  position: relative;
+  background: #ead1dc;
+  color: #4c1130;
+  padding: 8px 12px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+#btn-today:hover,
+#btn-week:hover,
+#btn-month:hover {
+  background: #ead1dc;
+  transform: scale(1.05);
+}
+
+/* =========== EDIT MENU AND BACKGROUND SECTION ==============================
 
 /* ==== Picture Box Styles ==== */
 
@@ -393,7 +457,8 @@ section.active {
 }
 
 /* Buttons */
-.btn-edit, .btn-delete {
+.btn-edit,
+.btn-delete {
   padding: 8px 16px;
   border: none;
   border-radius: 5px;

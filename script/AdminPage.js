@@ -439,6 +439,8 @@ window.addEventListener("click", (e) => {
 });
 
 // ===================== USER LOGINS CHART =====================
+
+// ====== no fetch user logins data from Firestore yet ======
 const userChart = document.getElementById("usersChart").getContext("2d");
 let usersChart = new Chart(userChart, {
   type: "bar",
@@ -457,8 +459,6 @@ let usersChart = new Chart(userChart, {
     scales: { y: { beginAtZero: true, ticks: { precision: 0 } } },
   },
 });
-
-// ====== no fetch user logins data from Firestore yet ======
 
 // ================== DATA CHART ==================
 // SALES ANALYTICS CHART

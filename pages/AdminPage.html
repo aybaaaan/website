@@ -28,7 +28,7 @@
       <!-- Main content -->
       <main>
         <!-- Add this HTML somewhere in your page -->
-        <section id="user-analytics" class="active">
+        <section class="user-section" id="user-analytics" class="active">
           <div class="card">
             <h4 class="title-tag">User Analytics</h4>
             <div class="chart">
@@ -46,15 +46,17 @@
         </section>
 
         <!-- Data Analytics -->
-        <section id="section-analytics" class="active">
+        <section class="data-section" id="section-analytics" class="active">
           <div class="card">
             <h4 class="title-tag">Data Analytics</h4>
             <div class="chart">
-              <h2>Analytics</h2>
+              <h2>Data Overview</h2>
 
               <div style="margin-bottom: 10px">
-                <label for="data-type">Select Data Type:</label>
-                <select id="data-type">
+                <label class="data-label" for="data-type"
+                  >Select Data Type:</label
+                >
+                <select class="data-type-option" id="data-type">
                   <option value="sales">Sales</option>
                   <option value="orders">Orders</option>
                   <option value="revenue">Revenue</option>
