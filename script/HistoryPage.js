@@ -7,19 +7,6 @@ hamburger.addEventListener("click", () => {
   hamburger.classList.toggle("active");
 });
 
-// Reorder function
-/*  No function?
-function reorder(name, qty, price) {
-  let cart = JSON.parse(localStorage.getItem("cart")) || [];
-  const existing = cart.find((item) => item.name === name);
-  if (existing) existing.qty += qty;
-  else cart.push({ name, qty, price });
-  localStorage.setItem("cart", JSON.stringify(cart));
-  alert(`${qty} x ${name} added to your cart!`);
-  window.location.href = "/pages/CheckoutPage.html";
-}
-*/
-
 // ===================== IMPORTS =====================
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
 import {
@@ -89,7 +76,7 @@ onAuthStateChanged(auth, (user) => {
         day: "numeric",
       });
 
-      // Each Firebase order contains multiple items (order.orders)
+      // Each Firebase order contains multiple items
       order.orders.forEach((item) => {
         orderList.innerHTML += `
           <div class="order-card">
@@ -98,15 +85,14 @@ onAuthStateChanged(auth, (user) => {
               <h3>${item.name}</h3>
               <p>Quantity: ${item.qty}</p>
               <p>Price: ₱${item.price} each</p>
-              <p class="subtotal">Subtotal: ₱${(item.price * item.qty).toFixed(
-                2
-              )}</p>
+              <p class="subtotal">Subtotal: ₱${(item.price * item.qty).toFixed(2)}</p>
               <p class="order-date">Date: ${orderDate}</p>
             </div>
-            <button class="reorder-btn" onclick="reorder('${item.name}', ${
-          item.qty
-        }, ${item.price})">
+            <button class="reorder-btn" onclick="reorder('${item.name}', ${item.qty}, ${item.price})">
               Reorder
+            </button>
+            <button class="feedback-btn" onclick="window.location.href='/pages/FeedbackPage.html?item=${encodeURIComponent(item.name)}&order=${order.timestamp}'">
+              Give Feedback
             </button>
           </div>
         `;

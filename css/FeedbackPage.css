@@ -46,8 +46,8 @@ body {
   color: #741b47;
 }
 
-/* ====== History Container ====== */
-.history-container {
+/* ====== Feedback Container ====== */
+.feedback-container {
   flex: 1;
   width: 95%;
   max-width: 1200px;
@@ -55,8 +55,7 @@ body {
   padding: 20px;
 }
 
-/* ====== Header with Back Button ====== */
-.history-header {
+.feedback-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -65,7 +64,7 @@ body {
   gap: 15px;
 }
 
-.history-header h1 {
+.feedback-header h1 {
   font-size: 28px;
   color: #333;
 }
@@ -84,78 +83,70 @@ body {
   background: #741b47;
 }
 
-/* ====== Orders ====== */
-.order-list {
-  display: flex;
-  flex-direction: column;
-  gap: 25px;
-}
-
-.order-card {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
+/* ====== Feedback Card ====== */
+.feedback-card {
+  background: #ffffff;
   padding: 25px;
   border-radius: 16px;
-  background: #ffffff;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
-  gap: 25px;
-  transition: transform 0.2s ease;
+  margin-bottom: 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
-.order-card:hover {
-  transform: scale(1.02);
-}
-
-.order-card img {
-  width: 140px;
-  height: 140px;
-  object-fit: cover;
-  border-radius: 12px;
-  flex-shrink: 0;
-}
-
-.order-info {
-  flex: 1 1 200px;
-}
-
-.order-info h3 {
-  margin-bottom: 8px;
-  font-size: 22px;
+.feedback-card p {
+  font-size: 17px;
   color: #333;
 }
 
-.order-info p {
-  font-size: 17px;
-  margin-bottom: 6px;
-  color: #444;
+.feedback-card textarea {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  resize: none;
+  font-size: 16px;
+  font-family: "Livvic", Arial, sans-serif;
 }
 
-.order-info .subtotal {
-  font-weight: bold;
-  color: #741b47;
+.feedback-buttons {
+  display: flex;
+  gap: 15px;
+  justify-content: flex-end;
 }
 
-.order-info .order-date {
-  font-size: 15px;
-  color: #666;
-}
-
-.reorder-btn {
-  margin-left: auto;
-  padding: 14px 28px;
-  font-size: 17px;
-  border-radius: 10px;
+.feedback-buttons .btn-submit {
   background: #a64d79;
   color: #fffefe;
-  font-weight: 500;
   border: none;
+  padding: 12px 25px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
-.reorder-btn:hover {
-  transform: scale(1.07);
+.feedback-buttons .btn-submit:hover {
+  transform: scale(1.05);
+}
+
+.feedback-buttons .btn-cancel {
+  background: #ead1dc;
+  color: #741b47;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.feedback-buttons .btn-cancel:hover {
+  background: #a64d79;
+  color: #fff;
 }
 
 /* ====== Footer ====== */
@@ -169,7 +160,49 @@ body {
   margin-top: auto;
 }
 
-/* === HAMBURGER MENU === */
+/* FeedbackPage.css */
+.popup-overlay {
+  display: none; /* Hidden by default */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.popup-content {
+  background: #fff;
+  padding: 20px 30px;
+  border-radius: 10px;
+  text-align: center;
+  min-width: 250px;
+}
+
+/* Modal OK button */
+#feedbackOkBtn {
+  background: #a64d79; /* your main accent color */
+  color: white;
+  border: none;
+  padding: 10px 25px;
+  font-size: 16px;
+  font-weight: 500;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 15px;
+  transition: all 0.2s ease;
+}
+
+#feedbackOkBtn:hover {
+  background: #741b47;
+  transform: scale(1.05);
+}
+
+
+/* ====== Hamburger ====== */
 .hamburger {
   display: none;
   flex-direction: column;
@@ -185,105 +218,6 @@ body {
   transition: 0.3s ease;
 }
 
-
-/* Reorder Popup */
-.popup-overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background-color: rgba(0, 0, 0, 0.6);
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
-.popup-content {
-  background: #fff;
-  padding: 25px;
-  border-radius: 10px;
-  text-align: center;
-  width: 280px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
-}
-
-.popup-content p {
-  font-size: 16px;
-  margin-bottom: 20px;
-}
-
-#reorderOkBtn {
-  background-color: #a64d79;
-  color: #ffffff;
-  border: none;
-  padding: 10px 25px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-weight: 600;
-}
-
-#reorderOkBtn:hover {
-  transform: scale(1.05);
-}
-
-/* ====== Feedback Button ====== */
-.feedback-btn {
-  margin-left: 10px;
-  padding: 14px 28px;
-  font-size: 17px;
-  border-radius: 10px;
-  background: #ead1dc;
-  color: #741b47;
-  font-weight: 500;
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.feedback-btn:hover {
-  background: #a64d79;
-  color: #fff;
-}
-
-/* ====== Feedback Modal ====== */
-#feedbackModal {
-  display: none;
-  position: fixed;
-  z-index: 1000;
-  inset: 0;
-  background-color: rgba(0, 0, 0, 0.6);
-  justify-content: center;
-  align-items: center;
-}
-
-#feedbackModal .modal-content {
-  background: #fff;
-  padding: 25px;
-  border-radius: 12px;
-  width: 320px;
-  text-align: center;
-}
-
-#feedbackModal textarea {
-  width: 100%;
-  padding: 10px;
-  margin: 15px 0;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  resize: none;
-}
-
-#feedbackModal .close {
-  position: absolute;
-  top: 10px;
-  right: 15px;
-  font-size: 26px;
-  font-weight: bold;
-  cursor: pointer;
-  color: #333;
-}
-
-
-/* Animate hamburger to X */
 .hamburger.active span:nth-child(1) {
   transform: rotate(45deg) translate(5px, 6px);
 }
@@ -294,34 +228,28 @@ body {
   transform: rotate(-45deg) translate(5px, -7px);
 }
 
-/* ====== Responsive Breakpoints ====== */
-
-/* Tablets / Medium screens */
+/* ====== Responsive ====== */
 @media (max-width: 1024px) {
-  .history-container {
+  .feedback-container {
     width: 90%;
   }
 
-  .order-card {
+  .feedback-card {
     padding: 20px;
   }
 
-  .order-card img {
-    width: 120px;
-    height: 120px;
-  }
-
-  .order-info h3 {
-    font-size: 20px;
-  }
-
-  .order-info p {
+  .feedback-card p {
     font-size: 16px;
   }
 
-  .reorder-btn {
-    padding: 12px 24px;
-    font-size: 16px;
+  .feedback-card textarea {
+    font-size: 15px;
+  }
+
+  .feedback-buttons .btn-submit,
+  .feedback-buttons .btn-cancel {
+    padding: 10px 22px;
+    font-size: 15px;
   }
 }
 
@@ -364,18 +292,11 @@ body {
   }
 
   @keyframes dropdownFade {
-    from {
-      opacity: 0;
-      transform: translateY(-10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 }
 
-/* Make sure it still looks right for smaller phones */
 @media (max-width: 480px) {
   .nav {
     padding: 20px 0;
