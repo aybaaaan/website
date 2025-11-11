@@ -56,7 +56,7 @@ onAuthStateChanged(auth, (user) => {
       return;
     }
 
-    // Filter orders that belong to the current user
+    // Filter orders belonging to the current user
     const userOrders = Object.values(data).filter(
       (order) => order.userId === user.uid
     );
@@ -66,18 +66,28 @@ onAuthStateChanged(auth, (user) => {
       return;
     }
 
-    // Sort orders by timestamp (latest first)
-    userOrders.sort((a, b) => b.timestamp - a.timestamp);
+    // Sort orders by deliveryDate (latest first)
+    userOrders.sort((a, b) => new Date(b.deliveryDate) - new Date(a.deliveryDate));
 
     userOrders.forEach((order) => {
-      const orderDate = new Date(order.timestamp).toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      });
+      // Combine delivery date and time
+      const displayDate = order.deliveryDate
+        ? `${new Date(order.deliveryDate).toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })} ${order.deliveryTime ? `at ${order.deliveryTime}` : ""}`
+        : "Date not available";
 
-      // Each Firebase order contains multiple items
-      order.orders.forEach((item) => {
+        let statusColor = "grey";
+        if (order.status === "for-delivery") statusColor = "green";
+        else if (order.status === "cancelled") statusColor = "#cc3232";
+        else if (order.status === "delivered") statusColor = "#a64d79";
+
+      // Reverse items (stack-like behavior)
+      const reversedItems = [...order.orders].reverse();
+
+      reversedItems.forEach((item) => {
         orderList.innerHTML += `
           <div class="order-card">
             <img src="https://via.placeholder.com/140x140" alt="${item.name}" />
@@ -86,12 +96,15 @@ onAuthStateChanged(auth, (user) => {
               <p>Quantity: ${item.qty}</p>
               <p>Price: ₱${item.price} each</p>
               <p class="subtotal">Subtotal: ₱${(item.price * item.qty).toFixed(2)}</p>
-              <p class="order-date">Date: ${orderDate}</p>
+              <p class="order-date">Date Received: ${displayDate}</p>
+              <p class="order-status" style="color: ${statusColor}; font-weight: 600;">
+                Status: ${order.status || "pending"}
+              </p>
             </div>
             <button class="reorder-btn" onclick="reorder('${item.name}', ${item.qty}, ${item.price})">
               Reorder
             </button>
-            <button class="feedback-btn" onclick="window.location.href='/pages/FeedbackPage.html?item=${encodeURIComponent(item.name)}&order=${order.timestamp}'">
+            <button class="feedback-btn" onclick="window.location.href='/pages/FeedbackPage.html?item=${encodeURIComponent(item.name)}&order=${order.deliveryDate}'">
               Give Feedback
             </button>
           </div>
