@@ -322,10 +322,20 @@ onValue(ordersRef, (snapshot) => {
       <div class="order-actions">
         <label class="status-label" for="order-status">Status:</label>
         <select class="order-status-dropdown">
-          <option value="for-delivery" ${data.status === "for-delivery" ? "selected" : ""}>For Delivery</option>
-          <option value="cancelled" ${data.status?.toLowerCase() === "cancelled" ? "selected" : ""}>Cancelled</option>
-          <option value="delivered" ${data.status?.toLowerCase() === "delivered" ? "selected" : ""}>Delivered</option>
-          <option value="pending" ${!data.status || data.status?.toLowerCase() === "pending" ? "selected" : ""}>Pending</option>
+          <option value="for-delivery" ${
+            data.status === "for-delivery" ? "selected" : ""
+          }>For Delivery</option>
+          <option value="cancelled" ${
+            data.status?.toLowerCase() === "cancelled" ? "selected" : ""
+          }>Cancelled</option>
+          <option value="delivered" ${
+            data.status?.toLowerCase() === "delivered" ? "selected" : ""
+          }>Delivered</option>
+          <option value="pending" ${
+            !data.status || data.status?.toLowerCase() === "pending"
+              ? "selected"
+              : ""
+          }>Pending</option>
         </select>
       </div>
     `;
@@ -360,10 +370,10 @@ onValue(ordersRef, (snapshot) => {
       const newStatus = statusDropdown.value;
       const orderKey = child.key; // make sure you have the key of the order
       update(ref(db, `Order/${orderKey}`), { status: newStatus })
-      .then(() => {
-      console.log(`Order status updated to ${newStatus} in Firebase`);
-    })
-    .catch((err) => console.error(err));
+        .then(() => {
+          console.log(`Order status updated to ${newStatus} in Firebase`);
+        })
+        .catch((err) => console.error(err));
     });
 
     const foodToggle = row.querySelector(".food-toggle");
@@ -555,7 +565,7 @@ async function renderChart() {
     chart.update();
   } else {
     chart = new Chart(ctx, {
-      type: "bar",
+      type: "line",
       data: {
         labels: res.labels,
         datasets: [
@@ -563,7 +573,9 @@ async function renderChart() {
             label: datasetLabel,
             data: res.data,
             backgroundColor: "#3b82f6",
-            borderWidth: 1,
+            borderColor: "#3b82f6",
+            fill: false,
+            borderWidth: 3,
           },
         ],
       },

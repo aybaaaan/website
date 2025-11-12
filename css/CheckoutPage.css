@@ -29,7 +29,7 @@ body::before {
 
 /* ====== Header ====== */
 .header {
-  background: 	#741b47;
+  background: #741b47;
   color: white;
   display: flex;
   justify-content: space-between;
@@ -54,7 +54,7 @@ body::before {
 }
 
 .header .nav a:hover {
-  color: 	#c27ba0;
+  color: #c27ba0;
 }
 
 /* ====== Checkout Container ====== */
@@ -147,8 +147,8 @@ body::before {
   width: 28px;
   height: 28px;
   border: none;
-  background: 	#ead1dc;
-  color: 	#741b47;
+  background: #ead1dc;
+  color: #741b47;
   border-radius: 6px;
   cursor: pointer;
   font-size: 18px;
@@ -157,8 +157,8 @@ body::before {
 }
 
 .quantity-control button:hover {
-  background:#a64d79;
-  color:	#ead1dc;
+  background: #a64d79;
+  color: #ead1dc;
 }
 
 .details-qty {
@@ -219,9 +219,9 @@ body::before {
 
 /* Button Styles */
 .addmore-btn {
-  background: 	#ead1dc;
+  background: #ead1dc;
   border: none;
-  color: 	#4c1130;
+  color: #4c1130;
   padding: 12px 20px;
   font-weight: bold;
   cursor: pointer;
@@ -231,7 +231,7 @@ body::before {
 }
 
 .proceed-btn {
-  background: 	#a64d79;
+  background: #a64d79;
   border: none;
   padding: 12px 20px;
   font-weight: bold;
@@ -266,7 +266,7 @@ body::before {
 /* ====== Footer ====== */
 .footer {
   text-align: center;
-  background: 	#741b47;
+  background: #741b47;
   color: white;
   padding: 14px;
   font-size: 14px;
@@ -461,8 +461,8 @@ select {
 }
 
 #returnHomeBtn {
-  background-color: #ffcf78; /* yellow */
-  color: #333;
+  background-color: #a64d79; /* yellow */
+  color: #f7f4f4;
   border: none;
   border-radius: 6px;
   padding: 10px 20px;
@@ -516,6 +516,6 @@ select {
   color: #fffcfc;
 }
 .popup-btn.confirm:hover {
-  background:  #ead1dc;
+  background: #ead1dc;
   color: #4c1130;
 }
