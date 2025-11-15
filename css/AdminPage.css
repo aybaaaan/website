@@ -397,6 +397,7 @@ section.active {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  justify-content: flex-start;
   gap: 10px;
 }
 .order-card-left {
@@ -404,6 +405,11 @@ section.active {
   flex-direction: column;
   align-items: flex-start;
   gap: 10px;
+}
+.order-number {
+  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 20px;
 }
 
 /* Total price emphasis */
