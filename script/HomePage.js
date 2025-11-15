@@ -409,13 +409,15 @@ onValue(ref(db, "menu"), (snapshot) => {
         <div class="card-content">
           <h3 class="card-title">${item.name}</h3>
           <p class="card-desc">${item.desc}</p>
-          <p class="card-price">₱${item.price || 0}</p>
-          <button class="order-btn" onclick="goToDetails(
-            '${item.name}',
-            '${item.price || 0}',
-            '${item.url}',
-            '${item.desc}'
-          )">Order</button>
+          <div class="card-bottom">
+  <span class="card-price">₱${item.price || 0}.00</span>
+  <button class="order-btn" onclick="goToDetails(
+    '${item.name}',
+    '${item.price || 0}.00',
+    '${item.url}',
+    '${item.desc}'
+  )">Order</button>
+</div>
         </div>
       </div>
     `;
