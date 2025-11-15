@@ -173,7 +173,16 @@ window.editItem = (section, key, url, name, desc, price) => {
 };
 
 // DELETE ITEM
-window.deleteItem = (section, key) => remove(ref(db, `${section}/${key}`));
+let pendingDelete = { section: null, key: null };
+window.deleteItem = (section, key) => {
+  pendingDelete.section = section;
+  pendingDelete.key = key;
+
+  document.getElementById("delete-confirm-message").innerText =
+    "Are you sure you want to delete this item?";
+
+  document.getElementById("delete-confirm-modal").style.display = "flex";
+};
 
 // RENDER MENU AND HOME ITEMS
 function renderItems(refPath, container) {
@@ -298,13 +307,12 @@ onValue(ordersRef, (snapshot) => {
     }
 
     row.innerHTML = `
-  <div class="order-card-left">
-    <h2>${data.name || "Unknown"}</h2>
-    <p><strong>Order #:</strong> ${data.orderNumber || "N/A"}</p>
-    <p><strong>Address:</strong> ${data.address || "N/A"}</p>
-    <p><strong>Contact:</strong> ${data.contact || "N/A"}</p>
-    <p><strong>Payment:</strong> ${data.payment || "N/A"}</p>
-    <p><strong>Order Date & Time:</strong> ${data.orderDate} ${
+      <div class="order-card-left">
+      <h2>${data.name || "Unknown"}</h2>
+      <p><strong>Address:</strong> ${data.address || "N/A"}</p>
+      <p><strong>Contact:</strong> ${data.contact || "N/A"}</p>
+      <p><strong>Payment:</strong> ${data.payment || "N/A"}</p>
+      <p><strong>Order Date & Time:</strong> ${data.orderDate} ${
       data.orderTime
     }</p>
 
@@ -314,11 +322,15 @@ onValue(ordersRef, (snapshot) => {
             <ul>${foodListHTML}</ul>
           </div>
         </div>
+        </div>
 
-  <div class="order-card-right">
-    <p><strong>Total:</strong> <span class="total-amount">₱${
-      data.total ? data.total.toFixed(2) : "0.00"
-    }</span></p>
+       <div class="order-card-right">
+      <p class= "orderNumber" <strong>Order #:</strong> ${
+        data.orderNumber || "N/A"
+      }</p>
+        <p><strong>Total:</strong> <span class="total-amount">₱${
+          data.total ? data.total.toFixed(2) : "0.00"
+        }</span></p>
     <p><strong>Delivery Date:</strong> ${deliveryDate}</p>
     <p><strong>Delivery Time:</strong> ${deliveryTime}</p>
 
@@ -342,6 +354,7 @@ onValue(ordersRef, (snapshot) => {
       </select>
     </div>
   </div>
+
 `;
 
     const statusDropdown = row.querySelector(".order-status-dropdown");
@@ -862,6 +875,24 @@ document.getElementById("btn-month").addEventListener("click", () => {
 document.getElementById("data-type").addEventListener("change", (e) => {
   currentType = e.target.value; // "sales" or "orders"
   renderChart();
+});
+
+// ============ DELETE CONFIRMATION ============
+
+document.getElementById("cancel-delete").addEventListener("click", () => {
+  document.getElementById("delete-confirm-modal").style.display = "none";
+});
+
+document.getElementById("confirm-delete").addEventListener("click", () => {
+  if (!pendingDelete.section || !pendingDelete.key) return;
+
+  remove(ref(db, `${pendingDelete.section}/${pendingDelete.key}`))
+    .then(() => {
+      document.getElementById("delete-confirm-modal").style.display = "none";
+    })
+    .catch((error) => {
+      console.error("Delete failed:", error);
+    });
 });
 
 // ============ INITIAL RENDER ============
