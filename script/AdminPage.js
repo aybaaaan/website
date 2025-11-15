@@ -22,6 +22,15 @@ window.addEventListener("click", (e) => {
   if (e.target === logoutModal) logoutModal.style.display = "none";
 });
 
+
+//Hamburger
+const hamburger = document.getElementById("hamburger");
+const sidebar = document.querySelector("aside");
+
+hamburger.addEventListener("click", () => {
+  sidebar.classList.toggle("active");
+});
+
 // FIREBASE SETUP
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
 import {
@@ -803,7 +812,7 @@ const feedbackRef = ref(db, "Feedbacks");
 const feedbackContainer = document.getElementById("feedbackContainer");
 
 onValue(feedbackRef, (snapshot) => {
-  feedbackContainer.innerHTML = ""; // clear before adding
+  feedbackContainer.innerHTML = ""; // clear previous content
 
   if (!snapshot.exists()) {
     feedbackContainer.innerHTML = "<p>No feedback yet.</p>";
@@ -811,51 +820,36 @@ onValue(feedbackRef, (snapshot) => {
   }
 
   const allFeedbacks = snapshot.val();
-  const grouped = {};
 
-  // Group by item
-  Object.values(allFeedbacks).forEach((fb) => {
-    const itemName = fb.item || "Unknown Item";
-    if (!grouped[itemName]) grouped[itemName] = [];
-    grouped[itemName].push(fb);
-  });
+  Object.values(allFeedbacks).forEach(async (fb) => {
+    const card = document.createElement("div");
+    card.classList.add("admin-feedback-card");
 
-  // Render feedbacks per item
-  for (const item in grouped) {
-    const feedbackCard = document.createElement("div");
-    feedbackCard.classList.add("feedback-card");
+    // Fetch the order using orderID
+    let customerName = "Unknown";
+    let orderNumber = fb.orderID || "N/A"; // fallback if no orderID
+    let orderedItems = fb.item || "No items found";
 
-    let feedbackListHTML = "";
-    grouped[item].forEach((fb, index) => {
-      feedbackListHTML += `<li>${fb.feedback} <small>(${fb.timestamp})</small></li>`;
-    });
+    if (fb.orderID) {
+      const orderSnapshot = await get(ref(db, `Order/${fb.orderID}`));
+      if (orderSnapshot.exists()) {
+        const orderData = orderSnapshot.val();
+        customerName = orderData.name || "Unknown";
+        orderNumber = orderData.orderID || fb.orderID; // fallback to fb.orderID
+      }
+    }
 
-    feedbackCard.innerHTML = `
-      <h4>${item}</h4>
-      <button class="feedback-toggle">Show Feedbacks ▼</button>
-      <div class="feedback-list">
-        <ul>${feedbackListHTML}</ul>
-      </div>
+    card.innerHTML = `
+      <p><strong>Order ID:</strong> ${orderNumber}</p>
+      <p><strong>Ordered Items:</strong> ${orderedItems}</p>
+      <p><strong>Feedback:</strong> ${fb.feedback || "No feedback"}</p>
     `;
 
-    // Toggle button
-    const toggleBtn = feedbackCard.querySelector(".feedback-toggle");
-    const listDiv = feedbackCard.querySelector(".feedback-list");
-    listDiv.style.display = "none";
-
-    toggleBtn.addEventListener("click", () => {
-      if (listDiv.style.display === "none") {
-        listDiv.style.display = "block";
-        toggleBtn.textContent = "Hide Feedbacks ▲";
-      } else {
-        listDiv.style.display = "none";
-        toggleBtn.textContent = "Show Feedbacks ▼";
-      }
-    });
-
-    feedbackContainer.appendChild(feedbackCard);
-  }
+    feedbackContainer.appendChild(card);
+  });
 });
+
+
 
 // ============ BUTTON EVENTS ============
 document.getElementById("btn-today").addEventListener("click", () => {
@@ -870,6 +864,49 @@ document.getElementById("btn-month").addEventListener("click", () => {
   currentRange = "month";
   renderChart();
 });
+
+
+
+// REFERENCES FOR ABOUT US SECTION
+const aboutUsRef = ref(db, "homepage/aboutUs");
+const aboutUsPreview = document.getElementById("aboutUsPreview");
+
+// Load About Us text into preview
+onValue(aboutUsRef, (snapshot) => {
+  aboutUsPreview.textContent = snapshot.exists() ? snapshot.val().content : "Empty";
+});
+
+// OPEN MODAL (reuse your existing itemModal if you want)
+document.getElementById("editAboutUsBtn").addEventListener("click", async () => {
+  const snapshot = await get(aboutUsRef);
+  const currentContent = snapshot.exists() ? snapshot.val().content : "";
+
+  // Use the item modal for editing
+  document.getElementById("modalTitle").innerText = "Edit About Us";
+  document.getElementById("imageName").value = "About Us"; // not really used
+  document.getElementById("imageDesc").value = currentContent;
+  document.getElementById("imagePrice").closest(".input-group").style.display = "none";
+  preview.src = ""; // no image needed
+  base64Image = ""; 
+  editKey = "aboutUs"; // special key to detect About Us
+  document.getElementById("itemModal").style.display = "block";
+});
+
+// SAVE CHANGES IN ITEM MODAL
+document.getElementById("saveItem").addEventListener("click", async () => {
+  if (editKey === "aboutUs") {
+    const newContent = document.getElementById("imageDesc").value.trim();
+    if (!newContent) return showFillFieldsModal();
+
+    await update(aboutUsRef, { content: newContent });
+    closeModal();
+    return;
+  }
+
+  // Your existing save logic for menu/home items...
+});
+
+
 
 // ============ TYPE TOGGLE ============
 document.getElementById("data-type").addEventListener("change", (e) => {

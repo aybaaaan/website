@@ -26,7 +26,8 @@
               id="email"
               required
             />
-            <div class = "password-wrapper"
+            <div
+              class="password-wrapper"
               style="display: flex; align-items: center; gap: 8px; width: 100%"
             >
               <input
@@ -38,8 +39,10 @@
               />
               <span style="color: #000000">👁</span>
             </div>
-            
-            <div class = "password-wrapper"
+
+            <div
+              class="password-wrapper"
+
               style="display: flex; align-items: center; gap: 8px; width: 100%"
             >
               <input
@@ -49,9 +52,11 @@
                 id="confirmpassword"
                 required
               />
-              <p id="error-message">Invalid email or password!</p>
               <span style="color: #000000">👁</span>
             </div>
+
+            <!-- ❗ Fix: error message must be OUTSIDE -->
+            <p id="error-message">Invalid email or password!</p>
           </form>
 
           <button type="submit" id="submit" class="signup-btn">SIGN UP</button>

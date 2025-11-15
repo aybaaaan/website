@@ -1,5 +1,5 @@
 // Import Firebase SDKs
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -10,10 +10,11 @@ import {
   getDatabase,
   ref,
   set,
-  serverTimestamp,
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
 
-// Firebase config
+// ===============================
+// NEW FIREBASE CONFIG
+// ===============================
 const firebaseConfig = {
   apiKey: "AIzaSyC7FLz6RyFhiNok82uPj3hs7Ev8r7UI3Ik",
   authDomain: "mediterranean-in-velvet-10913.firebaseapp.com",
@@ -55,8 +56,12 @@ submit.addEventListener("click", (event) => {
     return showError("Passwords do not match. Please try again.");
   }
 
-  if (password.length < 6) {
-    return showError("Password must be at least 6 characters.");
+  // Strong password check
+  const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{6,}$/;
+  if (!passwordPattern.test(password)) {
+    return showError(
+      "Password must be at least 6 characters and include a capital letter, a number, and a symbol."
+    );
   }
 
   // Firebase signup
@@ -64,20 +69,20 @@ submit.addEventListener("click", (event) => {
     .then((userCredential) => {
       const user = userCredential.user;
 
-      // Step 1: Send email verification
+      // Send email verification
       sendEmailVerification(user)
         .then(() => {
           showSuccess(
             "Verification email sent! Please check your inbox or spam and verify before logging in."
           );
 
-          // Step 2: Save user to database (optional, before sign out)
+          // Save user to database
           set(ref(db, "Logins/" + user.uid), {
             email: email,
             createdAt: new Date().toLocaleString(),
           });
 
-          // Step 3: Sign out user until verified
+          // Sign out user until verified
           setTimeout(() => {
             signOut(auth).then(() => {
               window.location.href = "/pages/LoginPage.html";
@@ -90,7 +95,9 @@ submit.addEventListener("click", (event) => {
     })
     .catch((error) => {
       if (error.code === "auth/invalid-email") {
-        showError("Please enter a valid email address (example@domain.com).");
+        showError(
+          "Please enter a valid email address (example@domain.com)."
+        );
       } else if (error.code === "auth/email-already-in-use") {
         showError("This email is already registered. Please sign in instead.");
       } else {
@@ -116,7 +123,7 @@ function showSuccess(msg) {
   setTimeout(() => errorMessage.classList.remove("show"), 4000);
 }
 
-//password visibility toggle
+// Password visibility toggle
 const passwordWrappers = document.querySelectorAll(".password-wrapper");
 
 passwordWrappers.forEach((wrapper) => {
@@ -126,10 +133,10 @@ passwordWrappers.forEach((wrapper) => {
   icon.addEventListener("click", () => {
     if (input.type === "password") {
       input.type = "text"; // show password
-      icon.style.color = "#741b47"; // change color (example: DodgerBlue)
+      icon.style.color = "#741b47";
     } else {
       input.type = "password"; // hide password
-      icon.style.color = "#000000"; // revert to original black
+      icon.style.color = "#000000";
     }
   });
 });

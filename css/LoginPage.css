@@ -142,6 +142,20 @@ body {
   }
 }
 
+.forgot-password {
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 13px;
+  margin-top: 15px;
+  transition: color 0.2s, text-decoration 0.2s;
+}
+
+.forgot-password:hover {
+  color: #ffcced;
+  text-decoration: underline;
+}
+
+
 /* ===== Error Message Style ===== */
 /* Popup Error Message */
 #error-message {

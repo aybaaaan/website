@@ -426,6 +426,18 @@ onValue(ref(db, "menu"), (snapshot) => {
   }
 });
 
+
+
+// ===================== LOAD ABOUT US CONTENT =====================
+const aboutUsContent = document.getElementById("aboutUsContent");
+onValue(ref(db, "homepage/aboutUs"), (snapshot) => {
+  aboutUsContent.textContent = snapshot.exists()
+    ? snapshot.val().content
+    : "About Us section is empty.";
+});
+
+
+
 // LOG OUT FUNCTIONALITY
 const auth = getAuth();
 
