@@ -306,40 +306,51 @@ onValue(ordersRef, (snapshot) => {
       foodListHTML = "<li>No food items found.</li>";
     }
 
-   row.innerHTML = `
+    row.innerHTML = `
   <div class="order-card-left">
     <h2>${data.name || "Unknown"}</h2>
     <p><strong>Address:</strong> ${data.address || "N/A"}</p>
     <p><strong>Contact:</strong> ${data.contact || "N/A"}</p>
     <p><strong>Payment:</strong> ${data.payment || "N/A"}</p>
-    <p><strong>Order Date & Time:</strong> ${data.orderDate} ${data.orderTime}</p>
+    <p><strong>Order Date & Time:</strong> ${data.orderDate} ${
+      data.orderTime
+    }</p>
 
-    <div class="food-section">
-      <button class="food-toggle">Order Details ▼</button>
-      <div class="order-food-list">
-        <ul>${foodListHTML}</ul>
-      </div>
-    </div>
-  </div>
+        <div class="food-section">
+          <button class="food-toggle">Order Details ▼</button>
+          <div class="order-food-list">
+            <ul>${foodListHTML}</ul>
+          </div>
+        </div>
 
   <div class="order-card-right">
-    <p class="order-number"><strong>Order #:</strong> ${data.ordernumber || "N/A"}</p>
-    <p><strong>Total:</strong> <span class="total-amount">₱${data.total ? data.total.toFixed(2) : "0.00"}</span></p>
+    <p><strong>Total:</strong> <span class="total-amount">₱${
+      data.total ? data.total.toFixed(2) : "0.00"
+    }</span></p>
     <p><strong>Delivery Date:</strong> ${deliveryDate}</p>
     <p><strong>Delivery Time:</strong> ${deliveryTime}</p>
 
     <div class="order-actions">
       <label class="status-label" for="order-status">Status:</label>
       <select class="order-status-dropdown">
-        <option value="for-delivery" ${data.status === "for-delivery" ? "selected" : ""}>For Delivery</option>
-        <option value="cancelled" ${data.status?.toLowerCase() === "cancelled" ? "selected" : ""}>Cancelled</option>
-        <option value="delivered" ${data.status?.toLowerCase() === "delivered" ? "selected" : ""}>Delivered</option>
-        <option value="pending" ${!data.status || data.status?.toLowerCase() === "pending" ? "selected" : ""}>Pending</option>
+        <option value="for-delivery" ${
+          data.status === "for-delivery" ? "selected" : ""
+        }>For Delivery</option>
+        <option value="cancelled" ${
+          data.status?.toLowerCase() === "cancelled" ? "selected" : ""
+        }>Cancelled</option>
+        <option value="delivered" ${
+          data.status?.toLowerCase() === "delivered" ? "selected" : ""
+        }>Delivered</option>
+        <option value="pending" ${
+          !data.status || data.status?.toLowerCase() === "pending"
+            ? "selected"
+            : ""
+        }>Pending</option>
       </select>
     </div>
   </div>
 `;
-
 
     const statusDropdown = row.querySelector(".order-status-dropdown");
 
@@ -366,23 +377,63 @@ onValue(ordersRef, (snapshot) => {
     setTextColor();
 
     statusDropdown.addEventListener("change", () => {
-      setTextColor();
       const newStatus = statusDropdown.value;
       const orderKey = child.key;
       const userId = child.val().userId;
+      const orderCard = row;
 
-      console.log("Updating order for userId:", userId);
-      if (!userId)
-        return console.error("No userId found, cannot send notification");
+      const getMessage = (status) => {
+        switch (status.toLowerCase()) {
+          case "pending":
+            return "Mark this order as Pending?";
+          case "for-delivery":
+            return "Mark this order as For Delivery?";
+          case "delivered":
+            return "Mark this order as Delivered? This will remove it from the view.";
+          case "cancelled":
+            return "Are you sure you want to Cancel this order? This will delete it from the database.";
+          default:
+            return "Update order status?";
+        }
+      };
 
-      //  Update Realtime Database
-      update(ref(db, `Order/${orderKey}`), { status: newStatus })
-        .then(() => {
-          showCustomerOrderPopup(`Status updated to ${newStatus}`);
-          return sendNotification(userId, newStatus, orderKey);
-        })
-        .then(() => console.log("Notification sent!"))
-        .catch((err) => console.error(err));
+      showStatusConfirm(getMessage(newStatus), (confirmed) => {
+        if (!confirmed) {
+          // revert dropdown to previous value
+          statusDropdown.value = data.status || "pending";
+          setTextColor();
+          return;
+        }
+
+        // proceed with action
+        setTextColor();
+
+        if (!userId)
+          return console.error("No userId found, cannot send notification");
+
+        if (newStatus.toLowerCase() === "cancelled") {
+          // Remove from DB
+          remove(ref(db, `Order/${orderKey}`))
+            .then(() => {
+              orderCard.remove();
+              console.log("Order cancelled and removed from DB");
+              return sendNotification(userId, newStatus, orderKey);
+            })
+            .catch((err) => console.error(err));
+        } else if (newStatus.toLowerCase() === "delivered") {
+          // Remove from view only
+          orderCard.remove();
+          sendNotification(userId, newStatus, orderKey)
+            .then(() => console.log("Delivered notification sent!"))
+            .catch((err) => console.error(err));
+        } else {
+          // Normal status update
+          update(ref(db, `Order/${orderKey}`), { status: newStatus })
+            .then(() => sendNotification(userId, newStatus, orderKey))
+            .then(() => console.log("Status updated and notification sent"))
+            .catch((err) => console.error(err));
+        }
+      });
     });
 
     const foodToggle = row.querySelector(".food-toggle");
@@ -396,6 +447,38 @@ onValue(ordersRef, (snapshot) => {
 
     ordersContainer.appendChild(row);
   });
+});
+
+// STATUS CONFIRMATION MODAL
+const statusConfirmModal = document.getElementById("status-confirm-modal");
+const statusConfirmMessage = document.getElementById("status-confirm-message");
+const statusYesBtn = document.getElementById("status-yes");
+const statusCancelBtn = document.getElementById("status-cancel");
+
+let pendingStatusChange = null;
+
+function showStatusConfirm(message, callback) {
+  statusConfirmMessage.textContent = message;
+  statusConfirmModal.style.display = "flex";
+
+  // Remove old event listeners
+  statusYesBtn.onclick = null;
+  statusCancelBtn.onclick = null;
+
+  statusYesBtn.onclick = () => {
+    statusConfirmModal.style.display = "none";
+    callback(true);
+  };
+
+  statusCancelBtn.onclick = () => {
+    statusConfirmModal.style.display = "none";
+    callback(false);
+  };
+}
+
+window.addEventListener("click", (e) => {
+  if (e.target === statusConfirmModal)
+    statusConfirmModal.style.display = "none";
 });
 
 // GLOBAL NOTIFICATION FUNCTION (fixed)
@@ -709,6 +792,67 @@ async function renderChart() {
     });
   }
 }
+
+// =========== FEEDBACK DISPLAY ===========
+const feedbackRef = ref(db, "Feedbacks");
+const feedbackContainer = document.getElementById("feedbackContainer");
+
+onValue(feedbackRef, (snapshot) => {
+  feedbackContainer.innerHTML = ""; // clear before adding
+
+  if (!snapshot.exists()) {
+    feedbackContainer.innerHTML = "<p>No feedback yet.</p>";
+    return;
+  }
+
+  const allFeedbacks = snapshot.val();
+  const grouped = {};
+
+  // Group by item
+  Object.values(allFeedbacks).forEach((fb) => {
+    const itemName = fb.item || "Unknown Item";
+    if (!grouped[itemName]) grouped[itemName] = [];
+    grouped[itemName].push(fb);
+  });
+
+  // Render feedbacks per item
+  for (const item in grouped) {
+    const feedbackCard = document.createElement("div");
+    feedbackCard.classList.add("feedback-card");
+
+    let feedbackListHTML = "";
+    grouped[item].forEach((fb, index) => {
+      feedbackListHTML += `<li>${fb.feedback} <small>(${fb.timestamp})</small></li>`;
+    });
+
+    feedbackCard.innerHTML = `
+      <h4>${item}</h4>
+      <button class="feedback-toggle">Show Feedbacks ▼</button>
+      <div class="feedback-list">
+        <ul>${feedbackListHTML}</ul>
+      </div>
+    `;
+
+    // Toggle button
+    const toggleBtn = feedbackCard.querySelector(".feedback-toggle");
+    const listDiv = feedbackCard.querySelector(".feedback-list");
+    listDiv.style.display = "none";
+
+    toggleBtn.addEventListener("click", () => {
+      if (listDiv.style.display === "none") {
+        listDiv.style.display = "block";
+        toggleBtn.textContent = "Hide Feedbacks ▲";
+      } else {
+        listDiv.style.display = "none";
+        toggleBtn.textContent = "Show Feedbacks ▼";
+      }
+    });
+
+    feedbackContainer.appendChild(feedbackCard);
+  }
+});
+
+
 
 // ============ BUTTON EVENTS ============
 document.getElementById("btn-today").addEventListener("click", () => {
