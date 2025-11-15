@@ -371,28 +371,105 @@ section.active {
 }
 
 /* Individual order card design */
+/* Split order card into left & right sections */
 .order-card {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 20px;
   background: #f8f8f8;
   border: 1px solid #ccc;
   border-radius: 10px;
-  padding: 15px 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  animation: fadeIn 0.3s ease;
+  padding: 20px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+  flex-wrap: wrap; /* for small screens */
 }
 
+.order-card-left,
+.order-card-right {
+  flex: 1;
+  min-width: 250px;
+}
+
+/* Align right section to top */
+.order-card-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+.order-card-left {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+/* Total price emphasis */
+.order-card-right .total-amount {
+  color: #a64d79;
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+/* Food list adjustments */
+.order-food-list {
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 8px 12px;
+  max-height: 150px;
+  overflow-y: auto;
+  margin-top: 5px;
+}
+
+.order-food-list li {
+  font-size: 14px;
+  padding: 4px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.order-food-list li:last-child {
+  border-bottom: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .order-card {
+    flex-direction: column;
+  }
+
+  .order-card-right {
+    align-items: flex-start;
+  }
+}
+
+
 .order-details h3 {
-  font-size: 18px;
+  font-size: 1.2rem;
+  color: #222;
   font-weight: bold;
-  margin-bottom: 5px;
+  margin-bottom: 8px;
 }
 
 .order-details p {
-  margin: 2px 0;
-  font-size: 14px;
+  margin: 4px 0;
+  font-size: 0.95rem;
+  color: #444;
 }
+
+.order-details strong {
+  color: #000;
+  font-weight: 600;
+}
+
+.order-details p strong.total-amount {
+  color: #a64d79; 
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
 
 .order-actions {
   display: flex;
@@ -558,7 +635,7 @@ section.active {
   padding: 20px;
   margin-top: 20px;
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
-  max-height: 600px; /* Height fits ~3 order cards */
+  max-height: 860px; /* Height fits ~3 order cards */
   overflow-y: auto; /* Scrollable vertically */
 }
 
