@@ -305,7 +305,7 @@ onValue(ordersRef, (snapshot) => {
       data.orderTime
     }</p>
 
-        <div class="food-section">
+        <div class="food-section"> 
           <button class="food-toggle">Order Details ▼</button>
           <div class="order-food-list">
             <ul>${foodListHTML}</ul>
@@ -586,6 +586,67 @@ async function renderChart() {
     });
   }
 }
+
+// =========== FEEDBACK DISPLAY ===========
+const feedbackRef = ref(db, "Feedbacks");
+const feedbackContainer = document.getElementById("feedbackContainer");
+
+onValue(feedbackRef, (snapshot) => {
+  feedbackContainer.innerHTML = ""; // clear before adding
+
+  if (!snapshot.exists()) {
+    feedbackContainer.innerHTML = "<p>No feedback yet.</p>";
+    return;
+  }
+
+  const allFeedbacks = snapshot.val();
+  const grouped = {};
+
+  // Group by item
+  Object.values(allFeedbacks).forEach((fb) => {
+    const itemName = fb.item || "Unknown Item";
+    if (!grouped[itemName]) grouped[itemName] = [];
+    grouped[itemName].push(fb);
+  });
+
+  // Render feedbacks per item
+  for (const item in grouped) {
+    const feedbackCard = document.createElement("div");
+    feedbackCard.classList.add("feedback-card");
+
+    let feedbackListHTML = "";
+    grouped[item].forEach((fb, index) => {
+      feedbackListHTML += `<li>${fb.feedback} <small>(${fb.timestamp})</small></li>`;
+    });
+
+    feedbackCard.innerHTML = `
+      <h4>${item}</h4>
+      <button class="feedback-toggle">Show Feedbacks ▼</button>
+      <div class="feedback-list">
+        <ul>${feedbackListHTML}</ul>
+      </div>
+    `;
+
+    // Toggle button
+    const toggleBtn = feedbackCard.querySelector(".feedback-toggle");
+    const listDiv = feedbackCard.querySelector(".feedback-list");
+    listDiv.style.display = "none";
+
+    toggleBtn.addEventListener("click", () => {
+      if (listDiv.style.display === "none") {
+        listDiv.style.display = "block";
+        toggleBtn.textContent = "Hide Feedbacks ▲";
+      } else {
+        listDiv.style.display = "none";
+        toggleBtn.textContent = "Show Feedbacks ▼";
+      }
+    });
+
+    feedbackContainer.appendChild(feedbackCard);
+  }
+});
+
+
 
 // ============ BUTTON EVENTS ============
 document.getElementById("btn-today").addEventListener("click", () => {
