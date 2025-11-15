@@ -385,7 +385,12 @@ section.active {
   transition: all 0.3s ease;
   flex-wrap: wrap; /* for small screens */
 }
-
+.orderNumber {
+  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
 .order-card-left,
 .order-card-right {
   flex: 1;
