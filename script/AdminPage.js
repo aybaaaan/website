@@ -295,50 +295,40 @@ onValue(ordersRef, (snapshot) => {
       foodListHTML = "<li>No food items found.</li>";
     }
 
-    row.innerHTML = `
-      <div class="order-details">
-        <h3>${data.name || "Unknown"}</h3>
-        <p><strong>Address:</strong> ${data.address || "N/A"}</p>
-        <p><strong>Contact:</strong> ${data.contact || "N/A"}</p>
-        <p><strong>Payment Method:</strong> ${data.payment || "N/A"}</p>
-        <p><strong>Order Date and Time:</strong> ${data.orderDate}, ${
-      data.orderTime
-    }</p>
+   row.innerHTML = `
+  <div class="order-card-left">
+    <h2>${data.name || "Unknown"}</h2>
+    <p><strong>Order #:</strong> ${data.orderNumber || "N/A"}</p>
+    <p><strong>Address:</strong> ${data.address || "N/A"}</p>
+    <p><strong>Contact:</strong> ${data.contact || "N/A"}</p>
+    <p><strong>Payment:</strong> ${data.payment || "N/A"}</p>
+    <p><strong>Order Date & Time:</strong> ${data.orderDate} ${data.orderTime}</p>
 
-        <div class="food-section">
-          <button class="food-toggle">Order Details ▼</button>
-          <div class="order-food-list">
-            <ul>${foodListHTML}</ul>
-          </div>
-        </div>
+    <div class="food-section">
+      <button class="food-toggle">Order Details ▼</button>
+      <div class="order-food-list">
+        <ul>${foodListHTML}</ul>
+      </div>
+    </div>
+  </div>
 
-        <p><strong>Total:</strong> ₱${
-          data.total ? data.total.toFixed(2) : "0.00"
-        }</p>
-        <p><strong>Delivery Date:</strong> ${deliveryDate}</p>
-        <p><strong>Delivery Time:</strong> ${deliveryTime}</p>
-      </div>
-      
-      <div class="order-actions">
-        <label class="status-label" for="order-status">Status:</label>
-        <select class="order-status-dropdown">
-          <option value="for-delivery" ${
-            data.status === "for-delivery" ? "selected" : ""
-          }>For Delivery</option>
-          <option value="cancelled" ${
-            data.status?.toLowerCase() === "cancelled" ? "selected" : ""
-          }>Cancelled</option>
-          <option value="delivered" ${
-            data.status?.toLowerCase() === "delivered" ? "selected" : ""
-          }>Delivered</option>
-          <option value="pending" ${
-            !data.status || data.status?.toLowerCase() === "pending"
-              ? "selected"
-              : ""
-          }>Pending</option>
-        </select>
-      </div>
-    `;
+  <div class="order-card-right">
+    <p><strong>Total:</strong> <span class="total-amount">₱${data.total ? data.total.toFixed(2) : "0.00"}</span></p>
+    <p><strong>Delivery Date:</strong> ${deliveryDate}</p>
+    <p><strong>Delivery Time:</strong> ${deliveryTime}</p>
+
+    <div class="order-actions">
+      <label class="status-label" for="order-status">Status:</label>
+      <select class="order-status-dropdown">
+        <option value="for-delivery" ${data.status === "for-delivery" ? "selected" : ""}>For Delivery</option>
+        <option value="cancelled" ${data.status?.toLowerCase() === "cancelled" ? "selected" : ""}>Cancelled</option>
+        <option value="delivered" ${data.status?.toLowerCase() === "delivered" ? "selected" : ""}>Delivered</option>
+        <option value="pending" ${!data.status || data.status?.toLowerCase() === "pending" ? "selected" : ""}>Pending</option>
+      </select>
+    </div>
+  </div>
+`;
+
 
     const statusDropdown = row.querySelector(".order-status-dropdown");
 
