@@ -1,0 +1,128 @@
+<!-- NOTIFICATION UI -->
+<div id="notifWrapper" style="position: relative; cursor: pointer">
+  <span id="notifBell">🔔</span>
+
+  <!-- Badge -->
+  <span
+    id="notifCount"
+    style="
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background: red;
+      color: white;
+      padding: 2px 6px;
+      border-radius: 50%;
+      font-size: 12px;
+      display: none;
+    "
+  >
+  </span>
+
+  <!-- Dropdown panel -->
+  <div
+    id="notifPanel"
+    style="
+      display: none;
+      position: absolute;
+      right: 0;
+      background: white;
+      width: 300px;
+      max-height: 350px;
+      overflow-y: auto;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      margin-top: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      z-index: 999;
+    "
+  >
+    <div id="notifList" style="padding: 10px"></div>
+  </div>
+</div>
+
+<style>
+  .notif-item {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+  }
+  .notif-item:hover {
+    background: #f5f5f5;
+  }
+  .notif-item.unread {
+    background: #eef7ff;
+    font-weight: bold;
+  }
+</style>
+
+<script type="module">
+  import {
+    getDatabase,
+    ref,
+    onValue,
+    update,
+  } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
+
+  const db = getDatabase();
+
+  // CHANGE THIS: get the logged-in user's ID
+  const currentUserId = localStorage.getItem("userId");
+
+  if (currentUserId) {
+    const notifRef = ref(db, `notifications/${currentUserId}`);
+
+    onValue(notifRef, (snapshot) => {
+      const notifListEl = document.getElementById("notifList");
+      const notifCountEl = document.getElementById("notifCount");
+
+      notifListEl.innerHTML = "";
+      let unreadCount = 0;
+
+      snapshot.forEach((child) => {
+        const notif = child.val();
+        const notifId = child.key;
+
+        if (!notif.read) unreadCount++;
+
+        const div = document.createElement("div");
+        div.classList.add("notif-item");
+        if (!notif.read) div.classList.add("unread");
+
+        div.innerHTML = `
+                <div>${notif.message}</div>
+                <small style="color:#555;">
+                    ${new Date(notif.timestamp).toLocaleString()}
+                </small>
+            `;
+
+        // Mark as read on click
+        div.addEventListener("click", () => {
+          update(ref(db, `notifications/${currentUserId}/${notifId}`), {
+            read: true,
+          });
+          div.classList.remove("unread");
+        });
+
+        notifListEl.prepend(div);
+      });
+
+      // Update badge
+      if (unreadCount > 0) {
+        notifCountEl.style.display = "block";
+        notifCountEl.innerText = unreadCount;
+      } else {
+        notifCountEl.style.display = "none";
+      }
+    });
+  }
+
+  // Toggle panel
+  const panel = document.getElementById("notifPanel");
+  document.getElementById("notifWrapper").addEventListener("click", () => {
+    panel.style.display =
+      panel.style.display === "none" || panel.style.display === ""
+        ? "block"
+        : "none";
+  });
+</script>
