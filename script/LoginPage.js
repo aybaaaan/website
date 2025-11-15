@@ -3,10 +3,13 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebas
 import {
   getAuth,
   signInWithEmailAndPassword,
+  sendPasswordResetEmail,
   signOut,
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 
-// Firebase config
+// ===============================
+// Firebase Config
+// ===============================
 const firebaseConfig = {
   apiKey: "AIzaSyC7FLz6RyFhiNok82uPj3hs7Ev8r7UI3Ik",
   authDomain: "mediterranean-in-velvet-10913.firebaseapp.com",
@@ -26,10 +29,9 @@ const auth = getAuth(app);
 // DOM Elements
 const submit = document.getElementById("submit");
 const errorMessage = document.getElementById("error-message");
+const forgotPasswordLink = document.getElementById("forgot-password");
 
-// ===============================
-// UI Feedback Functions
-// ===============================
+// UI Feedback
 function showSuccess(msg) {
   errorMessage.textContent = msg;
   errorMessage.style.backgroundColor = "rgba(76, 175, 80, 0.95)";
@@ -53,32 +55,26 @@ submit.addEventListener("click", (event) => {
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value;
 
-  // Reset error message
   errorMessage.textContent = "";
   errorMessage.classList.remove("show");
 
-  // Validation
   if (!email || !password) {
     return showError("Please fill in all fields.");
   }
 
-  // Firebase login
   signInWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       const user = userCredential.user;
 
-      // ✅ Reload to get latest emailVerified status
       user.reload().then(() => {
-        // 🚫 Block if not verified
         if (!user.emailVerified) {
           showError(
             "Please verify your email before logging in. Check your inbox or spam folder."
           );
-          signOut(auth); // sign them out immediately
+          signOut(auth);
           return;
         }
 
-        // ✅ Allow login if verified
         if (user.email === "admin123@miv.com" && password === "admin123") {
           showSuccess("Admin login successful!");
           setTimeout(() => {
@@ -101,7 +97,27 @@ submit.addEventListener("click", (event) => {
     });
 });
 
-//password visibility toggle
+// ===============================
+// FORGOT PASSWORD LOGIC
+// ===============================
+forgotPasswordLink.addEventListener("click", () => {
+  const email = document.getElementById("email").value.trim();
+  if (!email) {
+    return showError("Please enter your email to reset password.");
+  }
+
+  sendPasswordResetEmail(auth, email)
+    .then(() => {
+      showSuccess("Password reset email sent! Check your inbox or spam.");
+    })
+    .catch((error) => {
+      showError("Error sending reset email: " + error.message);
+    });
+});
+
+// ===============================
+// PASSWORD VISIBILITY TOGGLE
+// ===============================
 const passwordWrappers = document.querySelectorAll(".password-wrapper");
 
 passwordWrappers.forEach((wrapper) => {
@@ -110,11 +126,11 @@ passwordWrappers.forEach((wrapper) => {
 
   icon.addEventListener("click", () => {
     if (input.type === "password") {
-      input.type = "text"; // show password
-      icon.style.color = "#741b47"; // change color (example: DodgerBlue)
+      input.type = "text";
+      icon.style.color = "#741b47";
     } else {
-      input.type = "password"; // hide password
-      icon.style.color = "#000000"; // revert to original black
+      input.type = "password";
+      icon.style.color = "#000000";
     }
   });
 });
