@@ -1,17 +1,23 @@
 // ===================== Firebase Imports =====================
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
-import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-database.js";
+import {
+  getDatabase,
+  ref,
+  push,
+  set,
+} from "https://www.gstatic.com/firebasejs/10.4.0/firebase-database.js";
 
 // ===================== Firebase Config =====================
 const firebaseConfig = {
-  apiKey: "AIzaSyAvQnRa_q4JlxVgcifjFtKM4i2ckHTJInc",
-  authDomain: "webusiteu.firebaseapp.com",
+  apiKey: "AIzaSyC7FLz6RyFhiNok82uPj3hs7Ev8r7UI3Ik",
+  authDomain: "mediterranean-in-velvet-10913.firebaseapp.com",
   databaseURL:
-    "https://webusiteu-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "webusiteu",
-  storageBucket: "webusiteu.firebasestorage.app",
-  messagingSenderId: "974146331400",
-  appId: "1:974146331400:web:a0590d7dc71dd3c00f02bd"
+    "https://mediterranean-in-velvet-10913-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "mediterranean-in-velvet-10913",
+  storageBucket: "mediterranean-in-velvet-10913.firebasestorage.app",
+  messagingSenderId: "478608649838",
+  appId: "1:478608649838:web:cbe6ed90b718037244c07f",
+  measurementId: "G-T9TT5N8NJX",
 };
 
 const app = initializeApp(firebaseConfig);
@@ -36,7 +42,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const text = feedbackText.value.trim();
 
     if (!text) {
-      feedbackMessage.textContent = "Please write your feedback before submitting.";
+      feedbackMessage.textContent =
+        "Please write your feedback before submitting.";
       feedbackMessage.style.color = "red";
       feedbackModal.style.display = "flex";
       return;
@@ -53,16 +60,18 @@ document.addEventListener("DOMContentLoaded", () => {
     set(newFeedbackRef, {
       item: itemName,
       feedback: text,
-      timestamp: formattedTime
+      timestamp: formattedTime,
     })
       .then(() => {
-        feedbackMessage.textContent = "Thank you! Your feedback has been submitted.";
+        feedbackMessage.textContent =
+          "Thank you! Your feedback has been submitted.";
         feedbackMessage.style.color = "green";
         feedbackText.value = "";
         feedbackModal.style.display = "flex";
       })
       .catch((error) => {
-        feedbackMessage.textContent = "Error submitting feedback: " + error.message;
+        feedbackMessage.textContent =
+          "Error submitting feedback: " + error.message;
         feedbackMessage.style.color = "red";
         feedbackModal.style.display = "flex";
       });

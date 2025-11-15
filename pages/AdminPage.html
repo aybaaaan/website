@@ -56,7 +56,9 @@
               <h2>Data Overview</h2>
 
               <div style="margin-bottom: 10px">
-                <label class="data-label" for="data-type">Select Data Type:</label>
+                <label class="data-label" for="data-type"
+                  >Select Data Type:</label
+                >
                 <select class="data-type-option" id="data-type">
                   <option value="sales">Sales</option>
                   <option value="orders">Orders</option>
@@ -79,7 +81,9 @@
         <section id="section-homepage">
           <h4 class="title-tag">Edit Homepage</h4>
           <div class="grid" id="homeGrid">
-            <div class="picture-box-plus" onclick="openAddModal('homepage')">+</div>
+            <div class="picture-box-plus" onclick="openAddModal('homepage')">
+              +
+            </div>
           </div>
         </section>
 
@@ -97,7 +101,7 @@
           <div id="ordersContainer"></div>
         </section>
 
-        <!-- ⭐ NEW: Feedback Section -->
+        <!-- NEW: Feedback Section -->
         <section id="section-feedback">
           <h4 class="title-tag">Customer Feedback</h4>
 
@@ -114,13 +118,22 @@
         <h3 id="modalTitle">Add Item</h3>
 
         <p>Choose Image (PNG or JPG)</p>
-        <input type="file" id="imageFile" accept="image/png, image/jpeg" /><br />
+        <input
+          type="file"
+          id="imageFile"
+          accept="image/png, image/jpeg"
+        /><br />
 
         <p>Image Preview</p>
         <img id="preview" src="" width="150" style="margin-top: 10px" /><br />
 
         <p>Name</p>
-        <input class="imageName" type="text" id="imageName" placeholder="Name" /><br />
+        <input
+          class="imageName"
+          type="text"
+          id="imageName"
+          placeholder="Name"
+        /><br />
 
         <p>Description</p>
         <textarea id="imageDesc" placeholder="Description"></textarea><br />
