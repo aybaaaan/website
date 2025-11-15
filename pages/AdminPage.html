@@ -23,11 +23,14 @@
         <a href="#section-homepage"><button>Edit Homepage Image</button></a>
         <a href="#section-menu"><button>Edit Menu Image</button></a>
         <a href="#section-orders"><button>Orders</button></a>
+
+        <!-- ⭐ Added Feedback Button -->
+        <a href="#section-feedback"><button>Feedback</button></a>
       </aside>
 
       <!-- Main content -->
       <main>
-        <!-- Add this HTML somewhere in your page -->
+        <!-- User Analytics -->
         <section class="user-section" id="user-analytics" class="active">
           <div class="card">
             <h4 class="title-tag">User Analytics</h4>
@@ -53,9 +56,7 @@
               <h2>Data Overview</h2>
 
               <div style="margin-bottom: 10px">
-                <label class="data-label" for="data-type"
-                  >Select Data Type:</label
-                >
+                <label class="data-label" for="data-type">Select Data Type:</label>
                 <select class="data-type-option" id="data-type">
                   <option value="sales">Sales</option>
                   <option value="orders">Orders</option>
@@ -74,15 +75,15 @@
           </div>
         </section>
 
-        <!-- Edit Menu -->
+        <!-- Edit Homepage -->
         <section id="section-homepage">
           <h4 class="title-tag">Edit Homepage</h4>
           <div class="grid" id="homeGrid">
-            <div class="picture-box-plus" onclick="openAddModal('homepage')">
-              +
-            </div>
+            <div class="picture-box-plus" onclick="openAddModal('homepage')">+</div>
           </div>
         </section>
+
+        <!-- Edit Menu -->
         <section id="section-menu">
           <h4 class="title-tag">Edit Menu</h4>
           <div class="grid" id="menuGrid">
@@ -95,6 +96,15 @@
           <h4>Orders List</h4>
           <div id="ordersContainer"></div>
         </section>
+
+        <!-- ⭐ NEW: Feedback Section -->
+        <section id="section-feedback">
+          <h4 class="title-tag">Customer Feedback</h4>
+
+          <div id="feedbackContainer">
+            <p>Loading feedback...</p>
+          </div>
+        </section>
       </main>
     </div>
 
@@ -104,22 +114,13 @@
         <h3 id="modalTitle">Add Item</h3>
 
         <p>Choose Image (PNG or JPG)</p>
-        <input
-          type="file"
-          id="imageFile"
-          accept="image/png, image/jpeg"
-        /><br />
+        <input type="file" id="imageFile" accept="image/png, image/jpeg" /><br />
 
         <p>Image Preview</p>
         <img id="preview" src="" width="150" style="margin-top: 10px" /><br />
 
         <p>Name</p>
-        <input
-          class="imageName"
-          type="text"
-          id="imageName"
-          placeholder="Name"
-        /><br />
+        <input class="imageName" type="text" id="imageName" placeholder="Name" /><br />
 
         <p>Description</p>
         <textarea id="imageDesc" placeholder="Description"></textarea><br />
@@ -147,9 +148,7 @@
       </div>
     </div>
 
-    <!--Pop Up-->
-
-    <!-- Fill Fields or Image Modal -->
+    <!-- Fill Fields Modal -->
     <div id="fill-fields-images" class="modal">
       <div class="modal-content">
         <p>Please fill all fields and select an image.</p>
