@@ -37,6 +37,7 @@ import {
 import {
   getFirestore,
   collection,
+  addDoc,
   getDocs,
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
@@ -53,7 +54,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
-const firestore = getFirestore(app);
+const dbFirestore = getFirestore(app);
 
 const menuRef = ref(db, "menu");
 const homeRef = ref(db, "homepage");
@@ -364,15 +365,23 @@ onValue(ordersRef, (snapshot) => {
     // Initial color
     setTextColor();
 
-    // On change
     statusDropdown.addEventListener("change", () => {
       setTextColor();
       const newStatus = statusDropdown.value;
-      const orderKey = child.key; // make sure you have the key of the order
+      const orderKey = child.key;
+      const userId = child.val().userId;
+
+      console.log("Updating order for userId:", userId);
+      if (!userId)
+        return console.error("No userId found, cannot send notification");
+
+      //  Update Realtime Database
       update(ref(db, `Order/${orderKey}`), { status: newStatus })
         .then(() => {
-          console.log(`Order status updated to ${newStatus} in Firebase`);
+          showCustomerOrderPopup(`Status updated to ${newStatus}`);
+          return sendNotification(userId, newStatus, orderKey);
         })
+        .then(() => console.log("Notification sent!"))
         .catch((err) => console.error(err));
     });
 
@@ -388,6 +397,54 @@ onValue(ordersRef, (snapshot) => {
     ordersContainer.appendChild(row);
   });
 });
+
+// GLOBAL NOTIFICATION FUNCTION (fixed)
+function sendNotification(userId, status, orderKey) {
+  if (!userId) {
+    console.error("❌ Cannot send notification — missing userId.");
+    return;
+  }
+
+  // Normalize status (capitalize first letter)
+  const formattedStatus = status
+    .toLowerCase()
+    .replace(/(^\w|\s\w)/g, (c) => c.toUpperCase());
+
+  const notifRef = ref(db, `notifications/${userId}`);
+
+  let message = "";
+  switch (formattedStatus) {
+    case "Pending":
+      message = "Your order is now pending confirmation.";
+      break;
+    case "For-Delivery":
+    case "For Delivery":
+      message = "Your order is now on its way!";
+      break;
+    case "Cancelled":
+      message = "Your order has been cancelled.";
+      break;
+    case "Delivered":
+      message = "Your order has been delivered successfully!";
+      break;
+    default:
+      message = "Your order status has been updated.";
+  }
+
+  const notificationData = {
+    orderId: orderKey,
+    status: formattedStatus,
+    message,
+    timestamp: new Date().toISOString(),
+    read: false,
+  };
+
+  return push(notifRef, notificationData)
+    .then(() =>
+      console.log(`✔ Notification saved under notifications/${userId}`)
+    )
+    .catch((error) => console.error("❌ Error sending notification:", error));
+}
 
 // CUSTOM POPUP MODALS (REPLACE ALERTS)
 
@@ -411,11 +468,6 @@ window.addEventListener("click", (e) => {
 const customerOrderModal = document.getElementById("customer-order-popup");
 const customerOrderMessage = document.getElementById("customer-order-message");
 const closeCustomerOrder = document.getElementById("close-customer-order");
-
-function showCustomerOrderPopup(message) {
-  customerOrderMessage.textContent = message;
-  customerOrderModal.style.display = "flex";
-}
 
 closeCustomerOrder.addEventListener("click", () => {
   customerOrderModal.style.display = "none";
@@ -441,6 +493,11 @@ function showDeleteConfirmPopup(message, orderKey) {
   deleteConfirmModal.style.display = "flex";
 }
 
+function showCustomerOrderPopup(message) {
+  customerOrderMessage.textContent = message;
+  customerOrderModal.style.display = "flex";
+}
+
 cancelDelete.addEventListener("click", () => {
   deleteConfirmModal.style.display = "none";
   orderKeyToDelete = null;
@@ -459,7 +516,58 @@ window.addEventListener("click", (e) => {
 
 // ===================== USER LOGINS CHART =====================
 
-// ====== no fetch user logins data from Firestore yet ======
+const loginsRef = ref(db, "Logins");
+
+// ===== RANGE HANDLER =====
+function getStartDate(range) {
+  const now = new Date();
+  if (range === "today") return new Date(now.setHours(0, 0, 0, 0));
+  if (range === "week")
+    return new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate() - now.getDay()
+    );
+  if (range === "month") return new Date(now.getFullYear(), now.getMonth(), 1);
+  return new Date(0);
+}
+
+// ===== FETCH DATA AND UPDATE CHART =====
+onValue(loginsRef, (snapshot) => {
+  if (snapshot.exists()) {
+    const data = snapshot.val();
+    const labels = [];
+    const counts = [];
+    const dateCounts = {};
+
+    Object.values(data).forEach((entry) => {
+      if (entry.createdAt) {
+        const rawDate = new Date(entry.createdAt);
+        const formattedDate = rawDate.toLocaleDateString("en-US", {
+          month: "short",
+          day: "numeric",
+        });
+
+        dateCounts[formattedDate] = (dateCounts[formattedDate] || 0) + 1;
+      }
+    });
+
+    // Prepare data for chart
+    for (const date in dateCounts) {
+      labels.push(date);
+      counts.push(dateCounts[date]);
+    }
+
+    // Update chart
+    usersChart.data.labels = labels;
+    usersChart.data.datasets[0].data = counts;
+    usersChart.update();
+  } else {
+    console.log("No login data found.");
+  }
+});
+
+// ====== CHART CONFIG ======
 const userChart = document.getElementById("usersChart").getContext("2d");
 let usersChart = new Chart(userChart, {
   type: "bar",
@@ -475,8 +583,26 @@ let usersChart = new Chart(userChart, {
   },
   options: {
     responsive: true,
-    scales: { y: { beginAtZero: true, ticks: { precision: 0 } } },
+    scales: {
+      y: { beginAtZero: true, ticks: { precision: 0 } },
+    },
   },
+});
+
+// ================== BUTTON EVENTS ==================
+document.getElementById("btn-logins-today").addEventListener("click", () => {
+  currentLoginRange = "today";
+  renderLoginChart("today");
+});
+
+document.getElementById("btn-logins-week").addEventListener("click", () => {
+  currentLoginRange = "week";
+  renderLoginChart("week");
+});
+
+document.getElementById("btn-logins-month").addEventListener("click", () => {
+  currentLoginRange = "month";
+  renderLoginChart("month");
 });
 
 // ================== DATA CHART ==================
@@ -485,20 +611,6 @@ const ctx = document.getElementById("dataChart");
 let chart;
 let currentRange = "month"; // default range
 let currentType = "sales";
-
-// ===== RANGE HANDLER =====
-function getStartDate(range) {
-  const now = new Date();
-  if (range === "today") return new Date(now.setHours(0, 0, 0, 0));
-  if (range === "week")
-    return new Date(
-      now.getFullYear(),
-      now.getMonth(),
-      now.getDate() - now.getDay()
-    );
-  if (range === "month") return new Date(now.getFullYear(), now.getMonth(), 1);
-  return new Date(0);
-}
 
 // ============ FETCH SALES DATA ============
 async function getChartData(range, type = "sales") {
@@ -560,22 +672,33 @@ async function renderChart() {
 
   if (chart) {
     chart.data.labels = res.labels;
+
+    // Update both datasets with the new data
     chart.data.datasets[0].data = res.data;
-    chart.data.datasets[0].label = datasetLabel;
+    chart.data.datasets[1].data = res.data;
+
+    chart.data.datasets[0].label = datasetLabel + " (Line)";
+    chart.data.datasets[1].label = datasetLabel + " (Bar)";
     chart.update();
   } else {
     chart = new Chart(ctx, {
-      type: "line",
       data: {
         labels: res.labels,
         datasets: [
           {
-            label: datasetLabel,
+            type: "line",
+            label: datasetLabel + " (Line)",
             data: res.data,
-            backgroundColor: "#3b82f6",
             borderColor: "#3b82f6",
-            fill: false,
             borderWidth: 3,
+            fill: false,
+          },
+          {
+            type: "bar",
+            label: datasetLabel + " (Bar)",
+            data: res.data, // same data, or you can put different
+            backgroundColor: "rgba(59, 130, 246, 0.4)",
+            borderColor: "#3b82f6",
           },
         ],
       },

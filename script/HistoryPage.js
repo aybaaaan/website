@@ -19,6 +19,18 @@ import {
   onAuthStateChanged,
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 
+import {
+  getFirestore,
+  collection,
+  query,
+  orderBy,
+  onSnapshot,
+  updateDoc,
+  doc,
+  serverTimestamp,
+  addDoc,
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+
 // ===================== FIREBASE CONFIG =====================
 const firebaseConfig = {
   apiKey: "AIzaSyAvQnRa_q4JlxVgcifjFtKM4i2ckHTJInc",
@@ -34,9 +46,44 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 const auth = getAuth(app);
+const dbFirestore = getFirestore(app);
 
 // ===================== DOM ELEMENTS =====================
 const orderList = document.querySelector(".order-list");
+
+function renderNotifications(notifs) {
+  const notifContainer = document.getElementById("notifItems");
+  if (!notifContainer) return; // <-- prevents errors
+
+  notifContainer.innerHTML = "";
+
+  notifs.forEach((notif) => {
+    const notifItem = document.createElement("div");
+    notifItem.classList.add("notif-item");
+    if (!notif.isRead) notifItem.classList.add("unread");
+
+    notifItem.innerHTML = `
+      <p>${notif.message}</p>
+      <small>${
+        notif.timestamp ? notif.timestamp.toDate().toLocaleString() : ""
+      }</small>
+    `;
+
+    notifItem.addEventListener("click", async () => {
+      const notifDoc = doc(
+        dbFirestore,
+        "notifications",
+        notif.userId,
+        "userNotifications",
+        notif.id
+      );
+      await updateDoc(notifDoc, { isRead: true });
+      notifItem.classList.remove("unread");
+    });
+
+    notifContainer.appendChild(notifItem);
+  });
+}
 
 // ===================== FETCH USER ORDERS =====================
 onAuthStateChanged(auth, (user) => {
@@ -44,6 +91,41 @@ onAuthStateChanged(auth, (user) => {
     alert("Please log in to view your order history.");
     window.location.href = "/pages/LoginPage.html";
     return;
+  }
+
+  // Firestore real-time notifications
+  const notifRef = collection(
+    dbFirestore,
+    "notifications",
+    user.uid,
+    "userNotifications"
+  );
+  const notifQuery = query(notifRef, orderBy("timestamp", "desc"));
+
+  onSnapshot(notifQuery, (snapshot) => {
+    const notifications = [];
+    snapshot.forEach((doc) => {
+      notifications.push({ id: doc.id, userId: user.uid, ...doc.data() });
+    });
+
+    renderNotifications(notifications);
+  });
+
+  onSnapshot(notifQuery, (snapshot) => {
+    snapshot.docChanges().forEach((change) => {
+      if (change.type === "added") {
+        const notif = change.doc.data();
+        showToast(notif.message);
+      }
+    });
+  });
+
+  function showToast(message) {
+    const toast = document.createElement("div");
+    toast.classList.add("toast");
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 5000);
   }
 
   const ordersRef = ref(db, "Order");
@@ -67,7 +149,9 @@ onAuthStateChanged(auth, (user) => {
     }
 
     // Sort orders by deliveryDate (latest first)
-    userOrders.sort((a, b) => new Date(b.deliveryDate) - new Date(a.deliveryDate));
+    userOrders.sort(
+      (a, b) => new Date(b.deliveryDate) - new Date(a.deliveryDate)
+    );
 
     userOrders.forEach((order) => {
       // Combine delivery date and time
@@ -79,10 +163,10 @@ onAuthStateChanged(auth, (user) => {
           })} ${order.deliveryTime ? `at ${order.deliveryTime}` : ""}`
         : "Date not available";
 
-        let statusColor = "grey";
-        if (order.status === "for-delivery") statusColor = "green";
-        else if (order.status === "cancelled") statusColor = "#cc3232";
-        else if (order.status === "delivered") statusColor = "#a64d79";
+      let statusColor = "grey";
+      if (order.status === "for-delivery") statusColor = "green";
+      else if (order.status === "cancelled") statusColor = "#cc3232";
+      else if (order.status === "delivered") statusColor = "#a64d79";
 
       // Reverse items (stack-like behavior)
       const reversedItems = [...order.orders].reverse();
@@ -95,16 +179,22 @@ onAuthStateChanged(auth, (user) => {
               <h3>${item.name}</h3>
               <p>Quantity: ${item.qty}</p>
               <p>Price: ₱${item.price} each</p>
-              <p class="subtotal">Subtotal: ₱${(item.price * item.qty).toFixed(2)}</p>
+              <p class="subtotal">Subtotal: ₱${(item.price * item.qty).toFixed(
+                2
+              )}</p>
               <p class="order-date">Date Received: ${displayDate}</p>
               <p class="order-status" style="color: ${statusColor}; font-weight: 600;">
                 Status: ${order.status || "pending"}
               </p>
             </div>
-            <button class="reorder-btn" onclick="reorder('${item.name}', ${item.qty}, ${item.price})">
+            <button class="reorder-btn" onclick="reorder('${item.name}', ${
+          item.qty
+        }, ${item.price})">
               Reorder
             </button>
-            <button class="feedback-btn" onclick="window.location.href='/pages/FeedbackPage.html?item=${encodeURIComponent(item.name)}&order=${order.deliveryDate}'">
+            <button class="feedback-btn" onclick="window.location.href='/pages/FeedbackPage.html?item=${encodeURIComponent(
+              item.name
+            )}&order=${order.deliveryDate}'">
               Give Feedback
             </button>
           </div>

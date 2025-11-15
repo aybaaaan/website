@@ -73,10 +73,7 @@ submit.addEventListener("click", (event) => {
           // Step 2: Save user to database (optional, before sign out)
           set(ref(db, "Logins/" + user.uid), {
             email: email,
-            contactNumber: "",
-            name: "",
             createdAt: new Date().toLocaleString(),
-            emailVerified: false, // optional tracking field
           });
 
           // Step 3: Sign out user until verified
