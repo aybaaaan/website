@@ -425,6 +425,94 @@ onValue(ref(db, "menu"), (snapshot) => {
     });
   }
 });
+const orderToasts = {}; // Track the toast element per orderID
+const orderStatuses = {}; // Track last known status
+
+// Track dismissed statuses in localStorage
+let dismissedOrders = JSON.parse(localStorage.getItem("dismissedOrders")) || {};
+function saveDismissedOrders() {
+  localStorage.setItem("dismissedOrders", JSON.stringify(dismissedOrders));
+}
+
+// Helper to get color based on status
+function getStatusColor(status) {
+  if (status === "accepted") return "black";
+  if (status === "for-delivery") return "green";
+  if (status === "cancelled") return "#cc3232";
+  if (status === "delivered") return "#a64d79";
+  return "orange"; // fallback
+}
+
+function showOrUpdateOrderToast(orderID, status) {
+  const container = document.getElementById("orderStatusToast");
+  const color = getStatusColor(status);
+
+  // Don't show toast if this status was already dismissed
+  if (dismissedOrders[orderID] === status) return;
+
+  if (orderToasts[orderID]) {
+    // Update existing toast
+    const toast = orderToasts[orderID];
+    const p = toast.querySelector("p");
+    p.textContent = `Order ID ${orderID} status is now ${status}`;
+    p.style.color = color;
+    orderStatuses[orderID] = status;
+  } else {
+    // Create new toast
+    const toast = document.createElement("div");
+    toast.classList.add("order-toast");
+    toast.innerHTML = `
+      <p style="color: ${color};">OrderID ${orderID} status is now ${status}</p>
+      <button>OK</button>
+    `;
+    container.appendChild(toast);
+    setTimeout(() => toast.classList.add("show"), 10);
+
+    // Remove toast when OK is clicked
+    toast.querySelector("button").addEventListener("click", () => {
+      toast.remove();
+      orderToasts[orderID] = null;
+
+      // Mark this status as dismissed
+      dismissedOrders[orderID] = status;
+      saveDismissedOrders();
+    });
+
+    // Store reference
+    orderToasts[orderID] = toast;
+    orderStatuses[orderID] = status;
+  }
+}
+
+// Watch user orders
+const ordersRef = ref(db, "Order");
+
+onValue(ordersRef, (snapshot) => {
+  const data = snapshot.val();
+  if (!data) return;
+
+  const user = auth.currentUser;
+  if (!user) return;
+
+  const userOrders = Object.values(data).filter(
+    (order) => order.userId === user.uid
+  );
+
+  userOrders.forEach((order) => {
+    // Clear dismissal if status changed
+    if (dismissedOrders[order.orderID] && dismissedOrders[order.orderID] !== order.status) {
+      delete dismissedOrders[order.orderID];
+      saveDismissedOrders();
+    }
+
+    // Only show/update toast if status changed
+    if (orderStatuses[order.orderID] !== order.status) {
+      showOrUpdateOrderToast(order.orderID, order.status);
+    }
+  });
+});
+
+
 
 
 

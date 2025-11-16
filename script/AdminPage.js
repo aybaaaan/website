@@ -348,7 +348,9 @@ function renderOrdersPage() {
         <p><strong>Address:</strong> ${data.address || "N/A"}</p>
         <p><strong>Contact:</strong> ${data.contact || "N/A"}</p>
         <p><strong>Payment:</strong> ${data.payment || "N/A"}</p>
-        <p><strong>Order Date & Time:</strong> ${orderDate} ${orderTime}</p>
+        <p><strong>Order Date & Time:</strong> ${data.orderDate} ${
+      data.orderTime
+    }</p>
         <div class="food-section">
           <button class="food-toggle">Order Details ▼</button>
           <div class="order-food-list">
@@ -369,6 +371,9 @@ function renderOrdersPage() {
         <div class="order-actions">
           <label class="status-label" for="order-status">Status:</label>
           <select class="order-status-dropdown">
+            <option value="accepted" ${
+              data.status === "accepted" ? "selected" : ""
+            }>Accepted</option>
             <option value="for-delivery" ${
               data.status === "for-delivery" ? "selected" : ""
             }>For Delivery</option>
@@ -393,6 +398,9 @@ function renderOrdersPage() {
 
     const setTextColor = () => {
       switch (statusDropdown.value) {
+        case "accepted":
+          statusDropdown.style.color = "black";
+          break;
         case "for-delivery":
           statusDropdown.style.color = "green";
           break;
@@ -400,7 +408,7 @@ function renderOrdersPage() {
           statusDropdown.style.color = "#cc3232";
           break;
         case "pending":
-          statusDropdown.style.color = "grey";
+          statusDropdown.style.color = "darkorange";
           break;
         case "delivered":
           statusDropdown.style.color = "#a64d79";
@@ -418,6 +426,8 @@ function renderOrdersPage() {
 
       const getMessage = (status) => {
         switch (status.toLowerCase()) {
+          case "accepted":
+            return "Mark this order as Accepted?";
           case "pending":
             return "Mark this order as Pending?";
           case "for-delivery":
@@ -443,22 +453,27 @@ function renderOrdersPage() {
         if (!userId)
           return console.error("No userId found, cannot send notification");
 
-        if (newStatus.toLowerCase() === "cancelled") {
-          remove(ref(db, `Order/${orderKey}`))
+        if (newStatus.toLowerCase() === "delivered") {
+          update(ref(db, `Order/${orderKey}`), { status: "delivered" })
+            .then(() => {
+              // toast will be shown by onValue listener
+              row.remove(); // remove from admin table
+              return sendNotification(userId, "delivered", orderKey);
+            })
+            .catch(console.error);
+        } else if (newStatus.toLowerCase() === "cancelled") {
+          update(ref(db, `Order/${orderKey}`), { status: "cancelled" })
+            .then(() => remove(ref(db, `Order/${orderKey}`))) // delete from DB
             .then(() => {
               row.remove();
-              return sendNotification(userId, newStatus, orderKey);
+              return sendNotification(userId, "cancelled", orderKey);
             })
-            .catch((err) => console.error(err));
-        } else if (newStatus.toLowerCase() === "delivered") {
-          row.remove();
-          sendNotification(userId, newStatus, orderKey).catch((err) =>
-            console.error(err)
-          );
+            .catch(console.error);
         } else {
+          // other statuses: accepted, pending, for-delivery
           update(ref(db, `Order/${orderKey}`), { status: newStatus })
             .then(() => sendNotification(userId, newStatus, orderKey))
-            .catch((err) => console.error(err));
+            .catch(console.error);
         }
       });
     });
