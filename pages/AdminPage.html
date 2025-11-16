@@ -10,17 +10,15 @@
   <script type="module">
     import { sendStatusNotification } from "/notification/notification.js";
 
-    // Example:
-    // When admin changes status
     document.querySelectorAll(".order-status").forEach((select) => {
       select.addEventListener("change", () => {
         const orderId = select.dataset.orderid;
         const newStatus = select.value;
-
         sendStatusNotification(orderId, newStatus);
       });
     });
   </script>
+
   <body>
     <!-- Top bar -->
     <header>
@@ -39,15 +37,17 @@
     </header>
 
     <div class="container">
-      <!-- Sidebar (BUTTONS) -->
+      <!-- Sidebar -->
       <aside>
         <h3>Dashboard</h3>
+
         <a href="#user-analytics"><button>Data Analytics</button></a>
         <a href="#section-homepage"><button>Edit Homepage Image</button></a>
         <a href="#section-menu"><button>Edit Menu Image</button></a>
-        <a href="#section-orders"><button>Orders</button></a>
 
-        <!-- ⭐ Added Feedback Button -->
+        <!-- ⭐ Added About Us Button -->
+        <a href="#section-aboutus"><button>Edit About Us</button></a>
+        <a href="#section-orders"><button>Orders</button></a>
         <a href="#section-feedback"><button>Feedback</button></a>
       </aside>
 
@@ -58,7 +58,6 @@
           <div class="card">
             <h4 class="title-tag">User Analytics</h4>
             <div class="chart">
-              <!-- REPLACED CANVAS WITH TEXT RESULT -->
               <div class="login-result-container">
                 <div class="loginResult" id="loginResult">
                   <div class="users-total-container">
@@ -71,6 +70,7 @@
           </div>
         </section>
 
+        <!-- Sales Report -->
         <div id="salesReportContainer" class="sales-report">
           <h3>Sales Report</h3>
           <table id="salesReportTable">
@@ -100,7 +100,7 @@
         </div>
 
         <!-- Data Analytics -->
-        <section class="data-section" id="section-analytics" class="active">
+        <section class="data-section" id="section-analytics">
           <div class="card">
             <h4 class="title-tag">Data Analytics</h4>
             <div class="chart">
@@ -146,18 +146,31 @@
           </div>
         </section>
 
-        <!-- About Us Card -->
-        <div class="item-wrapper" id="aboutUsCard">
-          <div class="picture-box about-us-box">
-            <p>About Us Section</p>
-          </div>
-          <div class="item-details">
-            <p id="aboutUsPreview">Loading...</p>
-          </div>
-          <div class="buttons">
-            <button class="btn-edit" id="editAboutUsBtn">Edit</button>
-          </div>
-        </div>
+        <!-- About Us Section -->
+<section id="section-aboutus">
+  <h4 class="title-tag" style="text-align: center;">About Us</h4>
+
+  <div id="aboutUsCard">
+    <div class="item-details-container">
+      <p id="aboutUsPreview">Loading...</p>
+    </div>
+    <div class="buttons">
+      <button class="btn-edit" id="editAboutUsBtn">Edit</button>
+    </div>
+  </div>
+</section>
+
+<!-- About Us Modal -->
+<div id="aboutUsModal" style="display: none;">
+  <div class="modal-content">
+    <textarea id="aboutUsContent"></textarea>
+    <div class="modal-actions">
+      <button id="saveAboutUs">Save</button>
+      <button id="cancelAboutUs">Cancel</button>
+    </div>
+  </div>
+</div>
+
 
         <!-- Orders -->
         <section id="section-orders">
@@ -170,10 +183,9 @@
           </div>
         </section>
 
-        <!-- NEW: Feedback Section -->
+        <!-- Feedback -->
         <section id="section-feedback">
           <h4 class="title-tag">Customer Feedback</h4>
-
           <div id="feedbackContainer">
             <p>Loading feedback...</p>
           </div>
@@ -181,7 +193,7 @@
       </main>
     </div>
 
-    <!-- Add/Edit Modal -->
+    <!-- Modals (unchanged) -->
     <div id="itemModal" class="modal">
       <div class="modal-content">
         <h3 id="modalTitle">Add Item</h3>
@@ -219,7 +231,6 @@
       </div>
     </div>
 
-    <!-- Logout Modal -->
     <div id="logoutModal" class="modal">
       <div class="modal-content">
         <p>Are you sure you want to log out?</p>
@@ -230,7 +241,6 @@
       </div>
     </div>
 
-    <!-- Fill Fields Modal -->
     <div id="fill-fields-images" class="modal">
       <div class="modal-content">
         <p>Please fill all fields and select an image.</p>
@@ -240,7 +250,6 @@
       </div>
     </div>
 
-    <!-- Customer Order Confirmation Modal -->
     <div id="customer-order-popup" class="modal">
       <div class="modal-content">
         <p id="customer-order-message"></p>
@@ -250,7 +259,6 @@
       </div>
     </div>
 
-    <!-- Delete Confirmation Modal -->
     <div id="delete-confirm-modal" class="modal">
       <div class="modal-content">
         <p id="delete-confirm-message"></p>
@@ -261,7 +269,6 @@
       </div>
     </div>
 
-    <!-- STATUS CONFIRMATION MODAL -->
     <div id="status-confirm-modal" class="modal">
       <div class="modal-content">
         <p id="status-confirm-message"></p>
@@ -272,7 +279,6 @@
       </div>
     </div>
 
-    <!-- Script -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script type="module" src="/script/AdminPage.js"></script>
   </body>

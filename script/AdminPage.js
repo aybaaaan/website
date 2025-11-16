@@ -933,37 +933,41 @@ onValue(aboutUsRef, (snapshot) => {
 });
 
 // OPEN MODAL (reuse your existing itemModal if you want)
-document
-  .getElementById("editAboutUsBtn")
-  .addEventListener("click", async () => {
+document.addEventListener("DOMContentLoaded", () => {
+  const editBtn = document.getElementById("editAboutUsBtn");
+  const aboutUsModal = document.getElementById("aboutUsModal");
+  const aboutUsContent = document.getElementById("aboutUsContent");
+  const saveBtn = document.getElementById("saveAboutUs");
+  const cancelBtn = document.getElementById("cancelAboutUs");
+
+  // Open modal and load current content
+  editBtn.addEventListener("click", async () => {
     const snapshot = await get(aboutUsRef);
     const currentContent = snapshot.exists() ? snapshot.val().content : "";
-
-    // Use the item modal for editing
-    document.getElementById("modalTitle").innerText = "Edit About Us";
-    document.getElementById("imageName").value = "About Us"; // not really used
-    document.getElementById("imageDesc").value = currentContent;
-    document
-      .getElementById("imagePrice")
-      .closest(".input-group").style.display = "none";
-    preview.src = ""; // no image needed
-    base64Image = "";
-    editKey = "aboutUs"; // special key to detect About Us
-    document.getElementById("itemModal").style.display = "block";
+    
+    aboutUsContent.value = currentContent;
+    aboutUsModal.style.display = "flex";
+    editKey = "aboutUs";
   });
 
-// SAVE CHANGES IN ITEM MODAL
-document.getElementById("saveItem").addEventListener("click", async () => {
-  if (editKey === "aboutUs") {
-    const newContent = document.getElementById("imageDesc").value.trim();
-    if (!newContent) return showFillFieldsModal();
+  // Save changes
+  saveBtn.addEventListener("click", async () => {
+    const newContent = aboutUsContent.value.trim();
+    if (!newContent) return showFillFieldsModal(); // your existing validation modal
 
     await update(aboutUsRef, { content: newContent });
-    closeModal();
-    return;
-  }
+    aboutUsModal.style.display = "none";
+  });
 
-  // Your existing save logic for menu/home items...
+  // Cancel button
+  cancelBtn.addEventListener("click", () => {
+    aboutUsModal.style.display = "none";
+  });
+
+  // Close modal if click outside content
+  aboutUsModal.addEventListener("click", (e) => {
+    if (e.target === aboutUsModal) aboutUsModal.style.display = "none";
+  });
 });
 
 // ============ TYPE TOGGLE ============
