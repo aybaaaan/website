@@ -98,6 +98,7 @@ import {
   getDatabase,
   ref,
   push,
+  get,
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
 
 import {
@@ -315,10 +316,28 @@ timePopupOkBtn.addEventListener("click", () => {
   timePopup.setAttribute("aria-hidden", "true");
 });
 
+// ===================== ORDER ID GENERATOR =====================
+async function generateOrderID() {
+  const ordersSnapshot = await get(ordersRef); // fetch data from Firebase
+  let lastID = 1000; // start from 1000 if no orders yet
+
+  if (ordersSnapshot.exists()) {
+    const ordersData = ordersSnapshot.val();
+    const orderIDs = Object.values(ordersData).map(
+      (order) => order.orderID || 0
+    );
+    const maxID = Math.max(...orderIDs);
+    lastID = maxID;
+  }
+
+  return lastID + 1; // next order ID
+}
+
 // ==================== SUBMIT HANDLER ====================
 checkoutForm.addEventListener("submit", async (e) => {
   e.preventDefault();
 
+  const orderID = await generateOrderID();
   const name = document.getElementById("name").value.trim();
   const address = document.getElementById("address").value.trim();
   const contact = document.getElementById("contact").value.trim();
@@ -379,6 +398,7 @@ checkoutForm.addEventListener("submit", async (e) => {
   });
 
   const orderData = {
+    orderID,
     userId: currentUser.uid,
     userEmail: currentUser.email,
     name,

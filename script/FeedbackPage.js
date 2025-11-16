@@ -1,11 +1,12 @@
 // ===================== Firebase Imports =====================
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
 import {
   getDatabase,
   ref,
   push,
   set,
-} from "https://www.gstatic.com/firebasejs/10.4.0/firebase-database.js";
+  get,
+} from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
 
 // ===================== Firebase Config =====================
 const firebaseConfig = {
@@ -23,62 +24,80 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-// ===================== DOM Elements =====================
-document.addEventListener("DOMContentLoaded", () => {
-  const feedbackText = document.getElementById("feedbackText");
-  const itemNameEl = document.querySelector(".feedback-card p strong");
-  const submitBtn = document.getElementById("submitFeedback");
-  const feedbackModal = document.getElementById("feedbackModal");
-  const feedbackMessage = document.getElementById("feedbackMessage");
-  const feedbackOkBtn = document.getElementById("feedbackOkBtn");
+// ===================== Utility Function =====================
+async function getOrderData(orderID) {
+  const ordersRef = ref(db, "Order");
+  const snapshot = await get(ordersRef);
 
-  // ===================== Get URL Parameters =====================
-  const urlParams = new URLSearchParams(window.location.search);
-  const itemName = urlParams.get("item") || "Unknown Item";
-  itemNameEl.textContent = `Item Name: ${itemName}`;
+  if (!snapshot.exists()) throw new Error("No orders in database.");
 
-  // ===================== Submit Feedback =====================
-  submitBtn.addEventListener("click", () => {
-    const text = feedbackText.value.trim();
+  let foundOrder = null;
 
-    if (!text) {
-      feedbackMessage.textContent =
-        "Please write your feedback before submitting.";
-      feedbackMessage.style.color = "red";
-      feedbackModal.style.display = "flex";
-      return;
+  snapshot.forEach((childSnap) => {
+    const order = childSnap.val();
+    // Convert both to string to ensure comparison works
+    if (String(order.orderID) === String(orderID)) {
+      foundOrder = order;
     }
+  });
 
-    // Generate readable timestamp
-    const now = new Date();
-    const formattedTime = now.toLocaleString(); // example: "11/15/2025, 12:34:56 AM"
+  if (!foundOrder) throw new Error("Order not found in database.");
 
-    // Store feedback sa Firebase
-    const feedbackRef = ref(db, "Feedbacks");
-    const newFeedbackRef = push(feedbackRef);
+  return foundOrder;
+}
 
-    set(newFeedbackRef, {
+// ===================== DOM Elements =====================
+const feedbackText = document.getElementById("feedbackText");
+const submitBtn = document.getElementById("submitFeedback");
+const feedbackModal = document.getElementById("feedbackModal");
+const feedbackMessage = document.getElementById("feedbackMessage");
+const feedbackOkBtn = document.getElementById("feedbackOkBtn");
+
+// ===================== URL Parameters =====================
+const urlParams = new URLSearchParams(window.location.search);
+const currentOrderID = urlParams.get("orderID");
+const itemName = urlParams.get("item");
+
+// ===================== Submit Feedback =====================
+submitBtn.addEventListener("click", async () => {
+  const text = feedbackText.value.trim();
+  if (!text) {
+    feedbackMessage.textContent =
+      "Please write your feedback before submitting.";
+    feedbackMessage.style.color = "red";
+    feedbackModal.style.display = "flex";
+    return;
+  }
+
+  try {
+    // Get the order data
+    const orderData = await getOrderData(currentOrderID);
+
+    const feedbackData = {
+      orderID: currentOrderID,
       item: itemName,
       feedback: text,
-      timestamp: formattedTime,
-    })
-      .then(() => {
-        feedbackMessage.textContent =
-          "Thank you! Your feedback has been submitted.";
-        feedbackMessage.style.color = "green";
-        feedbackText.value = "";
-        feedbackModal.style.display = "flex";
-      })
-      .catch((error) => {
-        feedbackMessage.textContent =
-          "Error submitting feedback: " + error.message;
-        feedbackMessage.style.color = "red";
-        feedbackModal.style.display = "flex";
-      });
-  });
+      timestamp: new Date().toLocaleString(),
+      foodItems: orderData.orders || [],
+      customerName: orderData.name || "", // Fixed this line
+    };
 
-  // ===================== Close Modal =====================
-  feedbackOkBtn.addEventListener("click", () => {
-    feedbackModal.style.display = "none";
-  });
+    const newFeedbackRef = push(ref(db, "Feedbacks"));
+    await set(newFeedbackRef, feedbackData);
+
+    feedbackMessage.textContent =
+      "Thank you! Your feedback has been submitted.";
+    feedbackMessage.style.color = "green";
+    feedbackText.value = "";
+    feedbackModal.style.display = "flex";
+  } catch (error) {
+    feedbackMessage.textContent = "Error submitting feedback: " + error.message;
+    feedbackMessage.style.color = "red";
+    feedbackModal.style.display = "flex";
+  }
+});
+
+// ===================== Close Modal =====================
+feedbackOkBtn.addEventListener("click", () => {
+  feedbackModal.style.display = "none";
 });

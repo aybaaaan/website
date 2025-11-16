@@ -6,6 +6,21 @@
     <title>Admin Dashboard</title>
     <link rel="stylesheet" href="/css/AdminPage.css" />
   </head>
+
+  <script type="module">
+    import { sendStatusNotification } from "/notification/notification.js";
+
+    // Example:
+    // When admin changes status
+    document.querySelectorAll(".order-status").forEach((select) => {
+      select.addEventListener("change", () => {
+        const orderId = select.dataset.orderid;
+        const newStatus = select.value;
+
+        sendStatusNotification(orderId, newStatus);
+      });
+    });
+  </script>
   <body>
     <!-- Top bar -->
     <header>
@@ -39,22 +54,50 @@
       <!-- Main content -->
       <main>
         <!-- User Analytics -->
-        <section class="user-section" id="user-analytics" class="active">
+        <section class="user-section" id="user-analytics">
           <div class="card">
             <h4 class="title-tag">User Analytics</h4>
             <div class="chart">
-              <h2>User Logins</h2>
-
-              <div style="margin-bottom: 10px">
-                <button id="btn-logins-today">Today</button>
-                <button id="btn-logins-week">Week</button>
-                <button id="btn-logins-month">Month</button>
+              <!-- REPLACED CANVAS WITH TEXT RESULT -->
+              <div class="login-result-container">
+                <div class="loginResult" id="loginResult">
+                  <div class="users-total-container">
+                    <p class="users-total">3</p>
+                    <p class="users-text">Users</p>
+                  </div>
+                </div>
               </div>
-
-              <canvas id="usersChart" height="300"></canvas>
             </div>
           </div>
         </section>
+
+        <div id="salesReportContainer" class="sales-report">
+          <h3>Sales Report</h3>
+          <table id="salesReportTable">
+            <thead>
+              <tr>
+                <th>Order ID</th>
+                <th>Customer</th>
+                <th>Food Item</th>
+                <th>Qty</th>
+                <th>Amount (₱)</th>
+                <th>Total Amount (₱)</th>
+                <th>Payment Method</th>
+                <th>Order Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td colspan="8">Loading...</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="pagination-controls">
+            <button id="prevPageTable">Prev</button>
+            <span id="pageInfo">Page 1</span>
+            <button id="nextPageTable">Next</button>
+          </div>
+        </div>
 
         <!-- Data Analytics -->
         <section class="data-section" id="section-analytics" class="active">
@@ -116,12 +159,15 @@
           </div>
         </div>
 
-
-      
         <!-- Orders -->
         <section id="section-orders">
           <h4>Orders List</h4>
           <div id="ordersContainer"></div>
+          <div class="pagination-controls">
+            <button id="prevPageOrders">Prev</button>
+            <span id="ordersPageInfo">Page 1</span>
+            <button id="nextPageOrders">Next</button>
+          </div>
         </section>
 
         <!-- NEW: Feedback Section -->

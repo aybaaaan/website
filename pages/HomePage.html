@@ -150,7 +150,21 @@
     </div>
     </div>
 
+    <div id="notification-popup" class="notification-popup hidden">
+        <p id="notification-message"></p>
+    </div>
+
     <script type="module" src ="/script/HomePage.js"></script>
+
+    <script type="module">
+        import { listenForUserNotifications } from "/notifications/notification.js";
+
+        const userId = CURRENT_USER_ID; 
+
+        listenForUserNotifications(userId, (notif) => {
+        console.log("New notification:", notif);
+        });
+    </script>
 
 </body>
 </html>

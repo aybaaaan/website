@@ -22,7 +22,6 @@ window.addEventListener("click", (e) => {
   if (e.target === logoutModal) logoutModal.style.display = "none";
 });
 
-
 //Hamburger
 const hamburger = document.getElementById("hamburger");
 const sidebar = document.querySelector("aside");
@@ -61,6 +60,10 @@ const firebaseConfig = {
   appId: "1:478608649838:web:cbe6ed90b718037244c07f",
   measurementId: "G-T9TT5N8NJX",
 };
+
+const ordersPerPageCards = 10;
+let currentPageCards = 1;
+let ordersArrayCards = [];
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
@@ -265,16 +268,42 @@ renderItems(homeRef, homeGrid);
 
 // RENDER ORDERS
 onValue(ordersRef, (snapshot) => {
-  ordersContainer.innerHTML = "";
-  snapshot.forEach((child) => {
-    const data = child.val();
+  ordersArrayCards = [];
+  if (!snapshot.exists()) {
+    ordersContainer.innerHTML = "<p>No orders found.</p>";
+    return;
+  }
 
-    // ==================== FORMAT DATE AND TIME =======================
-    // get delivery date and time
-    const deliveryDate = data.deliveryDate || "N/A"; // ✅ added
+  snapshot.forEach((child) => {
+    const orderData = child.val();
+    orderData.key = child.key; // store key for actions
+    ordersArrayCards.push(orderData);
+  });
+
+  currentPageCards = 1;
+  renderOrdersPage();
+});
+
+function renderOrdersPage() {
+  ordersContainer.innerHTML = "";
+
+  if (ordersArrayCards.length === 0) {
+    ordersContainer.innerHTML = "<p>No orders found.</p>";
+    return;
+  }
+
+  const startIndex = (currentPageCards - 1) * ordersPerPageCards;
+  const endIndex = startIndex + ordersPerPageCards;
+  const pageOrders = ordersArrayCards.slice(startIndex, endIndex);
+
+  pageOrders.forEach((data) => {
+    const row = document.createElement("div");
+    row.classList.add("order-card");
+
+    // ============ FORMAT DATE & TIME ============
+    const deliveryDate = data.deliveryDate || "N/A";
     let deliveryTime = "N/A";
     if (data.deliveryTime) {
-      // 12-hour format with AM/PM
       const [hour, minute] = data.deliveryTime.split(":").map(Number);
       const dateObj = new Date();
       dateObj.setHours(hour, minute);
@@ -284,10 +313,9 @@ onValue(ordersRef, (snapshot) => {
         hour12: true,
       });
     }
-    // get order date and time
+
     let orderDate = "N/A";
     let orderTime = "N/A";
-
     if (data.timestamp) {
       const dateObj = new Date(data.timestamp);
       orderDate = dateObj.toLocaleDateString("en-PH", {
@@ -301,9 +329,7 @@ onValue(ordersRef, (snapshot) => {
       });
     }
 
-    const row = document.createElement("div");
-    row.classList.add("order-card");
-
+    // ============ FOOD LIST ============
     let foodListHTML = "";
     if (data.orders && Array.isArray(data.orders)) {
       data.orders.forEach((item) => {
@@ -315,57 +341,54 @@ onValue(ordersRef, (snapshot) => {
       foodListHTML = "<li>No food items found.</li>";
     }
 
+    // ============ ROW INNER HTML ============
     row.innerHTML = `
       <div class="order-card-left">
-      <h2>${data.name || "Unknown"}</h2>
-      <p><strong>Address:</strong> ${data.address || "N/A"}</p>
-      <p><strong>Contact:</strong> ${data.contact || "N/A"}</p>
-      <p><strong>Payment:</strong> ${data.payment || "N/A"}</p>
-      <p><strong>Order Date & Time:</strong> ${data.orderDate} ${
-      data.orderTime
-    }</p>
-
+        <h2>${data.name || "Unknown"}</h2>
+        <p><strong>Address:</strong> ${data.address || "N/A"}</p>
+        <p><strong>Contact:</strong> ${data.contact || "N/A"}</p>
+        <p><strong>Payment:</strong> ${data.payment || "N/A"}</p>
+        <p><strong>Order Date & Time:</strong> ${orderDate} ${orderTime}</p>
         <div class="food-section">
           <button class="food-toggle">Order Details ▼</button>
           <div class="order-food-list">
             <ul>${foodListHTML}</ul>
           </div>
         </div>
-        </div>
+      </div>
 
-       <div class="order-card-right">
-      <p class= "orderNumber" <strong>Order #:</strong> ${
-        data.orderNumber || "N/A"
-      }</p>
-        <p><strong>Total:</strong> <span class="total-amount">₱${
+      <div class="order-card-right">
+        <p class= "orderNumber"><strong>Order #:</strong> ${
+          data.orderID || "N/A"
+        }</p>
+        <p><strong>Total:</strong> ₱${
           data.total ? data.total.toFixed(2) : "0.00"
-        }</span></p>
-    <p><strong>Delivery Date:</strong> ${deliveryDate}</p>
-    <p><strong>Delivery Time:</strong> ${deliveryTime}</p>
+        }</p>
+        <p><strong>Delivery Date:</strong> ${deliveryDate}</p>
+        <p><strong>Delivery Time:</strong> ${deliveryTime}</p>
+        <div class="order-actions">
+          <label class="status-label" for="order-status">Status:</label>
+          <select class="order-status-dropdown">
+            <option value="for-delivery" ${
+              data.status === "for-delivery" ? "selected" : ""
+            }>For Delivery</option>
+            <option value="cancelled" ${
+              data.status?.toLowerCase() === "cancelled" ? "selected" : ""
+            }>Cancelled</option>
+            <option value="delivered" ${
+              data.status?.toLowerCase() === "delivered" ? "selected" : ""
+            }>Delivered</option>
+            <option value="pending" ${
+              !data.status || data.status?.toLowerCase() === "pending"
+                ? "selected"
+                : ""
+            }>Pending</option>
+          </select>
+        </div>
+      </div>
+    `;
 
-    <div class="order-actions">
-      <label class="status-label" for="order-status">Status:</label>
-      <select class="order-status-dropdown">
-        <option value="for-delivery" ${
-          data.status === "for-delivery" ? "selected" : ""
-        }>For Delivery</option>
-        <option value="cancelled" ${
-          data.status?.toLowerCase() === "cancelled" ? "selected" : ""
-        }>Cancelled</option>
-        <option value="delivered" ${
-          data.status?.toLowerCase() === "delivered" ? "selected" : ""
-        }>Delivered</option>
-        <option value="pending" ${
-          !data.status || data.status?.toLowerCase() === "pending"
-            ? "selected"
-            : ""
-        }>Pending</option>
-      </select>
-    </div>
-  </div>
-
-`;
-
+    // ============ STATUS DROPDOWN ============
     const statusDropdown = row.querySelector(".order-status-dropdown");
 
     const setTextColor = () => {
@@ -386,15 +409,12 @@ onValue(ordersRef, (snapshot) => {
           statusDropdown.style.color = "#000";
       }
     };
-
-    // Initial color
     setTextColor();
 
     statusDropdown.addEventListener("change", () => {
       const newStatus = statusDropdown.value;
-      const orderKey = child.key;
-      const userId = child.val().userId;
-      const orderCard = row;
+      const orderKey = data.key;
+      const userId = data.userId;
 
       const getMessage = (status) => {
         switch (status.toLowerCase()) {
@@ -413,43 +433,37 @@ onValue(ordersRef, (snapshot) => {
 
       showStatusConfirm(getMessage(newStatus), (confirmed) => {
         if (!confirmed) {
-          // revert dropdown to previous value
           statusDropdown.value = data.status || "pending";
           setTextColor();
           return;
         }
 
-        // proceed with action
         setTextColor();
 
         if (!userId)
           return console.error("No userId found, cannot send notification");
 
         if (newStatus.toLowerCase() === "cancelled") {
-          // Remove from DB
           remove(ref(db, `Order/${orderKey}`))
             .then(() => {
-              orderCard.remove();
-              console.log("Order cancelled and removed from DB");
+              row.remove();
               return sendNotification(userId, newStatus, orderKey);
             })
             .catch((err) => console.error(err));
         } else if (newStatus.toLowerCase() === "delivered") {
-          // Remove from view only
-          orderCard.remove();
-          sendNotification(userId, newStatus, orderKey)
-            .then(() => console.log("Delivered notification sent!"))
-            .catch((err) => console.error(err));
+          row.remove();
+          sendNotification(userId, newStatus, orderKey).catch((err) =>
+            console.error(err)
+          );
         } else {
-          // Normal status update
           update(ref(db, `Order/${orderKey}`), { status: newStatus })
             .then(() => sendNotification(userId, newStatus, orderKey))
-            .then(() => console.log("Status updated and notification sent"))
             .catch((err) => console.error(err));
         }
       });
     });
 
+    // ============ FOOD TOGGLE ============
     const foodToggle = row.querySelector(".food-toggle");
     const foodList = row.querySelector(".order-food-list");
     foodToggle.addEventListener("click", () => {
@@ -461,6 +475,31 @@ onValue(ordersRef, (snapshot) => {
 
     ordersContainer.appendChild(row);
   });
+
+  // ============ UPDATE PAGINATION INFO ============
+  const totalPages = Math.ceil(ordersArrayCards.length / ordersPerPageCards);
+  document.getElementById(
+    "pageInfo"
+  ).textContent = `Page ${currentPageCards} of ${totalPages}`;
+
+  document.getElementById("prevPageOrders").disabled = currentPageCards === 1;
+  document.getElementById("nextPageOrders").disabled =
+    currentPageCards === totalPages;
+}
+
+// PAGINATION BUTTONS
+document.getElementById("prevPageOrders").addEventListener("click", () => {
+  if (currentPageCards > 1) {
+    currentPageCards--;
+    renderOrdersPage();
+  }
+});
+document.getElementById("nextPageOrders").addEventListener("click", () => {
+  const totalPages = Math.ceil(ordersArrayCards.length / ordersPerPageCards);
+  if (currentPageCards < totalPages) {
+    currentPageCards++;
+    renderOrdersPage();
+  }
 });
 
 // STATUS CONFIRMATION MODAL
@@ -494,54 +533,6 @@ window.addEventListener("click", (e) => {
   if (e.target === statusConfirmModal)
     statusConfirmModal.style.display = "none";
 });
-
-// GLOBAL NOTIFICATION FUNCTION (fixed)
-function sendNotification(userId, status, orderKey) {
-  if (!userId) {
-    console.error("❌ Cannot send notification — missing userId.");
-    return;
-  }
-
-  // Normalize status (capitalize first letter)
-  const formattedStatus = status
-    .toLowerCase()
-    .replace(/(^\w|\s\w)/g, (c) => c.toUpperCase());
-
-  const notifRef = ref(db, `notifications/${userId}`);
-
-  let message = "";
-  switch (formattedStatus) {
-    case "Pending":
-      message = "Your order is now pending confirmation.";
-      break;
-    case "For-Delivery":
-    case "For Delivery":
-      message = "Your order is now on its way!";
-      break;
-    case "Cancelled":
-      message = "Your order has been cancelled.";
-      break;
-    case "Delivered":
-      message = "Your order has been delivered successfully!";
-      break;
-    default:
-      message = "Your order status has been updated.";
-  }
-
-  const notificationData = {
-    orderId: orderKey,
-    status: formattedStatus,
-    message,
-    timestamp: new Date().toISOString(),
-    read: false,
-  };
-
-  return push(notifRef, notificationData)
-    .then(() =>
-      console.log(`✔ Notification saved under notifications/${userId}`)
-    )
-    .catch((error) => console.error("❌ Error sending notification:", error));
-}
 
 // CUSTOM POPUP MODALS (REPLACE ALERTS)
 
@@ -612,95 +603,135 @@ window.addEventListener("click", (e) => {
 });
 
 // ===================== USER LOGINS CHART =====================
-
+// ===================== TOTAL USERS =====================
 const loginsRef = ref(db, "Logins");
 
-// ===== RANGE HANDLER =====
-function getStartDate(range) {
-  const now = new Date();
-  if (range === "today") return new Date(now.setHours(0, 0, 0, 0));
-  if (range === "week")
-    return new Date(
-      now.getFullYear(),
-      now.getMonth(),
-      now.getDate() - now.getDay()
-    );
-  if (range === "month") return new Date(now.getFullYear(), now.getMonth(), 1);
-  return new Date(0);
-}
-
-// ===== FETCH DATA AND UPDATE CHART =====
+// Fetch all logins once
 onValue(loginsRef, (snapshot) => {
   if (snapshot.exists()) {
-    const data = snapshot.val();
-    const labels = [];
-    const counts = [];
-    const dateCounts = {};
+    const allLoginData = Object.values(snapshot.val()).filter(
+      (entry) => entry.createdAt
+    );
 
-    Object.values(data).forEach((entry) => {
-      if (entry.createdAt) {
-        const rawDate = new Date(entry.createdAt);
-        const formattedDate = rawDate.toLocaleDateString("en-US", {
-          month: "short",
-          day: "numeric",
-        });
+    const totalUsers = allLoginData.length;
 
-        dateCounts[formattedDate] = (dateCounts[formattedDate] || 0) + 1;
-      }
-    });
-
-    // Prepare data for chart
-    for (const date in dateCounts) {
-      labels.push(date);
-      counts.push(dateCounts[date]);
-    }
-
-    // Update chart
-    usersChart.data.labels = labels;
-    usersChart.data.datasets[0].data = counts;
-    usersChart.update();
+    // Display the total users
+    const display = document.getElementById("loginResult");
+    display.innerHTML = `
+      <div class ="users-total-container">
+      <p class="users-total">${totalUsers} </p> <p class="users-text">Users</p> 
+      </div>
+    `;
   } else {
     console.log("No login data found.");
   }
 });
 
-// ====== CHART CONFIG ======
-const userChart = document.getElementById("usersChart").getContext("2d");
-let usersChart = new Chart(userChart, {
-  type: "bar",
-  data: {
-    labels: [],
-    datasets: [
-      {
-        label: "User Logins",
-        data: [],
-        backgroundColor: "#4CAF50",
-      },
-    ],
-  },
-  options: {
-    responsive: true,
-    scales: {
-      y: { beginAtZero: true, ticks: { precision: 0 } },
-    },
-  },
+const ordersPerPage = 10;
+let currentPage = 1;
+let ordersArray = []; // store all orders for pagination
+
+async function loadOrders() {
+  const snapshot = await get(ref(db, "Order"));
+  if (!snapshot.exists()) {
+    ordersArray = [];
+    renderPage();
+    return;
+  }
+
+  ordersArray = Object.values(snapshot.val());
+  currentPage = 1;
+  renderPage();
+}
+
+function renderPage() {
+  const tableBody = document.querySelector("#salesReportTable tbody");
+  tableBody.innerHTML = "";
+
+  if (ordersArray.length === 0) {
+    tableBody.innerHTML = `<tr><td colspan="8">No orders found.</td></tr>`;
+    document.getElementById("pageInfo").textContent = "";
+    return;
+  }
+
+  const startIndex = (currentPage - 1) * ordersPerPage;
+  const endIndex = startIndex + ordersPerPage;
+  const pageOrders = ordersArray.slice(startIndex, endIndex);
+
+  pageOrders.forEach((order) => {
+    const dateObj = order.orderDate ? new Date(order.orderDate) : null;
+    const formattedDate = dateObj
+      ? dateObj.toLocaleDateString("en-PH", {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+        })
+      : "N/A";
+
+    if (
+      order.orders &&
+      Array.isArray(order.orders) &&
+      order.orders.length > 0
+    ) {
+      order.orders.forEach((item, index) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${index === 0 ? order.orderID : ""}</td>
+          <td>${index === 0 ? order.name || "Unknown" : ""}</td>
+          <td>${item.name}</td>
+          <td>${item.qty}</td>
+          <td>${(item.price * item.qty).toFixed(2)}</td>
+          <td>${
+            index === 0 ? (order.total ? order.total.toFixed(2) : "0.00") : ""
+          }</td>
+          <td>${index === 0 ? order.payment || "N/A" : ""}</td>
+          <td>${index === 0 ? formattedDate : ""}</td>
+        `;
+        tableBody.appendChild(row);
+      });
+    } else {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>${order.orderID || "N/A"}</td>
+        <td>${order.name || "Unknown"}</td>
+        <td colspan="3">No items</td>
+        <td>${order.total ? order.total.toFixed(2) : "0.00"}</td>
+        <td>${order.payment || "N/A"}</td>
+        <td>${formattedDate}</td>
+      `;
+      tableBody.appendChild(row);
+    }
+  });
+
+  const totalPages = Math.ceil(ordersArray.length / ordersPerPage);
+  document.getElementById(
+    "pageInfo"
+  ).textContent = `Page ${currentPage} of ${totalPages}`;
+
+  // Disable/enable buttons
+  document.getElementById("prevPageTable").disabled = currentPage === 1;
+  document.getElementById("nextPageTable").disabled =
+    currentPage === totalPages;
+}
+
+// Pagination button events
+document.getElementById("prevPageTable").addEventListener("click", () => {
+  if (currentPage > 1) {
+    currentPage--;
+    renderPage();
+  }
 });
 
-// ================== BUTTON EVENTS ==================
-document.getElementById("btn-logins-today").addEventListener("click", () => {
-  currentLoginRange = "today";
-  renderLoginChart("today");
+document.getElementById("nextPageTable").addEventListener("click", () => {
+  const totalPages = Math.ceil(ordersArray.length / ordersPerPage);
+  if (currentPage < totalPages) {
+    currentPage++;
+    renderPage();
+  }
 });
 
-document.getElementById("btn-logins-week").addEventListener("click", () => {
-  currentLoginRange = "week";
-  renderLoginChart("week");
-});
-
-document.getElementById("btn-logins-month").addEventListener("click", () => {
-  currentLoginRange = "month";
-  renderLoginChart("month");
-});
+// Initial load
+loadOrders();
 
 // ================== DATA CHART ==================
 // SALES ANALYTICS CHART
@@ -807,12 +838,33 @@ async function renderChart() {
   }
 }
 
+// ========= GET START DATE ==========
+function getStartDate(range) {
+  const now = new Date();
+
+  if (range === "today") return new Date(now.setHours(0, 0, 0, 0));
+
+  if (range === "week") {
+    return new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate() - now.getDay()
+    );
+  }
+
+  if (range === "month") {
+    return new Date(now.getFullYear(), now.getMonth(), 1);
+  }
+
+  return new Date(0);
+}
+
 // =========== FEEDBACK DISPLAY ===========
 const feedbackRef = ref(db, "Feedbacks");
 const feedbackContainer = document.getElementById("feedbackContainer");
 
 onValue(feedbackRef, (snapshot) => {
-  feedbackContainer.innerHTML = ""; // clear previous content
+  feedbackContainer.innerHTML = "";
 
   if (!snapshot.exists()) {
     feedbackContainer.innerHTML = "<p>No feedback yet.</p>";
@@ -825,22 +877,28 @@ onValue(feedbackRef, (snapshot) => {
     const card = document.createElement("div");
     card.classList.add("admin-feedback-card");
 
-    // Fetch the order using orderID
-    let customerName = "Unknown";
-    let orderNumber = fb.orderID || "N/A"; // fallback if no orderID
+    let orderNumber = fb.orderID || "N/A";
     let orderedItems = fb.item || "No items found";
+    let customerName = "Unknown";
 
+    // FIX: Find the correct Firebase key of the order
     if (fb.orderID) {
-      const orderSnapshot = await get(ref(db, `Order/${fb.orderID}`));
-      if (orderSnapshot.exists()) {
-        const orderData = orderSnapshot.val();
-        customerName = orderData.name || "Unknown";
-        orderNumber = orderData.orderID || fb.orderID; // fallback to fb.orderID
+      const ordersRoot = await get(ref(db, "Order"));
+      if (ordersRoot.exists()) {
+        ordersRoot.forEach((orderSnap) => {
+          const orderData = orderSnap.val();
+
+          if (orderData.orderID === fb.orderID) {
+            customerName = orderData.name || "Unknown";
+            orderNumber = orderData.orderID;
+          }
+        });
       }
     }
 
     card.innerHTML = `
       <p><strong>Order ID:</strong> ${orderNumber}</p>
+      <p><strong>Customer:</strong> ${customerName}</p>
       <p><strong>Ordered Items:</strong> ${orderedItems}</p>
       <p><strong>Feedback:</strong> ${fb.feedback || "No feedback"}</p>
     `;
@@ -848,8 +906,6 @@ onValue(feedbackRef, (snapshot) => {
     feedbackContainer.appendChild(card);
   });
 });
-
-
 
 // ============ BUTTON EVENTS ============
 document.getElementById("btn-today").addEventListener("click", () => {
@@ -865,32 +921,36 @@ document.getElementById("btn-month").addEventListener("click", () => {
   renderChart();
 });
 
-
-
 // REFERENCES FOR ABOUT US SECTION
 const aboutUsRef = ref(db, "homepage/aboutUs");
 const aboutUsPreview = document.getElementById("aboutUsPreview");
 
 // Load About Us text into preview
 onValue(aboutUsRef, (snapshot) => {
-  aboutUsPreview.textContent = snapshot.exists() ? snapshot.val().content : "Empty";
+  aboutUsPreview.textContent = snapshot.exists()
+    ? snapshot.val().content
+    : "Empty";
 });
 
 // OPEN MODAL (reuse your existing itemModal if you want)
-document.getElementById("editAboutUsBtn").addEventListener("click", async () => {
-  const snapshot = await get(aboutUsRef);
-  const currentContent = snapshot.exists() ? snapshot.val().content : "";
+document
+  .getElementById("editAboutUsBtn")
+  .addEventListener("click", async () => {
+    const snapshot = await get(aboutUsRef);
+    const currentContent = snapshot.exists() ? snapshot.val().content : "";
 
-  // Use the item modal for editing
-  document.getElementById("modalTitle").innerText = "Edit About Us";
-  document.getElementById("imageName").value = "About Us"; // not really used
-  document.getElementById("imageDesc").value = currentContent;
-  document.getElementById("imagePrice").closest(".input-group").style.display = "none";
-  preview.src = ""; // no image needed
-  base64Image = ""; 
-  editKey = "aboutUs"; // special key to detect About Us
-  document.getElementById("itemModal").style.display = "block";
-});
+    // Use the item modal for editing
+    document.getElementById("modalTitle").innerText = "Edit About Us";
+    document.getElementById("imageName").value = "About Us"; // not really used
+    document.getElementById("imageDesc").value = currentContent;
+    document
+      .getElementById("imagePrice")
+      .closest(".input-group").style.display = "none";
+    preview.src = ""; // no image needed
+    base64Image = "";
+    editKey = "aboutUs"; // special key to detect About Us
+    document.getElementById("itemModal").style.display = "block";
+  });
 
 // SAVE CHANGES IN ITEM MODAL
 document.getElementById("saveItem").addEventListener("click", async () => {
@@ -905,8 +965,6 @@ document.getElementById("saveItem").addEventListener("click", async () => {
 
   // Your existing save logic for menu/home items...
 });
-
-
 
 // ============ TYPE TOGGLE ============
 document.getElementById("data-type").addEventListener("change", (e) => {

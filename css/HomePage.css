@@ -6,9 +6,29 @@
 }
 
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   background-color: #ffffff;
   line-height: 1.5;
+}
+
+.notification-popup {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: #323232;
+  color: white;
+  padding: 15px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 9999;
+}
+
+.notification-popup.show {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 /* ==== HEADER CONTAINER ==== */
@@ -80,7 +100,7 @@ body {
 .logo {
   font-size: 20px;
   font-weight: 600;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   color: #ffffff;
 }
 .nav-menu {
@@ -525,7 +545,7 @@ body {
 .card-price {
   font-size: 20px;
   font-weight: 700;
-  color: #a64d79;;
+  color: #a64d79;
 }
 
 /* Container (carousel area) */
@@ -616,11 +636,11 @@ body {
 
 .order-btn {
   background-color: #fcfcfc;
-  border:  #a64d79 2px solid;
+  border: #a64d79 2px solid;
   border-radius: 24px;
   padding: 6px 34px;
   font-size: 18px;
-  color:  #a64d79;
+  color: #a64d79;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
@@ -661,13 +681,12 @@ body {
   background: #fff;
   padding: 20px;
   border-radius: 12px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
   max-width: 800px;
   margin: 10px auto;
   font-size: 1rem;
   line-height: 1.6;
 }
-
 
 /* ==== FOOTER ==== */
 .footer {
