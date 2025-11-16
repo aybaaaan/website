@@ -677,15 +677,61 @@ body {
 }
 
 /* ==== ABOUT US SECTION ==== */
+.about-us-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* centers all children horizontally */
+  padding: 80px 20px; /* spacing sa top/bottom at side */
+  background: #f5f0f3;
+}
+
+/* Title */
+.aboutus-title {
+  font-size: 48px;
+  text-align: center;
+  font-weight: 700;
+  margin-bottom: 40px;
+  color: #4c1130;
+}
+
+/* Card */
 .about-us-card {
-  background: #fff;
-  padding: 20px;
+  background: #ddbbdb;
+  padding: 30px 40px;
   border-radius: 12px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.548);
   max-width: 800px;
-  margin: 10px auto;
-  font-size: 1rem;
-  line-height: 1.6;
+  width: 100%;
+  text-align: center;
+  margin: 0 auto 60px; /* <-- add bottom space */
+}
+
+
+
+
+/* Optional: responsive adjustments */
+@media (max-width: 768px) {
+  .aboutus-title {
+    font-size: 28px;
+  }
+
+  .about-us-card {
+    padding: 20px 24px;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+}
+
+@media (max-width: 480px) {
+  .aboutus-title {
+    font-size: 24px;
+  }
+
+  .about-us-card {
+    padding: 16px 20px;
+    font-size: 14px;
+    line-height: 1.5;
+  }
 }
 
 /* ==== FOOTER ==== */

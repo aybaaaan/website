@@ -428,6 +428,129 @@ section.active {
   cursor: pointer;
 }
 
+/* About Us Section Box */
+/* About Us Card */
+#aboutUsCard {
+  display: flex;
+  align-items: center; /* vertically center items */
+  justify-content: space-between; /* space between text and button */
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  max-width: 900px;
+  margin: 20px auto;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  gap: 15px;
+}
+
+#aboutUsCard:hover {
+  transform: scale(1.02);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+}
+
+/* Text */
+#aboutUsCard .item-details {
+  font-size: 16px;
+  color: #333;
+  line-height: 1.6;
+  flex: 1; /* take up remaining space */
+  margin-right: 15px; /* small gap between text and button */
+}
+
+/* Edit button */
+#aboutUsCard .btn-edit {
+  background: #a64d79;
+  color: #fff;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+#aboutUsCard .btn-edit:hover {
+  transform: scale(1.05);
+}
+
+
+#aboutUsCard .btn-edit:hover {
+  transform: scale(1.05);
+}
+
+/* Modal */
+#aboutUsModal {
+  display: none;
+  position: fixed;
+  z-index: 10000;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#aboutUsModal .modal-content {
+  background: #fff;
+  width: 400px;
+  max-width: 90%;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+#aboutUsModal textarea {
+  width: 100%;
+  min-height: 150px;
+  padding: 12px;
+  border-radius: 6px;
+  border: 1.5px solid #ccc;
+  resize: vertical;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+#aboutUsModal .modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+#aboutUsModal .modal-actions button {
+  flex: 1;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  color: #fff;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+#saveAboutUs { background-color: #a64d79; }
+#saveAboutUs:hover { background-color: #914068; transform: scale(1.03); }
+#saveAboutUs:active { transform: scale(0.98); }
+
+#cancelAboutUs { background-color: #e74c3c; }
+#cancelAboutUs:hover { transform: scale(1.03); }
+#cancelAboutUs:active { transform: scale(0.98); }
+
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  #aboutUsCard {
+    padding: 15px;
+    max-width: 95%;
+  }
+
+  #aboutUsCard .item-details {
+    font-size: 15px;
+  }
+}
+
+
 /** ===================================================
    ORDERS SECTION
    =================================================== */
