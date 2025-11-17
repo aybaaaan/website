@@ -164,7 +164,7 @@ onAuthStateChanged(auth, (user) => {
           })} ${order.deliveryTime ? `at ${order.deliveryTime}` : ""}`
         : "Date not available";
 
-      let statusColor = "grey";
+      let statusColor = "darkorange";
       if (order.status === "accepted") statusColor = "black";
       else if (order.status === "for-delivery") statusColor = "green";
       else if (order.status === "cancelled") statusColor = "#cc3232";

@@ -494,7 +494,7 @@ function renderOrdersPage() {
   // ============ UPDATE PAGINATION INFO ============
   const totalPages = Math.ceil(ordersArrayCards.length / ordersPerPageCards);
   document.getElementById(
-    "pageInfo"
+    "ordersPageInfo"
   ).textContent = `Page ${currentPageCards} of ${totalPages}`;
 
   document.getElementById("prevPageOrders").disabled = currentPageCards === 1;
