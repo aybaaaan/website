@@ -164,8 +164,9 @@ onAuthStateChanged(auth, (user) => {
           })} ${order.deliveryTime ? `at ${order.deliveryTime}` : ""}`
         : "Date not available";
 
-      let statusColor = "grey";
-      if (order.status === "for-delivery") statusColor = "green";
+      let statusColor = "darkorange";
+      if (order.status === "accepted") statusColor = "black";
+      else if (order.status === "for-delivery") statusColor = "green";
       else if (order.status === "cancelled") statusColor = "#cc3232";
       else if (order.status === "delivered") statusColor = "#a64d79";
 
@@ -177,6 +178,7 @@ onAuthStateChanged(auth, (user) => {
           <div class="order-card">
             <img src="https://via.placeholder.com/140x140" alt="${item.name}" />
             <div class="order-info">
+              <p class="order-id">Order ID: ${order.orderID || "N/A"}</p>
               <h3>${item.name}</h3>
               <p>Quantity: ${item.qty}</p>
               <p>Price: ₱${item.price} each</p>

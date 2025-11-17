@@ -178,35 +178,6 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("closeCart").addEventListener("click", closeCart);
 });
 
-// ===================== MENU CAROUSEL (HORIZONTAL) =====================
-let currentIndex = 0;
-
-function scrollMenu(direction) {
-  const cards = document.querySelectorAll(".menu-card");
-  const container = document.getElementById("menuCards");
-
-  if (cards.length === 0) return;
-
-  const cardWidth = cards[0].offsetWidth + 12; // card + gap
-  const totalCards = cards.length;
-
-  const visibleCards = Math.floor(
-    document.querySelector(".menu-cards-container").offsetWidth / cardWidth
-  );
-
-  currentIndex += direction;
-
-  // prevent scrolling too far
-  if (currentIndex < 0) currentIndex = 0;
-  if (currentIndex > totalCards - visibleCards) {
-    currentIndex = totalCards - visibleCards;
-  }
-
-  const offset = -currentIndex * cardWidth;
-  container.style.transform = `translateX(${offset}px)`;
-}
-
-window.scrollMenu = scrollMenu;
 // ===================== ACCOUNT DROPDOWN =====================
 document.addEventListener("DOMContentLoaded", () => {
   const accountBtn = document.getElementById("accountBtn");
@@ -396,37 +367,147 @@ onValue(ref(db, "homepage"), (snapshot) => {
   }
 });
 
-// ================== LOAD MENU CARDS ==================
+// ================== MENU CATEGORY TOGGLE ==================
+let allMenuItems = []; // store all menu items globally for toggling
+
+// Keep a snapshot of menu items whenever they load
 onValue(ref(db, "menu"), (snapshot) => {
   const data = snapshot.val();
+  allMenuItems = data ? Object.values(data) : [];
+
+  // Optional: default show Main Dishes
+  renderMenuByCategory("main");
+});
+
+// Function to render menu based on category
+function renderMenuByCategory(category) {
   const menuContainer = document.getElementById("menuCards");
   menuContainer.innerHTML = "";
 
-  if (data) {
-    Object.values(data).forEach((item) => {
-      menuContainer.innerHTML += `
+  const filteredItems =
+    category === "all"
+      ? allMenuItems
+      : allMenuItems.filter((item) => item.category === category);
+
+  filteredItems.forEach((item) => {
+    menuContainer.innerHTML += `
       <div class="menu-card">
         <img src="${item.url}" alt="${item.name}">
         <div class="card-content">
           <h3 class="card-title">${item.name}</h3>
           <p class="card-desc">${item.desc}</p>
           <div class="card-bottom">
-  <span class="card-price">₱${item.price || 0}.00</span>
-  <button class="order-btn" onclick="goToDetails(
-    '${item.name}',
-    '${item.price || 0}.00',
-    '${item.url}',
-    '${item.desc}'
-  )">Order</button>
-</div>
+            <span class="card-price">₱${item.price || 0}.00</span>
+            <button class="order-btn" onclick="goToDetails(
+              '${item.name}',
+              '${item.price || 0}.00',
+              '${item.url}',
+              '${item.desc}'
+            )">Order</button>
+          </div>
         </div>
       </div>
     `;
-    });
-  }
+  });
+}
+
+// Event listeners for toggle buttons
+document.getElementById("btnMain").addEventListener("click", () => {
+  renderMenuByCategory("main");
 });
 
+document.getElementById("btnSide").addEventListener("click", () => {
+  renderMenuByCategory("side");
+});
+const orderToasts = {}; // Track the toast element per orderID
+const orderStatuses = {}; // Track last known status
 
+// Track dismissed statuses in localStorage
+let dismissedOrders = JSON.parse(localStorage.getItem("dismissedOrders")) || {};
+function saveDismissedOrders() {
+  localStorage.setItem("dismissedOrders", JSON.stringify(dismissedOrders));
+}
+
+// Helper to get color based on status
+function getStatusColor(status) {
+  if (status === "accepted") return "#a64d79";
+  if (status === "for-delivery") return "#a64d79";
+  if (status === "cancelled") return "#a64d79";
+  if (status === "delivered") return "#a64d79";
+  return "#a64d79"; // fallback
+}
+
+function showOrUpdateOrderToast(orderID, status) {
+  const container = document.getElementById("orderStatusToast");
+  const color = getStatusColor(status);
+
+  // Don't show toast if this status was already dismissed
+  if (dismissedOrders[orderID] === status) return;
+
+  if (orderToasts[orderID]) {
+    // Update existing toast
+    const toast = orderToasts[orderID];
+    const p = toast.querySelector("p");
+    p.textContent = `UPDATE: OrderID ${orderID} status is now ${status}`;
+    p.style.color = color;
+    orderStatuses[orderID] = status;
+  } else {
+    // Create new toast
+    const toast = document.createElement("div");
+    toast.classList.add("order-toast");
+    toast.innerHTML = `
+      <p style="color: ${color};">UPDATE: OrderID ${orderID} status is now ${status}</p>
+      <button>OK</button>
+    `;
+    container.appendChild(toast);
+    setTimeout(() => toast.classList.add("show"), 10);
+
+    // Remove toast when OK is clicked
+    toast.querySelector("button").addEventListener("click", () => {
+      toast.remove();
+      orderToasts[orderID] = null;
+
+      // Mark this status as dismissed
+      dismissedOrders[orderID] = status;
+      saveDismissedOrders();
+    });
+
+    // Store reference
+    orderToasts[orderID] = toast;
+    orderStatuses[orderID] = status;
+  }
+}
+
+// Watch user orders
+const ordersRef = ref(db, "Order");
+
+onValue(ordersRef, (snapshot) => {
+  const data = snapshot.val();
+  if (!data) return;
+
+  const user = auth.currentUser;
+  if (!user) return;
+
+  const userOrders = Object.values(data).filter(
+    (order) => order.userId === user.uid
+  );
+
+  userOrders.forEach((order) => {
+    // Clear dismissal if status changed
+    if (
+      dismissedOrders[order.orderID] &&
+      dismissedOrders[order.orderID] !== order.status
+    ) {
+      delete dismissedOrders[order.orderID];
+      saveDismissedOrders();
+    }
+
+    // Only show/update toast if status changed
+    if (orderStatuses[order.orderID] !== order.status) {
+      showOrUpdateOrderToast(order.orderID, order.status);
+    }
+  });
+});
 
 // ===================== LOAD ABOUT US CONTENT =====================
 const aboutUsContent = document.getElementById("aboutUsContent");
@@ -435,8 +516,6 @@ onValue(ref(db, "homepage/aboutUs"), (snapshot) => {
     ? snapshot.val().content
     : "About Us section is empty.";
 });
-
-
 
 // LOG OUT FUNCTIONALITY
 const auth = getAuth();

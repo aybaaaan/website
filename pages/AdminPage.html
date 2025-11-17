@@ -72,30 +72,32 @@
 
         <!-- Sales Report -->
         <div id="salesReportContainer" class="sales-report">
-          <h3>Sales Report</h3>
-          <table id="salesReportTable">
-            <thead>
-              <tr>
-                <th>Order ID</th>
-                <th>Customer</th>
-                <th>Food Item</th>
-                <th>Qty</th>
-                <th>Amount (₱)</th>
-                <th>Total Amount (₱)</th>
-                <th>Payment Method</th>
-                <th>Order Date</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td colspan="8">Loading...</td>
-              </tr>
-            </tbody>
-          </table>
-          <div class="pagination-controls">
-            <button id="prevPageTable">Prev</button>
-            <span id="pageInfo">Page 1</span>
-            <button id="nextPageTable">Next</button>
+          <div class="card">
+            <h4 class="title-tag">Sales Report</h4>
+            <table id="salesReportTable">
+              <thead>
+                <tr>
+                  <th>Order ID</th>
+                  <th>Customer</th>
+                  <th>Food Item</th>
+                  <th>Qty</th>
+                  <th>Amount (₱)</th>
+                  <th>Total Amount (₱)</th>
+                  <th>Payment Method</th>
+                  <th>Order Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td colspan="8">Loading...</td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="pagination-controls">
+              <button id="prevPageTable">Prev</button>
+              <span id="pageInfo">Page 1</span>
+              <button id="nextPageTable">Next</button>
+            </div>
           </div>
         </div>
 
@@ -147,30 +149,29 @@
         </section>
 
         <!-- About Us Section -->
-<section id="section-aboutus">
-  <h4 class="title-tag" style="text-align: center;">About Us</h4>
+        <section id="section-aboutus">
+          <h4 class="title-tag" style="text-align: center">About Us</h4>
 
-  <div id="aboutUsCard">
-    <div class="item-details-container">
-      <p id="aboutUsPreview">Loading...</p>
-    </div>
-    <div class="buttons">
-      <button class="btn-edit" id="editAboutUsBtn">Edit</button>
-    </div>
-  </div>
-</section>
+          <div id="aboutUsCard">
+            <div class="item-details-container">
+              <p id="aboutUsPreview">Loading...</p>
+            </div>
+            <div class="buttons">
+              <button class="btn-edit" id="editAboutUsBtn">Edit</button>
+            </div>
+          </div>
+        </section>
 
-<!-- About Us Modal -->
-<div id="aboutUsModal" style="display: none;">
-  <div class="modal-content">
-    <textarea id="aboutUsContent"></textarea>
-    <div class="modal-actions">
-      <button id="saveAboutUs">Save</button>
-      <button id="cancelAboutUs">Cancel</button>
-    </div>
-  </div>
-</div>
-
+        <!-- About Us Modal -->
+        <div id="aboutUsModal" style="display: none">
+          <div class="modal-content">
+            <textarea id="aboutUsContent"></textarea>
+            <div class="modal-actions">
+              <button id="saveAboutUs">Save</button>
+              <button id="cancelAboutUs">Cancel</button>
+            </div>
+          </div>
+        </div>
 
         <!-- Orders -->
         <section id="section-orders">
@@ -220,8 +221,14 @@
         <textarea id="imageDesc" placeholder="Description"></textarea><br />
 
         <div class="input-group">
-          <label for="imagePrice">Price</label>
+          <label for="imagePrice">Price (₱)</label>
           <input type="text" id="imagePrice" />
+
+          <label for="itemCategory">Category</label>
+          <select id="itemCategory">
+            <option value="main">Main Dish</option>
+            <option value="side">Side Dish</option>
+          </select>
         </div>
 
         <div class="modal-actions">

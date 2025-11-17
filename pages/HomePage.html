@@ -65,17 +65,17 @@
     <section id="menu" class="menu-section">
         <h2 class="menu-title">Menu</h2>
 
-        <div class="menu-cards-container" id="menuCardsContainer">
-            <div class="menu-cards" id="menuCards">
-                <!-- menu cards is in js -->
-            </div>
+    <!-- Category Toggle -->
+    <div class="menu-toggle">
+        <button id="btnMain" class="toggle-btn">Main Dishes</button>
+        <button id="btnSide" class="toggle-btn">Side Dishes</button>
+    </div>
+    
+    <div class="menu-cards-container" id="menuCardsContainer">
+        <div class="menu-cards" id="menuCards">
+            <!-- cards will be injected via JS -->
         </div>
-
-        <!-- Arrows -->
-        <div class="menu-scroll-controls">
-            <button class="scroll-btn" onclick="scrollMenu(-1)">&#8249;</button>
-            <button class="scroll-btn" onclick="scrollMenu(1)">&#8250;</button>
-        </div>
+    </div>
     </section>
 
     <!-- ================= ABOUT ================= -->
@@ -140,7 +140,16 @@
             </div>
         </div>
     </div>
-
+    <!-- Order Status Toast Container -->
+    <div id="orderStatusToast" style="
+        position: fixed;
+        top: 120px;
+        left: 20px;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column-reverse;
+        gap: 10px;">
+    </div>
 
     <!-- Empty Cart Popup -->
     <div id="emptyCartPopup" class="popup-overlay">

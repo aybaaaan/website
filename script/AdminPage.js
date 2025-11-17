@@ -139,6 +139,7 @@ document.getElementById("saveItem").addEventListener("click", () => {
   const name = document.getElementById("imageName").value.trim();
   const desc = document.getElementById("imageDesc").value.trim();
   const price = document.getElementById("imagePrice").value.trim();
+  const category = document.getElementById("itemCategory")?.value || "main"; // default to main
 
   if (!base64Image || !name || !desc || (currentSection === "menu" && !price)) {
     showFillFieldsModal();
@@ -147,15 +148,24 @@ document.getElementById("saveItem").addEventListener("click", () => {
 
   const sectionRef = currentSection === "menu" ? menuRef : homeRef;
 
+  // Build the data object
+  const itemData = {
+    url: base64Image,
+    name,
+    desc,
+    price,
+  };
+
+  // Only add category for menu section
+  if (currentSection === "menu") {
+    itemData.category = category;
+  }
+
+  // Save to Firebase (update or push)
   if (editKey) {
-    update(ref(db, `${currentSection}/${editKey}`), {
-      url: base64Image,
-      name,
-      desc,
-      price,
-    });
+    update(ref(db, `${currentSection}/${editKey}`), itemData);
   } else {
-    push(sectionRef, { url: base64Image, name, desc, price });
+    push(sectionRef, itemData);
   }
 
   closeModal();
@@ -219,11 +229,13 @@ function renderItems(refPath, container) {
       details.classList.add("item-details");
 
       if (refPath.key === "menu") {
+        const categoryName = getCategoryName(item.category);
         // Show price for menu items
         details.innerHTML = `
     <p class="item-name">${item.name}</p>
     <p class="item-desc">${item.desc}</p>
     <p class="item-price">₱${item.price || 0}</p>
+    <p class="item-category">Category: ${categoryName}</p>
   `;
       } else {
         // Hide price for homepage items
@@ -348,7 +360,9 @@ function renderOrdersPage() {
         <p><strong>Address:</strong> ${data.address || "N/A"}</p>
         <p><strong>Contact:</strong> ${data.contact || "N/A"}</p>
         <p><strong>Payment:</strong> ${data.payment || "N/A"}</p>
-        <p><strong>Order Date & Time:</strong> ${orderDate} ${orderTime}</p>
+        <p><strong>Order Date & Time:</strong> ${data.orderDate} ${
+      data.orderTime
+    }</p>
         <div class="food-section">
           <button class="food-toggle">Order Details ▼</button>
           <div class="order-food-list">
@@ -369,6 +383,9 @@ function renderOrdersPage() {
         <div class="order-actions">
           <label class="status-label" for="order-status">Status:</label>
           <select class="order-status-dropdown">
+            <option value="accepted" ${
+              data.status === "accepted" ? "selected" : ""
+            }>Accepted</option>
             <option value="for-delivery" ${
               data.status === "for-delivery" ? "selected" : ""
             }>For Delivery</option>
@@ -393,6 +410,9 @@ function renderOrdersPage() {
 
     const setTextColor = () => {
       switch (statusDropdown.value) {
+        case "accepted":
+          statusDropdown.style.color = "black";
+          break;
         case "for-delivery":
           statusDropdown.style.color = "green";
           break;
@@ -400,7 +420,7 @@ function renderOrdersPage() {
           statusDropdown.style.color = "#cc3232";
           break;
         case "pending":
-          statusDropdown.style.color = "grey";
+          statusDropdown.style.color = "darkorange";
           break;
         case "delivered":
           statusDropdown.style.color = "#a64d79";
@@ -418,6 +438,8 @@ function renderOrdersPage() {
 
       const getMessage = (status) => {
         switch (status.toLowerCase()) {
+          case "accepted":
+            return "Mark this order as Accepted?";
           case "pending":
             return "Mark this order as Pending?";
           case "for-delivery":
@@ -443,22 +465,27 @@ function renderOrdersPage() {
         if (!userId)
           return console.error("No userId found, cannot send notification");
 
-        if (newStatus.toLowerCase() === "cancelled") {
-          remove(ref(db, `Order/${orderKey}`))
+        if (newStatus.toLowerCase() === "delivered") {
+          update(ref(db, `Order/${orderKey}`), { status: "delivered" })
+            .then(() => {
+              // toast will be shown by onValue listener
+              row.remove(); // remove from admin table
+              return sendNotification(userId, "delivered", orderKey);
+            })
+            .catch(console.error);
+        } else if (newStatus.toLowerCase() === "cancelled") {
+          update(ref(db, `Order/${orderKey}`), { status: "cancelled" })
+            .then(() => remove(ref(db, `Order/${orderKey}`))) // delete from DB
             .then(() => {
               row.remove();
-              return sendNotification(userId, newStatus, orderKey);
+              return sendNotification(userId, "cancelled", orderKey);
             })
-            .catch((err) => console.error(err));
-        } else if (newStatus.toLowerCase() === "delivered") {
-          row.remove();
-          sendNotification(userId, newStatus, orderKey).catch((err) =>
-            console.error(err)
-          );
+            .catch(console.error);
         } else {
+          // other statuses: accepted, pending, for-delivery
           update(ref(db, `Order/${orderKey}`), { status: newStatus })
             .then(() => sendNotification(userId, newStatus, orderKey))
-            .catch((err) => console.error(err));
+            .catch(console.error);
         }
       });
     });
@@ -479,7 +506,7 @@ function renderOrdersPage() {
   // ============ UPDATE PAGINATION INFO ============
   const totalPages = Math.ceil(ordersArrayCards.length / ordersPerPageCards);
   document.getElementById(
-    "pageInfo"
+    "ordersPageInfo"
   ).textContent = `Page ${currentPageCards} of ${totalPages}`;
 
   document.getElementById("prevPageOrders").disabled = currentPageCards === 1;
@@ -942,7 +969,7 @@ document.addEventListener("DOMContentLoaded", () => {
   editBtn.addEventListener("click", async () => {
     const snapshot = await get(aboutUsRef);
     const currentContent = snapshot.exists() ? snapshot.val().content : "";
-    
+
     aboutUsContent.value = currentContent;
     aboutUsModal.style.display = "flex";
     editKey = "aboutUs";
@@ -994,3 +1021,58 @@ document.getElementById("confirm-delete").addEventListener("click", () => {
 
 // ============ INITIAL RENDER ============
 renderChart();
+
+// ========== MENU CATEGORY TOGGLE ==========
+let currentCategory = "all"; // default
+
+document.getElementById("btnAll").addEventListener("click", () => {
+  currentCategory = "all";
+  updateToggleUI();
+  renderMenu(); // filter menuGrid items by category
+});
+
+document.getElementById("btnMain").addEventListener("click", () => {
+  currentCategory = "main";
+  updateToggleUI();
+  renderMenu();
+});
+
+document.getElementById("btnSide").addEventListener("click", () => {
+  currentCategory = "side";
+  updateToggleUI();
+  renderMenu();
+});
+
+function getCategoryName(category) {
+  switch (category) {
+    case "main":
+      return "Main Dish";
+    case "side":
+      return "Side Dish";
+    default:
+      return category; // fallback, e.g., "all"
+  }
+}
+
+function updateToggleUI() {
+  document
+    .querySelectorAll(".toggle-btn")
+    .forEach((btn) => btn.classList.remove("active"));
+
+  const label = document.getElementById("menuCategoryLabel");
+
+  switch (currentCategory) {
+    case "all":
+      document.getElementById("btnAll").classList.add("active");
+      label.textContent = "All Dishes";
+      break;
+    case "main":
+      document.getElementById("btnMain").classList.add("active");
+      label.textContent = "Main Dish"; // Friendly name
+      break;
+    case "side":
+      document.getElementById("btnSide").classList.add("active");
+      label.textContent = "Side Dish"; // Friendly name
+      break;
+  }
+}

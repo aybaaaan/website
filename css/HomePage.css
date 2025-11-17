@@ -518,6 +518,33 @@ body {
 }
 
 /* ==== MENU SECTION FIXED ==== */
+
+.menu-toggle {
+  position: relative;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+}
+
+.menu-toggle button {
+  background: #a64d79;
+  font-size: large;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 14px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.menu-toggle button:hover {
+  background: #914068;
+  transform: scale(1.05);
+}
+
 .menu-section {
   background: #f5f0f3;
   width: 100%;
@@ -552,16 +579,20 @@ body {
 .menu-cards-container {
   overflow: hidden;
   min-width: 100%;
-  min-height: 100%;
+  height: 100%;
   margin: 0 auto;
   position: relative;
+  display: flex;
+  justify-content: center;
+  z-index: 1;
 }
 
-/* Cards wrapper (scrollable area) */
+/* Container holding all cards */
 .menu-cards {
   display: flex;
-  transition: transform 0.4s ease-in-out;
-  gap: 0px;
+  flex-wrap: wrap;
+  gap: 20px; /* spacing between cards */
+  justify-content: center; /* keeps them centered */
 }
 
 /* Individual food card */
@@ -705,9 +736,6 @@ body {
   text-align: center;
   margin: 0 auto 60px; /* <-- add bottom space */
 }
-
-
-
 
 /* Optional: responsive adjustments */
 @media (max-width: 768px) {
@@ -937,6 +965,36 @@ body {
 .checkout-btn:hover {
   background: #a64d79;
   transform: scale(1.03);
+}
+.order-toast {
+  background: #fff;
+  border: 1px solid #ddd;
+  padding: 12px 18px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  min-width: 220px;
+  transform: translateX(100%);
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.order-toast.show {
+  transform: translateX(0);
+}
+
+.order-toast button {
+  align-self: flex-end;
+  margin-top: 8px;
+  padding: 5px 10px;
+  font-size: 13px;
+  font-weight: bold;
+  color: #fff;
+  background: #a64d79;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
 /* ===================== RESPONSIVE ===================== */
