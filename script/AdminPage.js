@@ -466,16 +466,21 @@ function renderOrdersPage() {
           return console.error("No userId found, cannot send notification");
 
         if (newStatus.toLowerCase() === "delivered") {
-          update(ref(db, `Order/${orderKey}`), { status: "delivered" })
+          update(ref(db, `Order/${orderKey}`), {
+            status: "delivered",
+            statusTimestamp: Date.now(),
+          })
             .then(() => {
-              // toast will be shown by onValue listener
-              row.remove(); // remove from admin table
+              row.remove();
               return sendNotification(userId, "delivered", orderKey);
             })
             .catch(console.error);
         } else if (newStatus.toLowerCase() === "cancelled") {
-          update(ref(db, `Order/${orderKey}`), { status: "cancelled" })
-            .then(() => remove(ref(db, `Order/${orderKey}`))) // delete from DB
+          update(ref(db, `Order/${orderKey}`), {
+            status: "cancelled",
+            statusTimestamp: Date.now(),
+          })
+            .then(() => remove(ref(db, `Order/${orderKey}`)))
             .then(() => {
               row.remove();
               return sendNotification(userId, "cancelled", orderKey);
@@ -483,7 +488,12 @@ function renderOrdersPage() {
             .catch(console.error);
         } else {
           // other statuses: accepted, pending, for-delivery
-          update(ref(db, `Order/${orderKey}`), { status: newStatus })
+          const now = Date.now(); // exact timestamp in ms
+
+          update(ref(db, `Order/${orderKey}`), {
+            status: newStatus,
+            statusTimestamp: now, // <-- save exact admin update time
+          })
             .then(() => sendNotification(userId, newStatus, orderKey))
             .catch(console.error);
         }
@@ -901,35 +911,37 @@ onValue(feedbackRef, (snapshot) => {
   const allFeedbacks = snapshot.val();
 
   Object.values(allFeedbacks).forEach(async (fb) => {
-  const card = document.createElement("div");
-  card.classList.add("admin-feedback-card");
+    const card = document.createElement("div");
+    card.classList.add("admin-feedback-card");
 
-  let orderNumber = fb.orderID || "N/A";
-  let orderedItems = fb.foodItems ? fb.foodItems.join(", ") : "No items found"; // FIXED
-  let customerName = "Unknown";
+    let orderNumber = fb.orderID || "N/A";
+    let orderedItems = fb.foodItems
+      ? fb.foodItems.join(", ")
+      : "No items found"; // FIXED
+    let customerName = "Unknown";
 
-  if (fb.orderID) {
-    const ordersRoot = await get(ref(db, "Order"));
-    if (ordersRoot.exists()) {
-      ordersRoot.forEach((orderSnap) => {
-        const orderData = orderSnap.val();
-        if (String(orderData.orderID) === String(fb.orderID)) {
-          customerName = orderData.name || "Unknown";
-          orderNumber = orderData.orderID;
-        }
-      });
+    if (fb.orderID) {
+      const ordersRoot = await get(ref(db, "Order"));
+      if (ordersRoot.exists()) {
+        ordersRoot.forEach((orderSnap) => {
+          const orderData = orderSnap.val();
+          if (String(orderData.orderID) === String(fb.orderID)) {
+            customerName = orderData.name || "Unknown";
+            orderNumber = orderData.orderID;
+          }
+        });
+      }
     }
-  }
 
-  card.innerHTML = `
+    card.innerHTML = `
     <p><strong>Order ID:</strong> ${orderNumber}</p>
     <p><strong>Customer:</strong> ${customerName}</p>
     <p><strong>Ordered Items:</strong> ${orderedItems}</p>
     <p><strong>Feedback:</strong> ${fb.feedback || "No feedback"}</p>
   `;
 
-  feedbackContainer.appendChild(card);
-});
+    feedbackContainer.appendChild(card);
+  });
 });
 
 // ============ BUTTON EVENTS ============
