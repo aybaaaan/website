@@ -461,7 +461,7 @@ function showOrUpdateOrderToast(order) {
     const toast = orderToasts[orderID];
     toast.querySelector(".status-text").textContent = `UPDATE: OrderID ${orderID} status is now ${status}`;
     toast.querySelector(".status-text").style.color = color;
-    toast.querySelector(".status-time").textContent = `Status Changed: ${timestamp}`;
+    toast.querySelector(".status-time").textContent = `Status Updated: ${timestamp}`;
     orderStatuses[orderID] = status;
   } else {
     // Create new toast
@@ -473,7 +473,7 @@ function showOrUpdateOrderToast(order) {
           UPDATE: OrderID ${orderID} status is now ${status}
         </p>
         <small class="status-time" style="opacity:0.8;">
-          Status Updated: ${timestamp}
+          Status Changed: ${timestamp}
         </small>
       </div>
       <button>OK</button>
