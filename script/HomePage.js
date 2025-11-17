@@ -178,35 +178,6 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("closeCart").addEventListener("click", closeCart);
 });
 
-// ===================== MENU CAROUSEL (HORIZONTAL) =====================
-let currentIndex = 0;
-
-function scrollMenu(direction) {
-  const cards = document.querySelectorAll(".menu-card");
-  const container = document.getElementById("menuCards");
-
-  if (cards.length === 0) return;
-
-  const cardWidth = cards[0].offsetWidth + 12; // card + gap
-  const totalCards = cards.length;
-
-  const visibleCards = Math.floor(
-    document.querySelector(".menu-cards-container").offsetWidth / cardWidth
-  );
-
-  currentIndex += direction;
-
-  // prevent scrolling too far
-  if (currentIndex < 0) currentIndex = 0;
-  if (currentIndex > totalCards - visibleCards) {
-    currentIndex = totalCards - visibleCards;
-  }
-
-  const offset = -currentIndex * cardWidth;
-  container.style.transform = `translateX(${offset}px)`;
-}
-
-window.scrollMenu = scrollMenu;
 // ===================== ACCOUNT DROPDOWN =====================
 document.addEventListener("DOMContentLoaded", () => {
   const accountBtn = document.getElementById("accountBtn");
@@ -500,7 +471,10 @@ onValue(ordersRef, (snapshot) => {
 
   userOrders.forEach((order) => {
     // Clear dismissal if status changed
-    if (dismissedOrders[order.orderID] && dismissedOrders[order.orderID] !== order.status) {
+    if (
+      dismissedOrders[order.orderID] &&
+      dismissedOrders[order.orderID] !== order.status
+    ) {
       delete dismissedOrders[order.orderID];
       saveDismissedOrders();
     }
@@ -512,10 +486,6 @@ onValue(ordersRef, (snapshot) => {
   });
 });
 
-
-
-
-
 // ===================== LOAD ABOUT US CONTENT =====================
 const aboutUsContent = document.getElementById("aboutUsContent");
 onValue(ref(db, "homepage/aboutUs"), (snapshot) => {
@@ -523,8 +493,6 @@ onValue(ref(db, "homepage/aboutUs"), (snapshot) => {
     ? snapshot.val().content
     : "About Us section is empty.";
 });
-
-
 
 // LOG OUT FUNCTIONALITY
 const auth = getAuth();

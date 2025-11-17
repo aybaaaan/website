@@ -555,13 +555,17 @@ body {
   min-height: 100%;
   margin: 0 auto;
   position: relative;
+  display: flex;
+  justify-content: center;
+  z-index: 1;
 }
 
-/* Cards wrapper (scrollable area) */
+/* Container holding all cards */
 .menu-cards {
   display: flex;
-  transition: transform 0.4s ease-in-out;
-  gap: 0px;
+  flex-wrap: wrap;
+  gap: 20px; /* spacing between cards */
+  justify-content: center; /* keeps them centered */
 }
 
 /* Individual food card */
@@ -705,9 +709,6 @@ body {
   text-align: center;
   margin: 0 auto 60px; /* <-- add bottom space */
 }
-
-
-
 
 /* Optional: responsive adjustments */
 @media (max-width: 768px) {
@@ -943,7 +944,7 @@ body {
   border: 1px solid #ddd;
   padding: 12px 18px;
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   font-size: 14px;
   font-weight: 500;
   color: #333;
@@ -968,8 +969,6 @@ body {
   border-radius: 4px;
   cursor: pointer;
 }
-
-
 
 /* ===================== RESPONSIVE ===================== */
 
