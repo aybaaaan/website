@@ -139,6 +139,7 @@ document.getElementById("saveItem").addEventListener("click", () => {
   const name = document.getElementById("imageName").value.trim();
   const desc = document.getElementById("imageDesc").value.trim();
   const price = document.getElementById("imagePrice").value.trim();
+  const category = document.getElementById("itemCategory")?.value || "main"; // default to main
 
   if (!base64Image || !name || !desc || (currentSection === "menu" && !price)) {
     showFillFieldsModal();
@@ -147,15 +148,24 @@ document.getElementById("saveItem").addEventListener("click", () => {
 
   const sectionRef = currentSection === "menu" ? menuRef : homeRef;
 
+  // Build the data object
+  const itemData = {
+    url: base64Image,
+    name,
+    desc,
+    price,
+  };
+
+  // Only add category for menu section
+  if (currentSection === "menu") {
+    itemData.category = category;
+  }
+
+  // Save to Firebase (update or push)
   if (editKey) {
-    update(ref(db, `${currentSection}/${editKey}`), {
-      url: base64Image,
-      name,
-      desc,
-      price,
-    });
+    update(ref(db, `${currentSection}/${editKey}`), itemData);
   } else {
-    push(sectionRef, { url: base64Image, name, desc, price });
+    push(sectionRef, itemData);
   }
 
   closeModal();
@@ -219,11 +229,13 @@ function renderItems(refPath, container) {
       details.classList.add("item-details");
 
       if (refPath.key === "menu") {
+        const categoryName = getCategoryName(item.category);
         // Show price for menu items
         details.innerHTML = `
     <p class="item-name">${item.name}</p>
     <p class="item-desc">${item.desc}</p>
     <p class="item-price">₱${item.price || 0}</p>
+    <p class="item-category">Category: ${categoryName}</p>
   `;
       } else {
         // Hide price for homepage items
@@ -959,7 +971,7 @@ document.addEventListener("DOMContentLoaded", () => {
   editBtn.addEventListener("click", async () => {
     const snapshot = await get(aboutUsRef);
     const currentContent = snapshot.exists() ? snapshot.val().content : "";
-    
+
     aboutUsContent.value = currentContent;
     aboutUsModal.style.display = "flex";
     editKey = "aboutUs";
@@ -1011,3 +1023,58 @@ document.getElementById("confirm-delete").addEventListener("click", () => {
 
 // ============ INITIAL RENDER ============
 renderChart();
+
+// ========== MENU CATEGORY TOGGLE ==========
+let currentCategory = "all"; // default
+
+document.getElementById("btnAll").addEventListener("click", () => {
+  currentCategory = "all";
+  updateToggleUI();
+  renderMenu(); // filter menuGrid items by category
+});
+
+document.getElementById("btnMain").addEventListener("click", () => {
+  currentCategory = "main";
+  updateToggleUI();
+  renderMenu();
+});
+
+document.getElementById("btnSide").addEventListener("click", () => {
+  currentCategory = "side";
+  updateToggleUI();
+  renderMenu();
+});
+
+function getCategoryName(category) {
+  switch (category) {
+    case "main":
+      return "Main Dish";
+    case "side":
+      return "Side Dish";
+    default:
+      return category; // fallback, e.g., "all"
+  }
+}
+
+function updateToggleUI() {
+  document
+    .querySelectorAll(".toggle-btn")
+    .forEach((btn) => btn.classList.remove("active"));
+
+  const label = document.getElementById("menuCategoryLabel");
+
+  switch (currentCategory) {
+    case "all":
+      document.getElementById("btnAll").classList.add("active");
+      label.textContent = "All Dishes";
+      break;
+    case "main":
+      document.getElementById("btnMain").classList.add("active");
+      label.textContent = "Main Dish"; // Friendly name
+      break;
+    case "side":
+      document.getElementById("btnSide").classList.add("active");
+      label.textContent = "Side Dish"; // Friendly name
+      break;
+  }
+}

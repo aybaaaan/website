@@ -367,34 +367,57 @@ onValue(ref(db, "homepage"), (snapshot) => {
   }
 });
 
-// ================== LOAD MENU CARDS ==================
+// ================== MENU CATEGORY TOGGLE ==================
+let allMenuItems = []; // store all menu items globally for toggling
+
+// Keep a snapshot of menu items whenever they load
 onValue(ref(db, "menu"), (snapshot) => {
   const data = snapshot.val();
+  allMenuItems = data ? Object.values(data) : [];
+
+  // Optional: default show Main Dishes
+  renderMenuByCategory("main");
+});
+
+// Function to render menu based on category
+function renderMenuByCategory(category) {
   const menuContainer = document.getElementById("menuCards");
   menuContainer.innerHTML = "";
 
-  if (data) {
-    Object.values(data).forEach((item) => {
-      menuContainer.innerHTML += `
+  const filteredItems =
+    category === "all"
+      ? allMenuItems
+      : allMenuItems.filter((item) => item.category === category);
+
+  filteredItems.forEach((item) => {
+    menuContainer.innerHTML += `
       <div class="menu-card">
         <img src="${item.url}" alt="${item.name}">
         <div class="card-content">
           <h3 class="card-title">${item.name}</h3>
           <p class="card-desc">${item.desc}</p>
           <div class="card-bottom">
-  <span class="card-price">₱${item.price || 0}.00</span>
-  <button class="order-btn" onclick="goToDetails(
-    '${item.name}',
-    '${item.price || 0}.00',
-    '${item.url}',
-    '${item.desc}'
-  )">Order</button>
-</div>
+            <span class="card-price">₱${item.price || 0}.00</span>
+            <button class="order-btn" onclick="goToDetails(
+              '${item.name}',
+              '${item.price || 0}.00',
+              '${item.url}',
+              '${item.desc}'
+            )">Order</button>
+          </div>
         </div>
       </div>
     `;
-    });
-  }
+  });
+}
+
+// Event listeners for toggle buttons
+document.getElementById("btnMain").addEventListener("click", () => {
+  renderMenuByCategory("main");
+});
+
+document.getElementById("btnSide").addEventListener("click", () => {
+  renderMenuByCategory("side");
 });
 const orderToasts = {}; // Track the toast element per orderID
 const orderStatuses = {}; // Track last known status

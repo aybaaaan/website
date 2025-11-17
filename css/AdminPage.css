@@ -515,6 +515,13 @@ section.active {
   font-weight: bold;
 }
 
+.item-category {
+  padding-top: 20px;
+  color: #000000;
+  font-size: 20px;
+  margin-top: 5px;
+}
+
 .item-wrapper {
   display: flex;
   align-items: center; /* vertically center image, text, and buttons */
@@ -551,14 +558,14 @@ section.active {
   padding: 20px;
   max-width: 900px;
   margin: 20px auto;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   gap: 15px;
 }
 
 #aboutUsCard:hover {
   transform: scale(1.02);
-  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
 }
 
 /* Text */
@@ -585,7 +592,6 @@ section.active {
   transform: scale(1.05);
 }
 
-
 #aboutUsCard .btn-edit:hover {
   transform: scale(1.05);
 }
@@ -595,9 +601,11 @@ section.active {
   display: none;
   position: fixed;
   z-index: 10000;
-  left: 0; top: 0;
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.4);
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -609,7 +617,7 @@ section.active {
   max-width: 90%;
   padding: 20px;
   border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 #aboutUsModal textarea {
@@ -641,14 +649,26 @@ section.active {
   transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
-#saveAboutUs { background-color: #a64d79; }
-#saveAboutUs:hover { background-color: #914068; transform: scale(1.03); }
-#saveAboutUs:active { transform: scale(0.98); }
+#saveAboutUs {
+  background-color: #a64d79;
+}
+#saveAboutUs:hover {
+  background-color: #914068;
+  transform: scale(1.03);
+}
+#saveAboutUs:active {
+  transform: scale(0.98);
+}
 
-#cancelAboutUs { background-color: #e74c3c; }
-#cancelAboutUs:hover { transform: scale(1.03); }
-#cancelAboutUs:active { transform: scale(0.98); }
-
+#cancelAboutUs {
+  background-color: #e74c3c;
+}
+#cancelAboutUs:hover {
+  transform: scale(1.03);
+}
+#cancelAboutUs:active {
+  transform: scale(0.98);
+}
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
@@ -661,7 +681,6 @@ section.active {
     font-size: 15px;
   }
 }
-
 
 /** ===================================================
    ORDERS SECTION
@@ -1268,7 +1287,7 @@ section.active {
   }
 }
 /* Cancel button */
-#cancel-logout{
+#cancel-logout {
   background: #a64d79;
 }
 
@@ -1302,28 +1321,27 @@ section.active {
   color: #fff;
 }
 
-#status-yes:hover{
+#status-yes:hover {
   background: #fff8f7;
-  color:#c62828;
+  color: #c62828;
 }
 
 .modal-content p {
   font-size: 1rem;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   color: #333;
   margin-bottom: 20px;
 }
 .modal-buttons {
   display: flex;
   justify-content: center;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   gap: 10px;
-  
 }
 .modal-buttons button {
   font-weight: lighter;
-  padding: 10px 25px;      /* increases overall size */
-  font-size: 0.9rem;         /* adjusts text size */
-  border-radius: 6px;      /* rounded corners */
+  padding: 10px 25px; /* increases overall size */
+  font-size: 0.9rem; /* adjusts text size */
+  border-radius: 6px; /* rounded corners */
   cursor: pointer;
 }
