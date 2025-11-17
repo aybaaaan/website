@@ -419,95 +419,102 @@ document.getElementById("btnMain").addEventListener("click", () => {
 document.getElementById("btnSide").addEventListener("click", () => {
   renderMenuByCategory("side");
 });
+
+//=================== ORDER STATUS TOASTS =====================//
 const orderToasts = {}; // Track the toast element per orderID
 const orderStatuses = {}; // Track last known status
+const orderTimestamps = {}; // Track timestamp per orderID
 
-// Track dismissed statuses in localStorage
 let dismissedOrders = JSON.parse(localStorage.getItem("dismissedOrders")) || {};
 function saveDismissedOrders() {
   localStorage.setItem("dismissedOrders", JSON.stringify(dismissedOrders));
 }
 
-// Helper to get color based on status
 function getStatusColor(status) {
   if (status === "accepted") return "#a64d79";
   if (status === "for-delivery") return "#a64d79";
   if (status === "cancelled") return "#a64d79";
   if (status === "delivered") return "#a64d79";
-  return "#a64d79"; // fallback
+  return "#a64d79";
 }
 
-function showOrUpdateOrderToast(orderID, status) {
+function showOrUpdateOrderToast(order) {
+  const orderID = order.orderID;
+  const status = order.status;
   const container = document.getElementById("orderStatusToast");
   const color = getStatusColor(status);
 
-  // Don't show toast if this status was already dismissed
+  // Use timestamp from admin update
+  const timestamp = order.statusTimestamp
+    ? new Date(order.statusTimestamp).toLocaleString("en-PH", {
+        dateStyle: "medium",
+        timeStyle: "short",
+      })
+    : new Date().toLocaleString("en-PH", { dateStyle: "medium", timeStyle: "short" });
+
+  orderTimestamps[orderID] = timestamp;
+
   if (dismissedOrders[orderID] === status) return;
 
   if (orderToasts[orderID]) {
     // Update existing toast
     const toast = orderToasts[orderID];
-    const p = toast.querySelector("p");
-    p.textContent = `UPDATE: OrderID ${orderID} status is now ${status}`;
-    p.style.color = color;
+    toast.querySelector(".status-text").textContent = `UPDATE: OrderID ${orderID} status is now ${status}`;
+    toast.querySelector(".status-text").style.color = color;
+    toast.querySelector(".status-time").textContent = `Status Changed: ${timestamp}`;
     orderStatuses[orderID] = status;
   } else {
     // Create new toast
     const toast = document.createElement("div");
     toast.classList.add("order-toast");
     toast.innerHTML = `
-      <p style="color: ${color};">UPDATE: OrderID ${orderID} status is now ${status}</p>
+      <div>
+        <p class="status-text" style="color:${color};">
+          UPDATE: OrderID ${orderID} status is now ${status}
+        </p>
+        <small class="status-time" style="opacity:0.8;">
+          Status Updated: ${timestamp}
+        </small>
+      </div>
       <button>OK</button>
     `;
     container.appendChild(toast);
     setTimeout(() => toast.classList.add("show"), 10);
 
-    // Remove toast when OK is clicked
     toast.querySelector("button").addEventListener("click", () => {
       toast.remove();
       orderToasts[orderID] = null;
-
-      // Mark this status as dismissed
       dismissedOrders[orderID] = status;
       saveDismissedOrders();
     });
 
-    // Store reference
     orderToasts[orderID] = toast;
     orderStatuses[orderID] = status;
   }
 }
 
-// Watch user orders
-const ordersRef = ref(db, "Order");
-
-onValue(ordersRef, (snapshot) => {
+onValue(ref(db, "Order"), (snapshot) => {
   const data = snapshot.val();
   if (!data) return;
 
   const user = auth.currentUser;
   if (!user) return;
 
-  const userOrders = Object.values(data).filter(
-    (order) => order.userId === user.uid
-  );
+  const userOrders = Object.values(data).filter(o => o.userId === user.uid);
 
-  userOrders.forEach((order) => {
-    // Clear dismissal if status changed
-    if (
-      dismissedOrders[order.orderID] &&
-      dismissedOrders[order.orderID] !== order.status
-    ) {
+  userOrders.forEach(order => {
+    if (dismissedOrders[order.orderID] && dismissedOrders[order.orderID] !== order.status) {
       delete dismissedOrders[order.orderID];
       saveDismissedOrders();
     }
 
-    // Only show/update toast if status changed
     if (orderStatuses[order.orderID] !== order.status) {
-      showOrUpdateOrderToast(order.orderID, order.status);
+      showOrUpdateOrderToast(order);
     }
   });
 });
+
+
 
 // ===================== LOAD ABOUT US CONTENT =====================
 const aboutUsContent = document.getElementById("aboutUsContent");
@@ -527,5 +534,16 @@ if (confirmLogout) {
     });
   });
 }
+const buttons = document.querySelectorAll('.menu-toggle button');
+
+buttons.forEach(button => {
+  button.addEventListener('click', () => {
+    // Remove active from all buttons (optional if only one can be active)
+    buttons.forEach(btn => btn.classList.remove('active'));
+    
+    // Add active to the clicked button
+    button.classList.add('active');
+  });
+});
 
 window.showSlide = showSlide; // allow indicators to work
