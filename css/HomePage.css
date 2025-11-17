@@ -680,7 +680,10 @@ body {
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
-
+.order-btn img {
+  height: 20px;
+  width: 20px;
+}
 .order-btn:hover {
   background-color: #a64d79;
   color: #fcf5f9;
@@ -1170,11 +1173,6 @@ body {
     color: #555555;
   }
 
-  button.order-btn {
-    font-size: 18px;
-    font-weight: 500;
-    padding: 8px 40px;
-  }
 
   /* FOOTER ADJUSTMENTS */
 
@@ -1268,11 +1266,7 @@ body {
     color: #555555;
   }
 
-  button.order-btn {
-    font-size: 18px;
-    font-weight: 500;
-    padding: 8px 40px;
-  }
+
 
   /* FOOTER ADJUSTMENTS */
   .footer {
@@ -1343,11 +1337,7 @@ body {
     color: #555555;
   }
 
-  button.order-btn {
-    font-size: 18px;
-    font-weight: 500;
-    padding: 8px 40px;
-  }
+  
 
   .footer-content {
     margin: 42px;
