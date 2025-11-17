@@ -407,11 +407,11 @@ function saveDismissedOrders() {
 
 // Helper to get color based on status
 function getStatusColor(status) {
-  if (status === "accepted") return "black";
-  if (status === "for-delivery") return "green";
-  if (status === "cancelled") return "#cc3232";
+  if (status === "accepted") return "#a64d79";
+  if (status === "for-delivery") return "#a64d79";
+  if (status === "cancelled") return "#a64d79";
   if (status === "delivered") return "#a64d79";
-  return "orange"; // fallback
+  return "#a64d79"; // fallback
 }
 
 function showOrUpdateOrderToast(orderID, status) {
@@ -425,7 +425,7 @@ function showOrUpdateOrderToast(orderID, status) {
     // Update existing toast
     const toast = orderToasts[orderID];
     const p = toast.querySelector("p");
-    p.textContent = `Order ID ${orderID} status is now ${status}`;
+    p.textContent = `UPDATE: OrderID ${orderID} status is now ${status}`;
     p.style.color = color;
     orderStatuses[orderID] = status;
   } else {
@@ -433,7 +433,7 @@ function showOrUpdateOrderToast(orderID, status) {
     const toast = document.createElement("div");
     toast.classList.add("order-toast");
     toast.innerHTML = `
-      <p style="color: ${color};">OrderID ${orderID} status is now ${status}</p>
+      <p style="color: ${color};">UPDATE: OrderID ${orderID} status is now ${status}</p>
       <button>OK</button>
     `;
     container.appendChild(toast);
