@@ -193,9 +193,7 @@ onAuthStateChanged(auth, (user) => {
         }, ${item.price})">
               Reorder
             </button>
-            <button class="feedback-btn" onclick="window.location.href='/pages/FeedbackPage.html?item=${encodeURIComponent(
-              item.name
-            )}&order=${order.deliveryDate}'">
+            <button class="feedback-btn" onclick="window.location.href='/pages/FeedbackPage.html?item=${encodeURIComponent(item.name)}&orderID=${order.orderID}'">
               Give Feedback
             </button>
           </div>

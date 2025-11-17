@@ -874,37 +874,35 @@ onValue(feedbackRef, (snapshot) => {
   const allFeedbacks = snapshot.val();
 
   Object.values(allFeedbacks).forEach(async (fb) => {
-    const card = document.createElement("div");
-    card.classList.add("admin-feedback-card");
+  const card = document.createElement("div");
+  card.classList.add("admin-feedback-card");
 
-    let orderNumber = fb.orderID || "N/A";
-    let orderedItems = fb.item || "No items found";
-    let customerName = "Unknown";
+  let orderNumber = fb.orderID || "N/A";
+  let orderedItems = fb.foodItems ? fb.foodItems.join(", ") : "No items found"; // FIXED
+  let customerName = "Unknown";
 
-    // FIX: Find the correct Firebase key of the order
-    if (fb.orderID) {
-      const ordersRoot = await get(ref(db, "Order"));
-      if (ordersRoot.exists()) {
-        ordersRoot.forEach((orderSnap) => {
-          const orderData = orderSnap.val();
-
-          if (orderData.orderID === fb.orderID) {
-            customerName = orderData.name || "Unknown";
-            orderNumber = orderData.orderID;
-          }
-        });
-      }
+  if (fb.orderID) {
+    const ordersRoot = await get(ref(db, "Order"));
+    if (ordersRoot.exists()) {
+      ordersRoot.forEach((orderSnap) => {
+        const orderData = orderSnap.val();
+        if (String(orderData.orderID) === String(fb.orderID)) {
+          customerName = orderData.name || "Unknown";
+          orderNumber = orderData.orderID;
+        }
+      });
     }
+  }
 
-    card.innerHTML = `
-      <p><strong>Order ID:</strong> ${orderNumber}</p>
-      <p><strong>Customer:</strong> ${customerName}</p>
-      <p><strong>Ordered Items:</strong> ${orderedItems}</p>
-      <p><strong>Feedback:</strong> ${fb.feedback || "No feedback"}</p>
-    `;
+  card.innerHTML = `
+    <p><strong>Order ID:</strong> ${orderNumber}</p>
+    <p><strong>Customer:</strong> ${customerName}</p>
+    <p><strong>Ordered Items:</strong> ${orderedItems}</p>
+    <p><strong>Feedback:</strong> ${fb.feedback || "No feedback"}</p>
+  `;
 
-    feedbackContainer.appendChild(card);
-  });
+  feedbackContainer.appendChild(card);
+});
 });
 
 // ============ BUTTON EVENTS ============
