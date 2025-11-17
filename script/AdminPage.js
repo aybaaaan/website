@@ -950,50 +950,39 @@ document.getElementById("btn-month").addEventListener("click", () => {
 const aboutUsRef = ref(db, "homepage/aboutUs");
 const aboutUsPreview = document.getElementById("aboutUsPreview");
 
-// Load About Us text into preview
 onValue(aboutUsRef, (snapshot) => {
-  aboutUsPreview.textContent = snapshot.exists()
-    ? snapshot.val().content
-    : "Empty";
+  aboutUsPreview.textContent = snapshot.exists() ? snapshot.val().content : "";
 });
 
-// OPEN MODAL (reuse your existing itemModal if you want)
 document.addEventListener("DOMContentLoaded", () => {
-  const editBtn = document.getElementById("editAboutUsBtn");
   const aboutUsModal = document.getElementById("aboutUsModal");
   const aboutUsContent = document.getElementById("aboutUsContent");
-  const saveBtn = document.getElementById("saveAboutUs");
-  const cancelBtn = document.getElementById("cancelAboutUs");
+  const saveBtn = document.getElementById("aboutUs-save-btn");
+  const cancelBtn = document.getElementById("aboutUs-cancel-btn");
 
-  // Open modal and load current content
-  editBtn.addEventListener("click", async () => {
+  // Open modal manually if needed (e.g., admin button elsewhere)
+  document.getElementById("editAboutUsBtn")?.addEventListener("click", async () => {
     const snapshot = await get(aboutUsRef);
-    const currentContent = snapshot.exists() ? snapshot.val().content : "";
-
-    aboutUsContent.value = currentContent;
+    aboutUsContent.value = snapshot.exists() ? snapshot.val().content : "";
     aboutUsModal.style.display = "flex";
-    editKey = "aboutUs";
   });
 
-  // Save changes
   saveBtn.addEventListener("click", async () => {
     const newContent = aboutUsContent.value.trim();
-    if (!newContent) return showFillFieldsModal(); // your existing validation modal
-
+    if (!newContent) return alert("Please fill in the About Us text.");
     await update(aboutUsRef, { content: newContent });
     aboutUsModal.style.display = "none";
   });
 
-  // Cancel button
   cancelBtn.addEventListener("click", () => {
     aboutUsModal.style.display = "none";
   });
 
-  // Close modal if click outside content
   aboutUsModal.addEventListener("click", (e) => {
     if (e.target === aboutUsModal) aboutUsModal.style.display = "none";
   });
 });
+
 
 // ============ TYPE TOGGLE ============
 document.getElementById("data-type").addEventListener("change", (e) => {
