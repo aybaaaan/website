@@ -151,30 +151,36 @@
 
         <!-- About Us Section -->
         <section id="section-aboutus">
-          <h4 class="title-tag" style="text-align: center">About Us</h4>
+          <h4 class="title-tag" style="text-align: left">About Us</h4>
 
-          <div id="aboutUsCard">
-            <div class="item-details-container">
-              <p id="aboutUsPreview">Loading...</p>
+          <div class="aboutUs-card" id="aboutUsCard">
+            <div class="aboutUs-item-details">
+              <p id="aboutUsPreview"></p>
             </div>
-            <div class="buttons">
-              <button class="btn-edit" id="editAboutUsBtn">Edit</button>
+            <div class="aboutUs-buttons">
+              <button class="aboutUs-btn-edit" id="editAboutUsBtn">Edit</button>
             </div>
           </div>
         </section>
 
         <!-- About Us Modal -->
-        <div id="aboutUsModal" style="display: none">
-          <div class="modal-content">
-            <textarea id="aboutUsContent"></textarea>
-            <div class="modal-actions">
-              <button id="saveAboutUs">Save</button>
-              <button id="cancelAboutUs">Cancel</button>
+        <div id="aboutUsModal">
+          <div class="aboutUs-modal-content">
+            <textarea
+              class="aboutUs-textarea"
+              id="aboutUsContent"
+              rows="6"
+              placeholder="Enter About Us text here"
+            ></textarea>
+            <div class="aboutUs-modal-actions">
+              <button id="aboutUs-save-btn">Save</button>
+              <button id="aboutUs-cancel-btn">Cancel</button>
             </div>
           </div>
         </div>
 
         <!-- Orders -->
+        <h4 class="title-tag">Orders</h4>
         <section id="section-orders">
           <h4>Orders List</h4>
           <div id="ordersContainer"></div>
@@ -188,8 +194,8 @@
         <!-- Feedback -->
         <section id="section-feedback">
           <h4 class="title-tag">Customer Feedback</h4>
-          <div id="feedbackContainer">
-            <p>Loading feedback...</p>
+          <div id="feedbackContainer" class="feedback-container">
+            <!-- Feedback cards will be dynamically injected here -->
           </div>
         </section>
       </main>

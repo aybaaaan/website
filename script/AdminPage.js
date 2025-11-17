@@ -466,16 +466,21 @@ function renderOrdersPage() {
           return console.error("No userId found, cannot send notification");
 
         if (newStatus.toLowerCase() === "delivered") {
-          update(ref(db, `Order/${orderKey}`), { status: "delivered" })
+          update(ref(db, `Order/${orderKey}`), {
+            status: "delivered",
+            statusTimestamp: Date.now(),
+          })
             .then(() => {
-              // toast will be shown by onValue listener
-              row.remove(); // remove from admin table
+              row.remove();
               return sendNotification(userId, "delivered", orderKey);
             })
             .catch(console.error);
         } else if (newStatus.toLowerCase() === "cancelled") {
-          update(ref(db, `Order/${orderKey}`), { status: "cancelled" })
-            .then(() => remove(ref(db, `Order/${orderKey}`))) // delete from DB
+          update(ref(db, `Order/${orderKey}`), {
+            status: "cancelled",
+            statusTimestamp: Date.now(),
+          })
+            .then(() => remove(ref(db, `Order/${orderKey}`)))
             .then(() => {
               row.remove();
               return sendNotification(userId, "cancelled", orderKey);
@@ -483,7 +488,12 @@ function renderOrdersPage() {
             .catch(console.error);
         } else {
           // other statuses: accepted, pending, for-delivery
-          update(ref(db, `Order/${orderKey}`), { status: newStatus })
+          const now = Date.now(); // exact timestamp in ms
+
+          update(ref(db, `Order/${orderKey}`), {
+            status: newStatus,
+            statusTimestamp: now, // <-- save exact admin update time
+          })
             .then(() => sendNotification(userId, newStatus, orderKey))
             .catch(console.error);
         }
@@ -926,17 +936,17 @@ onValue(feedbackRef, (snapshot) => {
     card.classList.add("admin-feedback-card");
 
     let orderNumber = fb.orderID || "N/A";
-    let orderedItems = fb.item || "No items found";
+    let orderedItems = fb.foodItems
+      ? fb.foodItems.join(", ")
+      : "No items found"; // FIXED
     let customerName = "Unknown";
 
-    // FIX: Find the correct Firebase key of the order
     if (fb.orderID) {
       const ordersRoot = await get(ref(db, "Order"));
       if (ordersRoot.exists()) {
         ordersRoot.forEach((orderSnap) => {
           const orderData = orderSnap.val();
-
-          if (orderData.orderID === fb.orderID) {
+          if (String(orderData.orderID) === String(fb.orderID)) {
             customerName = orderData.name || "Unknown";
             orderNumber = orderData.orderID;
           }
@@ -945,11 +955,11 @@ onValue(feedbackRef, (snapshot) => {
     }
 
     card.innerHTML = `
-      <p><strong>Order ID:</strong> ${orderNumber}</p>
-      <p><strong>Customer:</strong> ${customerName}</p>
-      <p><strong>Ordered Items:</strong> ${orderedItems}</p>
-      <p><strong>Feedback:</strong> ${fb.feedback || "No feedback"}</p>
-    `;
+    <p><strong>Order ID:</strong> ${orderNumber}</p>
+    <p><strong>Customer:</strong> ${customerName}</p>
+    <p><strong>Ordered Items:</strong> ${orderedItems}</p>
+    <p><strong>Feedback:</strong> ${fb.feedback || "No feedback"}</p>
+  `;
 
     feedbackContainer.appendChild(card);
   });
@@ -973,50 +983,39 @@ document.getElementById("btn-month").addEventListener("click", () => {
 const aboutUsRef = ref(db, "homepage/aboutUs");
 const aboutUsPreview = document.getElementById("aboutUsPreview");
 
-// Load About Us text into preview
 onValue(aboutUsRef, (snapshot) => {
-  aboutUsPreview.textContent = snapshot.exists()
-    ? snapshot.val().content
-    : "Empty";
+  aboutUsPreview.textContent = snapshot.exists() ? snapshot.val().content : "";
 });
 
-// OPEN MODAL (reuse your existing itemModal if you want)
 document.addEventListener("DOMContentLoaded", () => {
-  const editBtn = document.getElementById("editAboutUsBtn");
   const aboutUsModal = document.getElementById("aboutUsModal");
   const aboutUsContent = document.getElementById("aboutUsContent");
-  const saveBtn = document.getElementById("saveAboutUs");
-  const cancelBtn = document.getElementById("cancelAboutUs");
+  const saveBtn = document.getElementById("aboutUs-save-btn");
+  const cancelBtn = document.getElementById("aboutUs-cancel-btn");
 
-  // Open modal and load current content
-  editBtn.addEventListener("click", async () => {
+  // Open modal manually if needed (e.g., admin button elsewhere)
+  document.getElementById("editAboutUsBtn")?.addEventListener("click", async () => {
     const snapshot = await get(aboutUsRef);
-    const currentContent = snapshot.exists() ? snapshot.val().content : "";
-
-    aboutUsContent.value = currentContent;
+    aboutUsContent.value = snapshot.exists() ? snapshot.val().content : "";
     aboutUsModal.style.display = "flex";
-    editKey = "aboutUs";
   });
 
-  // Save changes
   saveBtn.addEventListener("click", async () => {
     const newContent = aboutUsContent.value.trim();
-    if (!newContent) return showFillFieldsModal(); // your existing validation modal
-
+    if (!newContent) return alert("Please fill in the About Us text.");
     await update(aboutUsRef, { content: newContent });
     aboutUsModal.style.display = "none";
   });
 
-  // Cancel button
   cancelBtn.addEventListener("click", () => {
     aboutUsModal.style.display = "none";
   });
 
-  // Close modal if click outside content
   aboutUsModal.addEventListener("click", (e) => {
     if (e.target === aboutUsModal) aboutUsModal.style.display = "none";
   });
 });
+
 
 // ============ TYPE TOGGLE ============
 document.getElementById("data-type").addEventListener("change", (e) => {

@@ -623,10 +623,10 @@ section.active {
 
 /* About Us Section Box */
 /* About Us Card */
-#aboutUsCard {
+.aboutUs-card {
   display: flex;
-  align-items: center; /* vertically center items */
-  justify-content: space-between; /* space between text and button */
+  align-items: center;
+  justify-content: space-between; /* text on left, button on right */
   background: #fff;
   border-radius: 12px;
   padding: 20px;
@@ -637,24 +637,12 @@ section.active {
   gap: 15px;
 }
 
-#aboutUsCard:hover {
+.aboutUs-card:hover {
   transform: scale(1.02);
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
 }
 
-/* Text */
-#aboutUsCard {
-  font-size: 16px;
-  color: #333;
-  line-height: 1.6;
-  flex: 1; /* take up remaining space */
-  margin-right: 15px; /* small gap between text and button */
-}
-
-/* Edit button */
-#aboutUsCard .btn-edit {
-  position: absolute;
-  left: 20px;
+.aboutUs-btn-edit {
   background: #a64d79;
   color: #fff;
   padding: 8px 12px;
@@ -664,12 +652,16 @@ section.active {
   transition: transform 0.2s ease;
 }
 
-#aboutUsCard .btn-edit:hover {
+.aboutUs-btn-edit:hover {
   transform: scale(1.05);
 }
 
-#aboutUsCard .btn-edit:hover {
-  transform: scale(1.05);
+.aboutUs-item-details {
+  font-size: 16px;
+  color: #333;
+  line-height: 1.6;
+  flex: 1;
+  margin-right: 15px;
 }
 
 /* Modal */
@@ -682,13 +674,12 @@ section.active {
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.4);
-  display: flex;
   justify-content: center;
   align-items: center;
 }
 
-#aboutUsModal .modal-content {
-  background: #914848;
+.aboutUs-modal-content {
+  background: #fff;
   width: 400px;
   max-width: 90%;
   padding: 20px;
@@ -696,7 +687,7 @@ section.active {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
-#aboutUsModal textarea {
+.aboutUs-textarea {
   width: 100%;
   min-height: 150px;
   padding: 12px;
@@ -707,14 +698,14 @@ section.active {
   line-height: 1.5;
 }
 
-#aboutUsModal .modal-actions {
+.aboutUs-modal-actions {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
   margin-top: 15px;
 }
 
-#aboutUsModal .modal-actions button {
+#aboutUs-save-btn {
   flex: 1;
   padding: 10px 16px;
   border: none;
@@ -722,39 +713,71 @@ section.active {
   cursor: pointer;
   font-weight: bold;
   color: #fff;
+  background-color: #a64d79;
   transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
-#saveAboutUs {
-  background-color: #a64d79;
-}
-#saveAboutUs:hover {
+#aboutUs-save-btn:hover {
   background-color: #914068;
   transform: scale(1.03);
 }
-#saveAboutUs:active {
+
+#aboutUs-save-btn:active {
   transform: scale(0.98);
 }
 
-#cancelAboutUs {
+#aboutUs-cancel-btn {
+  flex: 1;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  color: #fff;
   background-color: #e74c3c;
+  transition: transform 0.1s ease;
 }
-#cancelAboutUs:hover {
+
+#aboutUs-cancel-btn:hover {
   transform: scale(1.03);
 }
-#cancelAboutUs:active {
+
+#aboutUs-cancel-btn:active {
   transform: scale(0.98);
 }
 
-/* Responsive adjustments */
+/* Responsive adjustments: text still left, button still right */
 @media (max-width: 768px) {
-  #aboutUsCard {
+  .aboutUs-card {
     padding: 15px;
-    max-width: 95%;
+    gap: 10px;
   }
 
-  #aboutUsCard {
+  .aboutUs-item-details {
     font-size: 15px;
+    margin-right: 10px;
+  }
+
+  .aboutUs-btn-edit {
+    padding: 7px 10px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .aboutUs-card {
+    padding: 12px;
+    gap: 8px;
+  }
+
+  .aboutUs-item-details {
+    font-size: 14px;
+    line-height: 1.4;
+  }
+
+  .aboutUs-btn-edit {
+    padding: 6px 8px;
+    font-size: 13px;
   }
 }
 
