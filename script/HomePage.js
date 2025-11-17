@@ -473,7 +473,7 @@ function showOrUpdateOrderToast(order) {
           UPDATE: OrderID ${orderID} status is now ${status}
         </p>
         <small class="status-time" style="opacity:0.8;">
-          Status Changed: ${timestamp}
+          Status Updated: ${timestamp}
         </small>
       </div>
       <button>OK</button>
