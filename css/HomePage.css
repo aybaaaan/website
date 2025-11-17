@@ -133,16 +133,21 @@ body {
 }
 
 .action-btn {
+  display: flex;
   background-color: #ead1dc;
+  border: none;
   border-radius: 24px;
   padding: 12px 14px;
-  font-size: 12px;
   font-weight: bold;
   box-shadow: 1px 4px 10px #272727;
-  color: #4c1130;
   text-decoration: none;
   transition: background-color 0.3s ease;
   white-space: nowrap; /* prevents text from wrapping */
+}
+
+.action-btn img {
+  height: 20px;
+  width: 20px;
 }
 
 .action-btn:hover {
@@ -597,16 +602,13 @@ body {
 
 /* Individual food card */
 .menu-card {
-  background: #fff;
+  background: #bd9c9cc9;
   border-radius: 12px;
   width: 300px;
   height: 360px;
   flex-shrink: 0;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+
   transition: transform 0.2s ease;
 }
 
@@ -624,10 +626,6 @@ body {
 }
 
 /* Content under image */
-.card-content {
-  padding: 12px;
-  text-align: left;
-}
 
 .card-title {
   font-size: 20px;
@@ -783,7 +781,7 @@ body {
 }
 
 .footer-logo {
-  font-size: 25px;
+  font-size: 40px;
   font-weight: 700;
   line-height: 26px;
   color: #ead1dc;

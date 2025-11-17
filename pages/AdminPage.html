@@ -54,17 +54,18 @@
       <!-- Main content -->
       <main>
         <!-- User Analytics -->
-        <section class="user-section" id="user-analytics">
-          <div class="card">
+        <section id="user-analytics" class="user-section">
+          <div class="user-card">
             <h4 class="title-tag">User Analytics</h4>
-            <div class="chart">
+            <div class="user-chart">
+              <!-- Login Analytics -->
               <div class="login-result-container">
-                <div class="loginResult" id="loginResult">
-                  <div class="users-total-container">
-                    <p class="users-total">3</p>
-                    <p class="users-text">Users</p>
-                  </div>
-                </div>
+                <div class="loginResult" id="loginResult"></div>
+              </div>
+
+              <!-- Orders Analytics -->
+              <div class="orders-container">
+                <div class="orderResult" id="orderResult"></div>
               </div>
             </div>
           </div>
@@ -225,7 +226,7 @@
           <input type="text" id="imagePrice" />
 
           <label for="itemCategory">Category</label>
-          <select id="itemCategory">
+          <select id="itemCategory" class="itemCategory">
             <option value="main">Main Dish</option>
             <option value="side">Side Dish</option>
           </select>

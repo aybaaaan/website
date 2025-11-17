@@ -232,9 +232,9 @@ function renderItems(refPath, container) {
         const categoryName = getCategoryName(item.category);
         // Show price for menu items
         details.innerHTML = `
-    <p class="item-name">${item.name}</p>
-    <p class="item-desc">${item.desc}</p>
-    <p class="item-price">₱${item.price || 0}</p>
+    <p class="item-name"><strong>Name:</strong> ${item.name}</p>
+    <p class="item-desc"><strong>Description:</strong> ${item.desc}</p>
+    <p class="item-price"><strong>Price:</strong> ₱${item.price || 0}</p>
     <p class="item-category">Category: ${categoryName}</p>
   `;
       } else {
@@ -630,10 +630,10 @@ window.addEventListener("click", (e) => {
 });
 
 // ===================== USER LOGINS CHART =====================
-// ===================== TOTAL USERS =====================
+// ===== Users =====
 const loginsRef = ref(db, "Logins");
 
-// Fetch all logins once
+// Fetch all logins
 onValue(loginsRef, (snapshot) => {
   if (snapshot.exists()) {
     const allLoginData = Object.values(snapshot.val()).filter(
@@ -642,15 +642,36 @@ onValue(loginsRef, (snapshot) => {
 
     const totalUsers = allLoginData.length;
 
-    // Display the total users
+    // Display total users
     const display = document.getElementById("loginResult");
     display.innerHTML = `
-      <div class ="users-total-container">
-      <p class="users-total">${totalUsers} </p> <p class="users-text">Users</p> 
+      <div class="users-total-container">
+        <p class="users-total">${totalUsers}</p>
+        <p class="users-text">Users</p>
       </div>
     `;
   } else {
     console.log("No login data found.");
+  }
+});
+
+// ===== Orders =====
+const OrderRef = ref(db, "Order"); // your orders node
+
+onValue(OrderRef, (snapshot) => {
+  if (snapshot.exists()) {
+    const allOrders = Object.values(snapshot.val());
+    const totalOrders = allOrders.length;
+
+    const display = document.getElementById("orderResult");
+    display.innerHTML = `
+      <div class="orders-total-container">
+        <p class="orders-total">${totalOrders}</p>
+        <p class="orders-text">Orders</p>
+      </div>
+    `;
+  } else {
+    console.log("No orders found.");
   }
 });
 
