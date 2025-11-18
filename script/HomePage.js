@@ -94,16 +94,6 @@ function formatPHP(n) {
   });
 }
 
-function escapeForOnclick(str) {
-  if (!str) return "";
-  return str
-    .replace(/\\/g, "\\\\") // escape backslashes
-    .replace(/'/g, "\\'") // escape single quotes
-    .replace(/"/g, '\\"') // escape double quotes
-    .replace(/\n/g, "\\n") // escape newlines
-    .replace(/\r/g, ""); // remove carriage returns
-}
-
 // ===================== RENDER CART =====================
 function renderCart() {
   const cartItems = document.getElementById("cartItems");
