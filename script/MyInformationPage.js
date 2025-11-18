@@ -154,18 +154,6 @@ onAuthStateChanged(auth, async (user) => {
   }
 });
 
-// ================= POPUP =================
-function showSuccess(msg) {
-  const errorMessage = document.getElementById("error-message");
-  errorMessage.textContent = msg;
-  errorMessage.style.backgroundColor = "rgba(76, 175, 80, 0.95)";
-  errorMessage.classList.add("show");
-
-  setTimeout(() => {
-    errorMessage.classList.remove("show");
-  }, 3000);
-}
-
 // ================= EDIT / SAVE TOGGLE =================
 let editing = false;
 
@@ -264,9 +252,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
-
-
-
 
 // ================= HAMBURGER MENU =================
 const hamburger = document.getElementById("hamburger");
