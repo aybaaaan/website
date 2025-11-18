@@ -9,6 +9,7 @@ import {
 import {
   getAuth,
   onAuthStateChanged,
+  updatePassword,
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 
 // ================= CONFIG =================
@@ -35,9 +36,31 @@ const phoneInput = document.getElementById("phone");
 const addressInput = document.getElementById("address");
 const editBtn = document.getElementById("editBtn");
 
-// ================= PHONE INPUT VALIDATION =================
+// Password Elements
+const passwordInput = document.getElementById("password");
+const togglePassword = document.getElementById("togglePassword");
+const changePasswordBtn = document.getElementById("changePasswordBtn");
+
+// ================= POPUP FEEDBACK =================
+function showSuccess(msg) {
+  const errorMessage = document.getElementById("error-message");
+  errorMessage.textContent = msg;
+  errorMessage.style.backgroundColor = "rgba(76, 175, 80, 0.95)";
+  errorMessage.classList.add("show");
+  setTimeout(() => errorMessage.classList.remove("show"), 3000);
+}
+
+function showError(msg) {
+  const errorMessage = document.getElementById("error-message");
+  errorMessage.textContent = msg;
+  errorMessage.style.backgroundColor = "rgba(244, 67, 54, 0.95)";
+  errorMessage.classList.add("show");
+  setTimeout(() => errorMessage.classList.remove("show"), 3000);
+}
+
+// ================= PHONE ONLY VALIDATION =================
 phoneInput.addEventListener("input", (e) => {
-  e.target.value = e.target.value.replace(/\D/g, ""); // Only numbers
+  e.target.value = e.target.value.replace(/\D/g, "");
 });
 
 // ================= AUTH STATE =================
@@ -48,35 +71,33 @@ onAuthStateChanged(auth, async (user) => {
     return;
   }
 
-  // Display email from Firebase Auth
   emailEl.textContent = user.email;
 
-  // Firestore Reference
+  // Fake password placeholder (Firebase does NOT allow fetching real password)
+  passwordInput.value = "********";
+
   const userRef = doc(db, "users", user.uid);
   const snap = await getDoc(userRef);
 
   if (snap.exists()) {
     const data = snap.data();
 
-    // Default name (if empty, use part before @gmail.com)
     nameInput.value =
       data.name && data.name.trim() !== ""
         ? data.name
         : user.email.split("@")[0];
 
-    // Default phone (if empty, show Not set)
     phoneInput.value =
       data.phone && data.phone.trim() !== "" ? data.phone : "Not set";
 
-    // Default address (if empty, show Not set)
     addressInput.value =
       data.address && data.address.trim() !== "" ? data.address : "Not set";
   } else {
-    console.log("No user document found, creating one...");
     await setDoc(userRef, {
       email: user.email,
       name: user.email.split("@")[0],
       phone: "Not set",
+      address: "Not set",
     });
 
     nameInput.value = user.email.split("@")[0];
@@ -85,27 +106,14 @@ onAuthStateChanged(auth, async (user) => {
   }
 });
 
-// ================= EDIT / SAVE TOGGLE =================
-function showSuccess(msg) {
-  const errorMessage = document.getElementById("error-message");
-  errorMessage.textContent = msg;
-  errorMessage.style.backgroundColor = "rgba(76, 175, 80, 0.95)";
-  errorMessage.classList.add("show");
-
-  // Hide automatically after 3 seconds
-  setTimeout(() => {
-    errorMessage.classList.remove("show");
-  }, 3000);
-}
-
+// ================= EDIT / SAVE =================
 let editing = false;
 
 editBtn.addEventListener("click", async () => {
   const user = auth.currentUser;
-  if (!user) return showSuccess("You are not logged in.");
+  if (!user) return showError("You are not logged in.");
 
   if (!editing) {
-    // Switch to edit mode
     editing = true;
     nameInput.disabled = false;
     phoneInput.disabled = false;
@@ -113,7 +121,6 @@ editBtn.addEventListener("click", async () => {
     editBtn.textContent = "Save Changes";
     nameInput.focus();
   } else {
-    // Save changes
     editing = false;
     nameInput.disabled = true;
     phoneInput.disabled = true;
@@ -132,10 +139,58 @@ editBtn.addEventListener("click", async () => {
       { merge: true }
     );
 
-    // ✅ Replace alert with popup
     showSuccess("Profile updated successfully!");
   }
+})
+
+// ================= CHANGE PASSWORD VISIBILITY =================
+document.addEventListener("DOMContentLoaded", () => {
+  const changePasswordBtn = document.getElementById("changePasswordBtn");
+  const changePasswordModal = document.getElementById("changePasswordModal");
+  const modalNewPass = document.getElementById("modalNewPass");
+  const modalSubmitBtn = document.getElementById("modalSubmitBtn");
+  const modalCancelBtn = document.getElementById("modalCancelBtn");
+
+  changePasswordBtn.addEventListener("click", () => {
+    changePasswordModal.style.display = "flex";
+  });
+
+  modalCancelBtn.addEventListener("click", () => {
+    changePasswordModal.style.display = "none";
+    modalNewPass.value = "";
+  });
+
+  modalSubmitBtn.addEventListener("click", async () => {
+    const user = auth.currentUser;
+    if (!user) return showError("You are not logged in.");
+
+    const newPass = modalNewPass.value.trim();
+    if (!newPass) return;
+    if (newPass.length < 6) return showError("Password must be at least 6 characters.");
+
+    // ===== Password strength check =====
+    const uppercase = /[A-Z]/;
+    const number = /[0-9]/;
+    const symbol = /[!@#$%^&*(),.?":{}|<>]/;
+
+    if (!uppercase.test(newPass)) return showError("Password must contain at least one uppercase letter.");
+    if (!number.test(newPass)) return showError("Password must contain at least one number.");
+    if (!symbol.test(newPass)) return showError("Password must contain at least one symbol.");
+
+    try {
+      await updatePassword(user, newPass);
+      showSuccess("Password updated successfully!");
+      changePasswordModal.style.display = "none";
+      modalNewPass.value = "";
+    } catch (error) {
+      console.error(error);
+      showError("Failed to update password. Please log in again.");
+    }
+  });
 });
+
+
+
 
 // ================= HAMBURGER MENU =================
 const hamburger = document.getElementById("hamburger");

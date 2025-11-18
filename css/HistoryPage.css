@@ -185,7 +185,6 @@ body {
   transition: 0.3s ease;
 }
 
-
 /* Reorder Popup */
 .popup-overlay {
   display: none;
@@ -269,7 +268,11 @@ body {
   margin: 15px 0;
   border-radius: 6px;
   border: 1px solid #ccc;
-  resize: none;
+  resize: vertical; /* Allow vertical resizing */
+  font-family: "Livvic", Arial, sans-serif;
+  font-size: 16px;
+  height: 120px; /* Default height */
+  min-height: 100px;
 }
 
 #feedbackModal .close {
@@ -281,7 +284,6 @@ body {
   cursor: pointer;
   color: #333;
 }
-
 
 /* Animate hamburger to X */
 .hamburger.active span:nth-child(1) {
@@ -296,14 +298,52 @@ body {
 
 /* ====== Responsive Breakpoints ====== */
 
+/* Large Desktops */
+@media (max-width: 1200px) {
+  .history-container {
+    width: 90%;
+    padding: 15px;
+  }
+
+  .history-header h1 {
+    font-size: 26px;
+  }
+
+  .back-btn {
+    padding: 10px 20px;
+    font-size: 15px;
+  }
+
+  .order-card img {
+    width: 130px;
+    height: 130px;
+  }
+
+  .order-info h3 {
+    font-size: 20px;
+  }
+
+  .order-info p {
+    font-size: 16px;
+  }
+
+  .reorder-btn,
+  .feedback-btn {
+    padding: 12px 24px;
+    font-size: 16px;
+  }
+}
+
 /* Tablets / Medium screens */
 @media (max-width: 1024px) {
   .history-container {
     width: 90%;
+    padding: 15px;
   }
 
   .order-card {
     padding: 20px;
+    gap: 20px;
   }
 
   .order-card img {
@@ -319,9 +359,25 @@ body {
     font-size: 16px;
   }
 
-  .reorder-btn {
+  .reorder-btn,
+  .feedback-btn {
     padding: 12px 24px;
     font-size: 16px;
+  }
+
+  .popup-content {
+    width: 260px;
+    padding: 20px;
+  }
+
+  #feedbackModal .modal-content {
+    width: 300px;
+    padding: 20px;
+  }
+
+  #feedbackModal textarea {
+    height: 100px;
+    min-height: 80px;
   }
 }
 
@@ -373,9 +429,83 @@ body {
       transform: translateY(0);
     }
   }
+
+  .history-container {
+    width: 95%;
+    margin: 20px auto;
+    padding: 10px;
+  }
+
+  .history-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .history-header h1 {
+    font-size: 22px;
+  }
+
+  .back-btn {
+    align-self: flex-end;
+    padding: 10px 15px;
+    font-size: 14px;
+  }
+
+  .order-card {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 15px;
+    gap: 15px;
+  }
+
+  .order-card img {
+    width: 100%;
+    height: auto;
+    max-height: 200px;
+  }
+
+  .order-info {
+    flex: 1;
+  }
+
+  .order-info h3 {
+    font-size: 18px;
+  }
+
+  .order-info p {
+    font-size: 15px;
+  }
+
+  .reorder-btn,
+  .feedback-btn {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    margin-left: 0;
+    margin-top: 10px;
+  }
+
+  .popup-content {
+    width: 90%;
+    max-width: 300px;
+    padding: 20px;
+  }
+
+  #feedbackModal .modal-content {
+    width: 90%;
+    max-width: 350px;
+    padding: 20px;
+  }
+
+  #feedbackModal textarea {
+    height: 100px;
+    min-height: 80px;
+    font-size: 15px;
+  }
 }
 
-/* Make sure it still looks right for smaller phones */
+/* Small Phones */
 @media (max-width: 480px) {
   .nav {
     padding: 20px 0;
@@ -388,5 +518,137 @@ body {
 
   .hamburger span {
     width: 28px;
+  }
+
+  .header {
+    padding: 10px 20px;
+  }
+
+  .header .logo {
+    font-size: 20px;
+  }
+
+  .history-container {
+    width: 100%;
+    margin: 15px auto;
+    padding: 10px;
+  }
+
+  .history-header h1 {
+    font-size: 20px;
+  }
+
+  .back-btn {
+    padding: 10px 15px;
+    font-size: 13px;
+  }
+
+  .order-card {
+    padding: 15px;
+    gap: 10px;
+  }
+
+  .order-card img {
+    width: 100%;
+    height: auto;
+    max-height: 180px;
+  }
+
+  .order-info h3 {
+    font-size: 16px;
+  }
+
+  .order-info p {
+    font-size: 14px;
+  }
+
+  .reorder-btn,
+  .feedback-btn {
+    padding: 12px;
+    font-size: 15px;
+  }
+
+  .footer {
+    padding: 10px;
+    font-size: 12px;
+  }
+
+  .popup-content {
+    width: 95%;
+    padding: 15px;
+  }
+
+  .popup-content p {
+    font-size: 14px;
+  }
+
+  #reorderOkBtn {
+    padding: 8px 20px;
+    font-size: 14px;
+  }
+
+  #feedbackModal .modal-content {
+    width: 95%;
+    padding: 15px;
+  }
+
+  #feedbackModal textarea {
+    height: 80px;
+    min-height: 60px;
+    font-size: 14px;
+  }
+
+  #feedbackModal .close {
+    font-size: 24px;
+  }
+}
+
+/* Very Small Phones */
+@media (max-width: 320px) {
+  .header .logo {
+    font-size: 18px;
+  }
+
+  .history-header h1 {
+    font-size: 18px;
+  }
+
+  .back-btn {
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+
+  .order-card {
+    padding: 10px;
+  }
+
+  .order-info h3 {
+    font-size: 14px;
+  }
+
+  .order-info p {
+    font-size: 13px;
+  }
+
+  .reorder-btn,
+  .feedback-btn {
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  .popup-content {
+    width: 98%;
+    padding: 10px;
+  }
+
+  #feedbackModal .modal-content {
+    width: 98%;
+    padding: 10px;
+  }
+
+  #feedbackModal textarea {
+    height: 70px;
+    min-height: 50px;
+    font-size: 13px;
   }
 }

@@ -116,16 +116,125 @@ body {
 .back-btn:hover {
   background: #741b47;
 }
+/* ====== Change Password Section ====== */
+.password-wrapper {
+  margin-bottom: 20px;
+}
 
-/* ====== Footer ====== */
-.footer {
-  text-align: center;
-  background: linear-gradient(to right, #4c1130da, #741b47da);
+.password-row {
+  display: flex;
+  align-items: center; /* vertically center everything */
+  gap: 10px;           /* space between label, input, button */
+  flex-wrap: wrap;      /* allow wrapping on small screens */
+}
+
+.password-row label {
+  white-space: nowrap; /* keep "Password:" on one line */
+}
+
+.password-row input,
+.change-pass-btn {
+  height: 36px;        /* same height for both input and button */
+  box-sizing: border-box;
+}
+
+.password-row input {
+  flex: 1 1 150px;      /* input grows but has a minimum width */
+  max-width: 200px;
+  padding: 0 10px;      /* padding inside input */
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background-color: #f4f4f4; /* matches readonly style */
+  color: #777;
+}
+
+.change-pass-btn {
+  padding: 0 12px;     /* horizontal padding only, height is fixed */
+  background: #741b47;
   color: white;
-  padding: 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
   font-size: 14px;
-  font-weight: 600;
-  margin-top: auto;
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-top: -18px; /* slight adjustment to align with input */
+}
+
+
+.change-pass-btn:hover {
+  background: #a64d79;
+}
+
+
+.modal {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5);
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 25px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 360px;
+  text-align: center;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+.modal-content p {
+  font-size: 16px;
+  margin-bottom: 15px;
+}
+
+.modal-content input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.modal-buttons button {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  background: #741b47;
+  color: #fff;
+  font-size: 14px;
+}
+
+.modal-buttons button:hover {
+  background: #a64d79;
+}
+
+
+/* Responsive: stack nicely on small screens */
+@media (max-width: 480px) {
+  .password-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .password-row input,
+  .change-pass-btn {
+    width: 100%;
+  }
 }
 
 /* ====== Popup Message ====== */
