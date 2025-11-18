@@ -19,6 +19,8 @@ header .logo {
 
 /* Logout button */
 #btn-logout {
+  font-size: 14px;
+  width: 6rem;
   background: #d63422;
   border: none;
   padding: 8px 15px;
@@ -289,6 +291,26 @@ section.active {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-weight: 600;
   color: #e0d9d9;
+}
+
+/* Assumed base styles (adjust if you have existing ones) */
+.orders-container {
+  position: relative;
+  top: 50%;
+  transform: translateX(-50);
+  text-align: center;
+  display: block;
+}
+
+.orders-total-container {
+  text-align: center;
+  display: block;
+}
+.orders-text {
+  font-size: 16px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: #d8cfcf;
+  padding: 2px;
 }
 
 .user-section,

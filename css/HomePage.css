@@ -6,7 +6,7 @@
 }
 
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   background-color: #ffffff;
   line-height: 1.5;
 }
@@ -536,7 +536,7 @@ body {
 .menu-toggle button {
   background: #a64d79;
   font-size: large;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   color: #fff;
   border: none;
   border-radius: 8px;
@@ -574,11 +574,13 @@ body {
 }
 
 .card-bottom {
-  width: 100%;
   display: flex;
   justify-content: space-between;
-  align-items: left;
-  margin-top: 10px;
+  align-items: center;
+  padding: 12px 16px;
+  border-top: 1px solid #eee; /* optional separation line */
+  margin-top: auto; /* push it down to the bottom */
+  background-color: #fff; /* optional: match card background */
 }
 
 .card-price {
@@ -608,28 +610,32 @@ body {
 }
 
 /* Individual food card */
+/* ====== MENU CARD ====== */
 .menu-card {
   background: #bd9c9cc9;
   border-radius: 12px;
-  width: 300px;
-  height: 360px;
+  width: 320px; /* fixed width for medium cards */
+  height: 450px; /* fixed height */
   flex-shrink: 0;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-
-  transition: transform 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* space between image and content */
+  overflow: hidden; /* prevent overflow */
+  transition: transform 0.2s ease, border-color 0.2s ease;
 }
 
 .menu-card:hover {
   transform: translateY(-5px);
-  border: #000 3px solid;
-  border-color: #a64d79;
+  border: 3px solid #a64d79;
 }
 
-/* Image style */
+/* IMAGE */
 .menu-card img {
   width: 100%;
-  height: 70%;
+  height: 55%; /* leave 45% for content */
   object-fit: cover;
+  border-radius: 12px 12px 0 0;
 }
 
 /* Content under image */
@@ -1016,7 +1022,6 @@ body {
   color: #a64d79;
 }
 
-
 /* ===================== RESPONSIVE ===================== */
 
 /* Small screens, Phone (max-width: 480px) */
@@ -1132,47 +1137,49 @@ body {
   }
 
   .menu-card {
-    position: relative;
-    width: 360px;
-    height: 460px; /* palit */
+    background: #fff; /* change from purple to white */
+    border-radius: 12px;
+    width: 320px;
+    min-height: auto; /* allow height to grow with content */
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
   }
 
   .menu-cards {
-    padding: 12px 24px;
-    gap: 2rem;
-    z-index: 101;
+    display: flex;
+    transition: transform 0.6s ease;
   }
 
+  /* IMAGE */
   .menu-card img {
     width: 100%;
-    height: 300px;
+    height: 55%; /* leave 45% for content */
     object-fit: cover;
-    border-radius: 6px 6px 0 0;
+    border-radius: 12px 12px 0 0;
   }
 
   .card-content {
-    position: absolute;
-    bottom: 0;
-    height: 160px;
-    width: 100%;
+    padding: 12px 10px;
+    flex-grow: 1; /* this will stretch content to fill leftover space */
     display: flex;
     flex-direction: column;
-    align-items: left;
-    padding: 12px 20px;
+    justify-content: flex-start;
   }
 
   .card-title {
-    padding-top: 12px;
     font-size: 18px;
     font-weight: 600;
   }
 
   .card-desc {
     font-size: 14px;
-    padding-bottom: 20px;
     color: #555555;
+    padding-bottom: 20px;
+    overflow-wrap: break-word; /* break long words */
+    word-break: break-word; /* support older browsers */
+    overflow: hidden;
   }
-
 
   /* FOOTER ADJUSTMENTS */
 
@@ -1225,48 +1232,59 @@ body {
   }
 
   .menu-card {
-    position: relative;
-    width: 360px;
-    height: 460px; /* palit */
+    background: #fff; /* change from purple to white */
+    border-radius: 12px;
+    width: 320px;
+    min-height: auto; /* allow height to grow with content */
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
   }
 
   .menu-cards {
-    padding: 12px 24px;
-    gap: 2rem;
-    z-index: 101;
+    display: flex;
+    transition: transform 0.6s ease;
   }
 
+  /* IMAGE */
   .menu-card img {
     width: 100%;
-    height: 300px;
+    height: 55%; /* leave 45% for content */
     object-fit: cover;
-    border-radius: 6px 6px 0 0;
+    border-radius: 12px 12px 0 0;
   }
 
   .card-content {
-    position: relative;
-    bottom: 0;
-    height: 160px;
-    width: 100%;
+    padding: 12px 10px;
+    flex-grow: 1; /* this will stretch content to fill leftover space */
     display: flex;
     flex-direction: column;
-    align-items: left;
-    padding: 12px 20px;
+    justify-content: flex-start;
   }
 
   .card-title {
-    padding-top: 12px;
     font-size: 18px;
     font-weight: 600;
   }
 
   .card-desc {
     font-size: 14px;
-    padding-bottom: 20px;
     color: #555555;
+    padding-bottom: 20px;
+    overflow-wrap: break-word; /* break long words */
+    word-break: break-word; /* support older browsers */
+    overflow: hidden;
   }
 
-
+  .card-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    border-top: 1px solid #eee; /* optional separation line */
+    margin-top: auto; /* push it down to the bottom */
+    background-color: #fff; /* optional: match card background */
+  }
 
   /* FOOTER ADJUSTMENTS */
   .footer {
@@ -1299,45 +1317,56 @@ body {
   }
 
   .menu-card {
-    border-radius: 8px;
-    width: 400px;
-    height: 600px;
-    flex-shrink: 0;
-    position: relative;
+    background: #fff; /* change from purple to white */
+    border-radius: 12px;
+    width: 320px;
+    min-height: auto; /* allow height to grow with content */
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    overflow: hidden;
   }
+  /* IMAGE */
   .menu-card img {
     width: 100%;
-    height: 70%;
+    height: 250px; /* fixed image height */
     object-fit: cover;
-    border-radius: 6px 6px 0 0;
+    border-radius: 12px 12px 0 0;
   }
+
   .card-content {
-    position: relative;
-    bottom: 0;
-    height: 160px;
-    width: 100%;
+    padding: 12px 10px;
+    flex-grow: 1; /* this will stretch content to fill leftover space */
     display: flex;
     flex-direction: column;
-    align-items: left;
-    padding: 12px 20px;
+    justify-content: flex-start;
   }
 
   .card-title {
-    padding-top: 12px;
-    font-size: 18px;
-    font-weight: 600;
+    font-size: 24px;
+    font-weight: 700;
   }
 
   .card-desc {
     font-size: 14px;
-    padding-bottom: 20px;
-    color: #555555;
+    color: #555;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
-  
+  /* Card bottom sticks to the bottom */
+  .card-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    border-top: 1px solid #eee; /* optional separation line */
+    margin-top: auto; /* push it down to the bottom */
+    background-color: #fff; /* optional: match card background */
+  }
 
   .footer-content {
     margin: 42px;

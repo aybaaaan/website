@@ -94,6 +94,16 @@ function formatPHP(n) {
   });
 }
 
+function escapeForOnclick(str) {
+  if (!str) return "";
+  return str
+    .replace(/\\/g, "\\\\") // escape backslashes
+    .replace(/'/g, "\\'") // escape single quotes
+    .replace(/"/g, '\\"') // escape double quotes
+    .replace(/\n/g, "\\n") // escape newlines
+    .replace(/\r/g, ""); // remove carriage returns
+}
+
 // ===================== RENDER CART =====================
 function renderCart() {
   const cartItems = document.getElementById("cartItems");
@@ -390,27 +400,33 @@ function renderMenuByCategory(category) {
       : allMenuItems.filter((item) => item.category === category);
 
   filteredItems.forEach((item) => {
-    menuContainer.innerHTML += `
-      <div class="menu-card">
-        <img src="${item.url}" alt="${item.name}">
-        <div class="card-content">
-          <h3 class="card-title">${item.name}</h3>
-          <p class="card-desc">${item.desc}</p>
-          <div class="card-bottom">
-            <span class="card-price">₱${item.price || 0}.00</span>
-            <button class="order-btn" onclick="goToDetails(
-              '${item.name}',
-              '${item.price || 0}.00',
-              '${item.url}',
-              '${item.desc}'
-            )">Order</button>
-          </div>
+    const card = document.createElement("div");
+    card.className = "menu-card";
+
+    card.innerHTML = `
+      <img src="${item.url}" alt="${item.name}">
+      <div class="card-content">
+        <h3 class="card-title">${item.name}</h3>
+        <p class="card-desc">${item.desc}</p>
+        <div class="card-bottom">
+          <span class="card-price">₱${item.price || 0}.00</span>
         </div>
       </div>
     `;
+
+    // Create the Order button dynamically
+    const cardBottom = card.querySelector(".card-bottom");
+    const btn = document.createElement("button");
+    btn.className = "order-btn";
+    btn.textContent = "Order";
+    btn.addEventListener("click", () => {
+      goToDetails(item.name, item.price || 0, item.url, item.desc);
+    });
+
+    cardBottom.appendChild(btn);
+    menuContainer.appendChild(card);
   });
 }
-
 // Event listeners for toggle buttons
 document.getElementById("btnMain").addEventListener("click", () => {
   renderMenuByCategory("main");
@@ -450,7 +466,10 @@ function showOrUpdateOrderToast(order) {
         dateStyle: "medium",
         timeStyle: "short",
       })
-    : new Date().toLocaleString("en-PH", { dateStyle: "medium", timeStyle: "short" });
+    : new Date().toLocaleString("en-PH", {
+        dateStyle: "medium",
+        timeStyle: "short",
+      });
 
   orderTimestamps[orderID] = timestamp;
 
@@ -459,9 +478,13 @@ function showOrUpdateOrderToast(order) {
   if (orderToasts[orderID]) {
     // Update existing toast
     const toast = orderToasts[orderID];
-    toast.querySelector(".status-text").textContent = `UPDATE: OrderID ${orderID} status is now ${status}`;
+    toast.querySelector(
+      ".status-text"
+    ).textContent = `UPDATE: OrderID ${orderID} status is now ${status}`;
     toast.querySelector(".status-text").style.color = color;
-    toast.querySelector(".status-time").textContent = `Status Updated: ${timestamp}`;
+    toast.querySelector(
+      ".status-time"
+    ).textContent = `Status Updated: ${timestamp}`;
     orderStatuses[orderID] = status;
   } else {
     // Create new toast
@@ -500,10 +523,13 @@ onValue(ref(db, "Order"), (snapshot) => {
   const user = auth.currentUser;
   if (!user) return;
 
-  const userOrders = Object.values(data).filter(o => o.userId === user.uid);
+  const userOrders = Object.values(data).filter((o) => o.userId === user.uid);
 
-  userOrders.forEach(order => {
-    if (dismissedOrders[order.orderID] && dismissedOrders[order.orderID] !== order.status) {
+  userOrders.forEach((order) => {
+    if (
+      dismissedOrders[order.orderID] &&
+      dismissedOrders[order.orderID] !== order.status
+    ) {
       delete dismissedOrders[order.orderID];
       saveDismissedOrders();
     }
@@ -513,8 +539,6 @@ onValue(ref(db, "Order"), (snapshot) => {
     }
   });
 });
-
-
 
 // ===================== LOAD ABOUT US CONTENT =====================
 const aboutUsContent = document.getElementById("aboutUsContent");
@@ -534,15 +558,15 @@ if (confirmLogout) {
     });
   });
 }
-const buttons = document.querySelectorAll('.menu-toggle button');
+const buttons = document.querySelectorAll(".menu-toggle button");
 
-buttons.forEach(button => {
-  button.addEventListener('click', () => {
+buttons.forEach((button) => {
+  button.addEventListener("click", () => {
     // Remove active from all buttons (optional if only one can be active)
-    buttons.forEach(btn => btn.classList.remove('active'));
-    
+    buttons.forEach((btn) => btn.classList.remove("active"));
+
     // Add active to the clicked button
-    button.classList.add('active');
+    button.classList.add("active");
   });
 });
 

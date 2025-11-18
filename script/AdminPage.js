@@ -250,16 +250,37 @@ function renderItems(refPath, container) {
 
       // then append itemWrapper to container
 
+      // BUTTONS CONTAINER
       const buttonsDiv = document.createElement("div");
       buttonsDiv.classList.add("buttons");
-      buttonsDiv.innerHTML = `
-        <button class="btn-edit" onclick="editItem('${refPath.key}','${key}','${
-        item.url
-      }','${item.name}','${item.desc}','${item.price || 0}')">Edit</button>
-        <button class="btn-delete" onclick="deleteItem('${
-          refPath.key
-        }','${key}')">Delete</button>
-      `;
+
+      // EDIT BUTTON
+      const editBtn = document.createElement("button");
+      editBtn.classList.add("btn-edit");
+      editBtn.textContent = "Edit";
+
+      // store safely
+      editBtn.dataset.ref = refPath.key;
+      editBtn.dataset.key = key;
+      editBtn.dataset.url = item.url;
+      editBtn.dataset.name = item.name;
+      editBtn.dataset.desc = item.desc;
+      editBtn.dataset.price = item.price || 0;
+
+      // event listener
+      editBtn.addEventListener("click", (e) => {
+        const d = e.currentTarget.dataset;
+        editItem(d.ref, d.key, d.url, d.name, d.desc, d.price);
+      });
+
+      // DELETE BUTTON
+      const delBtn = document.createElement("button");
+      delBtn.classList.add("btn-delete");
+      delBtn.textContent = "Delete";
+      delBtn.addEventListener("click", () => deleteItem(refPath.key, key));
+
+      // append buttons
+      buttonsDiv.append(editBtn, delBtn);
 
       itemWrapper.appendChild(box);
       itemWrapper.appendChild(buttonsDiv);
@@ -357,7 +378,22 @@ function renderOrdersPage() {
     row.innerHTML = `
       <div class="order-card-left">
         <h2>${data.name || "Unknown"}</h2>
-        <p><strong>Address:</strong> ${data.address || "N/A"}</p>
+        <p><strong>Address:</strong> ${
+          typeof data.address === "string"
+            ? data.address // If stored as plain text
+            : data.address
+            ? [
+                data.address.houseno,
+                data.address.street,
+                data.address.barangay,
+                data.address.city,
+                data.address.province,
+              ]
+                .filter(Boolean)
+                .join(", ")
+            : "N/A"
+        }</p>
+
         <p><strong>Contact:</strong> ${data.contact || "N/A"}</p>
         <p><strong>Payment:</strong> ${data.payment || "N/A"}</p>
         <p><strong>Order Date & Time:</strong> ${data.orderDate} ${
@@ -804,46 +840,40 @@ async function getChartData(range, type = "sales") {
   if (!snapshot.exists()) return { labels: [], data: [] };
 
   const orders = snapshot.val();
-  const startDate = getStartDate(range);
-  const counts = {};
+  const startDate = getStartDate(range); // day/week/month start
+  const counts = {}; // { "YYYY-MM-DD": totalRevenue }
 
-  if (type === "sales") {
-    // Revenue per individual order
-    const labels = [];
-    const data = [];
-    for (const key in orders) {
-      const order = orders[key];
-      if (!order.orderID || !order.total) continue;
+  for (const key in orders) {
+    const order = orders[key];
+    if (!order.orderDate || !order.orders) continue;
 
-      const date = new Date(order.orderDate);
-      if (date >= startDate) {
-        labels.push(order.orderID); // each order as a label
-        data.push(Number(order.total)); // revenue for that order
-      }
+    const dateObj = new Date(order.orderDate);
+    if (dateObj < startDate) continue;
+
+    // group by date string
+    const label = dateObj.toISOString().split("T")[0]; // "YYYY-MM-DD"
+
+    if (!counts[label]) counts[label] = 0;
+
+    if (type === "sales") {
+      // sum price * quantity of all items
+      const totalSale = order.orders.reduce(
+        (sum, item) => sum + Number(item.price) * Number(item.qty),
+        0
+      );
+      counts[label] += totalSale;
+    } else if (type === "revenue") {
+      counts[label] += Number(order.total) || 0;
+    } else if (type === "orders") {
+      counts[label] += 1;
     }
-    return { labels, data };
-  } else {
-    // Existing logic for sales (total per day) or orders count
-    for (const key in orders) {
-      const order = orders[key];
-      if (!order.orderDate) continue;
-
-      const date = new Date(order.orderDate);
-      if (date >= startDate) {
-        const label = date.toLocaleDateString("en-US", {
-          month: "short",
-          day: "numeric",
-        });
-        if (type === "revenue") {
-          if (!order.total) continue;
-          counts[label] = (counts[label] || 0) + Number(order.total);
-        } else if (type === "orders") {
-          counts[label] = (counts[label] || 0) + 1;
-        }
-      }
-    }
-    return { labels: Object.keys(counts), data: Object.values(counts) };
   }
+
+  // sort dates
+  const sortedLabels = Object.keys(counts).sort();
+  const chartData = sortedLabels.map((d) => counts[d]);
+
+  return { labels: sortedLabels, data: chartData };
 }
 
 // --- RENDER CHART ---
@@ -994,11 +1024,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const cancelBtn = document.getElementById("aboutUs-cancel-btn");
 
   // Open modal manually if needed (e.g., admin button elsewhere)
-  document.getElementById("editAboutUsBtn")?.addEventListener("click", async () => {
-    const snapshot = await get(aboutUsRef);
-    aboutUsContent.value = snapshot.exists() ? snapshot.val().content : "";
-    aboutUsModal.style.display = "flex";
-  });
+  document
+    .getElementById("editAboutUsBtn")
+    ?.addEventListener("click", async () => {
+      const snapshot = await get(aboutUsRef);
+      aboutUsContent.value = snapshot.exists() ? snapshot.val().content : "";
+      aboutUsModal.style.display = "flex";
+    });
 
   saveBtn.addEventListener("click", async () => {
     const newContent = aboutUsContent.value.trim();
@@ -1015,7 +1047,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if (e.target === aboutUsModal) aboutUsModal.style.display = "none";
   });
 });
-
 
 // ============ TYPE TOGGLE ============
 document.getElementById("data-type").addEventListener("change", (e) => {
