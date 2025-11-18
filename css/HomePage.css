@@ -133,12 +133,13 @@ body {
 }
 
 .action-btn {
+  color: #4c1130;
   display: flex;
   background-color: #ead1dc;
   border: none;
   border-radius: 24px;
   padding: 12px 14px;
-  font-weight: bold;
+  font-weight: 700;
   box-shadow: 1px 4px 10px #272727;
   text-decoration: none;
   transition: background-color 0.3s ease;
@@ -152,6 +153,7 @@ body {
 
 .action-btn:hover {
   background-color: #c27ba0;
+  color: #ead1dc;
 }
 
 /* Account Dropdown */
@@ -592,7 +594,7 @@ body {
 /* Container (carousel area) */
 .menu-cards-container {
   overflow: hidden;
-  min-width: 100%;
+  min-width: 80%;
   height: 100%;
   margin: 0 auto;
   position: relative;
@@ -615,7 +617,7 @@ body {
   background: #bd9c9cc9;
   border-radius: 12px;
   width: 320px; /* fixed width for medium cards */
-  height: 450px; /* fixed height */
+  height: 480px; /* fixed height */
   flex-shrink: 0;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
   display: flex;

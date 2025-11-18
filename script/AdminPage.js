@@ -183,7 +183,7 @@ window.editItem = (section, key, url, name, desc, price) => {
   base64Image = url;
   document.getElementById("itemModal").style.display = "block";
 
-  // ✅ Show or hide price input depending on section
+  // Show or hide price input depending on section
   const priceField =
     document.getElementById("imagePrice").closest(".input-group") ||
     document.getElementById("imagePrice");

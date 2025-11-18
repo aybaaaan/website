@@ -74,28 +74,6 @@ provinceInput.value = "Cavite";
 const emailEl = document.getElementById("email");
 const editBtn = document.getElementById("editBtn");
 
-// Password Elements
-const passwordInput = document.getElementById("password");
-const togglePassword = document.getElementById("togglePassword");
-const changePasswordBtn = document.getElementById("changePasswordBtn");
-
-// ================= POPUP FEEDBACK =================
-function showSuccess(msg) {
-  const errorMessage = document.getElementById("error-message");
-  errorMessage.textContent = msg;
-  errorMessage.style.backgroundColor = "rgba(76, 175, 80, 0.95)";
-  errorMessage.classList.add("show");
-  setTimeout(() => errorMessage.classList.remove("show"), 3000);
-}
-
-function showError(msg) {
-  const errorMessage = document.getElementById("error-message");
-  errorMessage.textContent = msg;
-  errorMessage.style.backgroundColor = "rgba(244, 67, 54, 0.95)";
-  errorMessage.classList.add("show");
-  setTimeout(() => errorMessage.classList.remove("show"), 3000);
-}
-
 // ================= PHONE ONLY VALIDATION =================
 phoneInput.addEventListener("input", (e) => {
   e.target.value = e.target.value.replace(/\D/g, "");
@@ -110,9 +88,6 @@ onAuthStateChanged(auth, async (user) => {
   }
 
   emailEl.textContent = user.email;
-
-  // Fake password placeholder (Firebase does NOT allow fetching real password)
-  passwordInput.value = "********";
 
   const userRef = doc(db, "users", user.uid);
   const snap = await getDoc(userRef);
@@ -129,17 +104,6 @@ onAuthStateChanged(auth, async (user) => {
 
     cityInput.value = address.city || "Tagaytay"; // always fixed
     provinceInput.value = address.province || "Cavite"; // always fixed
-
-    nameInput.value =
-      data.name && data.name.trim() !== ""
-        ? data.name
-        : user.email.split("@")[0];
-
-    phoneInput.value =
-      data.phone && data.phone.trim() !== "" ? data.phone : "Not set";
-
-    addressInput.value =
-      data.address && data.address.trim() !== "" ? data.address : "Not set";
   } else {
     await setDoc(userRef, {
       email: user.email,
@@ -171,7 +135,7 @@ let editing = false;
 
 editBtn.addEventListener("click", async () => {
   const user = auth.currentUser;
-  if (!user) return showError("You are not logged in.");
+  if (!user) return showSuccess("You are not logged in.");
 
   if (!editing) {
     editing = true;
@@ -217,7 +181,21 @@ editBtn.addEventListener("click", async () => {
 
     showSuccess("Profile updated successfully!");
   }
-})
+});
+
+// Password Elements
+const passwordInput = document.getElementById("password");
+
+// Fake password placeholder (Firebase does NOT allow fetching real password)
+passwordInput.value = "********";
+
+function showError(msg) {
+  const errorMessage = document.getElementById("error-message");
+  errorMessage.textContent = msg;
+  errorMessage.style.backgroundColor = "rgba(244, 67, 54, 0.95)";
+  errorMessage.classList.add("show");
+  setTimeout(() => errorMessage.classList.remove("show"), 3000);
+}
 
 // ================= CHANGE PASSWORD VISIBILITY =================
 document.addEventListener("DOMContentLoaded", () => {
@@ -242,16 +220,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const newPass = modalNewPass.value.trim();
     if (!newPass) return;
-    if (newPass.length < 6) return showError("Password must be at least 6 characters.");
+    if (newPass.length < 6)
+      return showError("Password must be at least 6 characters.");
 
     // ===== Password strength check =====
     const uppercase = /[A-Z]/;
     const number = /[0-9]/;
     const symbol = /[!@#$%^&*(),.?":{}|<>]/;
 
-    if (!uppercase.test(newPass)) return showError("Password must contain at least one uppercase letter.");
-    if (!number.test(newPass)) return showError("Password must contain at least one number.");
-    if (!symbol.test(newPass)) return showError("Password must contain at least one symbol.");
+    if (!uppercase.test(newPass))
+      return showError("Password must contain at least one uppercase letter.");
+    if (!number.test(newPass))
+      return showError("Password must contain at least one number.");
+    if (!symbol.test(newPass))
+      return showError("Password must contain at least one symbol.");
 
     try {
       await updatePassword(user, newPass);
@@ -264,9 +246,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
-
-
-
 
 // ================= HAMBURGER MENU =================
 const hamburger = document.getElementById("hamburger");
