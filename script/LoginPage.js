@@ -75,7 +75,7 @@ submit.addEventListener("click", (event) => {
           return;
         }
 
-        if (user.email === "admin123@miv.com" && password === "admin123") {
+        if (user.email === "admin@miv.com" && password === "admin123") {
           showSuccess("Admin login successful!");
           setTimeout(() => {
             window.location.href = "/pages/AdminPage.html";

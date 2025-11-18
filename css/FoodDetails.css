@@ -29,6 +29,8 @@ body {
 /* ==== CONTAINER ==== */
 .food-details-container {
   background: #fff;
+  height: 80vh; /* Adjust as needed; this makes it 80% of viewport height. Use a fixed px value if preferred. */
+  overflow: hidden;
   max-width: 900px;
   width: 100%;
   border-radius: 16px;
@@ -62,6 +64,7 @@ body {
   display: flex;
   flex-direction: row;
   gap: 30px;
+  height: 100%;
   align-items: flex-start;
 }
 
@@ -76,7 +79,9 @@ body {
   flex: 1;
   display: flex;
   flex-direction: column;
+  max-height: calc(100% - 20px);
   gap: 14px;
+  overflow: hidden;
 }
 
 .food-info h2 {
@@ -88,6 +93,10 @@ body {
 .food-info p {
   font-size: 16px;
   color: #555;
+  flex: 1; /* Take up remaining space in .food-info */
+  overflow-y: auto; /* Add vertical scroll if content exceeds height */
+  max-height: none; /* Remove any default max-height; flex:1 will constrain it */
+  word-wrap: break-word;
 }
 
 .food-info .price {
@@ -126,11 +135,10 @@ body {
 }
 
 .order-btn:hover {
-  background-color:		#ead1dc;
+  background-color: #ead1dc;
   transform: scale(1.05);
-  color: #4c1130
+  color: #4c1130;
 }
-
 
 /*CUSTOM POPUP*/
 .custom-popup {
@@ -172,7 +180,6 @@ body {
 .popup-content button:hover {
   background-color: #f0b429;
 }
-
 
 /* ==== ANIMATION ==== */
 @keyframes fadeIn {

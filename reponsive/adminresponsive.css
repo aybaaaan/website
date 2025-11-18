@@ -1,0 +1,140 @@
+/* Responsive adjustments for tablets (max-width: 1024px) */
+@media (max-width: 1024px) {
+  .user-card {
+    height: 35vh; /* Slightly shorter for tablets */
+    padding: 15px; /* Reduce padding for more space */
+    margin: 8px; /* Tighter margins */
+  }
+
+  .user-chart {
+    gap: 15px; /* Smaller gap between cards */
+    justify-content: center; /* Center cards on tablets */
+  }
+
+  .users-text {
+    font-size: 14px; /* Smaller text */
+  }
+
+  .users-total {
+    font-size: 48px; /* Smaller total number */
+  }
+
+  .orderResult {
+    height: 35vh; /* Slightly shorter for tablets */
+    padding: 15px; /* Reduce padding */
+    margin: 8px; /* Tighter margins */
+  }
+
+  .orders-text {
+    font-size: 14px; /* Smaller text */
+  }
+
+  .orders-total {
+    font-size: 48px; /* Smaller total number */
+  }
+}
+
+/* Responsive adjustments for phones (max-width: 768px) */
+@media (max-width: 768px) {
+  .user-card {
+    height: auto; /* Let height adjust to content instead of fixed vh */
+    min-height: 200px; /* Minimum height to prevent squishing */
+    padding: 10px; /* Further reduced padding */
+    margin: 5px; /* Tighter margins */
+  }
+
+  .user-chart {
+    flex-direction: column; /* Force vertical stacking */
+    gap: 10px; /* Smaller gap */
+    align-items: center; /* Center items vertically */
+  }
+
+  .users-total-container {
+    top: 0; /* Reset positioning for better centering */
+    transform: none; /* Remove translateX for phones */
+    margin: 10px 0; /* Add vertical margin */
+  }
+
+  .users-text {
+    font-size: 12px; /* Even smaller text for phones */
+  }
+
+  .users-total {
+    font-size: 36px; /* Much smaller total number */
+  }
+
+  .orderResult {
+    height: auto; /* Let height adjust to content */
+    min-height: 200px; /* Minimum height to prevent squishing */
+    padding: 10px; /* Further reduced padding */
+    margin: 5px; /* Tighter margins */
+  }
+
+  .orders-container {
+    padding: 10px; /* Reduce outer padding */
+  }
+
+  .orders-total-container {
+    margin: 10px 0; /* Add vertical margin for better spacing */
+  }
+
+  .orders-text {
+    font-size: 12px; /* Even smaller text for phones */
+  }
+
+  .orders-total {
+    font-size: 36px; /* Much smaller total number */
+  }
+}
+
+/* Optional: Further tweaks for very small phones (max-width: 480px) */
+@media (max-width: 480px) {
+  .login-result-container {
+    height: 12vh;
+    width: 12vh;
+  }
+
+  .orders-container {
+    height: 12vh;
+    width: 12vh;
+  }
+
+  .user-card {
+    padding: 8px;
+    margin: 3px;
+  }
+
+  .users-text {
+    font-size: 11px;
+  }
+
+  .users-total {
+    font-size: 28px;
+  }
+
+  .orderResult {
+    padding: 8px;
+    margin: 3px;
+    min-height: 150px; /* Smaller min-height */
+  }
+
+  .orders-text {
+    font-size: 11px;
+  }
+
+  .orders-total {
+    font-size: 28px;
+  }
+}
+
+/* Responsive adjustments for tablets (max-width: 1024px) */
+@media (max-width: 1024px) {
+}
+
+/* Responsive adjustments for phones (max-width: 768px) */
+@media (max-width: 768px) {
+}
+
+/* Optional: Further tweaks for very small phones (max-width: 480px) */
+@media (max-width: 480px) {
+}

@@ -161,14 +161,32 @@ async function loadUserProfile() {
       document.getElementById("contact").value =
         data.phone && data.phone !== "Not set" ? data.phone : "";
 
-      document.getElementById("address").value =
-        data.address && data.address !== "Not set" ? data.address : "";
+      if (data.address) {
+        const addr = data.address;
+        document.getElementById(
+          "address"
+        ).value = `${addr.houseno}, ${addr.street}, ${addr.barangay}, ${addr.city}, ${addr.province}`;
+      } else {
+        document.getElementById("address").value = "";
+      }
     } else {
       console.log("⚠️ No user profile found in Firestore.");
     }
   } catch (err) {
     console.error("Error loading user profile:", err);
   }
+}
+
+function parseAddress(fullAddress) {
+  const parts = fullAddress.split(",").map((p) => p.trim());
+
+  return {
+    houseno: parts[0] || "",
+    street: parts[1] || "",
+    barangay: parts[2] || "",
+    city: parts[3] || "",
+    province: parts[4] || "",
+  };
 }
 
 // ===================== NAVIGATION HELPERS =====================
@@ -420,13 +438,15 @@ checkoutForm.addEventListener("submit", async (e) => {
 
     // Update user profile in Firestore
     const userRef = doc(fs, "users", currentUser.uid);
+    const parsedAddress = parseAddress(address);
+
     await setDoc(
       userRef,
       {
         email: currentUser.email,
         name,
         phone: contact,
-        address,
+        address: parsedAddress, // store as object
       },
       { merge: true }
     );

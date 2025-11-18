@@ -29,11 +29,49 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 
-// ================= ELEMENTS =================
-const emailEl = document.getElementById("email");
+// ================= REUSABLE TEXT-FIELD GENERATOR =================
+function createTextField(labelText, id, disabled = true) {
+  const wrapper = document.createElement("div");
+  wrapper.classList.add("input-group");
+
+  const label = document.createElement("label");
+  label.textContent = labelText;
+  label.setAttribute("for", id);
+
+  const input = document.createElement("input");
+  input.type = "text";
+  input.id = id;
+  input.placeholder = `Enter your ${labelText}`;
+  input.disabled = disabled;
+
+  wrapper.appendChild(label);
+  wrapper.appendChild(input);
+  return wrapper;
+}
+
+// ================= INSERT FIELDS INTO PAGE =================
+const container = document.getElementById("info-fields");
+container.appendChild(createTextField("Name", "name"));
+container.appendChild(createTextField("Phone Number", "phone"));
+container.appendChild(createTextField("House No.", "houseno"));
+container.appendChild(createTextField("Street", "street"));
+container.appendChild(createTextField("Barangay", "barangay"));
+container.appendChild(createTextField("City", "city", true)); // uneditable
+container.appendChild(createTextField("Province", "province", true)); // uneditable
+
+// Now we can safely reference them
 const nameInput = document.getElementById("name");
 const phoneInput = document.getElementById("phone");
-const addressInput = document.getElementById("address");
+const housenoInput = document.getElementById("houseno");
+const streetInput = document.getElementById("street");
+const barangayInput = document.getElementById("barangay");
+const cityInput = document.getElementById("city");
+const provinceInput = document.getElementById("province");
+
+cityInput.value = "Tagaytay";
+provinceInput.value = "Cavite";
+
+const emailEl = document.getElementById("email");
 const editBtn = document.getElementById("editBtn");
 
 // Password Elements
@@ -81,6 +119,16 @@ onAuthStateChanged(auth, async (user) => {
 
   if (snap.exists()) {
     const data = snap.data();
+    const address = data.address || {};
+
+    nameInput.value = data.name || user.email.split("@")[0];
+    phoneInput.value = data.phone || "Not set";
+    housenoInput.value = address.houseno || "Not set";
+    streetInput.value = address.street || "Not set";
+    barangayInput.value = address.barangay || "Not set";
+
+    cityInput.value = address.city || "Tagaytay"; // always fixed
+    provinceInput.value = address.province || "Cavite"; // always fixed
 
     nameInput.value =
       data.name && data.name.trim() !== ""
@@ -97,16 +145,28 @@ onAuthStateChanged(auth, async (user) => {
       email: user.email,
       name: user.email.split("@")[0],
       phone: "Not set",
-      address: "Not set",
+      houseno: "Not set",
+      street: "Not set",
+      barangay: "Not set",
+      city: "Tagaytay",
+      province: "Cavite",
     });
-
-    nameInput.value = user.email.split("@")[0];
-    phoneInput.value = "Not set";
-    addressInput.value = "Not set";
   }
 });
 
-// ================= EDIT / SAVE =================
+// ================= POPUP =================
+function showSuccess(msg) {
+  const errorMessage = document.getElementById("error-message");
+  errorMessage.textContent = msg;
+  errorMessage.style.backgroundColor = "rgba(76, 175, 80, 0.95)";
+  errorMessage.classList.add("show");
+
+  setTimeout(() => {
+    errorMessage.classList.remove("show");
+  }, 3000);
+}
+
+// ================= EDIT / SAVE TOGGLE =================
 let editing = false;
 
 editBtn.addEventListener("click", async () => {
@@ -115,16 +175,26 @@ editBtn.addEventListener("click", async () => {
 
   if (!editing) {
     editing = true;
+
     nameInput.disabled = false;
     phoneInput.disabled = false;
-    addressInput.disabled = false;
+    housenoInput.disabled = false;
+    streetInput.disabled = false;
+    barangayInput.disabled = false;
+
+    // city and province remain disabled
     editBtn.textContent = "Save Changes";
     nameInput.focus();
   } else {
     editing = false;
+
     nameInput.disabled = true;
     phoneInput.disabled = true;
-    addressInput.disabled = true;
+    housenoInput.disabled = true;
+    streetInput.disabled = true;
+    barangayInput.disabled = true;
+
+    // city and province remain disabled
     editBtn.textContent = "Edit Profile";
 
     const userRef = doc(db, "users", user.uid);
@@ -134,7 +204,13 @@ editBtn.addEventListener("click", async () => {
         email: user.email,
         name: nameInput.value.trim() || user.email.split("@")[0],
         phone: phoneInput.value.trim() || "Not set",
-        address: addressInput.value.trim() || "Not set",
+        address: {
+          houseno: housenoInput.value.trim() || "Not set",
+          street: streetInput.value.trim() || "Not set",
+          barangay: barangayInput.value.trim() || "Not set",
+          city: "Tagaytay",
+          province: "Cavite",
+        },
       },
       { merge: true }
     );
