@@ -519,3 +519,37 @@ select {
   background: #ead1dc;
   color: #4c1130;
 }
+
+.order-summary-box, .payment-info-box {
+  background: #f8f8f8;
+  padding: 12px;
+  margin-top: 15px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+}
+
+.order-summary-box h4 {
+  margin-bottom: 8px;
+}
+
+.payment-info-box {
+  font-size: 13px;
+  color: #444;
+  line-height: 1.4;
+}
+.summary-items {
+  margin-bottom: 10px;
+  padding-left: 10px;
+}
+
+.summary-items p {
+  font-size: 14px;
+  margin: 3px 0;
+  color: #333;
+}
+
+.summary-label {
+  margin-top: 10px;
+  margin-bottom: 5px;
+}

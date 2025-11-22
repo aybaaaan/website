@@ -47,6 +47,7 @@
         <a href="#section-menu"><button>Edit Menu Image</button></a>
 
         <!-- ⭐ Added About Us Button -->
+        <a href="#section-announcements"><button>Manage Announcements</button></a>
         <a href="#section-aboutus"><button>Edit About Us</button></a>
         <a href="#section-orders"><button>Orders</button></a>
         <a href="#section-feedback"><button>Feedback</button></a>
@@ -150,6 +151,23 @@
           </div>
         </section>
 
+        <section id="section-announcements" class="data-section">
+          <div class="card">
+            <h4 class="title-tag">Manage Announcements</h4>
+            <button
+              class="btn-edit"
+              onclick="window.openAnnouncementModal()"
+              style="margin-bottom: 20px"
+            >
+              + Add New Announcement
+            </button>
+
+            <div id="announcementContainer">
+              <p>Loading announcements...</p>
+            </div>
+          </div>
+        </section>
+
         <!-- About Us Section -->
         <section id="section-aboutus">
           <h4 class="title-tag" style="text-align: left">About Us</h4>
@@ -200,6 +218,31 @@
           </div>
         </section>
       </main>
+    </div>
+
+    <div id="announcementModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="window.closeAnnouncementModal()">&times;</span>
+        <h3 id="announcementModalTitle">Add New Announcement</h3>
+
+        <div class="input-group">
+          <label for="announcementTitle">Title:</label>
+          <input type="text" id="announcementTitle" placeholder="Enter announcement title" />
+        </div>
+
+        <div class="input-group">
+          <label for="announcementContent">Content:</label>
+          <textarea
+            id="announcementContent"
+            placeholder="Enter announcement text"
+            rows="5"
+          ></textarea>
+        </div>
+
+        <div class="modal-actions">
+          <button id="saveAnnouncement">Save Announcement</button>
+        </div>
+      </div>
     </div>
 
     <!-- Modals (unchanged) -->

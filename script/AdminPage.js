@@ -72,10 +72,169 @@ const dbFirestore = getFirestore(app);
 const menuRef = ref(db, "menu");
 const homeRef = ref(db, "homepage");
 const ordersRef = ref(db, "Order");
-
+const announcementRef = ref(db, "Announcements");
 const menuGrid = document.getElementById("menuGrid");
 const homeGrid = document.getElementById("homeGrid");
 const ordersContainer = document.getElementById("ordersContainer");
+
+// ANNOUNCEMENT MODAL VARIABLES
+let currentAnnouncementKey = null;
+const announcementModal = document.getElementById("announcementModal");
+const announcementTitleInput = document.getElementById("announcementTitle");
+const announcementContentInput = document.getElementById("announcementContent");
+const saveAnnouncementBtn = document.getElementById("saveAnnouncement");
+const announcementContainer = document.getElementById("announcementContainer");
+
+// OPEN ADD ANNOUNCEMENT MODAL
+window.openAnnouncementModal = () => {
+  currentAnnouncementKey = null;
+  document.getElementById("announcementModalTitle").innerText =
+    "Add New Announcement";
+  announcementTitleInput.value = "";
+  announcementContentInput.value = "";
+  announcementModal.style.display = "flex";
+};
+
+// CLOSE ANNOUNCEMENT MODAL
+window.closeAnnouncementModal = () => {
+  announcementModal.style.display = "none";
+};
+
+// EDIT ANNOUNCEMENT
+window.editAnnouncement = (key, title, content) => {
+  currentAnnouncementKey = key;
+  document.getElementById("announcementModalTitle").innerText =
+    "Edit Announcement";
+  announcementTitleInput.value = title;
+  announcementContentInput.value = content;
+  announcementModal.style.display = "flex";
+};
+
+// DELETE ANNOUNCEMENT - Reusing existing delete modal
+window.deleteAnnouncement = (key) => {
+  // Set a new section identifier for the delete logic
+  pendingDelete.section = "announcements";
+  pendingDelete.key = key;
+
+  document.getElementById("delete-confirm-message").innerText =
+    "Are you sure you want to delete this announcement?";
+  document.getElementById("delete-confirm-modal").style.display = "flex";
+};
+
+// SAVE ANNOUNCEMENT (ADD OR EDIT)
+saveAnnouncementBtn.addEventListener("click", () => {
+  const title = announcementTitleInput.value.trim();
+  const content = announcementContentInput.value.trim();
+
+  if (!title || !content) {
+    alert("Please fill in both the title and content for the announcement.");
+    return;
+  }
+
+  const announcementData = {
+    title: title,
+    content: content,
+    timestamp: Date.now(), // Add a timestamp for ordering
+  };
+
+  if (currentAnnouncementKey) {
+    // Update existing
+    update(
+      ref(db, `Announcements/${currentAnnouncementKey}`),
+      announcementData
+    );
+  } else {
+    // Add new
+    push(announcementRef, announcementData);
+  }
+
+  window.closeAnnouncementModal();
+});
+
+// ... [Keep existing saveItem, editItem, deleteItem functions] ...
+
+// RENDER ANNOUNCEMENTS
+onValue(announcementRef, (snapshot) => {
+  announcementContainer.innerHTML = "";
+  if (!snapshot.exists()) {
+    announcementContainer.innerHTML = "<p>No announcements found.</p>";
+    return;
+  }
+
+  const announcements = [];
+  snapshot.forEach((child) => {
+    const item = child.val();
+    item.key = child.key;
+    announcements.push(item);
+  });
+
+  // Sort newest first
+  announcements.sort((a, b) => b.timestamp - a.timestamp);
+
+  announcements.forEach((item) => {
+    const card = document.createElement("div");
+    card.classList.add("announcement-card");
+
+    const date = item.timestamp
+      ? new Date(item.timestamp).toLocaleString()
+      : "N/A";
+
+    // Add innerHTML safely
+    card.innerHTML = `
+      <h4>${item.title}</h4>
+      <p>${item.content.replace(/\n/g, "<br>")}</p>
+      <small style="color: #666; font-style: italic;">Posted: ${date}</small>
+      <div class="announcement-actions">
+        <button class="btn-edit">Edit</button>
+        <button class="btn-delete">Delete</button>
+      </div>
+    `;
+
+    // Attach edit event
+    const editBtn = card.querySelector(".btn-edit");
+    editBtn.addEventListener("click", () => {
+      window.editAnnouncement(item.key, item.title, item.content);
+    });
+
+    // Attach delete event
+    const deleteBtn = card.querySelector(".btn-delete");
+    deleteBtn.addEventListener("click", () => {
+      window.deleteAnnouncement(item.key);
+    });
+
+    announcementContainer.appendChild(card);
+  });
+});
+
+// ... [Keep existing renderItems, renderOrdersPage functions] ...
+
+// ⭐ UPDATE: Handle CONFIRM DELETE button for all sections
+document.getElementById("confirm-delete").addEventListener("click", () => {
+  if (pendingDelete.section && pendingDelete.key) {
+    let path = "";
+
+    if (
+      pendingDelete.section === "menu" ||
+      pendingDelete.section === "homepage"
+    ) {
+      // Existing logic for menu/homepage items
+      path = `${pendingDelete.section}/${pendingDelete.key}`;
+    } else if (pendingDelete.section === "announcements") {
+      // NEW logic for announcements
+      path = `Announcements/${pendingDelete.key}`;
+    }
+
+    if (path) {
+      remove(ref(db, path))
+        .then(() => console.log(`${pendingDelete.section} item deleted.`))
+        .catch((error) => console.error("Deletion failed: ", error));
+    }
+
+    // Reset and close
+    pendingDelete = { section: null, key: null };
+    document.getElementById("delete-confirm-modal").style.display = "none";
+  }
+});
 
 // ITEM MODAL VARIABLES
 let currentSection = "menu";
@@ -408,12 +567,16 @@ function renderOrdersPage() {
       </div>
 
       <div class="order-card-right">
-        <p class= "orderNumber"><strong>Order #:</strong> ${
-          data.orderID || "N/A"
-        }</p>
-        <p><strong>Total:</strong> ₱${
-          data.total ? data.total.toFixed(2) : "0.00"
-        }</p>
+        <h6 class= "orderNumber"><strong>Order #: ${
+          data.orderID || "N/A" 
+        }  </strong></h6>
+        <p>
+  <strong><span style= "color: #a64d79;">Total:</strong></span>
+  <span style="font-size: 18px; color: #a64d79; font-weight: bold;">
+    ₱${data.total ? data.total.toFixed(2) : "0.00"}
+  </span>
+</p>
+
         <p><strong>Delivery Date:</strong> ${deliveryDate}</p>
         <p><strong>Delivery Time:</strong> ${deliveryTime}</p>
         <div class="order-actions">
