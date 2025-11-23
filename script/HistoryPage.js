@@ -185,7 +185,7 @@ onAuthStateChanged(auth, (user) => {
               <p class="subtotal">Subtotal: ₱${(item.price * item.qty).toFixed(
                 2
               )}</p>
-              <p class="order-date">Date Received: ${displayDate}</p>
+              <p class="order-date">Date Ordered: ${displayDate}</p>
               <p class="order-status" style="color: ${statusColor}; font-weight: 600;">
                 Status: ${order.status || "pending"}
               </p>
