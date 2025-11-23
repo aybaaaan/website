@@ -6,7 +6,7 @@
 }
 
 body {
-  font-family: "Livvic", Arial, sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background: url("https://imgs.search.brave.com/qwpZN5_Purot1GZWJoFNbNlNT1xNrco54atkeNOGNG8/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/cHJlbWl1bS1waG90/by90YWJsZS13aXRo/LW1hbnktcGxhdGVz/LWZvb2QtaW5jbHVk/aW5nLWZvb2QtZHJp/bmtzXzg2MjQ2Mi0x/MDM5MC5qcGc_c2Vt/dD1haXNfaHlicmlk/Jnc9NzQwJnE9ODA")
     no-repeat center center/cover;
   min-height: 100vh;
@@ -518,4 +518,38 @@ select {
 .popup-btn.confirm:hover {
   background: #ead1dc;
   color: #4c1130;
+}
+
+.order-summary-box, .payment-info-box {
+  background: #f8f8f8;
+  padding: 12px;
+  margin-top: 15px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+}
+
+.order-summary-box h4 {
+  margin-bottom: 8px;
+}
+
+.payment-info-box {
+  font-size: 13px;
+  color: #444;
+  line-height: 1.4;
+}
+.summary-items {
+  margin-bottom: 10px;
+  padding-left: 10px;
+}
+
+.summary-items p {
+  font-size: 14px;
+  margin: 3px 0;
+  color: #333;
+}
+
+.summary-label {
+  margin-top: 10px;
+  margin-bottom: 5px;
 }

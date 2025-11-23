@@ -4,6 +4,19 @@ const subtotalEl = document.getElementById("subtotal");
 const totalEl = document.getElementById("total");
 const addMoreBtn = document.getElementById("addMoreBtn");
 const proceedBtn = document.getElementById("proceedBtn");
+const paymentSelect = document.getElementById("payment");
+const summaryItems = document.getElementById("summaryItems");
+
+// Order summary elements
+const summarySubtotal = document.getElementById("summarySubtotal");
+const summaryTotal = document.getElementById("summaryTotal");
+
+// Payment info box
+const paymentInfo = document.getElementById("paymentInfo");
+
+// Delivery fee
+const DELIVERY_FEE = 50;
+
 
 // Load orders from localStorage
 let orders = JSON.parse(localStorage.getItem("cart")) || [];
@@ -306,7 +319,28 @@ proceedBtn.addEventListener("click", async () => {
   // 🔹 Try to load profile info from Firestore
   await loadUserProfile();
 
+// Build item list inside summary
+summaryItems.innerHTML = ""; // clear previous
+
+orders.forEach(item => {
+  const row = document.createElement("p");
+  row.textContent = `${item.name} — Qty: ${item.qty} — Price: ₱${(item.price * item.qty).toFixed(2)}`;
+  summaryItems.appendChild(row);
+});
+
+// Update subtotal & total
+summarySubtotal.textContent = subtotalEl.textContent;
+summaryTotal.textContent = (
+  parseFloat(totalEl.textContent) + 50
+).toFixed(2);
+
+
+
   modal.style.display = "flex";
+  // Update summary when modal shows
+summarySubtotal.textContent = subtotalEl.textContent;
+summaryTotal.textContent = (parseFloat(totalEl.textContent) + DELIVERY_FEE).toFixed(2);
+
 });
 
 // ========== Modal Close Logic ==========
@@ -472,6 +506,32 @@ checkoutForm.addEventListener("submit", async (e) => {
     alert("Failed to place order. Please try again.");
   }
 });
+
+paymentSelect.addEventListener("change", () => {
+  const selected = paymentSelect.value;
+
+  if (selected === "GCASH") {
+    paymentInfo.style.display = "block";
+    paymentInfo.innerHTML = `
+      <strong>GCash Payment:</strong><br>
+      The delivery personnel will provide a GCash QR scanner upon arrival. 
+      Please prepare your device for scanning.
+    `;
+  } 
+  
+  else if (selected === "CASH_ON_DELIVERY") {
+    paymentInfo.style.display = "block";
+    paymentInfo.innerHTML = `
+      <strong>Cash on Delivery:</strong><br>
+      Please prepare the exact cash amount and hand it to the delivery personnel upon arrival.
+    `;
+  }
+
+  else {
+    paymentInfo.style.display = "none";
+  }
+});
+
 
 // Return Home button handler
 document.getElementById("returnHomeBtn").addEventListener("click", () => {
