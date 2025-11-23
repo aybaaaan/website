@@ -87,7 +87,8 @@ body::before {
 /* Back Button */
 .back-btn {
   display: block; /* ensures it doesn’t overlap other content */
-  text-align: right; /* move it to the right */
+  text-align: right;
+  /* move it to the right */
   margin-bottom: 15px; /* spacing below */
   text-decoration: none;
   color: #a64d79;
@@ -214,7 +215,8 @@ body::before {
 
 .addmore-btn,
 .proceed-btn {
-  flex: 0 0 auto; /* natural size, do not stretch */
+  flex: 0 0 auto;
+  /* natural size, do not stretch */
 }
 
 /* Button Styles */
@@ -286,35 +288,10 @@ body::before {
   }
 }
 
-/* ====== Responsive ====== */
-@media (max-width: 768px) {
-  .order-item {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .order-item img {
-    width: 100%;
-    height: 180px;
-  }
-
-  .totals {
-    text-align: left;
-  }
-
-  .actions-row {
-    flex-direction: column; /* stack buttons on small screens */
-    align-items: stretch;
-  }
-
-  .addmore-btn,
-  .green-btn {
-    width: 100%; /* full width on mobile */
-  }
-}
 /* ====== Modal Styles ====== */
 .modal {
-  display: none; /* hidden by default */
+  display: none;
+  /* hidden by default */
   position: fixed;
   z-index: 100;
   left: 0;
@@ -387,9 +364,11 @@ body::before {
 }
 
 #checkoutForm button[type="submit"] {
-  width: 100%; /* full width */
+  width: 100%;
+  /* full width */
   margin-top: 15px; /* space above the button */
-  align-self: center; /* keep it centered */
+  align-self: center;
+  /* keep it centered */
 }
 
 #checkoutForm input {
@@ -415,7 +394,8 @@ select {
   display: block;
 }
 .pickup-label {
-  font-size: 14px !important; /* force smaller text */
+  font-size: 14px !important;
+  /* force smaller text */
   font-weight: 600;
 
   display: block;
@@ -423,7 +403,8 @@ select {
 }
 
 #successModal {
-  display: none; /* hidden by default */
+  display: none;
+  /* hidden by default */
   position: fixed;
   justify-content: center;
   align-items: center;
@@ -553,3 +534,24 @@ select {
   margin-top: 10px;
   margin-bottom: 5px;
 }
+
+/* =========================================
+    HAMBURGER STYLES
+   ========================================= */
+
+/* Hamburger Menu Icon (Desktop: Hidden) */
+.hamburger {
+  display: none;
+  cursor: pointer;
+}
+
+.bar {
+  display: block;
+  width: 25px;
+  height: 3px;
+  margin: 5px auto;
+  -webkit-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+  background-color: white;
+}
+

@@ -5,17 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Feedback Page</title>
     <link rel="stylesheet" href="/css/FeedbackPage.css" />
+    <link rel="stylesheet" href="/responsive/FeedbackResponsive.css" />
     <!-- Use your existing CSS -->
   </head>
   <body>
-    <!-- Header -->
     <header class="header">
-      <div class="logo">Mediterranean In Velvet</div>
       <div class="hamburger" id="hamburger">
         <span></span>
         <span></span>
         <span></span>
       </div>
+
+      <div class="logo">Mediterranean In Velvet</div>
+
       <nav class="nav" id="nav-menu">
         <a href="/pages/HomePage.html#home">Home</a>
         <a href="/pages/HomePage.html#menu">Menu</a>
@@ -39,7 +41,10 @@
 
       <div class="order-list">
         <div class="feedback-card">
-          <p><strong>Food Name:</strong> <span id="feedbackItemName">Loading...</span></p>
+          <p>
+            <strong>Food Name:</strong>
+            <span id="feedbackItemName">Loading...</span>
+          </p>
           <textarea
             id="feedbackText"
             placeholder="Write your feedback here..."

@@ -59,6 +59,15 @@ document.addEventListener("DOMContentLoaded", () => {
   const itemName = urlParams.get("item") || "Unknown Item";
   const orderID = urlParams.get("orderID"); // Important to link order
 
+  // ===================== Hamburger Icon =====================
+  const hamburger = document.getElementById("hamburger");
+  const navMenu = document.getElementById("nav-menu");
+
+  hamburger.addEventListener("click", () => {
+    hamburger.classList.toggle("active");
+    navMenu.classList.toggle("active");
+  });
+
   // Display item name in UI
   feedbackItemNameEl.textContent = itemName;
 
@@ -67,7 +76,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const text = feedbackText.value.trim();
 
     if (!text) {
-      feedbackMessage.textContent = "Please write your feedback before submitting.";
+      feedbackMessage.textContent =
+        "Please write your feedback before submitting.";
       feedbackMessage.style.color = "red";
       feedbackModal.style.display = "flex";
       return;
@@ -98,7 +108,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const customerName = orderData.name || "Unknown Customer";
       const foodItems = orderData.orders
-        ? Object.values(orderData.orders).map(i => i.name)
+        ? Object.values(orderData.orders).map((i) => i.name)
         : ["Unknown Items"];
 
       // ---------------- SAVE FEEDBACK ----------------
@@ -109,15 +119,16 @@ document.addEventListener("DOMContentLoaded", () => {
         itemName: itemName,
         feedback: text,
         timestamp: new Date().toLocaleString(),
-        foodItems: foodItems
+        foodItems: foodItems,
       });
 
-      feedbackMessage.textContent = "Thank you! Your feedback has been submitted.";
+      feedbackMessage.textContent =
+        "Thank you! Your feedback has been submitted.";
       feedbackMessage.style.color = "green";
       feedbackText.value = "";
-
     } catch (error) {
-      feedbackMessage.textContent = "Error submitting feedback: " + error.message;
+      feedbackMessage.textContent =
+        "Error submitting feedback: " + error.message;
       feedbackMessage.style.color = "red";
     }
 

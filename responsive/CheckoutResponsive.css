@@ -1,0 +1,120 @@
+/* ====== Responsive / Mobile Styles ====== */
+@media (max-width: 768px) {
+  /* Header Adjustments */
+  .header {
+    padding: 15px 20px;
+    
+    /* Dito natin sila pinagdikit sa Left Side */
+    justify-content: flex-start; 
+    align-items: center;
+    
+    /* Ito ang layo ng Hamburger sa Logo */
+    gap: 15px; 
+  }
+
+  /* Logo Adjustments */
+  .logo {
+    font-size: 19px; /* Liitan konti para kasya sa phone */
+    text-align: left;
+  }
+
+  /* Show Hamburger */
+  .hamburger {
+    display: block; 
+    cursor: pointer;
+    z-index: 1001;
+    
+    /* Magic code para mauna siya sa Logo visually */
+    order: -1; 
+  }
+
+  /* Mobile Navigation Menu */
+  .nav {
+    position: fixed;
+    left: -100%; /* Nakatago sa kaliwa */
+    top: 60px;   /* Nasa ilalim ng header */
+    gap: 0;
+    flex-direction: column;
+    background-color: #741b47;
+    width: 100%;
+    text-align: center;
+    transition: 0.3s;
+    box-shadow: 0 10px 10px rgba(0,0,0,0.1);
+    z-index: 1000;
+  }
+
+  /* Active class para lumabas ang menu */
+  .nav.active {
+    left: 0; 
+  }
+
+  .nav a {
+    margin: 16px 0;
+    display: block;
+    font-size: 18px;
+  }
+
+  /* Hamburger Animation Styles (nagiging X) */
+  .hamburger.active .bar:nth-child(2) {
+    opacity: 0;
+  }
+  .hamburger.active .bar:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+  }
+  .hamburger.active .bar:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+  }
+
+  /* Layout Adjustments for Content */
+  .checkout-container {
+    padding: 20px 10px; 
+  }
+
+  .checkout-card {
+    padding: 15px; 
+  }
+
+  /* Make items stack vertically */
+  .order-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .order-item img {
+    width: 100%;
+    height: 150px;
+    margin-bottom: 10px;
+  }
+
+  .quantity-control {
+    margin-top: 10px;
+  }
+
+  .totals {
+    text-align: left;
+  }
+
+  /* Adjust Modal for Mobile */
+  .modal-content {
+    width: 95%;
+    padding: 25px 20px;
+    margin: 10px;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .deliv-details {
+    font-size: 20px;
+  }
+  
+  /* Buttons stacking */
+  .actions-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+  
+  .addmore-btn, .proceed-btn {
+    width: 100%;
+  }
+}

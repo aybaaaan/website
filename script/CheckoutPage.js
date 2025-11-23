@@ -17,7 +17,6 @@ const paymentInfo = document.getElementById("paymentInfo");
 // Delivery fee
 const DELIVERY_FEE = 50;
 
-
 // Load orders from localStorage
 let orders = JSON.parse(localStorage.getItem("cart")) || [];
 
@@ -97,6 +96,25 @@ function renderOrders() {
   });
 
   updateTotals();
+}
+
+// ===================== Hamburger Icon =====================
+const hamburger = document.querySelector("#hamburger");
+const navMenu = document.querySelector("#nav-menu");
+
+if (hamburger && navMenu) {
+  hamburger.addEventListener("click", () => {
+    hamburger.classList.toggle("active");
+    navMenu.classList.toggle("active");
+  });
+
+  // Close menu when a link is clicked
+  document.querySelectorAll(".nav a").forEach((n) =>
+    n.addEventListener("click", () => {
+      hamburger.classList.remove("active");
+      navMenu.classList.remove("active");
+    })
+  );
 }
 
 // ===================== MODAL LOGIC =====================
@@ -319,28 +337,27 @@ proceedBtn.addEventListener("click", async () => {
   // 🔹 Try to load profile info from Firestore
   await loadUserProfile();
 
-// Build item list inside summary
-summaryItems.innerHTML = ""; // clear previous
+  // Build item list inside summary
+  summaryItems.innerHTML = ""; // clear previous
 
-orders.forEach(item => {
-  const row = document.createElement("p");
-  row.textContent = `${item.name} — Qty: ${item.qty} — Price: ₱${(item.price * item.qty).toFixed(2)}`;
-  summaryItems.appendChild(row);
-});
+  orders.forEach((item) => {
+    const row = document.createElement("p");
+    row.textContent = `${item.name} — Qty: ${item.qty} — Price: ₱${(
+      item.price * item.qty
+    ).toFixed(2)}`;
+    summaryItems.appendChild(row);
+  });
 
-// Update subtotal & total
-summarySubtotal.textContent = subtotalEl.textContent;
-summaryTotal.textContent = (
-  parseFloat(totalEl.textContent) + 50
-).toFixed(2);
-
-
+  // Update subtotal & total
+  summarySubtotal.textContent = subtotalEl.textContent;
+  summaryTotal.textContent = (parseFloat(totalEl.textContent) + 50).toFixed(2);
 
   modal.style.display = "flex";
   // Update summary when modal shows
-summarySubtotal.textContent = subtotalEl.textContent;
-summaryTotal.textContent = (parseFloat(totalEl.textContent) + DELIVERY_FEE).toFixed(2);
-
+  summarySubtotal.textContent = subtotalEl.textContent;
+  summaryTotal.textContent = (
+    parseFloat(totalEl.textContent) + DELIVERY_FEE
+  ).toFixed(2);
 });
 
 // ========== Modal Close Logic ==========
@@ -517,21 +534,16 @@ paymentSelect.addEventListener("change", () => {
       The delivery personnel will provide a GCash QR scanner upon arrival. 
       Please prepare your device for scanning.
     `;
-  } 
-  
-  else if (selected === "CASH_ON_DELIVERY") {
+  } else if (selected === "CASH_ON_DELIVERY") {
     paymentInfo.style.display = "block";
     paymentInfo.innerHTML = `
       <strong>Cash on Delivery:</strong><br>
       Please prepare the exact cash amount and hand it to the delivery personnel upon arrival.
     `;
-  }
-
-  else {
+  } else {
     paymentInfo.style.display = "none";
   }
 });
-
 
 // Return Home button handler
 document.getElementById("returnHomeBtn").addEventListener("click", () => {

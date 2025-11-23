@@ -1,0 +1,101 @@
+/* ==========================================================
+   RESPONSIVE WEBSITE STYLES
+   ========================================================== */
+
+/* Tablet Adjustments */
+@media (max-width: 1024px) {
+  .user-card {
+    height: 35vh;
+    padding: 15px;
+    margin: 8px;
+  }
+  .user-chart {
+    gap: 15px;
+    justify-content: center;
+  }
+  .users-text { font-size: 14px; }
+  .users-total { font-size: 48px; }
+  .orderResult {
+    height: 35vh;
+    padding: 15px;
+    margin: 8px;
+  }
+  .orders-text { font-size: 14px; }
+  .orders-total { font-size: 48px; }
+}
+
+/* Phone Adjustments (Where the Hamburger Appears) */
+@media (max-width: 768px) {
+
+  .hamburger {
+    display: flex;
+  }
+
+  aside {
+    left: -220px; /* Hide to the left */
+  }
+
+  aside.active {
+    left: 0;
+  }
+
+  main {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  /* --- EXISTING MOBILE CARD STYLES BELOW --- */
+  .user-card {
+    height: auto;
+    min-height: 200px;
+    padding: 10px;
+    margin: 5px;
+  }
+  .user-chart {
+    flex-direction: column;
+    gap: 10px; 
+    align-items: center;
+  }
+  .users-total-container {
+    top: 0;
+    transform: none;
+    margin: 10px 0;
+  }
+  .users-text { font-size: 12px; }
+  .users-total { font-size: 36px; }
+  .orderResult {
+    height: auto;
+    min-height: 200px;
+    padding: 10px;
+    margin: 5px;
+  }
+  .orders-container { padding: 10px; }
+  .orders-total-container { margin: 10px 0; }
+  .orders-text { font-size: 12px; }
+  .orders-total { font-size: 36px; }
+}
+
+/* Small Phones */
+@media (max-width: 480px) {
+  .login-result-container {
+    height: 12vh;
+    width: 12vh;
+  }
+  .orders-container {
+    height: 12vh;
+    width: 12vh;
+  }
+  .user-card {
+    padding: 8px;
+    margin: 3px;
+  }
+  .users-text { font-size: 11px; }
+  .users-total { font-size: 28px; }
+  .orderResult {
+    padding: 8px;
+    margin: 3px;
+    min-height: 150px;
+  }
+  .orders-text { font-size: 11px; }
+  .orders-total { font-size: 28px; }
+}
