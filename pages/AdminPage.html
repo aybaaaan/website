@@ -47,7 +47,9 @@
         <a href="#section-menu"><button>Edit Menu Image</button></a>
 
         <!-- ⭐ Added About Us Button -->
-        <a href="#section-announcements"><button>Manage Announcements</button></a>
+        <a href="#section-announcements"
+          ><button>Manage Announcements</button></a
+        >
         <a href="#section-aboutus"><button>Edit About Us</button></a>
         <a href="#section-orders"><button>Orders</button></a>
         <a href="#section-feedback"><button>Feedback</button></a>
@@ -216,18 +218,29 @@
           <div id="feedbackContainer" class="feedback-container">
             <!-- Feedback cards will be dynamically injected here -->
           </div>
+          <div class="pagination-controls">
+            <button id="prevPageFeedback">Prev</button>
+            <span id="feedbackPageInfo">Page 1</span>
+            <button id="nextPageFeedback">Next</button>
+          </div>
         </section>
       </main>
     </div>
 
     <div id="announcementModal" class="modal">
       <div class="modal-content">
-        <span class="close" onclick="window.closeAnnouncementModal()">&times;</span>
+        <span class="close" onclick="window.closeAnnouncementModal()"
+          >&times;</span
+        >
         <h3 id="announcementModalTitle">Add New Announcement</h3>
 
         <div class="input-group">
           <label for="announcementTitle">Title:</label>
-          <input type="text" id="announcementTitle" placeholder="Enter announcement title" />
+          <input
+            type="text"
+            id="announcementTitle"
+            placeholder="Enter announcement title"
+          />
         </div>
 
         <div class="input-group">

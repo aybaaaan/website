@@ -1114,48 +1114,113 @@ function getStartDate(range) {
 const feedbackRef = ref(db, "Feedbacks");
 const feedbackContainer = document.getElementById("feedbackContainer");
 
-onValue(feedbackRef, (snapshot) => {
-  feedbackContainer.innerHTML = "";
+// Variables for Feedback Pagination
+const feedbackPerPage = 5;
+let currentFeedbackPage = 1;
+let allFeedbacks = [];
 
+// Fetch Feedbacks
+onValue(feedbackRef, (snapshot) => {
+  allFeedbacks = []; // Reset array
+  
   if (!snapshot.exists()) {
     feedbackContainer.innerHTML = "<p>No feedback yet.</p>";
     return;
   }
 
-  const allFeedbacks = snapshot.val();
+  const rawData = snapshot.val();
+  allFeedbacks = Object.values(rawData);
+  
+  // Optionally sort by something if available, e.g. timestamp?
+  // allFeedbacks.sort((a, b) => b.timestamp - a.timestamp);
 
-  Object.values(allFeedbacks).forEach(async (fb) => {
+  // Reset to first page on new data load
+  currentFeedbackPage = 1;
+  renderFeedbackPage();
+});
+
+// Render Function
+async function renderFeedbackPage() {
+  feedbackContainer.innerHTML = "";
+
+  if (allFeedbacks.length === 0) {
+    feedbackContainer.innerHTML = "<p>No feedback yet.</p>";
+    return;
+  }
+
+  // Calculate slice indices
+  const startIndex = (currentFeedbackPage - 1) * feedbackPerPage;
+  const endIndex = startIndex + feedbackPerPage;
+  const pageItems = allFeedbacks.slice(startIndex, endIndex);
+
+  // Loop through visible items
+  for (const fb of pageItems) {
     const card = document.createElement("div");
     card.classList.add("admin-feedback-card");
 
     let orderNumber = fb.orderID || "N/A";
     let orderedItems = fb.foodItems
       ? fb.foodItems.join(", ")
-      : "No items found"; // FIXED
+      : "No items found";
     let customerName = "Unknown";
 
+    // Only fetch customer name if we have an Order ID
     if (fb.orderID) {
-      const ordersRoot = await get(ref(db, "Order"));
-      if (ordersRoot.exists()) {
-        ordersRoot.forEach((orderSnap) => {
-          const orderData = orderSnap.val();
-          if (String(orderData.orderID) === String(fb.orderID)) {
-            customerName = orderData.name || "Unknown";
-            orderNumber = orderData.orderID;
-          }
-        });
+      try {
+        // Optimization: Fetch only specific order if possible, 
+        // but current structure suggests fetching all orders is the pattern.
+        // To save bandwidth, we check locally if we have ordersArray loaded, otherwise fetch.
+        // Assuming orders are small enough or fetched elsewhere:
+        const ordersRoot = await get(ref(db, "Order"));
+        if (ordersRoot.exists()) {
+          ordersRoot.forEach((orderSnap) => {
+            const orderData = orderSnap.val();
+            if (String(orderData.orderID) === String(fb.orderID)) {
+              customerName = orderData.name || "Unknown";
+              orderNumber = orderData.orderID;
+            }
+          });
+        }
+      } catch (err) {
+        console.error("Error fetching order details for feedback:", err);
       }
     }
 
     card.innerHTML = `
-    <p><strong>Order ID:</strong> ${orderNumber}</p>
-    <p><strong>Customer:</strong> ${customerName}</p>
-    <p><strong>Ordered Items:</strong> ${orderedItems}</p>
-    <p><strong>Feedback:</strong> ${fb.feedback || "No feedback"}</p>
-  `;
+      <p><strong>Order ID:</strong> ${orderNumber}</p>
+      <p><strong>Customer:</strong> ${customerName}</p>
+      <p><strong>Ordered Items:</strong> ${orderedItems}</p>
+      <p><strong>Feedback:</strong> ${fb.feedback || "No feedback"}</p>
+    `;
 
     feedbackContainer.appendChild(card);
-  });
+  }
+
+  // Update Pagination Controls
+  const totalPages = Math.ceil(allFeedbacks.length / feedbackPerPage);
+  document.getElementById(
+    "feedbackPageInfo"
+  ).textContent = `Page ${currentFeedbackPage} of ${totalPages}`;
+
+  document.getElementById("prevPageFeedback").disabled = currentFeedbackPage === 1;
+  document.getElementById("nextPageFeedback").disabled =
+    currentFeedbackPage >= totalPages;
+}
+
+// Pagination Button Listeners
+document.getElementById("prevPageFeedback").addEventListener("click", () => {
+  if (currentFeedbackPage > 1) {
+    currentFeedbackPage--;
+    renderFeedbackPage();
+  }
+});
+
+document.getElementById("nextPageFeedback").addEventListener("click", () => {
+  const totalPages = Math.ceil(allFeedbacks.length / feedbackPerPage);
+  if (currentFeedbackPage < totalPages) {
+    currentFeedbackPage++;
+    renderFeedbackPage();
+  }
 });
 
 // ============ BUTTON EVENTS ============
