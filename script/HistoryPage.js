@@ -129,77 +129,121 @@ onAuthStateChanged(auth, (user) => {
     setTimeout(() => toast.remove(), 5000);
   }
 
-  const ordersRef = ref(db, "Order");
-  onValue(ordersRef, (snapshot) => {
-    const data = snapshot.val();
-    orderList.innerHTML = "";
+  // ==========================================================
+  // --- UPDATED PART: FETCH MENU FIRST, THEN ORDERS ---
+  // ==========================================================
+  
+  // 1. Storage for menu images
+  let menuImages = {};
 
-    if (!data) {
-      orderList.innerHTML = "<p>No orders found.</p>";
-      return;
+  // 2. Fetch the "menu" node first
+  const menuRef = ref(db, "menu");
+
+  onValue(menuRef, (menuSnapshot) => {
+    const menuData = menuSnapshot.val();
+
+    // Reset and Populate image map
+    menuImages = {};
+    if (menuData) {
+      Object.values(menuData).forEach((item) => {
+        // We look for 'item.url' based on your screenshot
+        if (item.name && item.url) {
+          menuImages[item.name] = item.url;
+        }
+      });
     }
 
-    // Filter orders belonging to the current user
-    const userOrders = Object.values(data).filter(
-      (order) => order.userId === user.uid
-    );
+    // 3. NOW we fetch and display the orders (Logic moved inside here)
+    const ordersRef = ref(db, "Order");
+    onValue(ordersRef, (snapshot) => {
+      const data = snapshot.val();
+      orderList.innerHTML = "";
 
-    if (userOrders.length === 0) {
-      orderList.innerHTML = "<p>You have no past orders yet.</p>";
-      return;
-    }
+      if (!data) {
+        orderList.innerHTML = "<p>No orders found.</p>";
+        return;
+      }
 
-    // Sort orders by deliveryDate (latest first)
-    userOrders.sort(
-      (a, b) => new Date(b.deliveryDate) - new Date(a.deliveryDate)
-    );
+      // Filter orders belonging to the current user
+      const userOrders = Object.values(data).filter(
+        (order) => order.userId === user.uid
+      );
 
-    userOrders.forEach((order) => {
-      // Combine delivery date and time
-      const displayDate = order.deliveryDate
-        ? `${new Date(order.deliveryDate).toLocaleDateString("en-US", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-          })} ${order.deliveryTime ? `at ${order.deliveryTime}` : ""}`
-        : "Date not available";
+      if (userOrders.length === 0) {
+        orderList.innerHTML = "<p>You have no past orders yet.</p>";
+        return;
+      }
 
-      let statusColor = "darkorange";
-      if (order.status === "accepted") statusColor = "black";
-      else if (order.status === "for-delivery") statusColor = "green";
-      else if (order.status === "cancelled") statusColor = "#cc3232";
-      else if (order.status === "delivered") statusColor = "#a64d79";
+      // Sort orders by deliveryDate (latest first)
+      userOrders.sort(
+        (a, b) => new Date(b.deliveryDate) - new Date(a.deliveryDate)
+      );
 
-      // Reverse items (stack-like behavior)
-      const reversedItems = [...order.orders].reverse();
+      userOrders.forEach((order) => {
+        // Combine delivery date and time
+        const displayDate = order.deliveryDate
+          ? `${new Date(order.deliveryDate).toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })} ${order.deliveryTime ? `at ${order.deliveryTime}` : ""}`
+          : "Date not available";
 
-      reversedItems.forEach((item) => {
-        orderList.innerHTML += `
-          <div class="order-card">
-            <img src="https://via.placeholder.com/140x140" alt="${item.name}" />
-            <div class="order-info">
-              <p class="order-id">Order ID: ${order.orderID || "N/A"}</p>
-              <h3>${item.name}</h3>
-              <p>Quantity: ${item.qty}</p>
-              <p>Price: ₱${item.price} each</p>
-              <p class="subtotal">Subtotal: ₱${(item.price * item.qty).toFixed(
-                2
-              )}</p>
-              <p class="order-date">Date Ordered: ${displayDate}</p>
-              <p class="order-status" style="color: ${statusColor}; font-weight: 600;">
-                Status: ${order.status || "pending"}
-              </p>
+        let statusColor = "darkorange";
+        if (order.status === "accepted") statusColor = "black";
+        else if (order.status === "for-delivery") statusColor = "green";
+        else if (order.status === "cancelled") statusColor = "#cc3232";
+        else if (order.status === "delivered") statusColor = "#a64d79";
+
+        // Reverse items (Safely handle if orders is an object instead of array)
+        const itemsArray = order.orders ? Object.values(order.orders) : [];
+        const reversedItems = itemsArray.reverse();
+
+        reversedItems.forEach((item) => {
+          
+          // --- LOOKUP IMAGE HERE ---
+          // Use the image from menuImages, or fallback to placeholder
+          let finalImageSrc = "https://via.placeholder.com/140x140";
+          
+          if (menuImages[item.name]) {
+            finalImageSrc = menuImages[item.name];
+          } 
+          // Optional: Case-insensitive fallback
+          else {
+             const foundKey = Object.keys(menuImages).find(k => k.toLowerCase() === (item.name || "").toLowerCase());
+             if(foundKey) finalImageSrc = menuImages[foundKey];
+          }
+
+          orderList.innerHTML += `
+            <div class="order-card">
+              <img src="${finalImageSrc}" alt="${item.name}" style="object-fit: cover;" />
+              
+              <div class="order-info">
+                <p class="order-id">Order ID: ${order.orderID || "N/A"}</p>
+                <h3>${item.name}</h3>
+                <p>Quantity: ${item.qty}</p>
+                <p>Price: ₱${item.price} each</p>
+                <p class="subtotal">Subtotal: ₱${(
+                  item.price * item.qty
+                ).toFixed(2)}</p>
+                <p class="order-date">Date Ordered: ${displayDate}</p>
+                <p class="order-status" style="color: ${statusColor}; font-weight: 600;">
+                  Status: ${order.status || "pending"}
+                </p>
+              </div>
+              <button class="reorder-btn" onclick="reorder('${item.name}', ${
+            item.qty
+          }, ${item.price})">
+                Reorder
+              </button>
+              <button class="feedback-btn" onclick="window.location.href='/pages/FeedbackPage.html?item=${encodeURIComponent(
+                item.name
+              )}&orderID=${order.orderID}'">
+                Give Feedback
+              </button>
             </div>
-            <button class="reorder-btn" onclick="reorder('${item.name}', ${
-          item.qty
-        }, ${item.price})">
-              Reorder
-            </button>
-            <button class="feedback-btn" onclick="window.location.href='/pages/FeedbackPage.html?item=${encodeURIComponent(item.name)}&orderID=${order.orderID}'">
-              Give Feedback
-            </button>
-          </div>
-        `;
+          `;
+        });
       });
     });
   });
