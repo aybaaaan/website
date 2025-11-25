@@ -6,7 +6,7 @@
 }
 
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   background: url("https://imgs.search.brave.com/qwpZN5_Purot1GZWJoFNbNlNT1xNrco54atkeNOGNG8/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/cHJlbWl1bS1waG90/by90YWJsZS13aXRo/LW1hbnktcGxhdGVz/LWZvb2QtaW5jbHVk/aW5nLWZvb2QtZHJp/bmtzXzg2MjQ2Mi0x/MDM5MC5qcGc_c2Vt/dD1haXNfaHlicmlk/Jnc9NzQwJnE9ODA")
     no-repeat center center/cover;
   color: #333;
@@ -63,7 +63,7 @@ body {
 .food-details {
   display: flex;
   flex-direction: row;
-  gap: 30px;
+  gap: 25px;
   height: 100%;
   align-items: flex-start;
 }
@@ -123,6 +123,7 @@ body {
 }
 
 .order-btn {
+  margin-top: 5vh;
   background-color: #a64d79;
   border: none;
   border-radius: 24px;
@@ -194,13 +195,91 @@ body {
   }
 }
 
-/* ==== RESPONSIVE ==== */
+@media (max-width: 1024px) {
+  .food-details-container {
+    padding: 25px;
+    max-width: 800px;
+  }
+  .food-info h2 {
+    font-size: 26px;
+  }
+  .food-info .price {
+    font-size: 20px;
+  }
+  .order-btn {
+    padding: 9px 24px;
+    font-size: 18px;
+  }
+}
+
+/* Mobile (up to 768px) */
 @media (max-width: 768px) {
+  body {
+    padding: 10px;
+  }
+  .food-details-container {
+    padding: 20px;
+    height: auto;
+  }
   .food-details {
     flex-direction: column;
+    gap: 20px;
   }
-
   .food-img {
     width: 100%;
+    height: auto;
+    max-height: 300px; /* Limit height on mobile for better layout */
+  }
+  .food-info {
+    max-height: none;
+  }
+  .food-info h2 {
+    font-size: 24px;
+  }
+  .food-info p {
+    font-size: 15px;
+  }
+  .food-info .price {
+    font-size: 20px;
+  }
+  .qty-section {
+    gap: 10px;
+    align-items: stretch;
+  }
+  .order-btn {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+  }
+  .popup-content {
+    width: 90%;
+    max-width: 300px;
+  }
+}
+
+/* Small mobile (up to 480px) */
+@media (max-width: 480px) {
+  .food-details-container {
+    padding: 15px;
+  }
+  .food-info h2 {
+    font-size: 22px;
+  }
+  .food-info p {
+    font-size: 14px;
+  }
+  .food-info .price {
+    font-size: 18px;
+  }
+  .back-btn {
+    font-size: 16px;
+  }
+  .qty-section input {
+    padding: 8px;
+    font-size: 16px;
+  }
+  .order-btn {
+    padding: 14px;
+    font-size: 16px;
   }
 }

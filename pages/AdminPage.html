@@ -4,8 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin Dashboard</title>
-    <link rel="stylesheet" href="/css/AdminPage.css" />
-    <link rel="stylesheet" href="/responsive/AdminResponsive.css" />
+    <link rel="stylesheet" href="../css/AdminPage.css" />
+    <link rel="stylesheet" href="../responsive/AdminResponsive.css" />
   </head>
 
   <script type="module">
@@ -47,7 +47,9 @@
         <a href="#section-menu"><button>Edit Menu Image</button></a>
 
         <!-- ⭐ Added About Us Button -->
-        <a href="#section-announcements"><button>Manage Announcements</button></a>
+        <a href="#section-announcements"
+          ><button>Manage Announcements</button></a
+        >
         <a href="#section-aboutus"><button>Edit About Us</button></a>
         <a href="#section-orders"><button>Orders</button></a>
         <a href="#section-feedback"><button>Feedback</button></a>
@@ -222,12 +224,18 @@
 
     <div id="announcementModal" class="modal">
       <div class="modal-content">
-        <span class="close" onclick="window.closeAnnouncementModal()">&times;</span>
+        <span class="close" onclick="window.closeAnnouncementModal()"
+          >&times;</span
+        >
         <h3 id="announcementModalTitle">Add New Announcement</h3>
 
         <div class="input-group">
           <label for="announcementTitle">Title:</label>
-          <input type="text" id="announcementTitle" placeholder="Enter announcement title" />
+          <input
+            type="text"
+            id="announcementTitle"
+            placeholder="Enter announcement title"
+          />
         </div>
 
         <div class="input-group">
