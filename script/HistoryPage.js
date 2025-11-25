@@ -54,7 +54,7 @@ const orderList = document.querySelector(".order-list");
 
 function renderNotifications(notifs) {
   const notifContainer = document.getElementById("notifItems");
-  if (!notifContainer) return; // <-- prevents errors
+  if (!notifContainer) return; 
 
   notifContainer.innerHTML = "";
 
@@ -129,75 +129,72 @@ onAuthStateChanged(auth, (user) => {
     setTimeout(() => toast.remove(), 5000);
   }
 
-  // ==========================================================
-  // --- UPDATED PART: FETCH MENU FIRST, THEN ORDERS ---
-  // ==========================================================
+  // --- ADDED THIS PART: FETCH MENU IMAGES FIRST ---
+  // Nag-create ako ng variable para paglagyan ng images galing sa admin menu
+  let menuImages = {}; 
   
-  // 1. Storage for menu images
-  let menuImages = {};
-
-  // 2. Fetch the "menu" node first
-  const menuRef = ref(db, "menu");
-
-  onValue(menuRef, (menuSnapshot) => {
-    const menuData = menuSnapshot.val();
-
-    // Reset and Populate image map
-    menuImages = {};
+  // NOTE: Palitan mo yung "Products" kung iba ang name ng folder ng menu sa database mo (e.g., "Menu", "Dishes")
+  const menuRef = ref(db, "Products"); 
+  
+  onValue(menuRef, (snapshot) => {
+    const menuData = snapshot.val();
     if (menuData) {
-      Object.values(menuData).forEach((item) => {
-        // We look for 'item.url' based on your screenshot
-        if (item.name && item.url) {
-          menuImages[item.name] = item.url;
-        }
+      Object.values(menuData).forEach(item => {
+         // Ina-assume ko na ang structure ng product mo ay may .name at .image (o .imgUrl)
+         // Kung .imageUrl ang gamit mo, palitan mo yung item.image sa ibaba
+         if (item.name && item.image) {
+             menuImages[item.name] = item.image;
+         }
       });
     }
+    // Trigger order render if needed, but since onValue is real-time, 
+    // the next block will pick it up usually.
+  });
+  // ------------------------------------------------
 
-    // 3. NOW we fetch and display the orders (Logic moved inside here)
-    const ordersRef = ref(db, "Order");
-    onValue(ordersRef, (snapshot) => {
-      const data = snapshot.val();
-      orderList.innerHTML = "";
+  const ordersRef = ref(db, "Order");
+  onValue(ordersRef, (snapshot) => {
+    const data = snapshot.val();
+    orderList.innerHTML = "";
 
-      if (!data) {
-        orderList.innerHTML = "<p>No orders found.</p>";
-        return;
-      }
+    if (!data) {
+      orderList.innerHTML = "<p>No orders found.</p>";
+      return;
+    }
 
-      // Filter orders belonging to the current user
-      const userOrders = Object.values(data).filter(
-        (order) => order.userId === user.uid
-      );
+    // Filter orders belonging to the current user
+    const userOrders = Object.values(data).filter(
+      (order) => order.userId === user.uid
+    );
 
-      if (userOrders.length === 0) {
-        orderList.innerHTML = "<p>You have no past orders yet.</p>";
-        return;
-      }
+    if (userOrders.length === 0) {
+      orderList.innerHTML = "<p>You have no past orders yet.</p>";
+      return;
+    }
 
-      // Sort orders by deliveryDate (latest first)
-      userOrders.sort(
-        (a, b) => new Date(b.deliveryDate) - new Date(a.deliveryDate)
-      );
+    // Sort orders by deliveryDate (latest first)
+    userOrders.sort(
+      (a, b) => new Date(b.deliveryDate) - new Date(a.deliveryDate)
+    );
 
-      userOrders.forEach((order) => {
-        // Combine delivery date and time
-        const displayDate = order.deliveryDate
-          ? `${new Date(order.deliveryDate).toLocaleDateString("en-US", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })} ${order.deliveryTime ? `at ${order.deliveryTime}` : ""}`
-          : "Date not available";
+    userOrders.forEach((order) => {
+      // Combine delivery date and time
+      const displayDate = order.deliveryDate
+        ? `${new Date(order.deliveryDate).toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })} ${order.deliveryTime ? `at ${order.deliveryTime}` : ""}`
+        : "Date not available";
 
-        let statusColor = "darkorange";
-        if (order.status === "accepted") statusColor = "black";
-        else if (order.status === "for-delivery") statusColor = "green";
-        else if (order.status === "cancelled") statusColor = "#cc3232";
-        else if (order.status === "delivered") statusColor = "#a64d79";
+      let statusColor = "darkorange";
+      if (order.status === "accepted") statusColor = "black";
+      else if (order.status === "for-delivery") statusColor = "green";
+      else if (order.status === "cancelled") statusColor = "#cc3232";
+      else if (order.status === "delivered") statusColor = "#a64d79";
 
-        // Reverse items (Safely handle if orders is an object instead of array)
-        const itemsArray = order.orders ? Object.values(order.orders) : [];
-        const reversedItems = itemsArray.reverse();
+      // Reverse items (stack-like behavior)
+      const reversedItems = [...order.orders].reverse();
 
         reversedItems.forEach((item) => {
           
@@ -247,7 +244,7 @@ onAuthStateChanged(auth, (user) => {
       });
     });
   });
-});
+
 
 // ===================== REORDER FUNCTION =====================
 window.reorder = function (name, qty, price) {

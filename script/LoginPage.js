@@ -81,12 +81,12 @@ submit.addEventListener("click", (event) => {
         ) {
           showSuccess("Admin login successful!");
           setTimeout(() => {
-            window.location.href = "/pages/AdminPage.html";
+            window.location.href = "../pages/AdminPage.html";
           }, 1500);
         } else {
           showSuccess("User login successful!");
           setTimeout(() => {
-            window.location.href = "/pages/HomePage.html";
+            window.location.href = "../pages/HomePage.html";
           }, 1500);
         }
       });

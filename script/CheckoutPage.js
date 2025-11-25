@@ -224,10 +224,10 @@ function parseAddress(fullAddress) {
 function goToMenuPage() {
   if (currentUser) {
     // Logged-in users → HomePage.html
-    window.location.href = "/pages/HomePage.html#menu";
+    window.location.href = "../pages/HomePage.html#menu";
   } else {
     // Guests → index.html
-    window.location.href = "/index.html#menu";
+    window.location.href = "../index.html#menu";
   }
 }
 

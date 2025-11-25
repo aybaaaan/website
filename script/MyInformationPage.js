@@ -83,7 +83,7 @@ phoneInput.addEventListener("input", (e) => {
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
     alert("You must be logged in to view this page.");
-    window.location.href = "/pages/LoginPage.html";
+    window.location.href = "../pages/LoginPage.html";
     return;
   }
 

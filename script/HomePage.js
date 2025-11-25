@@ -9,68 +9,13 @@ window.addEventListener("scroll", () => {
   }
 });
 
-// ===================== CAROUSEL (HOME) =====================
-document.addEventListener("DOMContentLoaded", function () {
-  const slides = document.querySelectorAll(".carousel-item");
-  const indicators = document.querySelectorAll(".indicator");
-  const prevButton = document.querySelector(".carousel-prev");
-  const nextButton = document.querySelector(".carousel-next");
-
-  let currentSlide = 0;
-  const totalSlides = slides.length;
-
-  function showSlide(index) {
-    // Hide all slides and deactivate indicators
-    slides.forEach((slide) => slide.classList.remove("active"));
-    indicators.forEach((indicator) => indicator.classList.remove("active"));
-
-    // Show current slide and activate indicator
-    slides[index].classList.add("active");
-    indicators[index].classList.add("active");
-  }
-
-  function nextSlide() {
-    currentSlide = (currentSlide + 1) % totalSlides;
-    showSlide(currentSlide);
-  }
-
-  function prevSlide() {
-    currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
-    showSlide(currentSlide);
-  }
-
-  // Event listeners for navigation buttons
-  nextButton.addEventListener("click", nextSlide);
-  prevButton.addEventListener("click", prevSlide);
-
-  // Event listeners for indicators
-  indicators.forEach((indicator, index) => {
-    indicator.addEventListener("click", function () {
-      currentSlide = index;
-      showSlide(currentSlide);
-    });
-  });
-
-  // Keyboard navigation
-  document.addEventListener("keydown", function (event) {
-    if (event.key === "ArrowLeft") {
-      prevSlide();
-    } else if (event.key === "ArrowRight") {
-      nextSlide();
-    }
-  });
-
-  // Optional: Auto-advance slides every 5 seconds
-  // setInterval(nextSlide, 5000);
-});
-
 // ===================== FOOD DETAILS PAGE =====================
 function goToDetails(name, price, img, desc) {
   localStorage.setItem("foodName", name);
   localStorage.setItem("foodPrice", price);
   localStorage.setItem("foodImg", img);
   localStorage.setItem("foodDesc", desc);
-  window.location.href = "/pages/FoodDetails.html";
+  window.location.href = "../pages/FoodDetails.html";
 }
 
 // ===================== MENU NAVIGATION =====================
@@ -230,7 +175,7 @@ document.querySelectorAll(".checkout-btn").forEach((btn) => {
         popup.style.display = "none";
       };
     } else {
-      window.location.href = "/pages/CheckoutPage.html";
+      window.location.href = "../pages/CheckoutPage.html";
     }
   });
 });
@@ -316,6 +261,7 @@ const db = getDatabase(app);
 const announcementRef = ref(db, "Announcements");
 
 let currentSlide = 0;
+let autoSlideInterval;
 
 function showSlide(index) {
   const items = document.querySelectorAll(".carousel-item");
@@ -338,6 +284,31 @@ window.nextSlide = function () {
 window.prevSlide = function () {
   showSlide(currentSlide - 1);
 };
+
+// Automatic sliding
+function startAutoSlide() {
+  autoSlideInterval = setInterval(() => {
+    nextSlide();
+  }, 3000); // every 3 seconds
+}
+
+function stopAutoSlide() {
+  clearInterval(autoSlideInterval);
+}
+
+// Start auto-slide initially
+startAutoSlide();
+
+// Pause on hover
+const carousel = document.getElementById("carousel");
+carousel.addEventListener("mouseenter", stopAutoSlide);
+carousel.addEventListener("mouseleave", startAutoSlide);
+
+// Keyboard navigation
+document.addEventListener("keydown", (e) => {
+  if (e.key === "ArrowRight") nextSlide();
+  else if (e.key === "ArrowLeft") prevSlide();
+});
 
 // ================== LOAD HOMEPAGE CAROUSEL ==================
 onValue(ref(db, "homepage"), (snapshot) => {
@@ -771,7 +742,7 @@ const auth = getAuth();
 if (confirmLogout) {
   confirmLogout.addEventListener("click", () => {
     signOut(auth).then(() => {
-      window.location.href = "/index.html"; // after logout → guest page
+      window.location.href = "../index.html"; // after logout → guest page
     });
   });
 }

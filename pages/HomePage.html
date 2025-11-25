@@ -56,8 +56,8 @@
     </div>
 
     <!-- Navigation arrows -->
-    <button class="carousel-nav carousel-prev" onclick="prevSlide()" aria-label="Previous image">‹</button>
-    <button class="carousel-nav carousel-next" onclick="nextSlide()" aria-label="Next image">›</button>
+    <button id="prevSlide" class="carousel-nav carousel-prev onclick="prevSlide()" aria-label="Previous image">‹</button>
+    <button id="nextSlide" class="carousel-nav carousel-next" onclick="nextSlide()" aria-label="Next image">›</button>
 
     <!-- Indicators -->
     <div class="carousel-indicators" id="indicators"></div>
@@ -165,10 +165,10 @@
         <p id="notification-message"></p>
     </div>
 
-    <script type="module" src ="/script/HomePage.js"></script>
+    <script type="module" src ="../script/HomePage.js"></script>
 
     <script type="module">
-        import { listenForUserNotifications } from "/notifications/notification.js";
+        import { listenForUserNotifications } from "../notifications/notification.js";
 
         const userId = CURRENT_USER_ID; 
 
