@@ -85,7 +85,7 @@ submit.addEventListener("click", (event) => {
           // Sign out user until verified
           setTimeout(() => {
             signOut(auth).then(() => {
-              window.location.href = "/pages/LoginPage.html";
+              window.location.href = "../pages/LoginPage.html";
             });
           }, 2500);
         })
@@ -95,9 +95,7 @@ submit.addEventListener("click", (event) => {
     })
     .catch((error) => {
       if (error.code === "auth/invalid-email") {
-        showError(
-          "Please enter a valid email address (example@domain.com)."
-        );
+        showError("Please enter a valid email address (example@domain.com).");
       } else if (error.code === "auth/email-already-in-use") {
         showError("This email is already registered. Please sign in instead.");
       } else {

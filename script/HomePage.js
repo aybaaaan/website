@@ -70,7 +70,7 @@ function goToDetails(name, price, img, desc) {
   localStorage.setItem("foodPrice", price);
   localStorage.setItem("foodImg", img);
   localStorage.setItem("foodDesc", desc);
-  window.location.href = "/pages/FoodDetails.html";
+  window.location.href = "../pages/FoodDetails.html";
 }
 
 // ===================== MENU NAVIGATION =====================
@@ -230,7 +230,7 @@ document.querySelectorAll(".checkout-btn").forEach((btn) => {
         popup.style.display = "none";
       };
     } else {
-      window.location.href = "/pages/CheckoutPage.html";
+      window.location.href = "../pages/CheckoutPage.html";
     }
   });
 });
@@ -771,7 +771,7 @@ const auth = getAuth();
 if (confirmLogout) {
   confirmLogout.addEventListener("click", () => {
     signOut(auth).then(() => {
-      window.location.href = "/index.html"; // after logout → guest page
+      window.location.href = "../index.html"; // after logout → guest page
     });
   });
 }

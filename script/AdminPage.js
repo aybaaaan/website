@@ -15,7 +15,7 @@ cancelLogout.addEventListener(
 );
 confirmLogout.addEventListener(
   "click",
-  () => (window.location.href = "/pages/LoginPage.html")
+  () => (window.location.href = "../pages/LoginPage.html")
 );
 
 window.addEventListener("click", (e) => {

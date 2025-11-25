@@ -90,7 +90,7 @@ function renderNotifications(notifs) {
 onAuthStateChanged(auth, (user) => {
   if (!user) {
     alert("Please log in to view your order history.");
-    window.location.href = "/pages/LoginPage.html";
+    window.location.href = "../pages/LoginPage.html";
     return;
   }
 
@@ -195,7 +195,9 @@ onAuthStateChanged(auth, (user) => {
         }, ${item.price})">
               Reorder
             </button>
-            <button class="feedback-btn" onclick="window.location.href='/pages/FeedbackPage.html?item=${encodeURIComponent(item.name)}&orderID=${order.orderID}'">
+            <button class="feedback-btn" onclick="window.location.href='/pages/FeedbackPage.html?item=${encodeURIComponent(
+              item.name
+            )}&orderID=${order.orderID}'">
               Give Feedback
             </button>
           </div>
