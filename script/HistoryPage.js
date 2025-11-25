@@ -129,6 +129,13 @@ onAuthStateChanged(auth, (user) => {
     setTimeout(() => toast.remove(), 5000);
   }
 
+  let homepageImages = {};
+  const homepageRef = ref(db, "homepage");
+  onValue(homepageRef, (snapshot) => {
+    const imgdata = snapshot.val();
+    homepageImages = imgdata; // Store it for later use
+  });
+
   const ordersRef = ref(db, "Order");
   onValue(ordersRef, (snapshot) => {
     const data = snapshot.val();
@@ -174,9 +181,19 @@ onAuthStateChanged(auth, (user) => {
       const reversedItems = [...order.orders].reverse();
 
       reversedItems.forEach((item) => {
+        // Match the image from homepage node
+        let imageUrl = "";
+        Object.values(homepageImages).forEach((homeItem) => {
+          if (homeItem.name === item.name) {
+            imageUrl = homeItem.url;
+          }
+        });
+
+        if (!imageUrl) imageUrl = "/icons/cart.png";
+
         orderList.innerHTML += `
           <div class="order-card">
-            <img src="https://via.placeholder.com/140x140" alt="${item.name}" />
+            <img src="${imageUrl}" alt="${item.name}" />
             <div class="order-info">
               <p class="order-id">Order ID: ${order.orderID || "N/A"}</p>
               <h3>${item.name}</h3>
