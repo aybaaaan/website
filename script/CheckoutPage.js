@@ -227,7 +227,7 @@ function goToMenuPage() {
     window.location.href = "/pages/HomePage.html#menu";
   } else {
     // Guests → index.html
-    window.location.href = "/guest/index.html#menu";
+    window.location.href = "/index.html#menu";
   }
 }
 

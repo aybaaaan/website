@@ -70,7 +70,7 @@
     <!-- Category Toggle -->
     <div class="menu-toggle">
         <button id="btnMain" class="toggle-btn">Main Dishes</button>
-        <button id="btnSide" class="toggle-btn">Ala Carte</button>
+        <button id="btnSide" class="toggle-btn">Side Dishes</button>
     </div>
     
     <div class="menu-cards-container" id="menuCardsContainer">
@@ -142,21 +142,6 @@
             </div>
         </div>
     </div>
-
-  <div id="announcementToastContainer" style="
-    position: fixed;
-    bottom: 20px;  /* distance from bottom */
-    right: 20px;   /* distance from right */
-    z-index: 9999;
-    display: flex;
-    flex-direction: column-reverse; 
-    gap: 10px;
-    align-items: flex-end;">
-</div>
-
-
-
-
     <!-- Order Status Toast Container -->
     <div id="orderStatusToast" style="
         position: fixed;
@@ -167,19 +152,6 @@
         flex-direction: column-reverse;
         gap: 10px;">
     </div>
-
-    <div id="announcementModal" class="popup-overlay" style="z-index: 10000; display: none;">
-    <div class="popup-box announcement-box">
-        <h3 class="announcement-modal-header">Announcement:</h3>
-        <h2 class="announcement-greeting">(^.^)/ Hello customer! We truly appreciate your support. Check out the latest update/s:</h2>
-        <h3 id="announcement-modal-title"></h3>
-        <p id="announcement-modal-date"></p>
-        <div id="announcement-modal-content" style="text-align: left;">
-    </div>
-        <h6 class="announcement-signature">- Mediterranean In Velvet</h6>
-        <button class="confirm-btn" id="closeAnnouncementModal">Close</button>
-    </div>
-</div>
 
     <!-- Empty Cart Popup -->
     <div id="emptyCartPopup" class="popup-overlay">
