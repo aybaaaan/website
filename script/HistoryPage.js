@@ -94,7 +94,7 @@ onAuthStateChanged(auth, (user) => {
     return;
   }
 
-  // Firestore real-time notifications
+  // --- NOTIFICATIONS LOGIC (Walang binago dito) ---
   const notifRef = collection(
     dbFirestore,
     "notifications",
@@ -108,7 +108,6 @@ onAuthStateChanged(auth, (user) => {
     snapshot.forEach((doc) => {
       notifications.push({ id: doc.id, userId: user.uid, ...doc.data() });
     });
-
     renderNotifications(notifications);
   });
 
@@ -129,83 +128,86 @@ onAuthStateChanged(auth, (user) => {
     setTimeout(() => toast.remove(), 5000);
   }
 
-  // --- ADDED THIS PART: FETCH MENU IMAGES FIRST ---
-  // Nag-create ako ng variable para paglagyan ng images galing sa admin menu
-  let menuImages = {}; 
+  // ==========================================================
+  //  FIXED LOGIC: FETCH MENU FIRST -> THEN ORDERS
+  // ==========================================================
   
-  // NOTE: Palitan mo yung "Products" kung iba ang name ng folder ng menu sa database mo (e.g., "Menu", "Dishes")
-  const menuRef = ref(db, "Products"); 
-  
-  onValue(menuRef, (snapshot) => {
-    const menuData = snapshot.val();
+  // 1. Storage for menu images
+  let menuImages = {};
+
+  // 2. Fetch the "menu" node FIRST (Ito ang tama base sa screenshot mo: "menu")
+  const menuRef = ref(db, "menu");
+
+  onValue(menuRef, (menuSnapshot) => {
+    const menuData = menuSnapshot.val();
+
+    // Reset and Populate image map
+    menuImages = {};
     if (menuData) {
-      Object.values(menuData).forEach(item => {
-         // Ina-assume ko na ang structure ng product mo ay may .name at .image (o .imgUrl)
-         // Kung .imageUrl ang gamit mo, palitan mo yung item.image sa ibaba
-         if (item.name && item.image) {
-             menuImages[item.name] = item.image;
-         }
+      Object.values(menuData).forEach((item) => {
+        // Ito ang tama base sa screenshot mo: "item.url" (Base64 string)
+        if (item.name && item.url) {
+          menuImages[item.name] = item.url;
+        }
       });
     }
-    // Trigger order render if needed, but since onValue is real-time, 
-    // the next block will pick it up usually.
-  });
-  // ------------------------------------------------
 
-  const ordersRef = ref(db, "Order");
-  onValue(ordersRef, (snapshot) => {
-    const data = snapshot.val();
-    orderList.innerHTML = "";
+    // 3. PAGKATAPOS makuha ang images, saka lang tatawagin ang Orders.
+    // Nasa loob na ito ng onValue ng menu para siguradong hindi mag-uunahan.
+    const ordersRef = ref(db, "Order");
+    onValue(ordersRef, (snapshot) => {
+      const data = snapshot.val();
+      orderList.innerHTML = "";
 
-    if (!data) {
-      orderList.innerHTML = "<p>No orders found.</p>";
-      return;
-    }
+      if (!data) {
+        orderList.innerHTML = "<p>No orders found.</p>";
+        return;
+      }
 
-    // Filter orders belonging to the current user
-    const userOrders = Object.values(data).filter(
-      (order) => order.userId === user.uid
-    );
+      // Filter orders belonging to the current user
+      const userOrders = Object.values(data).filter(
+        (order) => order.userId === user.uid
+      );
 
-    if (userOrders.length === 0) {
-      orderList.innerHTML = "<p>You have no past orders yet.</p>";
-      return;
-    }
+      if (userOrders.length === 0) {
+        orderList.innerHTML = "<p>You have no past orders yet.</p>";
+        return;
+      }
 
-    // Sort orders by deliveryDate (latest first)
-    userOrders.sort(
-      (a, b) => new Date(b.deliveryDate) - new Date(a.deliveryDate)
-    );
+      // Sort orders by deliveryDate (latest first)
+      userOrders.sort(
+        (a, b) => new Date(b.deliveryDate) - new Date(a.deliveryDate)
+      );
 
-    userOrders.forEach((order) => {
-      // Combine delivery date and time
-      const displayDate = order.deliveryDate
-        ? `${new Date(order.deliveryDate).toLocaleDateString("en-US", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-          })} ${order.deliveryTime ? `at ${order.deliveryTime}` : ""}`
-        : "Date not available";
+      userOrders.forEach((order) => {
+        const displayDate = order.deliveryDate
+          ? `${new Date(order.deliveryDate).toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })} ${order.deliveryTime ? `at ${order.deliveryTime}` : ""}`
+          : "Date not available";
 
-      let statusColor = "darkorange";
-      if (order.status === "accepted") statusColor = "black";
-      else if (order.status === "for-delivery") statusColor = "green";
-      else if (order.status === "cancelled") statusColor = "#cc3232";
-      else if (order.status === "delivered") statusColor = "#a64d79";
+        let statusColor = "darkorange";
+        if (order.status === "accepted") statusColor = "black";
+        else if (order.status === "for-delivery") statusColor = "green";
+        else if (order.status === "cancelled") statusColor = "#cc3232";
+        else if (order.status === "delivered") statusColor = "#a64d79";
 
-      // Reverse items (stack-like behavior)
-      const reversedItems = [...order.orders].reverse();
+        // Safety check para sa orders array
+        const itemsArray = order.orders ? Object.values(order.orders) : [];
+        const reversedItems = itemsArray.reverse();
 
         reversedItems.forEach((item) => {
           
-          // --- LOOKUP IMAGE HERE ---
-          // Use the image from menuImages, or fallback to placeholder
+          // --- IMAGE LOOKUP ---
           let finalImageSrc = "https://via.placeholder.com/140x140";
           
+          // Exact Match
           if (menuImages[item.name]) {
             finalImageSrc = menuImages[item.name];
           } 
-          // Optional: Case-insensitive fallback
+          // Case-insensitive Fallback (Just in case "biriyani" vs "Biriyani")
           else {
              const foundKey = Object.keys(menuImages).find(k => k.toLowerCase() === (item.name || "").toLowerCase());
              if(foundKey) finalImageSrc = menuImages[foundKey];
@@ -244,7 +246,7 @@ onAuthStateChanged(auth, (user) => {
       });
     });
   });
-
+});
 
 // ===================== REORDER FUNCTION =====================
 window.reorder = function (name, qty, price) {
