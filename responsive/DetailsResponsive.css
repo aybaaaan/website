@@ -1,0 +1,76 @@
+/* =========================================
+   RESPONSIVE
+   ========================================= */
+
+@media (max-width: 900px) {
+  .food-details-container {
+    height: auto;
+    min-height: 80vh;
+  }
+}
+
+@media (max-width: 768px) {
+  .food-details-container {
+    height: auto;
+    padding: 25px;
+    overflow: visible;
+  }
+
+  .food-details {
+    flex-direction: column;
+    gap: 20px;
+    overflow: visible;
+  }
+
+  .food-img {
+    width: 100%;
+    height: 250px;
+    flex: 0 0 auto;
+  }
+
+  .food-info {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  #foodDesc {
+    flex: 0 0 auto;
+    max-height: unset;
+    overflow-y: visible;
+    margin-bottom: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    padding: 10px;
+  }
+
+  .food-details-container {
+    padding: 20px;
+    border-radius: 12px;
+  }
+
+  .food-img {
+    height: 200px;
+  }
+
+  .food-info h2 {
+    font-size: 24px;
+  }
+
+  .food-info .price {
+    font-size: 20px;
+  }
+
+  .order-btn {
+    width: 100%;
+  }
+
+  .qty-section {
+    width: 100%;
+    justify-content: flex-start; /* keep them close */
+    gap: 6px; /* small space only */
+  }
+}

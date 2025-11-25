@@ -1002,16 +1002,19 @@ section.active {
   overflow-y: auto;
 }
 
-#section-orders::-webkit-scrollbar {
+#section-orders::-webkit-scrollbar,
+#section-feedback::-webkit-scrollbar {
   width: 8px;
 }
 
-#section-orders::-webkit-scrollbar-thumb {
+#section-orders::-webkit-scrollbar-thumb,
+#section-feedback::-webkit-scrollbar-thumb {
   background: #888;
   border-radius: 4px;
 }
 
-#section-orders::-webkit-scrollbar-thumb:hover {
+#section-orders::-webkit-scrollbar-thumb:hover,
+#section-feedback::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
 
@@ -1183,24 +1186,6 @@ section.active {
   transform: scale(1.03);
 }
 
-#feedbackBox {
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  padding: 12px;
-  background-color: #f9f9f9;
-  max-height: 500px;
-  overflow-y: auto;
-}
-
-.admin-feedback-card {
-  background-color: #fff;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 12px 16px;
-  margin-bottom: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
-}
-
 @keyframes popIn {
   from {
     opacity: 0;
@@ -1337,4 +1322,58 @@ section.active {
   font-size: 1rem;
   resize: vertical;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Container styling for Feedback (and Orders) */
+#section-feedback {
+  background: #f0f0f0;
+  border: 1.5px solid #ccc;
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 20px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+  max-height: 860px;
+  overflow-y: auto;
+}
+/* Inner Box for Feedback List 
+#feedbackBox {
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 12px;
+  background-color: #f9f9f9;
+  max-height: 500px;
+  overflow-y: auto;
+}*/
+
+/* Individual Feedback Card Style */
+.admin-feedback-card {
+  border-left: 5px solid #a64d79; /* Signature purple border */
+  background-color: #f8f8f8;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: all 0.3s ease;
+}
+
+/* Card Hover Animation */
+.admin-feedback-card:hover {
+  transform: scale(1.01);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Text Styling inside the card */
+.admin-feedback-card p {
+  font-size: 0.95rem;
+  color: #444;
+  line-height: 1.5;
+}
+
+/* Bold Text (Label) Styling */
+.admin-feedback-card strong {
+  color: #a64d79;
+  font-weight: 600;
 }
