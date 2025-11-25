@@ -51,7 +51,7 @@ function goToMenuPage() {
     window.location.href = "/pages/HomePage.html#menu";
   } else {
     // Guests → index.html
-    window.location.href = "/guest/index.html#menu";
+    window.location.href = "/index.html#menu";
   }
 }
 
@@ -93,7 +93,7 @@ function addToCartFromDetails() {
   if (currentUser) {
     window.location.href = "/pages/HomePage.html?cart=open#menu";
   } else {
-    window.location.href = "/guest/index.html?cart=open#menu";
+    window.location.href = "/index.html?cart=open#menu";
   }
 }
 

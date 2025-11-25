@@ -568,7 +568,7 @@ function renderOrdersPage() {
 
       <div class="order-card-right">
         <h6 class= "orderNumber"><strong>Order #: ${
-          data.orderID || "N/A" 
+          data.orderID || "N/A"
         }  </strong></h6>
         <p>
   <strong><span style= "color: #a64d79;">Total:</strong></span>

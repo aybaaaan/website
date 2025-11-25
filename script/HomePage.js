@@ -434,25 +434,29 @@ document.getElementById("btnSide").addEventListener("click", () => {
 // ===================== NEW: ANNOUNCEMENT LOGIC FUNCTIONS =====================
 
 // NEW: Container for Announcement Toast and Modal elements
-let viewedAnnouncementKey = localStorage.getItem("viewedAnnouncementKey") || null;
-let viewedAnnouncementTimestamp = localStorage.getItem("viewedAnnouncementTimestamp") || null;
-
+let viewedAnnouncementKey =
+  localStorage.getItem("viewedAnnouncementKey") || null;
+let viewedAnnouncementTimestamp =
+  localStorage.getItem("viewedAnnouncementTimestamp") || null;
 
 let allAnnouncements = [];
-const announcementToastContainer = document.getElementById("announcementToastContainer"); 
+const announcementToastContainer = document.getElementById(
+  "announcementToastContainer"
+);
 const announcementModal = document.getElementById("announcementModal");
-const closeAnnouncementModalBtn = document.getElementById("closeAnnouncementModal");
+const closeAnnouncementModalBtn = document.getElementById(
+  "closeAnnouncementModal"
+);
 
 if (closeAnnouncementModalBtn) {
-    closeAnnouncementModalBtn.addEventListener('click', () => {
-        announcementModal.style.display = 'none';
-    });
+  closeAnnouncementModalBtn.addEventListener("click", () => {
+    announcementModal.style.display = "none";
+  });
 }
 // Listen for clicks outside the modal to close it
 window.addEventListener("click", (e) => {
-    if (e.target === announcementModal) announcementModal.style.display = "none";
+  if (e.target === announcementModal) announcementModal.style.display = "none";
 });
-
 
 /**
  * Listens for the single newest announcement from the database.
@@ -463,35 +467,35 @@ window.addEventListener("click", (e) => {
  * and triggers a toast for the single newest one.
  */
 function listenToAnnouncements() {
-    // Query to get ALL announcements, ordered by timestamp (newest last)
-    const allAnnouncementsQuery = query(
-        announcementRef, 
-        orderByChild("timestamp")
-    );
+  // Query to get ALL announcements, ordered by timestamp (newest last)
+  const allAnnouncementsQuery = query(
+    announcementRef,
+    orderByChild("timestamp")
+  );
 
-    onValue(allAnnouncementsQuery, (snapshot) => {
-        if (!snapshot.exists()) {
-            allAnnouncements = [];
-            if (announcementToastContainer) announcementToastContainer.innerHTML = ""; 
-            return;
-        }
+  onValue(allAnnouncementsQuery, (snapshot) => {
+    if (!snapshot.exists()) {
+      allAnnouncements = [];
+      if (announcementToastContainer) announcementToastContainer.innerHTML = "";
+      return;
+    }
 
-        const announcementsData = [];
-        snapshot.forEach((child) => {
-            const announcement = child.val();
-            announcementsData.push({ ...announcement, key: child.key });
-        });
-
-        // Store ALL announcements globally (newest is the last item)
-        allAnnouncements = announcementsData; 
-        
-        // Get the single newest announcement to display the toast notification
-        const newestAnnouncement = announcementsData[announcementsData.length - 1];
-
-        if (newestAnnouncement) {
-            showAnnouncementToast(newestAnnouncement);
-        }
+    const announcementsData = [];
+    snapshot.forEach((child) => {
+      const announcement = child.val();
+      announcementsData.push({ ...announcement, key: child.key });
     });
+
+    // Store ALL announcements globally (newest is the last item)
+    allAnnouncements = announcementsData;
+
+    // Get the single newest announcement to display the toast notification
+    const newestAnnouncement = announcementsData[announcementsData.length - 1];
+
+    if (newestAnnouncement) {
+      showAnnouncementToast(newestAnnouncement);
+    }
+  });
 }
 
 /**
@@ -505,14 +509,15 @@ function showAnnouncementToast(announcement) {
   if (!announcementToastContainer || !announcement) return;
 
   const postDate = announcement.timestamp
-      ? new Date(announcement.timestamp).toLocaleString()
-      : "N/A Date/Time";
+    ? new Date(announcement.timestamp).toLocaleString()
+    : "N/A Date/Time";
 
   // Only skip toast if user has already viewed this exact announcement version
   if (
     viewedAnnouncementKey === announcement.key &&
     viewedAnnouncementTimestamp === String(announcement.timestamp)
-  ) return;
+  )
+    return;
 
   // Remove old toast if exists
   if (announcementToast) {
@@ -540,7 +545,10 @@ function showAnnouncementToast(announcement) {
       viewedAnnouncementKey = announcement.key;
       viewedAnnouncementTimestamp = String(announcement.timestamp);
       localStorage.setItem("viewedAnnouncementKey", viewedAnnouncementKey);
-      localStorage.setItem("viewedAnnouncementTimestamp", viewedAnnouncementTimestamp);
+      localStorage.setItem(
+        "viewedAnnouncementTimestamp",
+        viewedAnnouncementTimestamp
+      );
 
       announcementToast.remove();
       announcementToast = null;
@@ -551,81 +559,97 @@ function showAnnouncementToast(announcement) {
   setTimeout(() => announcementToast.classList.add("show"), 10);
 }
 /* Helper function to check for content overflow and attach event listener */
-function checkOverflowAndAddButton(card, contentWrapper, contentElement, button) {
-    setTimeout(() => {
-        // If content overflows the visible wrapper, show the button
-        if (contentElement.scrollHeight > contentWrapper.offsetHeight) {
-            button.style.display = "block";
-            button.textContent = "Show Full";
-        }
-    }, 0);
+function checkOverflowAndAddButton(
+  card,
+  contentWrapper,
+  contentElement,
+  button
+) {
+  setTimeout(() => {
+    // If content overflows the visible wrapper, show the button
+    if (contentElement.scrollHeight > contentWrapper.offsetHeight) {
+      button.style.display = "block";
+      button.textContent = "Show Full";
+    }
+  }, 0);
 
-    button.addEventListener("click", () => {
-        const isExpanded = card.classList.toggle("expanded");
+  button.addEventListener("click", () => {
+    const isExpanded = card.classList.toggle("expanded");
 
-        if (isExpanded) {
-            // Expand wrapper to full content height
-            contentWrapper.style.height = contentElement.scrollHeight + "px";
-            button.textContent = "Show Less";
-        } else {
-            // Collapse wrapper to minimal height (auto adjust if needed)
-            contentWrapper.style.height = ""; // remove inline height, CSS handles default
-            button.textContent = "Show Full";
-        }
-    });
+    if (isExpanded) {
+      // Expand wrapper to full content height
+      contentWrapper.style.height = contentElement.scrollHeight + "px";
+      button.textContent = "Show Less";
+    } else {
+      // Collapse wrapper to minimal height (auto adjust if needed)
+      contentWrapper.style.height = ""; // remove inline height, CSS handles default
+      button.textContent = "Show Full";
+    }
+  });
 }
-
 
 /**
  * Updates the announcement modal with all announcements, now with "Show Full/Show Less" button logic.
  */
 function showAnnouncementContentModal() {
-    if (!announcementModal || allAnnouncements.length === 0) return;
-    const modalContentElement = document.getElementById("announcement-modal-content");
-    modalContentElement.innerHTML = ""; // Clear previous modal content
+  if (!announcementModal || allAnnouncements.length === 0) return;
+  const modalContentElement = document.getElementById(
+    "announcement-modal-content"
+  );
+  modalContentElement.innerHTML = ""; // Clear previous modal content
 
-    // Reverse so newest on top
-    const reversedAnnouncements = [...allAnnouncements].reverse();
-    const newestAnnouncementKey = allAnnouncements[allAnnouncements.length - 1]?.key;
+  // Reverse so newest on top
+  const reversedAnnouncements = [...allAnnouncements].reverse();
+  const newestAnnouncementKey =
+    allAnnouncements[allAnnouncements.length - 1]?.key;
 
-    reversedAnnouncements.forEach((item, index) => {
-        const postDate = item.timestamp ? new Date(item.timestamp).toLocaleString() : 'N/A';
+  reversedAnnouncements.forEach((item, index) => {
+    const postDate = item.timestamp
+      ? new Date(item.timestamp).toLocaleString()
+      : "N/A";
 
-        const card = document.createElement("div");
-        card.className = "announcement-card";
+    const card = document.createElement("div");
+    card.className = "announcement-card";
 
-        const titleBlock = document.createElement("div");
-        titleBlock.innerHTML = `
+    const titleBlock = document.createElement("div");
+    titleBlock.innerHTML = `
             <h4 class="announcement-title">${item.title}</h4>
-            ${item.key === newestAnnouncementKey ? '<span class="new-label">NEW</span>' : ''}
+            ${
+              item.key === newestAnnouncementKey
+                ? '<span class="new-label">NEW</span>'
+                : ""
+            }
             <small class="announcement-date">Posted: ${postDate}</small>
         `;
 
-        const contentWrapper = document.createElement("div");
-        contentWrapper.className = "announcement-content-wrapper";
+    const contentWrapper = document.createElement("div");
+    contentWrapper.className = "announcement-content-wrapper";
 
-        const contentElement = document.createElement("p");
-        contentElement.className = "announcement-content";
-        contentElement.textContent = item.content; 
-        contentElement.style.whiteSpace = "pre-wrap"; 
+    const contentElement = document.createElement("p");
+    contentElement.className = "announcement-content";
+    contentElement.textContent = item.content;
+    contentElement.style.whiteSpace = "pre-wrap";
 
-        const showFullBtn = document.createElement("button");
-        showFullBtn.className = "see-full-btn";
-        showFullBtn.textContent = "Show Full";
+    const showFullBtn = document.createElement("button");
+    showFullBtn.className = "see-full-btn";
+    showFullBtn.textContent = "Show Full";
 
-        contentWrapper.appendChild(contentElement);
-        card.appendChild(titleBlock);
-        card.appendChild(contentWrapper);
-        card.appendChild(showFullBtn);
-        modalContentElement.appendChild(card);
+    contentWrapper.appendChild(contentElement);
+    card.appendChild(titleBlock);
+    card.appendChild(contentWrapper);
+    card.appendChild(showFullBtn);
+    modalContentElement.appendChild(card);
 
-        checkOverflowAndAddButton(card, contentWrapper, contentElement, showFullBtn);
-    });
+    checkOverflowAndAddButton(
+      card,
+      contentWrapper,
+      contentElement,
+      showFullBtn
+    );
+  });
 
-    announcementModal.style.display = 'flex';
+  announcementModal.style.display = "flex";
 }
-
-
 
 //=================== ORDER STATUS TOASTS =====================//
 const orderToasts = {}; // Track the toast element per orderID
@@ -733,7 +757,6 @@ onValue(ref(db, "Order"), (snapshot) => {
   });
 });
 
-
 // ===================== LOAD ABOUT US CONTENT =====================
 const aboutUsContent = document.getElementById("aboutUsContent");
 onValue(ref(db, "homepage/aboutUs"), (snapshot) => {
@@ -748,7 +771,7 @@ const auth = getAuth();
 if (confirmLogout) {
   confirmLogout.addEventListener("click", () => {
     signOut(auth).then(() => {
-      window.location.href = "/guest/index.html"; // after logout → guest page
+      window.location.href = "/index.html"; // after logout → guest page
     });
   });
 }
