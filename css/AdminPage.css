@@ -431,6 +431,22 @@ section.active {
   font-style: italic;
 }
 
+.exportBtn {
+  background: #a64d79;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 14px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.exportBtn:hover {
+  background: #914068;
+  transform: scale(1.05);
+}
+
 .pagination-controls {
   margin-top: 15px;
   display: flex;
@@ -464,6 +480,8 @@ section.active {
 /* =========== EDIT MENU AND BACKGROUND SECTION (MODIFIED FOR FIX) ============================== */
 
 .title-tag {
+  display: flex;
+  justify-content: space-between;
   font-size: 30px;
   font-weight: bold;
   padding: 1rem 12px;

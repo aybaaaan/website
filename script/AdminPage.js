@@ -987,8 +987,23 @@ document.getElementById("nextPageTable").addEventListener("click", () => {
   }
 });
 
-// Initial load
+// load for the table
 loadOrders();
+
+// EXPORT TO EXCEL PART
+document.getElementById("exportExcelBtn").addEventListener("click", () => {
+  const table = document.getElementById("salesReportTable");
+
+  // Convert the table to a worksheet
+  const worksheet = XLSX.utils.table_to_sheet(table);
+
+  // Create a workbook and append the worksheet
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, "Sales Report");
+
+  // Save the Excel file
+  XLSX.writeFile(workbook, "sales_report.xlsx");
+});
 
 // ================== DATA CHART ==================
 // SALES ANALYTICS CHART
@@ -1122,7 +1137,7 @@ let allFeedbacks = [];
 // Fetch Feedbacks
 onValue(feedbackRef, (snapshot) => {
   allFeedbacks = []; // Reset array
-  
+
   if (!snapshot.exists()) {
     feedbackContainer.innerHTML = "<p>No feedback yet.</p>";
     return;
@@ -1130,7 +1145,7 @@ onValue(feedbackRef, (snapshot) => {
 
   const rawData = snapshot.val();
   allFeedbacks = Object.values(rawData);
-  
+
   // Optionally sort by something if available, e.g. timestamp?
   // allFeedbacks.sort((a, b) => b.timestamp - a.timestamp);
 
@@ -1167,7 +1182,7 @@ async function renderFeedbackPage() {
     // Only fetch customer name if we have an Order ID
     if (fb.orderID) {
       try {
-        // Optimization: Fetch only specific order if possible, 
+        // Optimization: Fetch only specific order if possible,
         // but current structure suggests fetching all orders is the pattern.
         // To save bandwidth, we check locally if we have ordersArray loaded, otherwise fetch.
         // Assuming orders are small enough or fetched elsewhere:
@@ -1202,7 +1217,8 @@ async function renderFeedbackPage() {
     "feedbackPageInfo"
   ).textContent = `Page ${currentFeedbackPage} of ${totalPages}`;
 
-  document.getElementById("prevPageFeedback").disabled = currentFeedbackPage === 1;
+  document.getElementById("prevPageFeedback").disabled =
+    currentFeedbackPage === 1;
   document.getElementById("nextPageFeedback").disabled =
     currentFeedbackPage >= totalPages;
 }

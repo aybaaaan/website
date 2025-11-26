@@ -8,18 +8,6 @@
     <link rel="stylesheet" href="../responsive/AdminResponsive.css" />
   </head>
 
-  <script type="module">
-    import { sendStatusNotification } from "/notification/notification.js";
-
-    document.querySelectorAll(".order-status").forEach((select) => {
-      select.addEventListener("change", () => {
-        const orderId = select.dataset.orderid;
-        const newStatus = select.value;
-        sendStatusNotification(orderId, newStatus);
-      });
-    });
-  </script>
-
   <body>
     <!-- Top bar -->
     <header>
@@ -78,7 +66,12 @@
         <!-- Sales Report -->
         <div id="salesReportContainer" class="sales-report">
           <div class="card">
-            <h4 class="title-tag">Sales Report</h4>
+            <div class="title-tag">
+              Sales Report
+              <button class="exportBtn" id="exportExcelBtn">
+                Export to Excel
+              </button>
+            </div>
             <table id="salesReportTable">
               <thead>
                 <tr>
@@ -351,6 +344,9 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Chart.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <!-- Excel export library -->
     <script type="module" src="../script/AdminPage.js"></script>
   </body>
 </html>
