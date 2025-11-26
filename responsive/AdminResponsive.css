@@ -13,19 +13,31 @@
     gap: 15px;
     justify-content: center;
   }
-  .users-text { font-size: 14px; }
-  .users-total { font-size: 48px; }
+  .users-text {
+    font-size: 14px;
+  }
+  .users-total {
+    font-size: 48px;
+  }
   .orderResult {
     height: 35vh;
     padding: 15px;
     margin: 8px;
   }
-  .orders-text { font-size: 14px; }
-  .orders-total { font-size: 48px; }
+  .orders-text {
+    font-size: 14px;
+  }
+  .orders-total {
+    font-size: 48px;
+  }
 }
 
 /* Phone Adjustments (Where the Hamburger Appears) */
 @media (max-width: 768px) {
+  .modal-content {
+    width: 90%;
+    padding: 16px;
+  }
 
   .hamburger {
     display: flex;
@@ -53,7 +65,7 @@
   }
   .user-chart {
     flex-direction: column;
-    gap: 10px; 
+    gap: 10px;
     align-items: center;
   }
   .users-total-container {
@@ -61,22 +73,55 @@
     transform: none;
     margin: 10px 0;
   }
-  .users-text { font-size: 12px; }
-  .users-total { font-size: 36px; }
+  .users-text {
+    font-size: 12px;
+  }
+  .users-total {
+    font-size: 36px;
+  }
   .orderResult {
     height: auto;
     min-height: 200px;
     padding: 10px;
     margin: 5px;
   }
-  .orders-container { padding: 10px; }
-  .orders-total-container { margin: 10px 0; }
-  .orders-text { font-size: 12px; }
-  .orders-total { font-size: 36px; }
+  .orders-container {
+    padding: 10px;
+  }
+  .orders-total-container {
+    margin: 10px 0;
+  }
+  .orders-text {
+    font-size: 12px;
+  }
+  .orders-total {
+    font-size: 36px;
+  }
 }
 
 /* Small Phones */
 @media (max-width: 480px) {
+  .modal-content {
+    width: 95%;
+    padding: 14px;
+  }
+
+  h3 {
+    font-size: 1.2rem;
+  }
+
+  .modal-actions {
+    flex-direction: column; /* stack buttons vertically */
+  }
+
+  .modal-actions button {
+    width: 100%;
+  }
+
+  #preview {
+    width: 120px;
+  }
+
   .login-result-container {
     height: 12vh;
     width: 12vh;
@@ -89,13 +134,21 @@
     padding: 8px;
     margin: 3px;
   }
-  .users-text { font-size: 11px; }
-  .users-total { font-size: 28px; }
+  .users-text {
+    font-size: 11px;
+  }
+  .users-total {
+    font-size: 28px;
+  }
   .orderResult {
     padding: 8px;
     margin: 3px;
     min-height: 150px;
   }
-  .orders-text { font-size: 11px; }
-  .orders-total { font-size: 28px; }
+  .orders-text {
+    font-size: 11px;
+  }
+  .orders-total {
+    font-size: 28px;
+  }
 }

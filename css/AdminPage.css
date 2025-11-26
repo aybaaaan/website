@@ -1353,15 +1353,6 @@ section.active {
   max-height: 860px;
   overflow-y: auto;
 }
-/* Inner Box for Feedback List 
-#feedbackBox {
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  padding: 12px;
-  background-color: #f9f9f9;
-  max-height: 500px;
-  overflow-y: auto;
-}*/
 
 /* Individual Feedback Card Style */
 .admin-feedback-card {
