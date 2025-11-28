@@ -205,6 +205,40 @@
     min-height: 80px;
     font-size: 15px;
   }
+
+  /* 1. Header: Ayusin ang Order ID at Status na mag-stack */
+  .order-group-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  /* 2. Items: Siguraduhing hindi sumasabog ang layout ng item row */
+  .order-item-row {
+    flex-wrap: wrap; 
+    gap: 10px;
+  }
+
+  /* Para hindi siya maging full width gaya ng ibang buttons */
+  .order-item-row .reorder-btn {
+    width: auto !important; 
+    margin-top: 0;
+    margin-left: auto; /* Itulak sa kanan */
+    padding: 8px 15px;
+  }
+
+  /* 3. Footer: Stack Total Price & Feedback Button */
+  .order-group-footer {
+    flex-direction: column; /* Gawing patayo */
+    align-items: stretch;   /* Full width alignment */
+    gap: 15px;
+  }
+
+  /* Feedback button stays full width (standard mobile behavior) */
+  .order-group-footer .feedback-btn {
+    width: 100%;
+    margin-left: 0;
+  }
 }
 
 /* Small Phones */

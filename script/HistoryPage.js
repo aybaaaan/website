@@ -27,8 +27,6 @@ import {
   onSnapshot,
   updateDoc,
   doc,
-  serverTimestamp,
-  addDoc,
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
 // ===================== FIREBASE CONFIG =====================
@@ -54,8 +52,7 @@ const orderList = document.querySelector(".order-list");
 
 function renderNotifications(notifs) {
   const notifContainer = document.getElementById("notifItems");
-  if (!notifContainer) return; 
-
+  if (!notifContainer) return;
   notifContainer.innerHTML = "";
 
   notifs.forEach((notif) => {
@@ -94,7 +91,7 @@ onAuthStateChanged(auth, (user) => {
     return;
   }
 
-  // --- NOTIFICATIONS LOGIC (Walang binago dito) ---
+  // --- NOTIFICATIONS LOGIC  ---
   const notifRef = collection(
     dbFirestore,
     "notifications",
@@ -129,15 +126,14 @@ onAuthStateChanged(auth, (user) => {
   }
 
   // ==========================================================
-  //  FIXED LOGIC: FETCH MENU FIRST -> THEN ORDERS
+  //  FETCH LOGIC: IMAGES -> THEN ORDERS -> GROUPING
   // ==========================================================
   
   // 1. Storage for menu images
   let menuImages = {};
-
-  // 2. Fetch the "menu" node FIRST (Ito ang tama base sa screenshot mo: "menu")
+  
+  // 2. Fetch the "menu" node FIRST
   const menuRef = ref(db, "menu");
-
   onValue(menuRef, (menuSnapshot) => {
     const menuData = menuSnapshot.val();
 
@@ -145,15 +141,13 @@ onAuthStateChanged(auth, (user) => {
     menuImages = {};
     if (menuData) {
       Object.values(menuData).forEach((item) => {
-        // Ito ang tama base sa screenshot mo: "item.url" (Base64 string)
         if (item.name && item.url) {
           menuImages[item.name] = item.url;
         }
       });
     }
 
-    // 3. PAGKATAPOS makuha ang images, saka lang tatawagin ang Orders.
-    // Nasa loob na ito ng onValue ng menu para siguradong hindi mag-uunahan.
+    // 3. FETCH ORDERS AFTER IMAGES
     const ordersRef = ref(db, "Order");
     onValue(ordersRef, (snapshot) => {
       const data = snapshot.val();
@@ -179,7 +173,9 @@ onAuthStateChanged(auth, (user) => {
         (a, b) => new Date(b.deliveryDate) - new Date(a.deliveryDate)
       );
 
+      // --- START GROUPING LOGIC ---
       userOrders.forEach((order) => {
+        // A. Setup Order Details
         const displayDate = order.deliveryDate
           ? `${new Date(order.deliveryDate).toLocaleDateString("en-US", {
               year: "numeric",
@@ -194,55 +190,84 @@ onAuthStateChanged(auth, (user) => {
         else if (order.status === "cancelled") statusColor = "#cc3232";
         else if (order.status === "delivered") statusColor = "#a64d79";
 
-        // Safety check para sa orders array
+        // B. Prepare Items List
         const itemsArray = order.orders ? Object.values(order.orders) : [];
         const reversedItems = itemsArray.reverse();
+        
+        let itemsHtml = "";
+        let grandTotal = 0; 
+        let itemNamesList = []; // Dito natin iipunin ang mga pangalan
 
         reversedItems.forEach((item) => {
+          const itemTotal = item.price * item.qty;
+          grandTotal += itemTotal;
           
-          // --- IMAGE LOOKUP ---
+          // I-save ang pangalan ng pagkain
+          if (item.name) {
+            itemNamesList.push(item.name);
+          }
+
+          // Image Logic
           let finalImageSrc = "https://via.placeholder.com/140x140";
-          
-          // Exact Match
           if (menuImages[item.name]) {
             finalImageSrc = menuImages[item.name];
-          } 
-          // Case-insensitive Fallback (Just in case "biriyani" vs "Biriyani")
-          else {
+          } else {
              const foundKey = Object.keys(menuImages).find(k => k.toLowerCase() === (item.name || "").toLowerCase());
              if(foundKey) finalImageSrc = menuImages[foundKey];
           }
 
-          orderList.innerHTML += `
-            <div class="order-card">
-              <img src="${finalImageSrc}" alt="${item.name}" style="object-fit: cover;" />
-              
-              <div class="order-info">
-                <p class="order-id">Order ID: ${order.orderID || "N/A"}</p>
-                <h3>${item.name}</h3>
-                <p>Quantity: ${item.qty}</p>
-                <p>Price: ₱${item.price} each</p>
-                <p class="subtotal">Subtotal: ₱${(
-                  item.price * item.qty
-                ).toFixed(2)}</p>
-                <p class="order-date">Date Ordered: ${displayDate}</p>
-                <p class="order-status" style="color: ${statusColor}; font-weight: 600;">
-                  Status: ${order.status || "pending"}
-                </p>
-              </div>
-              <button class="reorder-btn" onclick="reorder('${item.name}', ${
-            item.qty
-          }, ${item.price})">
-                Reorder
-              </button>
-              <button class="feedback-btn" onclick="window.location.href='/pages/FeedbackPage.html?item=${encodeURIComponent(
-                item.name
-              )}&orderID=${order.orderID}'">
-                Give Feedback
-              </button>
+          // Build row for each item
+          itemsHtml += `
+            <div class="order-item-row">
+                <img src="${finalImageSrc}" alt="${item.name}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px;">
+                
+                <div class="order-info" style="flex: 1;">
+                    <h3 style="font-size: 18px; margin-bottom: 5px;">${item.name}</h3>
+                    <p style="font-size: 14px; margin: 0;">Qty: ${item.qty} x ₱${item.price}</p>
+                    <p class="subtotal" style="font-size: 14px; margin-top: 5px;">Subtotal: ₱${itemTotal.toFixed(2)}</p>
+                </div>
+
+                <button class="reorder-btn" style="padding: 8px 15px; font-size: 14px; margin: 0;" 
+                    onclick="reorder('${item.name}', ${item.qty}, ${item.price})">
+                    Reorder
+                </button>
             </div>
           `;
         });
+
+        // Combine item names for feedback (e.g., "Pita Bread, Garlic Sauce")
+        const combinedItemNames = itemNamesList.join(", ");
+
+        // C. Build the MAIN CARD
+        orderList.innerHTML += `
+          <div class="order-card" style="flex-direction: column; align-items: stretch; cursor: default;">
+            
+            <div class="order-group-header">
+                <div>
+                    <p style="font-weight: bold; color: #333; font-size: 16px;">Order ID: ${order.orderID || "N/A"}</p>
+                    <p class="order-date" style="margin: 0; font-size: 13px;">${displayDate}</p>
+                </div>
+                <div style="color: ${statusColor}; font-weight: 700; text-transform: uppercase; font-size: 14px;">
+                    ${order.status || "pending"}
+                </div>
+            </div>
+
+            <div class="order-group-items">
+                ${itemsHtml}
+            </div>
+
+            <div class="order-group-footer">
+                <div style="font-size: 18px; font-weight: bold; color: #333;">
+                    Total: <span style="color: #741b47;">₱${grandTotal.toFixed(2)}</span>
+                </div>
+                
+                <button class="feedback-btn" onclick="window.location.href='/pages/FeedbackPage.html?item=${encodeURIComponent(combinedItemNames)}&orderID=${order.orderID}'">
+                    Give Feedback
+                </button>
+            </div>
+
+          </div>
+        `;
       });
     });
   });
@@ -261,7 +286,6 @@ window.reorder = function (name, qty, price) {
 
   message.textContent = `${name} has been added to your cart again!`;
   popup.style.display = "flex";
-
   okBtn.onclick = () => {
     popup.style.display = "none";
   };
