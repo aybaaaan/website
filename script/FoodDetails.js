@@ -57,13 +57,15 @@ function goToMenuPage() {
 
 // ===================== EVENT HANDLERS =====================
 
-const backBtn = document.getElementById("backBtn");
-if (backBtn) {
-  backBtn.addEventListener("click", (e) => {
-    e.preventDefault();
+backBtn.addEventListener("click", (e) => {
+  e.preventDefault();
+
+  if (currentUser) {
     goToMenuPage();
-  });
-}
+  } else {
+    window.location.href = "../index.html#menu";
+  }
+});
 
 function addToCartFromDetails() {
   const name = localStorage.getItem("foodName");
