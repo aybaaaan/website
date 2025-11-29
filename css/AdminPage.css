@@ -606,10 +606,10 @@ section.active {
 
 .itemCategory {
   display: block;
-
   margin-bottom: 5px;
-  color: #000000;
-  font-size: 20px;
+  color: #741b47;
+  font-size: 15px;
+  border-radius: 10px;
 }
 
 /* FIXED BUTTONS: Relative positioning so they don't overlap text */
@@ -1255,6 +1255,7 @@ section.active {
 #status-cancel {
   background: #a64d79;
   color: #fff;
+  font-weight: 500;
 }
 
 #status-cancel:hover {
@@ -1266,6 +1267,7 @@ section.active {
 #status-yes {
   background: #d63422;
   color: #fff;
+  font-weight: 500;
 }
 
 #status-yes:hover {
@@ -1385,4 +1387,10 @@ section.active {
 .admin-feedback-card strong {
   color: #a64d79;
   font-weight: 600;
+}
+#status-confirm-message {
+  font-size: 1rem;
+  color: #333;
+  font-weight: 600;
+  margin-bottom: 20px;
 }
