@@ -30,7 +30,12 @@
             />
             <div
               class="password-wrapper"
-              style="display: flex; align-items: center; gap: 8px; width: 100%"
+              style="
+                position: relative;
+                width: 100%;
+                display: flex;
+                align-items: center;
+              "
             >
               <input
                 type="password"
@@ -38,8 +43,15 @@
                 placeholder="Password"
                 id="password"
                 required
+                style="padding-right: 40px"
               />
-              <span style="color: #000000">👁</span>
+
+              <img
+                src="../icons/hide.png"
+                class="toggle-eye"
+                alt="Toggle Password"
+                style=" width: 22px; height: 22px; position: absolute; right: 12px; cursor: pointer; "
+              />
             </div>
           </form>
 

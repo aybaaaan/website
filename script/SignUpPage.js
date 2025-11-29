@@ -126,15 +126,16 @@ const passwordWrappers = document.querySelectorAll(".password-wrapper");
 
 passwordWrappers.forEach((wrapper) => {
   const input = wrapper.querySelector("input");
-  const icon = wrapper.querySelector("span");
+  const icon = wrapper.querySelector("img");
 
   icon.addEventListener("click", () => {
-    if (input.type === "password") {
-      input.type = "text"; // show password
-      icon.style.color = "#741b47";
-    } else {
-      input.type = "password"; // hide password
-      icon.style.color = "#000000";
-    }
+    const isHidden = input.type === "password";
+
+    input.type = isHidden ? "text" : "password";
+
+    // Swap PNG icons
+    icon.src = isHidden
+      ? "../icons/view.png"
+      : "../icons/hide.png";
   });
 });
