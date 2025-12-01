@@ -261,11 +261,12 @@ onAuthStateChanged(auth, (user) => {
                     Total: <span style="color: #741b47;">₱${grandTotal.toFixed(2)}</span>
                 </div>
                 
+                <!-- Give Feedback only if delivered -->
+                ${order.status === 'delivered' ? `
                 <button class="feedback-btn" onclick="window.location.href='/pages/FeedbackPage.html?item=${encodeURIComponent(combinedItemNames)}&orderID=${order.orderID}'">
-                    Give Feedback
-                </button>
+                  Give Feedback
+                </button>` : ``}
             </div>
-
           </div>
         `;
       });
