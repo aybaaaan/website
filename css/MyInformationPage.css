@@ -43,7 +43,7 @@ body {
 }
 
 .header .nav a:hover {
-  color: #4c1130;
+  color: #e7c0d1;
 }
 
 /* ====== My Information Container ====== */
@@ -114,7 +114,8 @@ body {
 }
 
 .back-btn:hover {
-  background: #741b47;
+  background: #e7c0d1;
+  color: #741b47;
 }
 /* ====== Change Password Section ====== */
 .password-wrapper {
@@ -163,7 +164,9 @@ body {
 
 
 .change-pass-btn:hover {
-  background: #a64d79;
+  background: #ead1dc;
+  color: #741b47;
+  transform: translateY(-2px);
 }
 
 
@@ -220,10 +223,18 @@ body {
 }
 
 .modal-buttons button:hover {
-  background: #a64d79;
+  background: #e7c0d1;
+  color: #741b47;
+  transform: translateY(-2px);
 }
-
-
+#modalCancelBtn {
+  background: rgb(189, 42, 42);
+  color: #fff4f4;
+}
+#modalCancelBtn:hover {
+  background: rgb(189, 42, 42);
+  color: #fff4f4;
+}
 /* Responsive: stack nicely on small screens */
 @media (max-width: 480px) {
   .password-row {
@@ -406,14 +417,15 @@ button {
 /* Edit / Save Button */
 #editBtn,
 #saveBtn {
-  background: #c27ba0;
-  color: #fff;
+  background: #741b47;
+  color: #ead1dc;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
 }
 
 #editBtn:hover,
 #saveBtn:hover {
-  background: #741b47;
+  background: #ead1dc;
+  color: #741b47;
   transform: translateY(-2px);
 }
 
@@ -423,3 +435,13 @@ input:disabled {
   color: #777;
 }
 
+/* ====== Footer ====== */
+.footer {
+  text-align: center;
+  background: linear-gradient(to right, #4c1130da, #741b47da);
+  color: white;
+  padding: 14px;
+  font-size: 14px;
+  font-weight: 600;
+  margin-top: auto;
+}

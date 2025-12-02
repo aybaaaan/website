@@ -571,8 +571,9 @@ section.active {
 }
 
 .item-name {
-  color: #000;
+  color: #a64d79;
   font-size: 20px;
+  font-weight: 600;
   font-weight: bold;
   padding-bottom: 20px;
   max-height: 60px; /* about 2 lines */
@@ -586,31 +587,35 @@ section.active {
   overflow-y: auto;
   word-wrap: break-word;
   padding-right: 5px; /* optional for scrollbar */
+  color:  #333333;
 }
 
 .item-price {
   padding-top: 10px;
-  color: #000000;
-  font-size: 20px;
+  color: #a64d79;
+  font-size: 18px;
   font-weight: bold;
 }
 
 .item-category {
   width: 100%;
   padding-top: 10px;
-  color: #000000;
-  font-size: 18px;
-
+  color: #a64d79;
+  font-size: 16px;
   font-weight: bold;
+  text-align: right;
+  margin-bottom: 10px;
 }
 
 .itemCategory {
   display: block;
-  margin-bottom: 5px;
+  margin: 8px auto 5px auto; /* top/right/bottom/left */
   color: #741b47;
   font-size: 15px;
   border-radius: 10px;
+  text-align: center; /* optional, if it has inline text */
 }
+
 
 /* FIXED BUTTONS: Relative positioning so they don't overlap text */
 .buttons {
@@ -1343,6 +1348,21 @@ section.active {
   resize: vertical;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
+#announcementModal .close {
+  position: absolute;
+  top: 10px;      /* distance from top */
+  right: 15px;    /* distance from right */
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+  color: #333;
+}
+
+#announcementModal .modal-content {
+  position: relative; /* required so the X stays inside */
+}
+
+/* ================= FEEDBACK SECTION ================= */
 
 /* Container styling for Feedback (and Orders) */
 #section-feedback {

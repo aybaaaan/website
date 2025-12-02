@@ -391,16 +391,16 @@ function renderItems(refPath, container) {
         const categoryName = getCategoryName(item.category);
         // Show price for menu items
         details.innerHTML = `
-    <p class="item-name"><strong>Name:</strong> ${item.name}</p>
+    <p class="item-name">${item.name}</p>
     <p class="item-desc"><strong>Description:</strong> ${item.desc}</p>
-    <p class="item-price"><strong>Price:</strong> ₱${item.price || 0}</p>
-    <p class="item-category">Category: ${categoryName}</p>
+    <p class="item-price">₱${item.price || 0}</p>
+    <p class="item-category"> • ${categoryName}</p>
   `;
       } else {
         // Hide price for homepage items
         details.innerHTML = `
     <p class="item-name">${item.name}</p>
-    <p class="item-desc">${item.desc}</p>
+    <p class="item-desc"><strong>Description:</strong> ${item.desc}</p>
   `;
       }
 
@@ -580,7 +580,7 @@ function renderOrdersPage() {
         <p><strong>Delivery Date:</strong> ${deliveryDate}</p>
         <p><strong>Delivery Time:</strong> ${deliveryTime}</p>
         <div class="order-actions">
-          <label class="status-label" for="order-status">Status:</label>
+          <label class="status-label" for="order-status">Update Status:</label>
           <select class="order-status-dropdown">
             <option value="accepted" ${
               data.status === "accepted" ? "selected" : ""

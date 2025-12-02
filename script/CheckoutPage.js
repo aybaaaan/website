@@ -15,7 +15,6 @@ const summaryTotal = document.getElementById("summaryTotal");
 const paymentInfo = document.getElementById("paymentInfo");
 
 // Delivery fee
-const DELIVERY_FEE = 50;
 
 // Load orders from localStorage
 let orders = JSON.parse(localStorage.getItem("cart")) || [];
@@ -350,13 +349,13 @@ proceedBtn.addEventListener("click", async () => {
 
   // Update subtotal & total
   summarySubtotal.textContent = subtotalEl.textContent;
-  summaryTotal.textContent = (parseFloat(totalEl.textContent) + 50).toFixed(2);
+  summaryTotal.textContent = (parseFloat(totalEl.textContent)).toFixed(2);
 
   modal.style.display = "flex";
   // Update summary when modal shows
   summarySubtotal.textContent = subtotalEl.textContent;
   summaryTotal.textContent = (
-    parseFloat(totalEl.textContent) + DELIVERY_FEE
+    parseFloat(totalEl.textContent)
   ).toFixed(2);
 });
 

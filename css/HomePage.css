@@ -109,9 +109,42 @@ body {
   gap: 24px;
 }
 
+.nav-menu a {
+  position: relative;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.nav-menu a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 0%;
+  height: 2px;
+  background: #c27ba0;
+  transition: width 0.3s ease;
+  border-radius: 10px;
+}
+
 .nav-menu a:hover {
   color: #c27ba0;
+  transform: scale(1.1);
 }
+
+.nav-menu a:hover::after {
+  width: 100%;
+}
+
+/* 🔥 ACTIVE STATE — underline stays */
+.nav-menu a.active {
+  color: #c27ba0;
+  transform: scale(1.1);
+}
+
+.nav-menu a.active::after {
+  width: 100%;
+}
+
 
 .nav-item {
   color: rgb(243, 240, 240);
@@ -154,6 +187,7 @@ body {
 .action-btn:hover {
   background-color: #c27ba0;
   color: #ead1dc;
+  transform: scale(1.1);
 }
 
 /* Account Dropdown */
@@ -542,22 +576,103 @@ body {
 }
 
 .menu-toggle button {
-  background: #a64d79;
+  background: linear-gradient(135deg, #a64d79, #c58aa7);
+  color: #fff;
   font-size: large;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  color: #fff;
   border: none;
-  border-radius: 8px;
-  padding: 8px 14px;
+  border-radius: 14px;
+  padding: 12px 22px;
   cursor: pointer;
   font-weight: 600;
-  transition: background 0.2s, transform 0.2s;
+  letter-spacing: 0.5px;
+  position: relative;
+  overflow: hidden;
+
+  transition: 
+    background 0.45s ease,
+    transform 0.45s ease,
+    box-shadow 0.45s ease,
+    letter-spacing 0.35s ease;
 }
 
+/* Hover aesthetic */
 .menu-toggle button:hover {
-  background: #914068;
-  transform: scale(1.05);
+  transform: translateY(-6px);
+  letter-spacing: 1px;
+  box-shadow:
+    0 15px 28px rgba(166, 77, 121, 0.25),
+    0 8px 12px rgba(166, 77, 121, 0.20),
+    0 0 10px rgba(255, 255, 255, 0.2);
 }
+
+/* EMPHASIZED aesthetic click */
+.menu-toggle button:active {
+  transform: scale(0.90);
+  box-shadow:
+    0 0 18px rgba(166, 77, 121, 0.3),
+    0 0 30px rgba(166, 77, 121, 0.25);
+
+  transition: transform 0.1s ease, box-shadow 0.15s ease;
+}
+
+/* Ripple pulse for click */
+.menu-toggle button::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.45);
+  opacity: 0;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+/* Trigger ripple on click */
+.menu-toggle button:active::after {
+  width: 200px;
+  height: 200px;
+  opacity: 0.5;
+  top: 50%;
+  left: 50%;
+  transition: 
+    width 0.4s ease-out,
+    height 0.4s ease-out,
+    opacity 0.5s ease-out;
+}
+
+/* Shimmer on hover */
+.menu-toggle button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 130%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(255, 255, 255, 0.35),
+    transparent
+  );
+  transition: 0.7s ease;
+}
+
+.menu-toggle button:hover::before {
+  left: 100%;
+}
+
+/* Active (selected) aesthetic */
+.menu-toggle button.active {
+  background: linear-gradient(135deg, #ead1dc, #ffffff);
+  color: #741b47;
+  transform: translateY(-5px);
+  box-shadow:
+    0 12px 22px rgba(234, 209, 220, 0.35),
+    0 4px 10px rgba(234, 209, 220, 0.25);
+}
+
 
 .menu-section {
   background: #f5f0f3;
@@ -574,11 +689,6 @@ body {
   margin-bottom: 40px;
   color: #4c1130;
   z-index: 100;
-}
-.menu-toggle button.active {
-  background: #ead1dc;
-  color: #741b47; /* darker or different color */
-  transform: scale(1.05);
 }
 
 .card-bottom {
@@ -653,7 +763,7 @@ body {
   font-weight: 600;
   text-align: left;
   margin-bottom: 8px;
-  color: #222;
+  color: #a64d79;
 }
 
 /* Scroll buttons */
@@ -692,17 +802,82 @@ body {
   font-size: 18px;
   color: #a64d79;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  position: relative;
+  overflow: hidden;
+
+  transition:
+    background-color 0.35s ease,
+    color 0.35s ease,
+    transform 0.35s ease,
+    box-shadow 0.35s ease;
 }
-.order-btn img {
-  height: 20px;
-  width: 20px;
-}
+
+/* Hover: soft lift + glow */
 .order-btn:hover {
   background-color: #a64d79;
   color: #fcf5f9;
-  transform: scale(1.05);
+  transform: translateY(-4px) scale(1.05);
+  box-shadow:
+    0 12px 20px rgba(166, 77, 121, 0.22),
+    0 6px 10px rgba(166, 77, 121, 0.17);
 }
+
+/* --- SHIMMER EFFECT --- */
+.order-btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 150%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(255, 255, 255, 0.35),
+    transparent
+  );
+  transition: 0.7s ease;
+}
+
+.order-btn:hover::before {
+  left: 120%;
+}
+
+/* Click: emphasized soft press */
+.order-btn:active {
+  transform: scale(0.92);
+  box-shadow:
+    0 0 14px rgba(166, 77, 121, 0.3),
+    0 0 24px rgba(166, 77, 121, 0.25);
+  transition: transform 0.1s, box-shadow 0.15s;
+}
+
+/* Ripple pulse effect */
+.order-btn::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.45);
+  opacity: 0;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+/* Trigger ripple on click */
+.order-btn:active::after {
+  width: 200px;
+  height: 200px;
+  opacity: 0.5;
+  top: 50%;
+  left: 50%;
+  transition:
+    width 0.4s ease-out,
+    height 0.4s ease-out,
+    opacity 0.5s ease-out;
+}
+
 
 /* ==== INDICATORS ==== */
 .menu-indicators {
@@ -904,6 +1079,13 @@ body {
   right: 0;
 }
 
+#cartTotal {
+  font-size: 16px;
+  font-weight: 600;
+  color: #741b47;
+  margin: 10px;
+}
+
 /* Close button */
 .close-btn {
   background: none;
@@ -921,7 +1103,7 @@ body {
 }
 
 .remove-btn {
-  background-color: #c41414;
+  background-color: #cc1313;
   border: none;
   border-radius: 10px;
   margin-top: 10px;
@@ -935,7 +1117,6 @@ body {
 }
 
 .remove-btn:hover {
-  background-color: #77190e;
   transform: scale(1.05);
 }
 
@@ -1506,8 +1687,8 @@ body {
   padding: 15px;
   font-size: 1.2rem;
   font-weight: 750;
-  color: #4c1130;
-  text-align: center;
+  color: #741b47;
+  text-align: left;
   border-bottom: 1px solid #ddd;
 }
 
@@ -1565,6 +1746,7 @@ body {
   color: #777;
   text-align: right;
   margin: 0;
+  text-align: left;
 }
 
 /* Signature at bottom */
@@ -1617,6 +1799,7 @@ body {
   font-size: 0.75rem;
   cursor: pointer;
   transition: background 0.2s;
+  font-weight: 600;
 }
 
 .see-full-btn:hover {

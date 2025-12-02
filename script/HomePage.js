@@ -68,7 +68,7 @@ function renderCart() {
       .join("");
   }
 
-  document.getElementById("cartTotal").textContent = `Total: Php ${formatPHP(
+  document.getElementById("cartTotal").textContent = `‣ Subtotal: Php ${formatPHP(
     total
   )}`;
 }
@@ -757,5 +757,15 @@ buttons.forEach((button) => {
     button.classList.add("active");
   });
 });
+
+const links = document.querySelectorAll(".nav-menu a");
+
+links.forEach(link => {
+  link.addEventListener("click", function () {
+    links.forEach(l => l.classList.remove("active"));
+    this.classList.add("active");
+  });
+});
+
 
 window.showSlide = showSlide; // allow indicators to work
