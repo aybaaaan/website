@@ -194,6 +194,14 @@ section.active {
   margin-bottom: 20px;
 }
 
+.chart-controls {
+  display: flex;
+  flex-wrap: wrap;       /* wrap buttons on very small screens */
+  gap: 10px;
+  justify-content: flex-start; /* or center, based on your design */
+  margin-bottom: 15px;
+}
+
 .card {
   background: #ffffff;
   border-radius: 8px;
@@ -332,10 +340,7 @@ section.active {
 
 #btn-logins-today,
 #btn-logins-week,
-#btn-logins-month,
-#btn-today,
-#btn-week,
-#btn-month {
+#btn-logins-month {
   position: relative;
   background: #ead1dc;
   color: #4c1130;
@@ -350,12 +355,33 @@ section.active {
 
 #btn-logins-today:hover,
 #btn-logins-week:hover,
-#btn-logins-month:hover,
-#btn-today:hover,
-#btn-week:hover,
-#btn-month:hover {
+#btn-logins-month:hover {
   background: #ead1dc;
   transform: scale(1.05);
+}
+
+.chart-controls button {
+  position: relative;
+  background: #a64d79;
+  color: #fffdfe;
+  padding: 8px 12px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.chart-controls button:hover {
+  background: #ead1dc;
+  color: #4c1130;
+  animation: popIn 0.3s ease;
+}
+
+.chart-controls button.active {
+  background: #ead1dc; /* same as hover */
+  color: #4c1130;
 }
 
 /* ============== FOR TABULAR SALES REPORT ===============*/

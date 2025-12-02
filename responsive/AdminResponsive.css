@@ -98,6 +98,10 @@
   .orders-total {
     font-size: 40px;
   }
+  .chart-controls button {
+    padding: 6px 10px;  /* smaller padding */
+    font-size: 14px;    /* smaller text */
+  }
 }
 
 /* Small Phones */
@@ -157,5 +161,13 @@
   }
   .orders-total {
     font-size: 28px;
+  }
+  .chart-controls {
+    justify-content: center; /* center buttons on very small screens */
+  }
+  .chart-controls button {
+    padding: 5px 8px;
+    font-size: 12px;
+    flex: 1 1 auto;  /* allow buttons to stretch if needed */
   }
 }
