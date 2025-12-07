@@ -119,6 +119,7 @@ if (hamburger && navMenu) {
 // ===================== MODAL LOGIC =====================
 const modal = document.getElementById("checkoutModal");
 const closeModal = document.getElementById("closeModal");
+const timeInput = document.getElementById("delivery-time");
 const checkoutForm = document.getElementById("checkoutForm");
 const dateInput = document.getElementById("delivery-date");
 
@@ -485,6 +486,39 @@ checkoutForm.addEventListener("submit", async (e) => {
 
   try {
     await push(ordersRef, orderData);
+
+    // ======================== EMAILJS ADMIN NOTIFICATION ========================
+const emailParams = {
+  orderID: orderID,
+  userEmail: currentUser.email,
+  name: name,
+  contact: contact,
+  address: address,
+  orderDate: userOrderDate,
+  orderTime: userOrderTime,
+  deliveryDate: deliveryDate,
+  deliveryTime: deliveryTime,
+  payment: payment,
+  status: "pending",
+  order_list: orders
+    .map(
+      item =>
+        `${item.name} (Qty: ${item.qty}) — ₱${(item.price * item.qty).toFixed(2)}`
+    )
+    .join("\n"),
+  total: totalEl.textContent
+};
+
+emailjs
+  .send("service_7vla50x", "template_s96a7yg", emailParams)
+  .then(() => {
+    console.log("📧 EmailJS: Admin notified successfully");
+  })
+  .catch((err) => {
+    console.error("❌ EmailJS failed:", err);
+  }); 
+// ========================================================================
+
 
     // Update user profile in Firestore
     const userRef = doc(fs, "users", currentUser.uid);

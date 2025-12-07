@@ -211,26 +211,22 @@ onValue(announcementRef, (snapshot) => {
 // ⭐ UPDATE: Handle CONFIRM DELETE button for all sections
 document.getElementById("confirm-delete").addEventListener("click", () => {
   if (pendingDelete.section && pendingDelete.key) {
-    let path = "";
+    const sectionName = pendingDelete.section;
+    let path;
 
-    if (
-      pendingDelete.section === "menu" ||
-      pendingDelete.section === "homepage"
-    ) {
-      // Existing logic for menu/homepage items
-      path = `${pendingDelete.section}/${pendingDelete.key}`;
-    } else if (pendingDelete.section === "announcements") {
-      // NEW logic for announcements
-      path = `Announcements/${pendingDelete.key}`;
-    }
+    // Determine the top-level node name
+    const topLevelNode =
+      sectionName === "announcements" ? "Announcements" : sectionName;
+
+    // Construct the path
+    path = `${topLevelNode}/${pendingDelete.key}`;
 
     if (path) {
       remove(ref(db, path))
-        .then(() => console.log(`${pendingDelete.section} item deleted.`))
+        .then(() => console.log(`${sectionName} item deleted.`))
         .catch((error) => console.error("Deletion failed: ", error));
-    }
+    } // Reset and close
 
-    // Reset and close
     pendingDelete = { section: null, key: null };
     document.getElementById("delete-confirm-modal").style.display = "none";
   }
@@ -580,8 +576,12 @@ function renderOrdersPage() {
         <p><strong>Delivery Date:</strong> ${deliveryDate}</p>
         <p><strong>Delivery Time:</strong> ${deliveryTime}</p>
         <div class="order-actions">
-          <label class="status-label" for="order-status">Update Status:</label>
-          <select class="order-status-dropdown">
+          <label class="status-label" for="status-dropdown-${
+            data.key
+          }">Update Status:</label>
+          <select class="order-status-dropdown" id="status-dropdown-${
+            data.key
+          }">
             <option value="accepted" ${
               data.status === "accepted" ? "selected" : ""
             }>Accepted</option>
@@ -671,7 +671,7 @@ function renderOrdersPage() {
           })
             .then(() => {
               row.remove();
-              return sendNotification(userId, "delivered", orderKey);
+              //return sendNotification(userId, "delivered", orderKey);
             })
             .catch(console.error);
         } else if (newStatus.toLowerCase() === "cancelled") {
@@ -682,7 +682,7 @@ function renderOrdersPage() {
             .then(() => remove(ref(db, `Order/${orderKey}`)))
             .then(() => {
               row.remove();
-              return sendNotification(userId, "cancelled", orderKey);
+              //return sendNotification(userId, "cancelled", orderKey);
             })
             .catch(console.error);
         } else {
@@ -693,7 +693,9 @@ function renderOrdersPage() {
             status: newStatus,
             statusTimestamp: now, // <-- save exact admin update time
           })
-            .then(() => sendNotification(userId, newStatus, orderKey))
+            .then(() => {
+              /* Notification call removed */
+            })
             .catch(console.error);
         }
       });
@@ -1254,7 +1256,7 @@ document.getElementById("btn-month").addEventListener("click", () => {
 });
 
 // REFERENCES FOR ABOUT US SECTION
-const aboutUsRef = ref(db, "homepage/aboutUs");
+const aboutUsRef = ref(db, "aboutUs");
 const aboutUsPreview = document.getElementById("aboutUsPreview");
 
 onValue(aboutUsRef, (snapshot) => {
@@ -1320,13 +1322,8 @@ document.getElementById("confirm-delete").addEventListener("click", () => {
 renderChart();
 
 // ========== MENU CATEGORY TOGGLE ==========
-let currentCategory = "all"; // default
-
-document.getElementById("btnAll").addEventListener("click", () => {
-  currentCategory = "all";
-  updateToggleUI();
-  renderMenu(); // filter menuGrid items by category
-});
+// default
+let currentCategory = "main";
 
 document.getElementById("btnMain").addEventListener("click", () => {
   currentCategory = "main";
@@ -1337,7 +1334,7 @@ document.getElementById("btnMain").addEventListener("click", () => {
 document.getElementById("btnSide").addEventListener("click", () => {
   currentCategory = "side";
   updateToggleUI();
-  renderMenu();
+  
 });
 
 function getCategoryName(category) {
@@ -1359,10 +1356,6 @@ function updateToggleUI() {
   const label = document.getElementById("menuCategoryLabel");
 
   switch (currentCategory) {
-    case "all":
-      document.getElementById("btnAll").classList.add("active");
-      label.textContent = "All Dishes";
-      break;
     case "main":
       document.getElementById("btnMain").classList.add("active");
       label.textContent = "Main Dish"; // Friendly name

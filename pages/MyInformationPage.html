@@ -29,7 +29,7 @@
     <!-- ===== My Information Section ===== -->
     <section class="info-container">
       <h1>My Information</h1>
-      <p><strong>Email:</strong> <span id="email">Loading Email...</span></p>
+      <p><strong>Email:</strong> <span id="email"style="color: #a64d79;">Loading Email...</span></p>
 
       <!--Password-->
       <div class="password-wrapper">
@@ -45,6 +45,8 @@
       <!-- Simple Password Modal -->
       <div id="changePasswordModal" class="modal" style="display: none">
         <div class="modal-content">
+          <label for="modalCurrentPass">Current Password</label>
+          <input type="password" id="modalCurrentPass" placeholder="Enter current password" />
           <p>Enter your new password (min 6 characters):</p>
           <input type="password" id="modalNewPass" placeholder="New Password" />
           <div class="modal-buttons">

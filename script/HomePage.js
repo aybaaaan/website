@@ -144,9 +144,11 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+ if (accountBtn) {
   accountBtn.addEventListener("click", () => {
     accountMenu.classList.toggle("active");
   });
+}
 
   // Close dropdown when clicking outside
   document.addEventListener("click", (event) => {
@@ -730,7 +732,7 @@ onValue(ref(db, "Order"), (snapshot) => {
 
 // ===================== LOAD ABOUT US CONTENT =====================
 const aboutUsContent = document.getElementById("aboutUsContent");
-onValue(ref(db, "homepage/aboutUs"), (snapshot) => {
+onValue(ref(db, "aboutUs"), (snapshot) => {
   aboutUsContent.textContent = snapshot.exists()
     ? snapshot.val().content
     : "About Us section is empty.";
