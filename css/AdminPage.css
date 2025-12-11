@@ -196,7 +196,7 @@ section.active {
 
 .chart-controls {
   display: flex;
-  flex-wrap: wrap;       /* wrap buttons on very small screens */
+  flex-wrap: wrap; /* wrap buttons on very small screens */
   gap: 10px;
   justify-content: flex-start; /* or center, based on your design */
   margin-bottom: 15px;
@@ -613,7 +613,7 @@ section.active {
   overflow-y: auto;
   word-wrap: break-word;
   padding-right: 5px; /* optional for scrollbar */
-  color:  #333333;
+  color: #333333;
 }
 
 .item-price {
@@ -641,7 +641,6 @@ section.active {
   border-radius: 10px;
   text-align: center; /* optional, if it has inline text */
 }
-
 
 /* FIXED BUTTONS: Relative positioning so they don't overlap text */
 .buttons {
@@ -1376,8 +1375,8 @@ section.active {
 }
 #announcementModal .close {
   position: absolute;
-  top: 10px;      /* distance from top */
-  right: 15px;    /* distance from right */
+  top: 10px; /* distance from top */
+  right: 15px; /* distance from right */
   font-size: 28px;
   font-weight: bold;
   cursor: pointer;

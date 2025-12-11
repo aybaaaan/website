@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="../css/AdminPage.css" />
+    <link rel="stylesheet" href="../responsive/AdminResponsive.css" />
+  </head>
+
+  <body>
+    <!-- Top bar -->
+    <header>
+      <div class="header-left">
+        <div id="hamburger" class="hamburger">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <div class="logo">Mediterranean In Velvet | Admin</div>
+      </div>
+
+      <div class="header-actions">
+        <a href="#" id="btn-logout">LOG OUT</a>
+      </div>
+    </header>
+
+    <div class="container">
+      <!-- Sidebar -->
+      <aside>
+        <h3>Dashboard</h3>
+
+        <a href="../pages/admin-dashboard.html"
+          ><button>Data Analytics</button></a
+        >
+        <a href="../pages/admin-orders.html"><button>Orders</button></a>
+        <a href="../pages/admin-manage-content.html"
+          ><button>Manage Contents</button></a
+        >
+
+        <a href="../pages/admin-manage-announcements.html"
+          ><button>Manage Announcements</button></a
+        >
+
+        <a href="../pages/admin-feedback.html"><button>Feedback</button></a>
+      </aside>
+
+      <!-- Main content -->
+      <main>
+        <!-- Edit Homepage -->
+        <section id="section-homepage">
+          <h4 class="title-tag">Edit Homepage</h4>
+          <div class="grid" id="homeGrid">
+            <div class="picture-box-plus" onclick="openAddModal('homepage')">
+              +
+            </div>
+          </div>
+        </section>
+
+        <!-- Edit Menu -->
+        <section id="section-menu">
+          <h4 class="title-tag">Edit Menu</h4>
+          <div class="grid" id="menuGrid">
+            <div class="picture-box-plus" onclick="openAddModal()">+</div>
+          </div>
+        </section>
+
+        <!-- About Us Section -->
+        <section id="section-aboutus">
+          <h4 class="title-tag" style="text-align: left">About Us</h4>
+
+          <div class="aboutUs-card" id="aboutUsCard">
+            <div class="aboutUs-item-details">
+              <p id="aboutUsPreview"></p>
+            </div>
+            <div class="aboutUs-buttons">
+              <button class="aboutUs-btn-edit" id="editAboutUsBtn">Edit</button>
+            </div>
+          </div>
+        </section>
+        <!-- About Us Modal -->
+        <div id="aboutUsModal">
+          <div class="aboutUs-modal-content">
+            <textarea
+              class="aboutUs-textarea"
+              id="aboutUsContent"
+              rows="6"
+              placeholder="Enter About Us text here"
+            ></textarea>
+            <div class="aboutUs-modal-actions">
+              <button id="aboutUs-save-btn">Save</button>
+              <button id="aboutUs-cancel-btn">Cancel</button>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- Modals (unchanged) -->
+    <div id="itemModal" class="modal">
+      <div class="modal-content">
+        <h3 id="modalTitle">Add Item</h3>
+
+        <p>Choose Image (PNG or JPG)</p>
+        <input
+          type="file"
+          id="imageFile"
+          accept="image/png, image/jpeg"
+        /><br />
+
+        <p>Image Preview</p>
+        <img id="preview" src="" width="150" style="margin-top: 10px" /><br />
+
+        <p>Name</p>
+        <input
+          class="imageName"
+          type="text"
+          id="imageName"
+          placeholder="Name"
+        /><br />
+
+        <p>Description</p>
+        <textarea id="imageDesc" placeholder="Description"></textarea><br />
+
+        <div class="input-group">
+          <label for="imagePrice">Price (₱)</label>
+          <input type="text" id="imagePrice" />
+
+          <label for="itemCategory">Category</label>
+          <select id="itemCategory" class="itemCategory">
+            <option id="btnMain" value="main">Main Dish</option>
+            <option id="btnSide" value="side">Side Dish</option>
+          </select>
+        </div>
+
+        <div class="modal-actions">
+          <button id="saveItem">Save</button>
+          <button onclick="closeModal()">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="logoutModal" class="modal">
+      <div class="modal-content">
+        <p>Are you sure you want to log out?</p>
+        <div class="modal-actions">
+          <button id="cancel-logout">Cancel</button>
+          <button id="confirm-logout">Confirm</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="fill-fields-images" class="modal">
+      <div class="modal-content">
+        <p>Please fill all fields and select an image.</p>
+        <div class="modal-actions">
+          <button id="close-fill-fields">OK</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="customer-order-popup" class="modal">
+      <div class="modal-content">
+        <p id="customer-order-message"></p>
+        <div class="modal-actions">
+          <button id="close-customer-order">OK</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="delete-confirm-modal" class="modal">
+      <div class="modal-content">
+        <p id="delete-confirm-message"></p>
+        <div class="modal-actions">
+          <button id="cancel-delete">Cancel</button>
+          <button id="confirm-delete">Delete</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="status-confirm-modal" class="modal">
+      <div class="modal-content">
+        <p id="status-confirm-message"></p>
+        <div class="modal-buttons">
+          <button id="status-yes" class="btn-confirm">Yes</button>
+          <button id="status-cancel" class="btn-cancel">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="../script/admin-manage-content.js"></script>
+    <script type="module" src="../script/AdminPage.js"></script>
+  </body>
+</html>

@@ -81,7 +81,7 @@ submit.addEventListener("click", (event) => {
         ) {
           showSuccess("Admin login successful!");
           setTimeout(() => {
-            window.location.href = "../pages/AdminPage.html";
+            window.location.href = "../pages/admin-dashboard.html";
           }, 1500);
         } else {
           showSuccess("User login successful!");
@@ -133,8 +133,6 @@ passwordWrappers.forEach((wrapper) => {
     input.type = isHidden ? "text" : "password";
 
     // Swap PNG icons
-    icon.src = isHidden
-      ? "../icons/view.png"
-      : "../icons/hide.png";
+    icon.src = isHidden ? "../icons/view.png" : "../icons/hide.png";
   });
 });

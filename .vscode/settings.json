@@ -1,4 +1,4 @@
 {
-  "livePreview.defaultPreviewPath": "/pages/AdminPage.html",
+  "livePreview.defaultPreviewPath": "/pages/admin-manage-content.html",
   "liveServer.settings.port": 5504
 }
