@@ -54,6 +54,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const feedbackMessage = document.getElementById("feedbackMessage");
   const feedbackOkBtn = document.getElementById("feedbackOkBtn");
 
+  // ===================== NEW: STAR ELEMENTS =====================
+  const stars = document.querySelectorAll(".star");
+  let currentRating = 0;
+
   // ===================== GET URL PARAMETERS =====================
   const urlParams = new URLSearchParams(window.location.search);
   const itemName = urlParams.get("item") || "Unknown Item";
@@ -71,9 +75,34 @@ document.addEventListener("DOMContentLoaded", () => {
   // Display item name in UI
   feedbackItemNameEl.textContent = itemName;
 
+  // ===================== NEW: STAR CLICK LOGIC =====================
+  stars.forEach((star) => {
+    star.addEventListener("click", () => {
+      // Get value (1-5)
+      currentRating = parseInt(star.getAttribute("data-value"));
+      
+      // Update Colors
+      stars.forEach((s, index) => {
+        if (index < currentRating) {
+          s.classList.add("active");
+        } else {
+          s.classList.remove("active");
+        }
+      });
+    });
+  });
+
   // ===================== SUBMIT FEEDBACK =====================
   submitBtn.addEventListener("click", async () => {
     const text = feedbackText.value.trim();
+
+    // NEW: Check if rating is selected
+    if (currentRating === 0) {
+      feedbackMessage.textContent = "Please select a star rating.";
+      feedbackMessage.style.color = "red";
+      feedbackModal.style.display = "flex";
+      return;
+    }
 
     if (!text) {
       feedbackMessage.textContent =
@@ -118,6 +147,7 @@ document.addEventListener("DOMContentLoaded", () => {
         customerName: customerName,
         itemName: itemName,
         feedback: text,
+        rating: currentRating, // NEW: Added rating here
         timestamp: new Date().toLocaleString(),
         foodItems: foodItems,
       });
@@ -126,6 +156,11 @@ document.addEventListener("DOMContentLoaded", () => {
         "Thank you! Your feedback has been submitted.";
       feedbackMessage.style.color = "green";
       feedbackText.value = "";
+      
+      // NEW: Reset Stars
+      currentRating = 0;
+      stars.forEach(s => s.classList.remove("active"));
+
     } catch (error) {
       feedbackMessage.textContent =
         "Error submitting feedback: " + error.message;

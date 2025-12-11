@@ -769,5 +769,77 @@ links.forEach(link => {
   });
 });
 
-
 window.showSlide = showSlide; // allow indicators to work
+
+
+
+// ===================== CUSTOMER REVIEWS LOGIC =====================
+const feedbacksRef = ref(db, "Feedbacks");
+const reviewsContainer = document.getElementById("reviewsContainer");
+
+// Fetch and Display Reviews
+onValue(feedbacksRef, (snapshot) => {
+  if (!snapshot.exists()) {
+    reviewsContainer.innerHTML = "<p style='width:100%; text-align:center;'>No reviews yet.</p>";
+    return;
+  }
+
+  const data = snapshot.val();
+  const allReviews = Object.values(data);
+
+  // 1. SORT: Show newest first
+  allReviews.reverse(); 
+
+  // 2. LIMIT: Limit to 15 reviews
+  const limitedReviews = allReviews.slice(0, 15);
+
+  reviewsContainer.innerHTML = ""; // Clear loading text
+
+  limitedReviews.forEach(review => {
+    // Generate Stars HTML
+    // If no rating, 0 stars (all empty)
+    let starsHtml = "";
+    const rating = review.rating || 0; 
+
+    for(let i=1; i<=5; i++) {
+        if(i <= rating) starsHtml += "★"; // Filled star
+        else starsHtml += "☆"; // Empty star
+    }
+
+    // Determine Name and Content
+    const name = review.customerName || "Customer";
+    const feedbackText = review.feedback ? `"${review.feedback}"` : "No comment provided.";
+    const foodItem = review.itemName || "Ordered Item";
+
+    // Create Card HTML
+    const card = document.createElement("div");
+    card.classList.add("review-card");
+    
+    // Added tooltip title
+    card.innerHTML = `
+        <div class="review-header" title="Click to expand">
+            <span class="reviewer-name">${name}</span>
+            <span class="review-stars">${starsHtml}</span>
+        </div>
+        <p class="review-text">${feedbackText}</p>
+        <span class="review-item-name">Ordered: ${foodItem}</span>
+    `;
+
+    // Click event to expand/collapse text
+    card.addEventListener("click", () => {
+        const textElement = card.querySelector(".review-text");
+        textElement.classList.toggle("expanded");
+    });
+
+    reviewsContainer.appendChild(card);
+  });
+});
+
+// Review Scroll Buttons Logic
+document.getElementById("reviewPrevBtn").addEventListener("click", () => {
+    reviewsContainer.scrollBy({ left: -320, behavior: "smooth" });
+});
+
+document.getElementById("reviewNextBtn").addEventListener("click", () => {
+    reviewsContainer.scrollBy({ left: 320, behavior: "smooth" });
+});

@@ -5,6 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="../css/HomePage.css" />
+    <link rel="stylesheet" href="../responsive/HomeResponsive.css" />
     <title>Food Restaurant Home Page</title>
 </head>
 
@@ -88,7 +89,21 @@
         </div>
     </section>
 
+    <!-- ================= REVIEWS ================= -->
+    <section id="reviews" class="reviews-section">
+        <h2 class="reviews-title">What Our Customers Say</h2>
+        
+        <div class="reviews-container-wrapper">
+            <button class="review-nav prev" id="reviewPrevBtn">&#10094;</button>
+            
+            <div class="reviews-container" id="reviewsContainer">
+                <p style="text-align:center; width:100%; color:#666;">Loading reviews...</p>
+            </div>
 
+            <button class="review-nav next" id="reviewNextBtn">&#10095;</button>
+        </div>
+    </section>
+    
     <!-- ================= FOOTER / CONTACT ================= -->
     <footer id ="contact" class="footer">
         <div class="footer-content">

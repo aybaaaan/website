@@ -6,7 +6,26 @@
     <title>Feedback Page</title>
     <link rel="stylesheet" href="../css/FeedbackPage.css" />
     <link rel="stylesheet" href="../responsive/FeedbackResponsive.css" />
-    <!-- Use your existing CSS -->
+    <style>
+      .rating-container {
+        display: flex;
+        gap: 10px;
+        margin: 10px 0;
+        justify-content: flex-start;
+      }
+      .star {
+        font-size: 30px;
+        color: #ccc;
+        cursor: pointer;
+        transition: color 0.2s;
+      }
+      .star.active {
+        color: #ffc107; /* Gold Color */
+      }
+      .star:hover {
+        transform: scale(1.1);
+      }
+    </style>
   </head>
   <body>
     <header class="header">
@@ -27,7 +46,6 @@
       </nav>
     </header>
 
-    <!-- Feedback Container -->
     <div class="feedback-container">
       <div class="feedback-header">
         <h1>Give Feedback</h1>
@@ -45,6 +63,14 @@
             <strong>Food Name:</strong>
             <span id="feedbackItemName">Loading...</span>
           </p>
+
+          <div class="rating-container">
+            <span class="star" data-value="1">&#9733;</span>
+            <span class="star" data-value="2">&#9733;</span>
+            <span class="star" data-value="3">&#9733;</span>
+            <span class="star" data-value="4">&#9733;</span>
+            <span class="star" data-value="5">&#9733;</span>
+          </div>
           <textarea
             id="feedbackText"
             placeholder="Write your feedback here..."
@@ -59,8 +85,7 @@
           </div>
         </div>
 
-        <!-- More feedback cards can be dynamically generated -->
-      </div>
+        </div>
     </div>
 
     <div id="feedbackModal" class="popup-overlay">
@@ -70,7 +95,6 @@
       </div>
     </div>
 
-    <!-- Footer -->
     <footer class="footer">&copy; Mediterranean In Velvet</footer>
 
     <script type="module" src="../script/FeedbackPage.js"></script>

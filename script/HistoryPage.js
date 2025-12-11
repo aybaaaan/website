@@ -218,20 +218,25 @@ onAuthStateChanged(auth, (user) => {
 
           // Build row for each item
           itemsHtml += `
-            <div class="order-item-row">
-                <img src="${finalImageSrc}" alt="${item.name}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px;">
-                
-                <div class="order-info" style="flex: 1;">
-                    <h3 style="font-size: 18px; margin-bottom: 5px;">${item.name}</h3>
-                    <p style="font-size: 14px; margin: 0;">Qty: ${item.qty} x ₱${item.price}</p>
-                    <p class="subtotal" style="font-size: 14px; margin-top: 5px;">Subtotal: ₱${itemTotal.toFixed(2)}</p>
-                </div>
+              <div class="order-item-row">
+                  <img src="${finalImageSrc}" alt="${item.name}" 
+                      style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px;">
+                  
+                  <div class="order-info" style="flex: 1;">
+                      <h3 style="font-size: 18px; margin-bottom: 5px;">${item.name}</h3>
+                      <p style="font-size: 14px; margin: 0;">Qty: ${item.qty} x ₱${item.price}</p>
+                      <p class="subtotal" style="font-size: 14px; margin-top: 5px;">
+                          Subtotal: ₱${itemTotal.toFixed(2)}
+                      </p>
+                  </div>
 
-                <button class="reorder-btn" style="padding: 8px 15px; font-size: 14px; margin: 0;" 
-                    onclick="reorder('${item.name}', ${item.qty}, ${item.price})">
-                    Reorder
-                </button>
-            </div>
+                  ${order.status === 'delivered' ? `
+                  <button class="reorder-btn" 
+                      style="padding: 8px 15px; font-size: 14px; margin: 0;"
+                      onclick="reorder('${item.name}', ${item.qty}, ${item.price})">
+                      Reorder
+                  </button>` : ``}
+              </div>
           `;
         });
 

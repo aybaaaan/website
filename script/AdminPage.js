@@ -284,7 +284,7 @@ fileInput.addEventListener("change", (e) => {
     reader.onload = (event) => {
       base64Image = event.target.result;
       preview.src = base64Image;
-    };
+        };
     reader.readAsDataURL(file);
   }
 });
@@ -1203,10 +1203,25 @@ async function renderFeedbackPage() {
       }
     }
 
+    // ⭐⭐ START OF ADDED CODE FOR STAR RATING ⭐⭐
+    let starHtml = "";
+    const rating = fb.rating || 0;
+    // Generate 5 stars
+    for (let i = 1; i <= 5; i++) {
+        if (i <= rating) {
+            // Filled Gold Star
+            starHtml += '<span style="color: #ffc107; font-size: 20px;">&#9733;</span>';
+        } else {
+            // Empty Grey Star
+            starHtml += '<span style="color: #ccc; font-size: 20px;">&#9733;</span>';
+        }
+    }
+    // ⭐⭐ END OF ADDED CODE ⭐⭐
+
     card.innerHTML = `
       <p><strong>Order ID:</strong> ${orderNumber}</p>
       <p><strong>Customer:</strong> ${customerName}</p>
-      <p><strong>Ordered Items:</strong> ${orderedItems}</p>
+      <p><strong>Rating:</strong> ${starHtml} <small>(${rating}/5)</small></p> <p><strong>Ordered Items:</strong> ${orderedItems}</p>
       <p><strong>Feedback:</strong> ${fb.feedback || "No feedback"}</p>
     `;
 
