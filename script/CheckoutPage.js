@@ -350,14 +350,12 @@ proceedBtn.addEventListener("click", async () => {
 
   // Update subtotal & total
   summarySubtotal.textContent = subtotalEl.textContent;
-  summaryTotal.textContent = (parseFloat(totalEl.textContent)).toFixed(2);
+  summaryTotal.textContent = parseFloat(totalEl.textContent).toFixed(2);
 
   modal.style.display = "flex";
   // Update summary when modal shows
   summarySubtotal.textContent = subtotalEl.textContent;
-  summaryTotal.textContent = (
-    parseFloat(totalEl.textContent)
-  ).toFixed(2);
+  summaryTotal.textContent = parseFloat(totalEl.textContent).toFixed(2);
 });
 
 // ========== Modal Close Logic ==========
@@ -481,13 +479,13 @@ checkoutForm.addEventListener("submit", async (e) => {
     orderDate: userOrderDate,
     orderTime: userOrderTime,
     timestamp: new Date(),
-    status: "pending",
+    status: "PENDING",
   };
 
   try {
     await push(ordersRef, orderData);
 
-/*   // ======================== EMAILJS ADMIN NOTIFICATION ========================
+    /*   // ======================== EMAILJS ADMIN NOTIFICATION ========================
 const emailParams = {
   orderID: orderID,
   userEmail: currentUser.email,

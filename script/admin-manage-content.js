@@ -254,16 +254,9 @@ renderItems(menuRef, menuGrid);
 renderItems(homeRef, homeGrid);
 
 const deleteConfirmModal = document.getElementById("delete-confirm-modal");
-const deleteConfirmMessage = document.getElementById("delete-confirm-message");
 const cancelDelete = document.getElementById("cancel-delete");
 
 cancelDelete.addEventListener("click", () => {
-  deleteConfirmModal.style.display = "none";
-  orderKeyToDelete = null;
-});
-
-confirmDelete.addEventListener("click", () => {
-  if (orderKeyToDelete) remove(ref(db, "Order/" + orderKeyToDelete));
   deleteConfirmModal.style.display = "none";
   orderKeyToDelete = null;
 });
@@ -288,46 +281,6 @@ document.getElementById("confirm-delete").addEventListener("click", () => {
     .catch((error) => {
       console.error("Delete failed:", error);
     });
-});
-// ========== ABOUT US SECTION ==========
-
-// REFERENCES FOR ABOUT US SECTION
-const aboutUsRef = ref(db, "aboutUs");
-const aboutUsPreview = document.getElementById("aboutUsPreview");
-
-onValue(aboutUsRef, (snapshot) => {
-  aboutUsPreview.textContent = snapshot.exists() ? snapshot.val().content : "";
-});
-
-document.addEventListener("DOMContentLoaded", () => {
-  const aboutUsModal = document.getElementById("aboutUsModal");
-  const aboutUsContent = document.getElementById("aboutUsContent");
-  const saveBtn = document.getElementById("aboutUs-save-btn");
-  const cancelBtn = document.getElementById("aboutUs-cancel-btn");
-
-  // Open modal manually if needed (e.g., admin button elsewhere)
-  document
-    .getElementById("editAboutUsBtn")
-    ?.addEventListener("click", async () => {
-      const snapshot = await get(aboutUsRef);
-      aboutUsContent.value = snapshot.exists() ? snapshot.val().content : "";
-      aboutUsModal.style.display = "flex";
-    });
-
-  saveBtn.addEventListener("click", async () => {
-    const newContent = aboutUsContent.value.trim();
-    if (!newContent) return alert("Please fill in the About Us text.");
-    await update(aboutUsRef, { content: newContent });
-    aboutUsModal.style.display = "none";
-  });
-
-  cancelBtn.addEventListener("click", () => {
-    aboutUsModal.style.display = "none";
-  });
-
-  aboutUsModal.addEventListener("click", (e) => {
-    if (e.target === aboutUsModal) aboutUsModal.style.display = "none";
-  });
 });
 
 // ========== MENU CATEGORY TOGGLE ==========
@@ -374,3 +327,61 @@ function updateToggleUI() {
       break;
   }
 }
+
+// ========== ABOUT US SECTION ==========
+
+// REFERENCES FOR ABOUT US SECTION
+
+// ========== ABOUT US SECTION ==========
+
+const aboutUsRef = ref(db, "aboutUs");
+const aboutUsPreview = document.getElementById("aboutUsPreview");
+
+const saveBtn = document.getElementById("aboutUs-save-btn");
+const cancelBtn = document.getElementById("aboutUs-cancel-btn");
+
+console.log("✅ admin-manage-content.js loaded");
+
+const editAboutUsBtn = document.getElementById("editAboutUsBtn");
+const aboutUsModal = document.getElementById("aboutUsModal");
+const aboutUsContent = document.getElementById("aboutUsContent");
+
+if (!editAboutUsBtn) {
+  console.error("❌ Edit About Us button not found");
+} else {
+  editAboutUsBtn.addEventListener("click", () => {
+    console.log("✏️ Edit About Us clicked");
+    aboutUsModal.style.display = "flex";
+  });
+}
+
+// realtime preview
+onValue(aboutUsRef, (snapshot) => {
+  aboutUsPreview.textContent = snapshot.exists() ? snapshot.val().content : "";
+});
+
+// open modal
+editAboutUsBtn.addEventListener("click", async () => {
+  const snapshot = await get(aboutUsRef);
+  aboutUsContent.value = snapshot.exists() ? snapshot.val().content : "";
+  aboutUsModal.style.display = "flex";
+});
+
+// save
+saveBtn.addEventListener("click", async () => {
+  const newContent = aboutUsContent.value.trim();
+  if (!newContent) return alert("Please fill in the About Us text.");
+
+  await update(aboutUsRef, { content: newContent });
+  aboutUsModal.style.display = "none";
+});
+
+// cancel
+cancelBtn.addEventListener("click", () => {
+  aboutUsModal.style.display = "none";
+});
+
+// click outside modal
+aboutUsModal.addEventListener("click", (e) => {
+  if (e.target === aboutUsModal) aboutUsModal.style.display = "none";
+});

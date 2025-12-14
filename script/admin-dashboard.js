@@ -1,35 +1,3 @@
-// LOGOUT MODAL LOGIC
-const logoutBtn = document.getElementById("btn-logout");
-const logoutModal = document.getElementById("logoutModal"); // fixed ID
-const cancelLogout = document.getElementById("cancel-logout");
-const confirmLogout = document.getElementById("confirm-logout");
-
-logoutBtn.addEventListener("click", (e) => {
-  e.preventDefault();
-  logoutModal.style.display = "flex";
-});
-
-cancelLogout.addEventListener(
-  "click",
-  () => (logoutModal.style.display = "none")
-);
-confirmLogout.addEventListener(
-  "click",
-  () => (window.location.href = "../pages/LoginPage.html")
-);
-
-window.addEventListener("click", (e) => {
-  if (e.target === logoutModal) logoutModal.style.display = "none";
-});
-
-//Hamburger
-const hamburger = document.getElementById("hamburger");
-const sidebar = document.querySelector("aside");
-
-hamburger.addEventListener("click", () => {
-  sidebar.classList.toggle("active");
-});
-
 // FIREBASE SETUP
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
 import {
@@ -41,13 +9,6 @@ import {
   remove,
   get,
 } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
-
-import {
-  getFirestore,
-  collection,
-  addDoc,
-  getDocs,
-} from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyC7FLz6RyFhiNok82uPj3hs7Ev8r7UI3Ik",
@@ -113,6 +74,7 @@ onValue(OrderRef, (snapshot) => {
 const ordersPerPage = 10;
 let currentPage = 1;
 let ordersArray = []; // store all orders for pagination
+let filteredOrders = [];
 
 async function loadOrders() {
   const snapshot = await get(ref(db, "Order"));
@@ -123,6 +85,7 @@ async function loadOrders() {
   }
 
   ordersArray = Object.values(snapshot.val());
+  filteredOrders = [...ordersArray];
   currentPage = 1;
   renderPage();
 }
@@ -131,7 +94,7 @@ function renderPage() {
   const tableBody = document.querySelector("#salesReportTable tbody");
   tableBody.innerHTML = "";
 
-  if (ordersArray.length === 0) {
+  if (filteredOrders.length === 0) {
     tableBody.innerHTML = `<tr><td colspan="8">No orders found.</td></tr>`;
     document.getElementById("pageInfo").textContent = "";
     return;
@@ -139,7 +102,7 @@ function renderPage() {
 
   const startIndex = (currentPage - 1) * ordersPerPage;
   const endIndex = startIndex + ordersPerPage;
-  const pageOrders = ordersArray.slice(startIndex, endIndex);
+  const pageOrders = filteredOrders.slice(startIndex, endIndex);
 
   pageOrders.forEach((order) => {
     const dateObj = order.orderDate ? new Date(order.orderDate) : null;
@@ -186,7 +149,7 @@ function renderPage() {
     }
   });
 
-  const totalPages = Math.ceil(ordersArray.length / ordersPerPage);
+  const totalPages = Math.ceil(filteredOrders.length / ordersPerPage);
   document.getElementById(
     "pageInfo"
   ).textContent = `Page ${currentPage} of ${totalPages}`;
@@ -197,6 +160,48 @@ function renderPage() {
     currentPage === totalPages;
 }
 
+function applyDateFilter() {
+  const fromVal = document.getElementById("dateFrom").value;
+  const toVal = document.getElementById("dateTo").value;
+
+  filteredOrders = ordersArray.filter((order) => {
+    if (!order.orderDate) return false;
+
+    const d = new Date(order.orderDate);
+
+    // Normalize order date (LOCAL, date-only)
+    const orderDay = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+
+    if (fromVal) {
+      const [fy, fm, fd] = fromVal.split("-").map(Number);
+      const from = new Date(fy, fm - 1, fd); // ✅ LOCAL date
+      if (orderDay < from) return false;
+    }
+
+    if (toVal) {
+      const [ty, tm, td] = toVal.split("-").map(Number);
+      const to = new Date(ty, tm - 1, td); // ✅ LOCAL date
+      if (orderDay > to) return false;
+    }
+
+    return true;
+  });
+
+  currentPage = 1;
+  renderPage();
+}
+
+document.getElementById("dateFrom").addEventListener("change", applyDateFilter);
+document.getElementById("dateTo").addEventListener("change", applyDateFilter);
+
+document.getElementById("resetDateFilter").addEventListener("click", () => {
+  document.getElementById("dateFrom").value = "";
+  document.getElementById("dateTo").value = "";
+  filteredOrders = [...ordersArray];
+  currentPage = 1;
+  renderPage();
+});
+
 // Pagination button events
 document.getElementById("prevPageTable").addEventListener("click", () => {
   if (currentPage > 1) {
@@ -206,7 +211,7 @@ document.getElementById("prevPageTable").addEventListener("click", () => {
 });
 
 document.getElementById("nextPageTable").addEventListener("click", () => {
-  const totalPages = Math.ceil(ordersArray.length / ordersPerPage);
+  const totalPages = Math.ceil(filteredOrders.length / ordersPerPage);
   if (currentPage < totalPages) {
     currentPage++;
     renderPage();

@@ -338,6 +338,26 @@ section.active {
   margin-bottom: 20px;
 }
 
+.table-filters {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin: 10px 0;
+}
+
+.table-filters label {
+  font-size: 14px;
+}
+
+.table-filters input {
+  padding: 4px;
+}
+
+.table-filters button {
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
 #btn-logins-today,
 #btn-logins-week,
 #btn-logins-month {

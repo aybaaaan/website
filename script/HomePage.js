@@ -68,9 +68,9 @@ function renderCart() {
       .join("");
   }
 
-  document.getElementById("cartTotal").textContent = `‣ Subtotal: Php ${formatPHP(
-    total
-  )}`;
+  document.getElementById(
+    "cartTotal"
+  ).textContent = `‣ Subtotal: Php ${formatPHP(total)}`;
 }
 
 function updateCartBadge() {
@@ -157,11 +157,11 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
- if (accountBtn) {
-  accountBtn.addEventListener("click", () => {
-    accountMenu.classList.toggle("active");
-  });
-}
+  if (accountBtn) {
+    accountBtn.addEventListener("click", () => {
+      accountMenu.classList.toggle("active");
+    });
+  }
 
   // Close dropdown when clicking outside
   document.addEventListener("click", (event) => {
@@ -423,7 +423,6 @@ document.getElementById("btnSide").addEventListener("click", () => {
 let lastViewedAnnouncementTimestamp =
   Number(localStorage.getItem("lastViewedAnnouncementTimestamp")) || 0;
 
-
 let allAnnouncements = [];
 const announcementToastContainer = document.getElementById(
   "announcementToastContainer"
@@ -482,16 +481,14 @@ function listenToAnnouncements() {
       // ntToast(newestAnnouncement);
     }
     const badge = document.getElementById("announcementBadge");
-if (
-  newestAnnouncement &&
-  newestAnnouncement.timestamp > lastViewedAnnouncementTimestamp
-) {
-  if (badge) badge.style.display = "flex";
-} else {
-  if (badge) badge.style.display = "none";
-}
-
-
+    if (
+      newestAnnouncement &&
+      newestAnnouncement.timestamp > lastViewedAnnouncementTimestamp
+    ) {
+      if (badge) badge.style.display = "flex";
+    } else {
+      if (badge) badge.style.display = "none";
+    }
   });
 }
 
@@ -680,21 +677,22 @@ document.addEventListener("DOMContentLoaded", () => {
     showAnnouncementContentModal();
 
     // Mark as viewed (latest announcement)
-    if (typeof allAnnouncements !== "undefined" && allAnnouncements.length > 0) {
+    if (
+      typeof allAnnouncements !== "undefined" &&
+      allAnnouncements.length > 0
+    ) {
       const newest = allAnnouncements[allAnnouncements.length - 1];
 
       lastViewedAnnouncementTimestamp = newest.timestamp;
-localStorage.setItem(
-  "lastViewedAnnouncementTimestamp",
-  String(lastViewedAnnouncementTimestamp)
-);
-
+      localStorage.setItem(
+        "lastViewedAnnouncementTimestamp",
+        String(lastViewedAnnouncementTimestamp)
+      );
     }
 
     if (badge) badge.style.display = "none";
   });
 });
-
 
 //=================== ORDER STATUS TOASTS =====================//
 const orderToasts = {}; // Track the toast element per orderID
@@ -707,11 +705,11 @@ function saveDismissedOrders() {
 }
 
 function getStatusColor(status) {
-  if (status === "accepted") return "#a64d79";
-  if (status === "for-delivery") return "#a64d79";
-  if (status === "cancelled") return "#a64d79";
-  if (status === "delivered") return "#a64d79";
-  return "#a64d79";
+  if (status === "ACCEPTED") return "#3cec18ff";
+  if (status === "FOR DELIVERY") return "#14c0ebff";
+  if (status === "CANCELLED") return "#e21d1dff";
+  if (status === "DELIVERED") return "#5dec1bff";
+  if (status === "PENDING") return "#e9da11ff";
 }
 
 function showOrUpdateOrderToast(order) {
@@ -740,8 +738,11 @@ function showOrUpdateOrderToast(order) {
     const toast = orderToasts[orderID];
     toast.querySelector(
       ".status-text"
-    ).textContent = `UPDATE: OrderID ${orderID} status is now ${status}`;
-    toast.querySelector(".status-text").style.color = color;
+    ).innerHTML = `UPDATE: OrderID ${orderID} status is now 
+   <span class="order-status" style="color:${color}">
+     ${status}
+   </span>`;
+    toast.querySelector(".status-text");
     toast.querySelector(
       ".status-time"
     ).textContent = `Status Updated: ${timestamp}`;
@@ -752,8 +753,11 @@ function showOrUpdateOrderToast(order) {
     toast.classList.add("order-toast");
     toast.innerHTML = `
       <div>
-        <p class="status-text" style="color:${color};">
-          UPDATE: OrderID ${orderID} status is now ${status}
+        <p class="status-text">
+          UPDATE: OrderID ${orderID} status is now
+          <span class="order-status" style="color:${color}">
+            ${status}
+          </span>
         </p>
         <small class="status-time" style="opacity:0.8;">
           Status Updated: ${timestamp}
@@ -834,8 +838,6 @@ buttons.forEach((button) => {
 
 window.showSlide = showSlide; // allow indicators to work
 
-
-
 // ===================== CUSTOMER REVIEWS LOGIC =====================
 const feedbacksRef = ref(db, "Feedbacks");
 const reviewsContainer = document.getElementById("reviewsContainer");
@@ -843,7 +845,8 @@ const reviewsContainer = document.getElementById("reviewsContainer");
 // Fetch and Display Reviews
 onValue(feedbacksRef, (snapshot) => {
   if (!snapshot.exists()) {
-    reviewsContainer.innerHTML = "<p style='width:100%; text-align:center;'>No reviews yet.</p>";
+    reviewsContainer.innerHTML =
+      "<p style='width:100%; text-align:center;'>No reviews yet.</p>";
     return;
   }
 
@@ -851,33 +854,35 @@ onValue(feedbacksRef, (snapshot) => {
   const allReviews = Object.values(data);
 
   // 1. SORT: Show newest first
-  allReviews.reverse(); 
+  allReviews.reverse();
 
   // 2. LIMIT: Limit to 15 reviews
   const limitedReviews = allReviews.slice(0, 15);
 
   reviewsContainer.innerHTML = ""; // Clear loading text
 
-  limitedReviews.forEach(review => {
+  limitedReviews.forEach((review) => {
     // Generate Stars HTML
     // If no rating, 0 stars (all empty)
     let starsHtml = "";
-    const rating = review.rating || 0; 
+    const rating = review.rating || 0;
 
-    for(let i=1; i<=5; i++) {
-        if(i <= rating) starsHtml += "★"; // Filled star
-        else starsHtml += "☆"; // Empty star
+    for (let i = 1; i <= 5; i++) {
+      if (i <= rating) starsHtml += "★"; // Filled star
+      else starsHtml += "☆"; // Empty star
     }
 
     // Determine Name and Content
     const name = review.customerName || "Customer";
-    const feedbackText = review.feedback ? `"${review.feedback}"` : "No comment provided.";
+    const feedbackText = review.feedback
+      ? `"${review.feedback}"`
+      : "No comment provided.";
     const foodItem = review.itemName || "Ordered Item";
 
     // Create Card HTML
     const card = document.createElement("div");
     card.classList.add("review-card");
-    
+
     // Added tooltip title
     card.innerHTML = `
         <div class="review-header" title="Click to expand">
@@ -890,8 +895,8 @@ onValue(feedbacksRef, (snapshot) => {
 
     // Click event to expand/collapse text
     card.addEventListener("click", () => {
-        const textElement = card.querySelector(".review-text");
-        textElement.classList.toggle("expanded");
+      const textElement = card.querySelector(".review-text");
+      textElement.classList.toggle("expanded");
     });
 
     reviewsContainer.appendChild(card);
@@ -900,9 +905,9 @@ onValue(feedbacksRef, (snapshot) => {
 
 // Review Scroll Buttons Logic
 document.getElementById("reviewPrevBtn").addEventListener("click", () => {
-    reviewsContainer.scrollBy({ left: -320, behavior: "smooth" });
+  reviewsContainer.scrollBy({ left: -320, behavior: "smooth" });
 });
 
 document.getElementById("reviewNextBtn").addEventListener("click", () => {
-    reviewsContainer.scrollBy({ left: 320, behavior: "smooth" });
+  reviewsContainer.scrollBy({ left: 320, behavior: "smooth" });
 });

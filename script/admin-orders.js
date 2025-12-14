@@ -170,19 +170,23 @@ function renderOrdersPage() {
           <select class="order-status-dropdown" id="status-dropdown-${
             data.key
           }">
-            <option value="accepted" ${
-              data.status === "accepted" ? "selected" : ""
+            <option value="ACCEPTED" ${
+              data.status || data.status?.toLowerCase() === "ACCEPTED"
+                ? "selected"
+                : ""
             }>Accepted</option>
-            <option value="for-delivery" ${
-              data.status === "for-delivery" ? "selected" : ""
+            <option value="FOR DELIVERY" ${
+              data.status || data.status?.toLowerCase() === "FOR DELIVERY"
+                ? "selected"
+                : ""
             }>For Delivery</option>
-            <option value="cancelled" ${
-              data.status?.toLowerCase() === "cancelled" ? "selected" : ""
+            <option value="CANCELLED" ${
+              data.status?.toLowerCase() === "CANCELLED" ? "selected" : ""
             }>Cancelled</option>
-            <option value="delivered" ${
-              data.status?.toLowerCase() === "delivered" ? "selected" : ""
+            <option value="DELIVERED" ${
+              data.status === "DELIVERED" ? "selected" : ""
             }>Delivered</option>
-            <option value="pending" ${
+            <option value="PENDING" ${
               !data.status || data.status?.toLowerCase() === "pending"
                 ? "selected"
                 : ""
@@ -197,19 +201,19 @@ function renderOrdersPage() {
 
     const setTextColor = () => {
       switch (statusDropdown.value) {
-        case "accepted":
-          statusDropdown.style.color = "black";
+        case "ACCEPTED":
+          statusDropdown.style.color = "#22b415ff";
           break;
-        case "for-delivery":
-          statusDropdown.style.color = "green";
+        case "FOR DELIVERY":
+          statusDropdown.style.color = "#14c0ebff";
           break;
-        case "cancelled":
+        case "CANCELLED":
           statusDropdown.style.color = "#cc3232";
           break;
-        case "pending":
-          statusDropdown.style.color = "darkorange";
+        case "PENDING":
+          statusDropdown.style.color = "#e9da11ff";
           break;
-        case "delivered":
+        case "DELIVERED":
           statusDropdown.style.color = "#a64d79";
           break;
         default:
@@ -225,11 +229,11 @@ function renderOrdersPage() {
 
       const getMessage = (status) => {
         switch (status.toLowerCase()) {
-          case "accepted":
+          case "ACCEPTED":
             return "Mark this order as Accepted?";
           case "pending":
             return "Mark this order as Pending?";
-          case "for-delivery":
+          case "for delivery":
             return "Mark this order as For Delivery?";
           case "delivered":
             return "Mark this order as Delivered? This will remove it from the view.";
@@ -242,7 +246,7 @@ function renderOrdersPage() {
 
       showStatusConfirm(getMessage(newStatus), (confirmed) => {
         if (!confirmed) {
-          statusDropdown.value = data.status || "pending";
+          statusDropdown.value = data.status || "PENDING";
           setTextColor();
           return;
         }
@@ -254,7 +258,7 @@ function renderOrdersPage() {
 
         if (newStatus.toLowerCase() === "delivered") {
           update(ref(db, `Order/${orderKey}`), {
-            status: "delivered",
+            status: "DELIVERED",
             statusTimestamp: Date.now(),
           })
             .then(() => {
@@ -264,7 +268,7 @@ function renderOrdersPage() {
             .catch(console.error);
         } else if (newStatus.toLowerCase() === "cancelled") {
           update(ref(db, `Order/${orderKey}`), {
-            status: "cancelled",
+            status: "CANCELLED",
             statusTimestamp: Date.now(),
           })
             .then(() => remove(ref(db, `Order/${orderKey}`)))

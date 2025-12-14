@@ -108,7 +108,7 @@ async function renderFeedbackPage() {
       }
     }
 
-    // ⭐⭐ START OF ADDED CODE FOR STAR RATING ⭐⭐
+    //  START OF ADDED CODE FOR STAR RATING
     let starHtml = "";
     const rating = fb.rating || 0;
     // Generate 5 stars
@@ -123,7 +123,7 @@ async function renderFeedbackPage() {
           '<span style="color: #ccc; font-size: 20px;">&#9733;</span>';
       }
     }
-    // ⭐⭐ END OF ADDED CODE ⭐⭐
+    //  END OF ADDED CODE FOR STAR RATING
 
     card.innerHTML = `
       <p><strong>Order ID:</strong> ${orderNumber}</p>
