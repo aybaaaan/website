@@ -340,6 +340,24 @@ body {
   padding: 10px 14px;
   white-space: nowrap;
 }
+.cart-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background-color: #a64d79;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  border-radius: 50%;
+  padding: 2px 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  z-index: 10;
+}
+
 
 .action-btn {
   color: #4c1130;

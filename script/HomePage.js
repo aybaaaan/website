@@ -73,32 +73,44 @@ function renderCart() {
   )}`;
 }
 
-// ===================== REMOVE ITEM =====================
-function removeFromCart(name) {
-  let cart = JSON.parse(localStorage.getItem("cart")) || [];
-  cart = cart.filter((item) => item.name !== name);
-  localStorage.setItem("cart", JSON.stringify(cart));
-  renderCart();
+function updateCartBadge() {
+  const badge = document.getElementById("cartBadge");
+  const cart = JSON.parse(localStorage.getItem("cart")) || [];
+  const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
+
+  if (totalQty > 0) {
+    badge.textContent = totalQty;
+    badge.style.display = "flex";
+  } else {
+    badge.style.display = "none";
+  }
 }
 
-// ===================== ADD TO CART =====================
+
+// ===================== REMOVE ITEM =====================
 function addToCart(name, price) {
   const cleanPrice = Number(String(price).replace(/[^0-9.]/g, "")) || 0;
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
   const existing = cart.find((i) => i.name === name);
-  if (existing) {
-    existing.qty += 1;
-  } else {
-    cart.push({ name, price: cleanPrice, qty: 1 });
-  }
+  if (existing) existing.qty += 1;
+  else cart.push({ name, price: cleanPrice, qty: 1 });
 
   localStorage.setItem("cart", JSON.stringify(cart));
   renderCart();
+  updateCartBadge(); // ✅ update badge
 
-  // open cart sidebar when adding item
   document.getElementById("cartSidebar").classList.add("active");
 }
+
+function removeFromCart(name) {
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+  cart = cart.filter((item) => item.name !== name);
+  localStorage.setItem("cart", JSON.stringify(cart));
+  renderCart();
+  updateCartBadge(); // ✅ update badge
+}
+
 
 // ===================== CART OPEN/CLOSE =====================
 function toggleCart() {
@@ -113,6 +125,7 @@ function closeCart() {
 document.addEventListener("DOMContentLoaded", () => {
   renderCart(); // always update items
   listenToAnnouncements();
+  updateCartBadge();
 
   // open cart only if redirected with ?cart=open
   const params = new URLSearchParams(window.location.search);
