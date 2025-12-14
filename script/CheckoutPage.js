@@ -350,14 +350,12 @@ proceedBtn.addEventListener("click", async () => {
 
   // Update subtotal & total
   summarySubtotal.textContent = subtotalEl.textContent;
-  summaryTotal.textContent = (parseFloat(totalEl.textContent)).toFixed(2);
+  summaryTotal.textContent = parseFloat(totalEl.textContent).toFixed(2);
 
   modal.style.display = "flex";
   // Update summary when modal shows
   summarySubtotal.textContent = subtotalEl.textContent;
-  summaryTotal.textContent = (
-    parseFloat(totalEl.textContent)
-  ).toFixed(2);
+  summaryTotal.textContent = parseFloat(totalEl.textContent).toFixed(2);
 });
 
 // ========== Modal Close Logic ==========
@@ -481,44 +479,45 @@ checkoutForm.addEventListener("submit", async (e) => {
     orderDate: userOrderDate,
     orderTime: userOrderTime,
     timestamp: new Date(),
-    status: "pending",
+    status: "PENDING",
   };
 
   try {
     await push(ordersRef, orderData);
 
     // ======================== EMAILJS ADMIN NOTIFICATION ========================
-const emailParams = {
-  orderID: orderID,
-  userEmail: currentUser.email,
-  name: name,
-  contact: contact,
-  address: address,
-  orderDate: userOrderDate,
-  orderTime: userOrderTime,
-  deliveryDate: deliveryDate,
-  deliveryTime: deliveryTime,
-  payment: payment,
-  status: "pending",
-  order_list: orders
-    .map(
-      item =>
-        `${item.name} (Qty: ${item.qty}) — ₱${(item.price * item.qty).toFixed(2)}`
-    )
-    .join("\n"),
-  total: totalEl.textContent
-};
+    const emailParams = {
+      orderID: orderID,
+      userEmail: currentUser.email,
+      name: name,
+      contact: contact,
+      address: address,
+      orderDate: userOrderDate,
+      orderTime: userOrderTime,
+      deliveryDate: deliveryDate,
+      deliveryTime: deliveryTime,
+      payment: payment,
+      status: "pending",
+      order_list: orders
+        .map(
+          (item) =>
+            `${item.name} (Qty: ${item.qty}) — ₱${(
+              item.price * item.qty
+            ).toFixed(2)}`
+        )
+        .join("\n"),
+      total: totalEl.textContent,
+    };
 
-emailjs
-  .send("service_7vla50x", "template_s96a7yg", emailParams)
-  .then(() => {
-    console.log("📧 EmailJS: Admin notified successfully");
-  })
-  .catch((err) => {
-    console.error("❌ EmailJS failed:", err);
-  }); 
-// ========================================================================
-
+    emailjs
+      .send("service_7vla50x", "template_s96a7yg", emailParams)
+      .then(() => {
+        console.log("📧 EmailJS: Admin notified successfully");
+      })
+      .catch((err) => {
+        console.error("❌ EmailJS failed:", err);
+      });
+    // ========================================================================
 
     // Update user profile in Firestore
     const userRef = doc(fs, "users", currentUser.uid);

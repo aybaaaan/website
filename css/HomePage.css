@@ -257,7 +257,7 @@ body {
 
 /* Hamburger (Hidden by default on Desktop) */
 .hamburger {
-  display: none; 
+  display: none;
   flex-direction: column;
   cursor: pointer;
   gap: 5px;
@@ -376,8 +376,14 @@ body {
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-15px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* ======================================================= */
@@ -487,8 +493,12 @@ body {
   transform: translateY(-50%) scale(1.1);
 }
 
-.carousel-prev { left: 24px; }
-.carousel-next { right: 24px; }
+.carousel-prev {
+  left: 24px;
+}
+.carousel-next {
+  right: 24px;
+}
 
 .carousel-indicators {
   position: absolute;
@@ -594,7 +604,7 @@ body {
 .menu-cards {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: 40px;
   justify-content: center;
   transition: transform 0.6s ease;
 }
@@ -726,7 +736,7 @@ body {
   max-width: 100%;
   margin: 0 auto;
   scroll-snap-type: x mandatory;
-  scrollbar-width: none; 
+  scrollbar-width: none;
   -ms-overflow-style: none;
 }
 
@@ -741,7 +751,7 @@ body {
   border-top: 5px solid #a64d79;
   border-radius: 12px;
   padding: 25px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
   text-align: left;
   flex-shrink: 0;
   display: flex;
@@ -809,10 +819,10 @@ body {
   z-index: 10;
   transition: background 0.3s, transform 0.2s;
   flex-shrink: 0;
-  display: flex; 
+  display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }
 
 .review-nav:hover {
@@ -846,7 +856,9 @@ body {
   transition: color 0.2s;
 }
 
-.close-review-modal:hover { color: #c41414; }
+.close-review-modal:hover {
+  color: #c41414;
+}
 
 .review-modal-header {
   display: flex;
@@ -944,7 +956,8 @@ body {
   color: #ead1dc;
 }
 
-.footer-title-nav, .footer-title {
+.footer-title-nav,
+.footer-title {
   position: relative;
   font-size: 24px;
   font-weight: 700;
@@ -953,7 +966,8 @@ body {
   margin-bottom: 8px;
 }
 
-.footer-nav-menu, .footer-social-contact {
+.footer-nav-menu,
+.footer-social-contact {
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -977,7 +991,9 @@ body {
   transition: transform 0.3s ease;
 }
 
-.footer-social-contact img:hover { transform: scale(1.1); }
+.footer-social-contact img:hover {
+  transform: scale(1.1);
+}
 
 /* ======================================================= */
 /* 8. CART & TOASTS                                        */
@@ -997,7 +1013,9 @@ body {
   padding: 20px;
 }
 
-.cart-sidebar.active { right: 0; }
+.cart-sidebar.active {
+  right: 0;
+}
 
 .cart-price {
   padding: 10px 0px;
@@ -1054,7 +1072,8 @@ body {
   cursor: pointer;
 }
 
-.order-toast, .announcement-toast {
+.order-toast,
+.announcement-toast {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -1073,7 +1092,8 @@ body {
   position: relative;
 }
 
-.announcement-toast.show, .order-toast.show {
+.announcement-toast.show,
+.order-toast.show {
   transform: translateX(0);
 }
 
@@ -1081,7 +1101,8 @@ body {
   border-left: 5px solid #a64d79;
 }
 
-.order-toast button, .announcement-toast button {
+.order-toast button,
+.announcement-toast button {
   position: absolute;
   bottom: 10px;
   right: 18px;

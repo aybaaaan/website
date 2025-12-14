@@ -74,6 +74,20 @@
                 Export to Excel
               </button>
             </div>
+            <div class="table-filters">
+              <label>
+                From:
+                <input type="date" id="dateFrom" />
+              </label>
+
+              <label>
+                To:
+                <input type="date" id="dateTo" />
+              </label>
+
+              <button id="resetDateFilter">Reset</button>
+            </div>
+
             <table id="salesReportTable">
               <thead>
                 <tr>
@@ -146,6 +160,7 @@
     <!-- Chart.js library -->
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <!-- Excel export library -->
-    <script type="module" src="../script/AdminPage.js"></script>
+    <script type="module" src="../script/admin-dashboard.js"></script>
+    <script src="../script/admin-common.js"></script>
   </body>
 </html>
