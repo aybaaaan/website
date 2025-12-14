@@ -407,10 +407,8 @@ document.getElementById("btnSide").addEventListener("click", () => {
 // ===================== NEW: ANNOUNCEMENT LOGIC FUNCTIONS =====================
 
 // NEW: Container for Announcement Toast and Modal elements
-let viewedAnnouncementKey =
-  localStorage.getItem("viewedAnnouncementKey") || null;
-let viewedAnnouncementTimestamp =
-  localStorage.getItem("viewedAnnouncementTimestamp") || null;
+let lastViewedAnnouncementTimestamp =
+  Number(localStorage.getItem("lastViewedAnnouncementTimestamp")) || 0;
 
 let allAnnouncements = [];
 const announcementToastContainer = document.getElementById(
@@ -466,7 +464,17 @@ function listenToAnnouncements() {
     const newestAnnouncement = announcementsData[announcementsData.length - 1];
 
     if (newestAnnouncement) {
-      showAnnouncementToast(newestAnnouncement);
+      //showAnnounceme
+      // ntToast(newestAnnouncement);
+    }
+    const badge = document.getElementById("announcementBadge");
+    if (
+      newestAnnouncement &&
+      newestAnnouncement.timestamp > lastViewedAnnouncementTimestamp
+    ) {
+      if (badge) badge.style.display = "flex";
+    } else {
+      if (badge) badge.style.display = "none";
     }
   });
 }
@@ -565,18 +573,40 @@ function checkOverflowAndAddButton(
  * Updates the announcement modal with all announcements, now with "Show Full/Show Less" button logic.
  */
 function showAnnouncementContentModal() {
-  if (!announcementModal || allAnnouncements.length === 0) return;
+  if (!announcementModal) return;
+
   const modalContentElement = document.getElementById(
     "announcement-modal-content"
   );
-  modalContentElement.innerHTML = ""; // Clear previous modal content
+
+  modalContentElement.innerHTML = ""; // Clear previous content
+
+  // ✅ EMPTY STATE
+  if (!allAnnouncements || allAnnouncements.length === 0) {
+    modalContentElement.innerHTML = `
+      <div style="
+        text-align: center;
+        padding: 40px 20px;
+        color: #777;
+        font-size: 15px;
+      ">
+        <div style="font-size: 32px; margin-bottom: 10px;">📢</div>
+        <p>No announcements</p>
+      </div>
+    `;
+
+    announcementModal.style.display = "flex";
+    return;
+  }
+
+  // ================= NORMAL ANNOUNCEMENTS =================
 
   // Reverse so newest on top
   const reversedAnnouncements = [...allAnnouncements].reverse();
   const newestAnnouncementKey =
     allAnnouncements[allAnnouncements.length - 1]?.key;
 
-  reversedAnnouncements.forEach((item, index) => {
+  reversedAnnouncements.forEach((item) => {
     const postDate = item.timestamp
       ? new Date(item.timestamp).toLocaleString()
       : "N/A";
@@ -586,14 +616,14 @@ function showAnnouncementContentModal() {
 
     const titleBlock = document.createElement("div");
     titleBlock.innerHTML = `
-            <h4 class="announcement-title">${item.title}</h4>
-            ${
-              item.key === newestAnnouncementKey
-                ? '<span class="new-label">NEW</span>'
-                : ""
-            }
-            <small class="announcement-date">Posted: ${postDate}</small>
-        `;
+      <h4 class="announcement-title">${item.title}</h4>
+      ${
+        item.timestamp > lastViewedAnnouncementTimestamp
+          ? '<span class="new-label">NEW</span>'
+          : ""
+      }
+      <small class="announcement-date">Posted: ${postDate}</small>
+    `;
 
     const contentWrapper = document.createElement("div");
     contentWrapper.className = "announcement-content-wrapper";
@@ -623,6 +653,33 @@ function showAnnouncementContentModal() {
 
   announcementModal.style.display = "flex";
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  const announcementBtn = document.getElementById("announcementFloatBtn");
+  const badge = document.getElementById("announcementBadge");
+
+  if (!announcementBtn) return;
+
+  announcementBtn.addEventListener("click", () => {
+    showAnnouncementContentModal();
+
+    // Mark as viewed (latest announcement)
+    if (
+      typeof allAnnouncements !== "undefined" &&
+      allAnnouncements.length > 0
+    ) {
+      const newest = allAnnouncements[allAnnouncements.length - 1];
+
+      lastViewedAnnouncementTimestamp = newest.timestamp;
+      localStorage.setItem(
+        "lastViewedAnnouncementTimestamp",
+        String(lastViewedAnnouncementTimestamp)
+      );
+    }
+
+    if (badge) badge.style.display = "none";
+  });
+});
 
 //=================== ORDER STATUS TOASTS =====================//
 const orderToasts = {}; // Track the toast element per orderID
@@ -763,15 +820,6 @@ buttons.forEach((button) => {
 
     // Add active to the clicked button
     button.classList.add("active");
-  });
-});
-
-const links = document.querySelectorAll(".nav-menu a");
-
-links.forEach((link) => {
-  link.addEventListener("click", function () {
-    links.forEach((l) => l.classList.remove("active"));
-    this.classList.add("active");
   });
 });
 
