@@ -487,7 +487,7 @@ checkoutForm.addEventListener("submit", async (e) => {
   try {
     await push(ordersRef, orderData);
 
-    // ======================== EMAILJS ADMIN NOTIFICATION ========================
+/*   // ======================== EMAILJS ADMIN NOTIFICATION ========================
 const emailParams = {
   orderID: orderID,
   userEmail: currentUser.email,
@@ -518,7 +518,7 @@ emailjs
     console.error("❌ EmailJS failed:", err);
   }); 
 // ========================================================================
-
+*/
 
     // Update user profile in Firestore
     const userRef = doc(fs, "users", currentUser.uid);
