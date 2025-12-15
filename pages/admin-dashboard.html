@@ -37,12 +37,13 @@
         <a href="../pages/admin-manage-content.html"
           ><button>Manage Contents</button></a
         >
-
         <a href="../pages/admin-manage-announcements.html"
           ><button>Manage Announcements</button></a
         >
-
         <a href="../pages/admin-feedback.html"><button>Feedback</button></a>
+        <a href="../pages/admin-orders-history.html"
+          ><button>Archived Orders</button></a
+        >
       </aside>
 
       <!-- Main content -->
@@ -93,7 +94,7 @@
                 <tr>
                   <th>Order ID</th>
                   <th>Customer</th>
-                  <th>Food Item</th>
+                  <th>Food Items/Subtotal</th>
                   <th>Qty</th>
                   <th>Amount (₱)</th>
                   <th>Total Amount (₱)</th>
@@ -111,6 +112,35 @@
               <button id="prevPageTable">Prev</button>
               <span id="pageInfo">Page 1</span>
               <button id="nextPageTable">Next</button>
+            </div>
+          </div>
+        </div>
+        <!-- Order Details Modal -->
+        <div id="orderModal" class="modal">
+          <div class="modal-content" style="max-width: 800px">
+            <h3>Order Details</h3>
+            <p><strong>Order ID:</strong> <span id="modalOrderID"></span></p>
+
+            <table class="modal-table">
+              <thead>
+                <tr>
+                  <th>Food(s)</th>
+                  <th>Qty</th>
+                  <th>Subtotal (₱)</th>
+                </tr>
+              </thead>
+
+              <tbody id="orderModalBody"></tbody>
+            </table>
+            <div class="order-summary">
+              <p>
+                <strong>Payment Method:</strong> <span id="modalPayment"></span>
+              </p>
+              <p><strong>Order Date:</strong> <span id="modalDate"></span></p>
+              <p><strong>Total:</strong> <span id="modalTotal"></span></p>
+            </div>
+            <div class="modal-footer">
+              <button id="closeOrderModal">Close</button>
             </div>
           </div>
         </div>

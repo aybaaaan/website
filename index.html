@@ -34,6 +34,7 @@
                     <div class="header-actions">
                         <button class="action-btn" onclick="toggleCart()">
                             <img src ="/icons/cart.png">
+                            <span id="cartBadge" class="cart-badge">0</span>
                         </button>
                         <div class="signup-button">
                             <a href="/pages/SignUpPage.html" class="action-btn" id="signupBtn">Sign Up</a>
@@ -85,6 +86,20 @@
         </div>
     </section>
 
+     <!-- ================= REVIEWS ================= -->
+    <section id="reviews" class="reviews-section">
+        <h2 class="reviews-title">What Our Customers Say 🡳</h2>
+        
+        <div class="reviews-container-wrapper">
+            <button class="review-nav prev" id="reviewPrevBtn">&#10094;</button>
+            
+            <div class="reviews-container" id="reviewsContainer">
+                <p style="text-align:center; width:100%; color:#666;">Loading reviews...</p>
+            </div>
+
+            <button class="review-nav next" id="reviewNextBtn">&#10095;</button>
+        </div>
+    </section>
 
     <!-- ================= FOOTER / CONTACT ================= -->
     <footer id ="contact" class="footer">
@@ -123,12 +138,12 @@
     <!-- Cart Sidebar -->
     <div id="cartSidebar" class="cart-sidebar">
         <button id="closeCart" class="close-btn">&times;</button>
-        <h2>Your Cart</h2>
+        <h2>Your Cart 🛒</h2>
         <ul id="cartItems">
             <li>No items in cart</li>
         </ul>
         <p id="cartTotal">Total: Php 0</p>
-        <button class="checkout-btn" window.location.href='/pages/LoginPage.html';>Checkout</button>
+        <button class="checkout-btn">Checkout</button>
     </div>
     <div id="logoutPopup" class="popup-overlay">
         <div class="popup-box">
@@ -138,6 +153,14 @@
                 <button id="cancelLogout" class="cancel-btn">Cancel</button>
             </div>
         </div>
+    </div>
+
+    <!-- Empty Cart Popup -->
+    <div id="emptyCartPopup" class="popup-overlay">
+    <div class="popup-content">
+        <p>Your cart is empty! Please add items first.</p>
+        <button id="emptyCartOkBtn">OK</button>
+    </div>
     </div>
 
     <script type ="module" src="../script/HomePage.js"></script>

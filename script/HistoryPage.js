@@ -128,10 +128,10 @@ onAuthStateChanged(auth, (user) => {
   // ==========================================================
   //  FETCH LOGIC: IMAGES -> THEN ORDERS -> GROUPING
   // ==========================================================
-  
+
   // 1. Storage for menu images
   let menuImages = {};
-  
+
   // 2. Fetch the "menu" node FIRST
   const menuRef = ref(db, "menu");
   onValue(menuRef, (menuSnapshot) => {
@@ -148,7 +148,7 @@ onAuthStateChanged(auth, (user) => {
     }
 
     // 3. FETCH ORDERS AFTER IMAGES
-    const ordersRef = ref(db, "Order");
+    const ordersRef = ref(db, "OrderHistory");
     onValue(ordersRef, (snapshot) => {
       const data = snapshot.val();
       orderList.innerHTML = "";
@@ -185,23 +185,23 @@ onAuthStateChanged(auth, (user) => {
           : "Date not available";
 
         let statusColor = "darkorange";
-        if (order.status === "accepted") statusColor = "black";
-        else if (order.status === "for-delivery") statusColor = "green";
-        else if (order.status === "cancelled") statusColor = "#cc3232";
-        else if (order.status === "delivered") statusColor = "#a64d79";
+        if (order.status === "ACCEPTED") statusColor = "#22b415ff";
+        else if (order.status === "FOR DELIVERY") statusColor = "#14c0ebff";
+        else if (order.status === "CANCELLED") statusColor = "#cc3232";
+        else if (order.status === "DELIVERED") statusColor = "#a64d79";
 
         // B. Prepare Items List
         const itemsArray = order.orders ? Object.values(order.orders) : [];
         const reversedItems = itemsArray.reverse();
-        
+
         let itemsHtml = "";
-        let grandTotal = 0; 
+        let grandTotal = 0;
         let itemNamesList = []; // Dito natin iipunin ang mga pangalan
 
         reversedItems.forEach((item) => {
           const itemTotal = item.price * item.qty;
           grandTotal += itemTotal;
-          
+
           // I-save ang pangalan ng pagkain
           if (item.name) {
             itemNamesList.push(item.name);
@@ -212,8 +212,10 @@ onAuthStateChanged(auth, (user) => {
           if (menuImages[item.name]) {
             finalImageSrc = menuImages[item.name];
           } else {
-             const foundKey = Object.keys(menuImages).find(k => k.toLowerCase() === (item.name || "").toLowerCase());
-             if(foundKey) finalImageSrc = menuImages[foundKey];
+            const foundKey = Object.keys(menuImages).find(
+              (k) => k.toLowerCase() === (item.name || "").toLowerCase()
+            );
+            if (foundKey) finalImageSrc = menuImages[foundKey];
           }
 
           // Build row for each item
@@ -223,19 +225,27 @@ onAuthStateChanged(auth, (user) => {
                       style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px;">
                   
                   <div class="order-info" style="flex: 1;">
-                      <h3 style="font-size: 18px; margin-bottom: 5px;">${item.name}</h3>
-                      <p style="font-size: 14px; margin: 0;">Qty: ${item.qty} x ₱${item.price}</p>
+                      <h3 style="font-size: 18px; margin-bottom: 5px;">${
+                        item.name
+                      }</h3>
+                      <p style="font-size: 14px; margin: 0;">Qty: ${
+                        item.qty
+                      } x ₱${item.price}</p>
                       <p class="subtotal" style="font-size: 14px; margin-top: 5px;">
                           Subtotal: ₱${itemTotal.toFixed(2)}
                       </p>
                   </div>
 
-                  ${order.status === 'delivered' ? `
+                  ${
+                    order.status === "DELIVERED"
+                      ? `
                   <button class="reorder-btn" 
                       style="padding: 8px 15px; font-size: 14px; margin: 0;"
                       onclick="reorder('${item.name}', ${item.qty}, ${item.price})">
                       Reorder
-                  </button>` : ``}
+                  </button>`
+                      : ``
+                  }
               </div>
           `;
         });
@@ -249,7 +259,9 @@ onAuthStateChanged(auth, (user) => {
             
             <div class="order-group-header">
                 <div>
-                    <p style="font-weight: bold; color: #333; font-size: 16px;">Order ID: ${order.orderID || "N/A"}</p>
+                    <p style="font-weight: bold; color: #333; font-size: 16px;">Order ID: ${
+                      order.orderID || "N/A"
+                    }</p>
                     <p class="order-date" style="margin: 0; font-size: 13px;">${displayDate}</p>
                 </div>
                 <div style="color: ${statusColor}; font-weight: 700; text-transform: uppercase; font-size: 14px;">
@@ -263,14 +275,22 @@ onAuthStateChanged(auth, (user) => {
 
             <div class="order-group-footer">
                 <div style="font-size: 18px; font-weight: bold; color: #333;">
-                    Total: <span style="color: #741b47;">₱${grandTotal.toFixed(2)}</span>
+                    Total: <span style="color: #741b47;">₱${grandTotal.toFixed(
+                      2
+                    )}</span>
                 </div>
                 
                 <!-- Give Feedback only if delivered -->
-                ${order.status === 'delivered' ? `
-                <button class="feedback-btn" onclick="window.location.href='/pages/FeedbackPage.html?item=${encodeURIComponent(combinedItemNames)}&orderID=${order.orderID}'">
+                ${
+                  order.status === "DELIVERED"
+                    ? `
+                <button class="feedback-btn" onclick="window.location.href='/pages/FeedbackPage.html?item=${encodeURIComponent(
+                  combinedItemNames
+                )}&orderID=${order.orderID}'">
                   Give Feedback
-                </button>` : ``}
+                </button>`
+                    : ``
+                }
             </div>
           </div>
         `;

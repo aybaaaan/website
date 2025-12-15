@@ -58,7 +58,7 @@ body {
 /* ====== Header with Back Button ====== */
 .history-header {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   margin-bottom: 30px;
   flex-wrap: wrap;
@@ -78,10 +78,13 @@ body {
   font-size: 16px;
   border-radius: 8px;
   cursor: pointer;
+  margin-bottom: 20px;
 }
 
 .back-btn:hover {
-  background: #741b47;
+  background: #ead1dc;
+  color: #741b47;
+  transform: scale(1.08);
 }
 
 /* ====== Orders ====== */

@@ -170,34 +170,22 @@ function renderOrdersPage() {
           <select class="order-status-dropdown" id="status-dropdown-${
             data.key
           }">
-            <option value="ACCEPTED" ${
-              data.status || data.status?.toLowerCase() === "ACCEPTED"
-                ? "selected"
-                : ""
-            }>Accepted</option>
-            <option value="FOR DELIVERY" ${
-              data.status || data.status?.toLowerCase() === "FOR DELIVERY"
-                ? "selected"
-                : ""
-            }>For Delivery</option>
-            <option value="CANCELLED" ${
-              data.status?.toLowerCase() === "CANCELLED" ? "selected" : ""
-            }>Cancelled</option>
-            <option value="DELIVERED" ${
-              data.status === "DELIVERED" ? "selected" : ""
-            }>Delivered</option>
-            <option value="PENDING" ${
-              !data.status || data.status?.toLowerCase() === "pending"
-                ? "selected"
-                : ""
-            }>Pending</option>
+            <option value="ACCEPTED">Accepted</option>
+            <option value="PREPARING">Preparing</option>
+            <option value="FOR DELIVERY">For Delivery</option>
+            <option value="CANCELLED">Cancelled</option>
+            <option value="DELIVERED">Delivered</option>
+            <option value="PENDING">Pending</option>
           </select>
         </div>
-      </div>
     `;
 
     // ============ STATUS DROPDOWN ============
     const statusDropdown = row.querySelector(".order-status-dropdown");
+    const status = (data.status || "PENDING").toUpperCase();
+    const deleteBtn = row.querySelector(".delete-order-btn");
+
+    statusDropdown.value = status;
 
     const setTextColor = () => {
       switch (statusDropdown.value) {
@@ -210,11 +198,12 @@ function renderOrdersPage() {
         case "CANCELLED":
           statusDropdown.style.color = "#cc3232";
           break;
-        case "PENDING":
-          statusDropdown.style.color = "#e9da11ff";
-          break;
         case "DELIVERED":
           statusDropdown.style.color = "#a64d79";
+          break;
+        case "PENDING":
+        case "PREPARING":
+          statusDropdown.style.color = "#e9da11ff";
           break;
         default:
           statusDropdown.style.color = "#000";
@@ -229,16 +218,18 @@ function renderOrdersPage() {
 
       const getMessage = (status) => {
         switch (status.toLowerCase()) {
-          case "ACCEPTED":
+          case "accepted":
             return "Mark this order as Accepted?";
+          case "preparing":
+            return "Mark this order as Preparing?";
           case "pending":
             return "Mark this order as Pending?";
-          case "for delivery":
+          case "fordelivery":
             return "Mark this order as For Delivery?";
           case "delivered":
             return "Mark this order as Delivered? This will remove it from the view.";
           case "cancelled":
-            return "Are you sure you want to Cancel this order? This will delete it from the database.";
+            return "Are you sure you want to Cancel this order? This will moved into the Archived Orders.";
           default:
             return "Update order status?";
         }
@@ -246,7 +237,7 @@ function renderOrdersPage() {
 
       showStatusConfirm(getMessage(newStatus), (confirmed) => {
         if (!confirmed) {
-          statusDropdown.value = data.status || "PENDING";
+          statusDropdown.value = status;
           setTextColor();
           return;
         }
@@ -256,40 +247,37 @@ function renderOrdersPage() {
         if (!userId)
           return console.error("No userId found, cannot send notification");
 
-        if (newStatus.toLowerCase() === "delivered") {
-          update(ref(db, `Order/${orderKey}`), {
-            status: "DELIVERED",
-            statusTimestamp: Date.now(),
-          })
-            .then(() => {
-              row.remove();
-              //return sendNotification(userId, "delivered", orderKey);
-            })
-            .catch(console.error);
-        } else if (newStatus.toLowerCase() === "cancelled") {
-          update(ref(db, `Order/${orderKey}`), {
-            status: "CANCELLED",
-            statusTimestamp: Date.now(),
-          })
-            .then(() => remove(ref(db, `Order/${orderKey}`)))
-            .then(() => {
-              row.remove();
-              //return sendNotification(userId, "cancelled", orderKey);
-            })
-            .catch(console.error);
-        } else {
-          // other statuses: accepted, pending, for-delivery
-          const now = Date.now(); // exact timestamp in ms
+        const upperStatus = newStatus.toUpperCase();
 
-          update(ref(db, `Order/${orderKey}`), {
-            status: newStatus,
-            statusTimestamp: now, // <-- save exact admin update time
+        update(ref(db, `Order/${orderKey}`), {
+          status: newStatus.toUpperCase(),
+          statusTimestamp: Date.now(),
+        })
+          .then(async () => {
+            if (upperStatus === "DELIVERED") {
+              // Archive delivered order
+              const orderSnapshot = await get(ref(db, `Order/${orderKey}`));
+              if (!orderSnapshot.exists()) return;
+
+              const orderData = orderSnapshot.val();
+              orderData.status = "DELIVERED";
+              orderData.archivedAt = Date.now();
+
+              await push(ref(db, "OrderHistory"), orderData);
+              await remove(ref(db, `Order/${orderKey}`));
+            } else if (upperStatus === "CANCELLED") {
+              const orderSnapshot = await get(ref(db, `Order/${orderKey}`));
+              if (!orderSnapshot.exists()) return;
+
+              const orderData = orderSnapshot.val();
+              orderData.status = "CANCELLED";
+              orderData.archivedAt = Date.now();
+
+              await push(ref(db, "OrderHistory"), orderData);
+              await remove(ref(db, `Order/${orderKey}`));
+            }
           })
-            .then(() => {
-              /* Notification call removed */
-            })
-            .catch(console.error);
-        }
+          .catch(console.error);
       });
     });
 

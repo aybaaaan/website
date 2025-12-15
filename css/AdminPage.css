@@ -477,6 +477,22 @@ section.active {
   font-style: italic;
 }
 
+#resetDateFilter {
+  background: #ead1dc;
+  color: #4c1130;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 14px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s, transform 0.2s;
+}
+#resetDateFilter:hover {
+  background: #a64d79;
+  color: #fffdfe;
+  transform: scale(1.05);
+}
+
 .exportBtn {
   background: #a64d79;
   color: #fff;
@@ -1382,6 +1398,9 @@ section.active {
   padding: 6px 12px;
   font-size: 13px;
 }
+.input-group {
+  margin-top: 15px;
+}
 
 #announcementModal textarea {
   width: 100%;
@@ -1457,4 +1476,211 @@ section.active {
   color: #333;
   font-weight: 600;
   margin-bottom: 20px;
+}
+
+/* Customer link */
+.customer-link {
+  color: #2563eb;
+  text-decoration: underline;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.customer-link:hover {
+  color: #1d4ed8;
+}
+
+/* Dropdown button */
+.view-items {
+  color: #2563eb;
+  cursor: pointer;
+  text-decoration: underline;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+/* Modal table */
+.modal-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.modal-table th,
+.modal-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+/* Modal */
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 1000;
+}
+
+.modal-content {
+  background: #fff;
+  margin: 8% auto;
+  padding: 20px;
+  border-radius: 6px;
+}
+
+.modal-footer {
+  text-align: right;
+  margin-top: 15px;
+}
+
+.food-list {
+  margin: 6px 0 0;
+  padding-left: 18px;
+  font-size: 13px;
+}
+
+details summary {
+  cursor: pointer;
+  font-weight: 500;
+}
+/* ================= ORDER DETAILS MODAL ================= */
+
+/* Overlay */
+#orderModal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(76, 17, 48, 0.45); /* velvet tint */
+  z-index: 10000;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Modal box */
+#orderModal .modal-content {
+  background: #f0e5ea; /* soft blush */
+  width: 750px;
+  max-width: 95%;
+  border-radius: 14px;
+  padding: 24px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+  animation: popIn 0.25s ease;
+  border-top: 6px solid #a64d79;
+}
+
+/* Title */
+#orderModal h3 {
+  color: #4c1130;
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  text-align: left;
+}
+
+/* Order ID text */
+#orderModal p {
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 12px;
+}
+
+#orderModal p strong {
+  color: #a64d79;
+}
+
+/* Table */
+#orderModal .modal-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+/* Table header */
+#orderModal .modal-table thead {
+  background: #a64d79;
+}
+
+#orderModal .modal-table th {
+  color: #fff;
+  padding: 12px;
+  font-size: 14px;
+  text-align: left;
+  font-weight: 600;
+}
+/* Subtotal column */
+#orderModal .modal-subtotal {
+  text-align: right;
+  font-weight: 600;
+  color: #a64d79;
+}
+
+/* Table body */
+#orderModal .modal-table td {
+  padding: 10px 12px;
+  font-size: 14px;
+  color: #333;
+  border-bottom: 1px solid #eee;
+}
+
+#orderModal .modal-table tbody tr:hover {
+  background: #f1d8e0;
+}
+
+/* Order summary */
+#orderModal .order-summary {
+  margin-top: 18px;
+  padding: 14px;
+  background: #ead1dc;
+  border-radius: 10px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 10px;
+}
+
+#orderModal .order-summary p {
+  margin: 0;
+  font-size: 14px;
+}
+/* Highlight GRAND TOTAL in order modal */
+
+/* Make the peso amount stand out more */
+#orderModal #modalTotal::before {
+  content: "₱";
+}
+
+#orderModal #modalTotal {
+  font-size: 15px;
+  font-weight: 500;
+  color: #4c1130; /* Dark velvet */
+}
+
+#orderModal .order-summary strong {
+  color: #4c1130;
+}
+
+/* Footer */
+#orderModal .modal-footer {
+  margin-top: 18px;
+  text-align: right;
+}
+
+/* Close button */
+#closeOrderModal {
+  background: #a64d79;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+#closeOrderModal:hover {
+  background: #914068;
+  transform: scale(1.05);
 }

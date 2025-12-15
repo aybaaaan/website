@@ -3,11 +3,12 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 body {
-  background: url("https://imgs.search.brave.com/qwpZN5_Purot1GZWJoFNbNlNT1xNrco54atkeNOGNG8/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/cHJlbWl1bS1waG90/by90YWJsZS13aXRo/LW1hbnktcGxhdGVz/LWZvb2QtaW5jbHVk/aW5nLWZvb2QtZHJp/bmtzXzg2MjQ2Mi0x/MDM5MC5qcGc_c2Vt/dD1haXNfaHlicmlk/Jnc9NzQwJnE9ODA") no-repeat center center/cover;
+  background: url("https://imgs.search.brave.com/qwpZN5_Purot1GZWJoFNbNlNT1xNrco54atkeNOGNG8/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/cHJlbWl1bS1waG90/by90YWJsZS13aXRo/LW1hbnktcGxhdGVz/LWZvb2QtaW5jbHVk/aW5nLWZvb2QtZHJp/bmtzXzg2MjQ2Mi0x/MDM5MC5qcGc_c2Vt/dD1haXNfaHlicmlk/Jnc9NzQwJnE9ODA")
+    no-repeat center center/cover;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -190,7 +191,7 @@ input[type="password"]::-ms-reveal {
 .signup-btn:hover {
   background-color: #ead1dc;
   transform: scale(1.05);
-  color: black;
+  color: #741b47;
 }
 
 .signup-btn:active {
@@ -268,7 +269,7 @@ input[type="password"]::-ms-reveal {
   color: #d8d8d6;
   font-size: 16px;
   font-weight: 400;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   line-height: 20px;
   transition: color 0.3s ease;
   cursor: pointer;
@@ -300,5 +301,3 @@ input[type="password"]::-ms-reveal {
 .footer-social-contact img:hover {
   transform: scale(1.1);
 }
-
-

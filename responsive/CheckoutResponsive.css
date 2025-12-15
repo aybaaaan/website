@@ -87,8 +87,12 @@
   }
 
   .quantity-control {
-    margin-top: 10px;
-  }
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+  justify-content: space-between;
+}
 
   .totals {
     text-align: left;
@@ -117,4 +121,35 @@
   .addmore-btn, .proceed-btn {
     width: 100%;
   }
+  .details {
+  width: 100%;
+}
+}
+
+@media (max-width: 480px) {
+  /* Further adjustments for very small screens if needed */
+  .header {
+    padding: 10px 15px;
+  }
+
+  .logo {
+    font-size: 17px;
+  }
+
+  .checkout-card {
+    padding: 10px;
+  }
+
+  .order-item img {
+    height: 120px;
+  }
+  .quantity-control {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: space-between;
+}
+.details {
+  width: 100%;
+}
 }

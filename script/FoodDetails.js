@@ -67,6 +67,22 @@ backBtn.addEventListener("click", (e) => {
   }
 });
 
+const qtyInput = document.getElementById("qty");
+const plusBtn = document.getElementById("plusBtn");
+const minusBtn = document.getElementById("minusBtn");
+const addBtn = document.getElementById("addBtn");
+
+// Handle + button
+plusBtn.addEventListener("click", () => {
+  qtyInput.value = parseInt(qtyInput.value, 10) + 1;
+});
+
+// Handle - button
+minusBtn.addEventListener("click", () => {
+  const current = parseInt(qtyInput.value, 10);
+  if (current > 1) qtyInput.value = current - 1;
+});
+
 function addToCartFromDetails() {
   const name = localStorage.getItem("foodName");
   const price = parseFloat(localStorage.getItem("foodPrice"));

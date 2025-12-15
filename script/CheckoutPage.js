@@ -51,10 +51,12 @@ function renderOrders() {
           item.price * item.qty
         ).toFixed(2)}</span></p>
         <div class="quantity-control">
+        <div class="qty-btn">
           <button class="decreaseBtn">-</button>
           <button class="increaseBtn">+</button>
         </div>
-        <button class="removeBtn">Remove</button>
+          <button class="removeBtn">Remove</button>
+        </div>
       </div>
     `;
 

@@ -231,7 +231,7 @@ input[type="password"]::-ms-reveal {
 .signup-btn:hover {
   background-color: #ead1dc;
   transform: scale(1.05);
-  color: black;
+  color: #741b47;
 }
 
 .signup-btn:active {

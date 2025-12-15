@@ -39,38 +39,77 @@ function formatPHP(n) {
   });
 }
 
-// ===================== RENDER CART =====================
 function renderCart() {
   const cartItems = document.getElementById("cartItems");
   let total = 0;
 
-  // always pull fresh from localStorage
   const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
   if (cart.length === 0) {
     cartItems.innerHTML = `<li class="empty">Your cart is empty!</li>`;
   } else {
     cartItems.innerHTML = cart
-      .map((item) => {
+      .map((item, index) => {
         const itemTotal = item.price * item.qty;
         total += itemTotal;
         return `
-        <li class="cart-item">
-          <p><strong>${item.name}</strong> x${item.qty}</p>
+        <li class="cart-item" data-index="${index}">
+          <p><strong>${item.name}</strong> x <span class="qty">${
+          item.qty
+        }</span></p>
           <p class="cart-price">Php ${formatPHP(itemTotal)}</p>
-          <button class="remove-btn" onclick="removeFromCart('${item.name.replace(
-            /'/g,
-            "\\'"
-          )}')">Remove</button>
+          
+          <div class="quantity-control">
+            <div class="qty-btn">
+              <button class="decreaseBtn">-</button>
+              <button class="increaseBtn">+</button>
+            </div>
+            <button class="remove-btn">Remove</button>
+          </div>
         </li>
       `;
       })
       .join("");
+
+    // Attach event listeners after rendering
+    cartItems.querySelectorAll(".cart-item").forEach((el) => {
+      const index = el.dataset.index;
+      const increaseBtn = el.querySelector(".increaseBtn");
+      const decreaseBtn = el.querySelector(".decreaseBtn");
+      const removeBtn = el.querySelector(".remove-btn");
+      const qtyEl = el.querySelector(".qty");
+      const priceEl = el.querySelector(".cart-price");
+
+      increaseBtn.addEventListener("click", () => {
+        cart[index].qty++;
+        localStorage.setItem("cart", JSON.stringify(cart));
+        renderCart(); // re-render for sync
+        updateCartBadge();
+      });
+
+      decreaseBtn.addEventListener("click", () => {
+        if (cart[index].qty > 1) {
+          cart[index].qty--;
+          localStorage.setItem("cart", JSON.stringify(cart));
+          renderCart();
+          updateCartBadge();
+        }
+      });
+
+      removeBtn.addEventListener("click", () => {
+        cart.splice(index, 1);
+        localStorage.setItem("cart", JSON.stringify(cart));
+        renderCart();
+        updateCartBadge();
+      });
+    });
   }
 
   document.getElementById(
     "cartTotal"
   ).textContent = `‣ Subtotal: Php ${formatPHP(total)}`;
+
+  updateCartBadge();
 }
 
 function updateCartBadge() {
@@ -85,7 +124,6 @@ function updateCartBadge() {
     badge.style.display = "none";
   }
 }
-
 
 // ===================== REMOVE ITEM =====================
 function addToCart(name, price) {
@@ -110,7 +148,6 @@ function removeFromCart(name) {
   renderCart();
   updateCartBadge(); // ✅ update badge
 }
-
 
 // ===================== CART OPEN/CLOSE =====================
 function toggleCart() {
@@ -707,9 +744,10 @@ function saveDismissedOrders() {
 function getStatusColor(status) {
   if (status === "ACCEPTED") return "#3cec18ff";
   if (status === "FOR DELIVERY") return "#14c0ebff";
+  if (status === "PREPARING") return "#cebb0fff";
   if (status === "CANCELLED") return "#e21d1dff";
   if (status === "DELIVERED") return "#5dec1bff";
-  if (status === "PENDING") return "#e9da11ff";
+  if (status === "PENDING") return "#dfd10dff";
 }
 
 function showOrUpdateOrderToast(order) {

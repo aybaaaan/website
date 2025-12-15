@@ -1,22 +1,42 @@
-
 /* ======================================================= */
 /* 9. RESPONSIVE MEDIA QUERIES (CONSOLIDATED)              */
 /* ======================================================= */
 
 /* --- TABLET LANDSCAPE / SMALL LAPTOP (Max Width: 1024px) --- */
 @media (max-width: 1024px) {
-  .menu-title { font-size: 42px; }
-  .aboutus-title { font-size: 40px; }
-  .footer-content { margin: 20px; }
-  .footer { padding: 30px 40px; }
+  .menu-title {
+    font-size: 42px;
+  }
+  .aboutus-title {
+    font-size: 40px;
+  }
+  .footer-content {
+    margin: 20px;
+  }
+  .footer {
+    padding: 30px 40px;
+  }
 }
 
 /* --- TABLET PORTRAIT / LARGE PHONES (Max Width: 768px) --- */
 @media (max-width: 768px) {
   /* Header */
-  .header { padding: 15px 20px; justify-content: space-between; }
-  .logo { margin-left: 40px; font-size: 24px; }
-  .hamburger { display: flex; position: absolute; left: 20px; top: 50%; transform: translateY(-50%); z-index: 200; }
+  .header {
+    padding: 15px 20px;
+    justify-content: space-between;
+  }
+  .logo {
+    margin-left: 40px;
+    font-size: 24px;
+  }
+  .hamburger {
+    display: flex;
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 200;
+  }
 
   /* Mobile Dropdown Nav */
   .nav-menu {
@@ -29,66 +49,210 @@
     left: 0;
     padding: 20px 0;
     border-bottom: 2px solid #c27ba0;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
   }
-  .nav-menu.active { display: flex; animation: fadeIn 0.3s ease; }
-  .nav-menu a { display: block; padding: 15px 0; width: 100%; text-align: center; color: #fff; font-size: 18px; border-bottom: 1px solid rgba(255,255,255,0.1); }
-  .nav-menu a:hover { background: rgba(255,255,255,0.1); }
+  .nav-menu.active {
+    display: flex;
+    animation: fadeIn 0.3s ease;
+  }
+  .nav-menu a {
+    display: block;
+    padding: 15px 0;
+    width: 100%;
+    text-align: center;
+    color: #fff;
+    font-size: 18px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  .nav-menu a:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .carousel-item-caption-container {
+    position: absolute;
+    display: block;
+    top: 60%;
+    left: 45%;
+    transform: translateX(-50%);
+    color: #fff;
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.9);
+    z-index: 1;
+  }
+
+  .carousel-item-caption {
+    position: relative;
+  }
 
   /* Carousel */
-  .carousel-item-caption { top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80%; text-align: center; }
-  .carousel-item-caption h1 { font-size: 2.5rem; }
-  .carousel-item-caption h2 { font-size: 1.8rem; }
+  .carousel-item-caption {
+    width: 80%;
+  }
+  .carousel-item-caption h1 {
+    font-size: 2.5rem;
+  }
+  .carousel-item-caption h2 {
+    font-size: 1.8rem;
+  }
 
   /* Menu */
-  .menu-cards { gap: 15px; }
-  .menu-card { background: #fff; width: 320px; height: auto; }
-  .menu-card img { height: 55%; }
-  
+  .menu-cards {
+    gap: 15px;
+  }
+  .menu-card {
+    background: #fff;
+    width: 320px;
+    height: auto;
+  }
+  .menu-card img {
+    height: 55%;
+  }
+
   /* Reviews */
-  .reviews-title { font-size: 32px; margin-bottom: 30px; }
-  .review-nav { display: none; } /* Hide arrows on touch */
-  .reviews-container { width: 100%; max-width: 100%; gap: 15px; justify-content: flex-start; padding-left: 20px; padding-right: 20px; }
+  .reviews-title {
+    font-size: 32px;
+    margin-bottom: 30px;
+  }
+  .review-nav {
+    display: none;
+  } /* Hide arrows on touch */
+  .reviews-container {
+    width: 100%;
+    max-width: 100%;
+    gap: 15px;
+    justify-content: flex-start;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
 
   /* Footer & About */
-  .footer-content { flex-direction: column; align-items: center; text-align: center; gap: 30px; margin-left: 0; }
-  .footer-nav-menu, .footer-social-contact { align-items: center; }
-  .footer-title-nav, .footer-title { text-align: center; }
-  .aboutus-title { font-size: 32px; }
-  .about-us-card { padding: 25px; font-size: 15px; }
+  .footer-content {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 30px;
+    margin-left: 0;
+  }
+  .footer-nav-menu,
+  .footer-social-contact {
+    align-items: center;
+  }
+  .footer-title-nav,
+  .footer-title {
+    text-align: center;
+  }
+  .aboutus-title {
+    font-size: 32px;
+  }
+  .about-us-card {
+    padding: 25px;
+    font-size: 15px;
+  }
 }
 
 /* --- MOBILE PHONES (Max Width: 480px) --- */
 @media (max-width: 480px) {
   /* Header */
-  .logo { font-size: 18px; }
-  .hamburger span { width: 24px; height: 3px; }
-  .header-actions { gap: 10px; padding: 10px; }
-  .action-btn { padding: 8px 10px; }
+  .logo {
+    font-size: 18px;
+  }
+  .hamburger span {
+    width: 24px;
+    height: 3px;
+  }
+  .header-actions {
+    gap: 10px;
+    padding: 10px;
+  }
+  .action-btn {
+    padding: 8px 10px;
+  }
+
+  .carousel-item-caption-container {
+    position: absolute;
+    display: block;
+    top: 60%;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #fff;
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.9);
+    z-index: 1;
+  }
 
   /* Carousel */
-  .carousel-item-caption h1 { font-size: 2rem; margin-bottom: 5px; }
-  .carousel-item-caption h2 { font-size: 1.5rem; margin-bottom: 5px; }
-  .item-desc { font-size: 0.9rem; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  .carousel-item-caption h1 {
+    font-size: 2rem;
+    margin-bottom: 5px;
+    width: auto;
+    white-space: nowrap;
+  }
+  .carousel-item-caption h2 {
+    font-size: 1rem;
+    margin-bottom: 5px;
+    width: auto;
+    white-space: nowrap;
+  }
+  .item-desc {
+    font-size: 0.9rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
 
   /* Menu */
-  .menu-title { font-size: 32px; }
-  .menu-toggle { gap: 10px; }
-  .menu-toggle button { padding: 10px 16px; font-size: 14px; }
-  .menu-card { width: 100%; max-width: 340px; }
+  .menu-title {
+    font-size: 32px;
+  }
+  .menu-toggle {
+    gap: 10px;
+  }
+  .menu-toggle button {
+    padding: 10px 16px;
+    font-size: 14px;
+  }
+  .menu-card {
+    width: 100%;
+    max-width: 340px;
+  }
 
   /* Reviews */
-  .reviews-section { padding: 40px 10px; }
-  .reviews-title { font-size: 26px; margin-bottom: 20px; }
-  .reviews-container { padding: 10px 15px; gap: 15px; }
+  .reviews-section {
+    padding: 40px 10px;
+  }
+  .reviews-title {
+    font-size: 26px;
+    margin-bottom: 20px;
+  }
+  .reviews-container {
+    padding: 10px 15px;
+    gap: 15px;
+  }
   /* Special width for mobile cards */
-  .review-card { min-width: 85vw; max-width: 85vw; padding: 20px; }
-  .reviewer-name { font-size: 15px; }
-  .review-text { font-size: 13px; -webkit-line-clamp: 5; }
+  .review-card {
+    min-width: 85vw;
+    max-width: 85vw;
+    padding: 20px;
+  }
+  .reviewer-name {
+    font-size: 15px;
+  }
+  .review-text {
+    font-size: 13px;
+    -webkit-line-clamp: 5;
+  }
 
   /* About & Footer */
-  .aboutus-title { font-size: 24px; }
-  .about-us-card { padding: 16px 20px; font-size: 14px; }
-  .footer { padding: 20px; }
-  .footer-logo { font-size: 30px; }
+  .aboutus-title {
+    font-size: 24px;
+  }
+  .about-us-card {
+    padding: 16px 20px;
+    font-size: 14px;
+  }
+  .footer {
+    padding: 20px;
+  }
+  .footer-logo {
+    font-size: 30px;
+  }
 }

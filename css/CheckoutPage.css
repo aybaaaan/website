@@ -3,7 +3,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 body {
@@ -77,17 +77,24 @@ body::before {
   width: 100%;
 }
 
+.checkout-items p {
+  font-size: 16px;
+  margin-bottom: 8px;
+  color: #741b47;
+}
+
 .checkout-card h2 {
   margin: 10px 0 20px;
   text-align: center;
   font-size: 24px;
   font-weight: 700;
+  color: #741b47;
 }
 
 /* Back Button */
 .back-btn {
   display: block; /* ensures it doesn’t overlap other content */
-  text-align: right;
+  text-align: left;
   /* move it to the right */
   margin-bottom: 15px; /* spacing below */
   text-decoration: none;
@@ -141,10 +148,32 @@ body::before {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-bottom: 8px;
+  margin-top: 10px;
+  justify-content: space-between;
 }
 
-.quantity-control button {
+.removeBtn {
+  background: transparent;
+  border: 1.6px solid #cc1313;
+  color: #cc1313;
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.removeBtn:hover {
+  background: #cc1313;
+  color: #f8f0f4;
+}
+.qty-btn {
+  display: flex;
+  gap: 10px;
+}
+
+.increaseBtn,
+.decreaseBtn {
   width: 28px;
   height: 28px;
   border: none;
@@ -156,8 +185,8 @@ body::before {
   font-weight: 700;
   box-shadow: #00000033 2px 3px 6px 0px;
 }
-
-.quantity-control button:hover {
+.increaseBtn:hover,
+.decreaseBtn:hover {
   background: #a64d79;
   color: #ead1dc;
 }
@@ -175,25 +204,6 @@ body::before {
   color: #000000;
   padding: 10px 0px;
   border-bottom: 2px solid #d3d3d3;
-}
-
-/* Remove Button */
-.removeBtn {
-  background-color: #bd2525;
-  border: none;
-  border-radius: 6px;
-  margin-top: 10px;
-  padding: 4px 12px;
-  font-size: 14px;
-  font-weight: bold;
-  color: #ffffff;
-  cursor: pointer;
-  top: 10px;
-  right: 10px;
-}
-.removeBtn:hover {
-  background-color: #bd2525;
-  transform: scale(1.06);
 }
 
 /* ====== Checkout Actions ====== */
@@ -247,13 +257,11 @@ body::before {
 .addmore-btn:hover {
   background: #a64d79;
   color: #f8f0f4;
-  transform: scale(1.05);
 }
 
 .proceed-btn:hover {
   background: #ead1dc;
   color: #4c1130;
-  transform: scale(1.05);
 }
 
 .totals {
@@ -486,7 +494,7 @@ select {
   animation: fadeIn 0.2s ease;
 }
 .popup-message {
-  color: #222;
+  color: #741b47;
   font-size: 16px;
   margin-bottom: 1.4rem;
   line-height: 1.4;
@@ -514,7 +522,8 @@ select {
   color: #4c1130;
 }
 
-.order-summary-box, .payment-info-box {
+.order-summary-box,
+.payment-info-box {
   background: #f8f8f8;
   padding: 12px;
   margin-top: 15px;
@@ -567,4 +576,3 @@ select {
   transition: all 0.3s ease-in-out;
   background-color: white;
 }
-

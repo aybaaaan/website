@@ -102,6 +102,24 @@
     padding: 6px 10px;  /* smaller padding */
     font-size: 14px;    /* smaller text */
   }
+   #orderModal .modal-content {
+    width: 90%;
+    padding: 20px;
+  }
+
+  #orderModal h3 {
+    font-size: 20px;
+  }
+
+  #orderModal .modal-table th,
+  #orderModal .modal-table td {
+    font-size: 12px;
+    padding: 8px;
+  }
+
+  #orderModal .order-summary {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* Small Phones */
@@ -169,5 +187,24 @@
     padding: 5px 8px;
     font-size: 12px;
     flex: 1 1 auto;  /* allow buttons to stretch if needed */
+  }
+  #orderModal .modal-content {
+    width: 95%;
+    padding: 16px;
+  }
+
+  #orderModal h3 {
+    font-size: 18px;
+  }
+
+  #orderModal .modal-table th,
+  #orderModal .modal-table td {
+    font-size: 11px;
+    padding: 6px;
+  }
+
+  #closeOrderModal {
+    width: 100%;
+    padding: 12px;
   }
 }

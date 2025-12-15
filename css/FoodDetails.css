@@ -50,7 +50,7 @@ body {
   background: none;
   border: none;
   font-size: 18px;
-  font-weight: bold;
+  font-weight: bolder;
   color: #a64d79;
   cursor: pointer;
   transition: transform 0.2s ease;
@@ -131,7 +131,6 @@ body {
   gap: 12px;
   margin-top: 8px; /* tightened */
 }
-
 .qty-section input {
   width: 70px;
   padding: 6px;
@@ -140,7 +139,29 @@ body {
   text-align: center;
   font-size: 16px;
 }
+.qty-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+}
 
+#plusBtn, #minusBtn {
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: #ead1dc;
+  color: #741b47;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: 700;
+  box-shadow: #00000033 2px 3px 6px 0px;
+}
+#plusBtn:hover, #minusBtn:hover{
+  background: #a64d79;
+  color: #ead1dc;
+}
 .order-btn {
   margin-top: 5vh;
   background-color: #a64d79;
@@ -156,7 +177,6 @@ body {
 
 .order-btn:hover {
   background-color: #ead1dc;
-  transform: scale(1.05);
   color: #4c1130;
 }
 
