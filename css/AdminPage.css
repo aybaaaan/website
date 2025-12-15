@@ -1420,10 +1420,8 @@ section.active {
   max-height: 860px;
   overflow-y: auto;
 }
-
-/* Individual Feedback Card Style */
 .admin-feedback-card {
-  border-left: 5px solid #a64d79; /* Signature purple border */
+  border-left: 5px solid #a64d79;
   background-color: #f8f8f8;
   border-radius: 10px;
   padding: 20px;
@@ -1433,6 +1431,7 @@ section.active {
   flex-direction: column;
   gap: 10px;
   transition: all 0.3s ease;
+  word-break: break-all; /*To prevent Overflow text*/
 }
 
 /* Card Hover Animation */

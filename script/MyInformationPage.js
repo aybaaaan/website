@@ -50,24 +50,70 @@ function createTextField(labelText, id, disabled = true) {
 }
 
 // ================= INSERT FIELDS INTO PAGE =================
+// ================= TAGAYTAY BARANGAYS DATA =================
+const tagaytayBarangays = [
+  "Kaybagal Center", "Kaybagal North", "Kaybagal South",
+  "Maharlika East", "Maharlika West",
+  "Maitim 2nd East", "Maitim 2nd West",
+  "Patutong Malaki North", "Patutong Malaki South",
+  "San Jose", "Silang Crossing West"
+];
+
+// Helper function to create a Dropdown (gaya ng style ng createTextField mo)
+function createSelectField(labelText, id, options) {
+    const wrapper = document.createElement("div");
+    wrapper.className = "input-group"; 
+
+    const label = document.createElement("label");
+    label.innerText = labelText;
+    label.setAttribute("for", id);
+
+    const select = document.createElement("select");
+    select.id = id;
+    select.name = id;
+    
+    // Default "Select" option
+    const defaultOption = document.createElement("option");
+    defaultOption.text = "Select Barangay";
+    defaultOption.value = "";
+    defaultOption.disabled = true;
+    defaultOption.selected = true;
+    select.appendChild(defaultOption);
+
+    // Add Tagaytay Barangays
+    options.forEach(brgy => {
+        const option = document.createElement("option");
+        option.value = brgy;
+        option.text = brgy;
+        select.appendChild(option);
+    });
+
+    wrapper.appendChild(label);
+    wrapper.appendChild(select);
+    return wrapper;
+}
+
+// ================= INSERT FIELDS INTO PAGE =================
 const container = document.getElementById("info-fields");
+
 container.appendChild(createTextField("Name", "name"));
 container.appendChild(createTextField("Phone Number", "phone"));
 container.appendChild(createTextField("House No.", "houseno"));
 container.appendChild(createTextField("Street", "street"));
-container.appendChild(createTextField("Barangay", "barangay"));
-container.appendChild(createTextField("City", "city", true)); // uneditable
-container.appendChild(createTextField("Province", "province", true)); // uneditable
+container.appendChild(createSelectField("Barangay", "barangay", tagaytayBarangays));
+container.appendChild(createTextField("City", "city", true)); 
+container.appendChild(createTextField("Province", "province", true)); 
 
 // Now we can safely reference them
 const nameInput = document.getElementById("name");
 const phoneInput = document.getElementById("phone");
 const housenoInput = document.getElementById("houseno");
 const streetInput = document.getElementById("street");
-const barangayInput = document.getElementById("barangay");
+const barangayInput = document.getElementById("barangay"); // Ito ngayon ay <select> na
 const cityInput = document.getElementById("city");
 const provinceInput = document.getElementById("province");
 
+// Fixed values
 cityInput.value = "Tagaytay";
 provinceInput.value = "Cavite";
 

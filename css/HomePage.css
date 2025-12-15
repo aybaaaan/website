@@ -860,7 +860,7 @@ body {
   line-height: 1.5;
   margin-bottom: 15px;
   display: -webkit-box;
-  -webkit-line-clamp: 4;
+  word-break: break-all;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }

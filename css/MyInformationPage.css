@@ -78,7 +78,7 @@ body {
   color: #333;
 }
 
-.info-container input {
+.info-container input, .info-container select {
   width: 100%;
   padding: 12px 14px;
   margin-bottom: 18px;
