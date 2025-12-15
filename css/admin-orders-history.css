@@ -8,10 +8,12 @@ main {
 /* Filters Styles */
 .filters {
   display: flex;
+  color: #741b47;
   flex-wrap: wrap;
   gap: 15px;
   margin-bottom: 20px;
   align-items: center;
+  justify-content: center;
 }
 
 .filters label {
@@ -51,6 +53,8 @@ main {
   display: flex;
   gap: 10px;
   margin-left: auto;
+  margin-bottom: 25px;
+  justify-content: center;
 }
 
 .filter-actions button {
@@ -76,11 +80,9 @@ main {
 
 /* Order History Container Styles */
 #orderHistoryContainer {
-  max-width: 1200px;
+  max-width: 100%;
   margin: 0 auto;
   padding: 20px;
-  font-family: Arial, sans-serif;
-
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
@@ -104,6 +106,7 @@ main {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   transition: box-shadow 0.3s ease;
   gap: 15px; /* Added gap for spacing between sections */
+  border-left: #a64d79 4px solid;
 }
 .order-card:hover {
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
@@ -204,6 +207,7 @@ main {
 
 /* Pagination Styles */
 .pagination {
+  margin-top: 25px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -211,7 +215,7 @@ main {
 }
 .pagination button {
   padding: 8px 16px;
-  background-color: #3498db;
+  background-color: #a64d79;
   color: #fff;
   border: none;
   border-radius: 4px;
@@ -219,11 +223,8 @@ main {
   transition: background-color 0.3s;
 }
 .pagination button:hover {
-  background-color: #2980b9;
-}
-.pagination button:disabled {
-  background-color: #bdc3c7;
-  cursor: not-allowed;
+  background-color: #ead1dc;
+  color: #4c1130;
 }
 
 /* Responsive Styles */

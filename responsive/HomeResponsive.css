@@ -147,6 +147,10 @@
     padding: 25px;
     font-size: 15px;
   }
+  .about-us-card {
+    padding: 30px 30px; 
+    text-align: center; /* Center text on small screens for visual balance */
+  }
 }
 
 /* --- MOBILE PHONES (Max Width: 480px) --- */
