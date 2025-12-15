@@ -247,10 +247,21 @@ body {
   width: 100%;
 }
 
-.logo {
-  font-size: 28px; /* Default Desktop Size */
+.logo-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.title-header {
+  font-size: 24px; /* Default Desktop Size */
   font-weight: 600;
   color: #ffffff;
+}
+
+.logo img {
+  height: 5rem;
+  width: 6.5rem;
 }
 
 .nav-menu {
@@ -995,19 +1006,19 @@ body {
   width: 100%;
   margin: 0 auto 60px;
   background: #ffffff;
-  border-radius: 20px; 
+  border-radius: 20px;
   padding: 40px 50px;
-  line-height: 1.7; 
+  line-height: 1.7;
   font-size: 17px;
-  color: #741b47; 
-  text-align: left; 
-  box-shadow: 0 10px 30px rgba(76, 17, 48, 0.3); 
+  color: #741b47;
+  text-align: left;
+  box-shadow: 0 10px 30px rgba(76, 17, 48, 0.3);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 .about-us-card:hover {
-  transform: translateY(-5px); 
-  border: 4px solid #a64d79; 
-  box-shadow: 0 15px 45px rgba(76, 17, 48, 0.4); 
+  transform: translateY(-5px);
+  border: 4px solid #a64d79;
+  box-shadow: 0 15px 45px rgba(76, 17, 48, 0.4);
 }
 
 .footer {
@@ -1248,8 +1259,6 @@ body {
     right: -100%;
   }
 }
-
-
 
 .order-toast {
   display: flex;

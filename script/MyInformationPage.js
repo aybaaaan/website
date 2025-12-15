@@ -52,45 +52,52 @@ function createTextField(labelText, id, disabled = true) {
 // ================= INSERT FIELDS INTO PAGE =================
 // ================= TAGAYTAY BARANGAYS DATA =================
 const tagaytayBarangays = [
-  "Kaybagal Center", "Kaybagal North", "Kaybagal South",
-  "Maharlika East", "Maharlika West",
-  "Maitim 2nd East", "Maitim 2nd West",
-  "Patutong Malaki North", "Patutong Malaki South",
-  "San Jose", "Silang Crossing West"
+  "Kaybagal Center",
+  "Kaybagal North",
+  "Kaybagal South",
+  "Maharlika East",
+  "Maharlika West",
+  "Maitim 2nd East",
+  "Maitim 2nd West",
+  "Patutong Malaki North",
+  "Patutong Malaki South",
+  "San Jose",
+  "Silang Crossing West",
 ];
 
 // Helper function to create a Dropdown (gaya ng style ng createTextField mo)
 function createSelectField(labelText, id, options) {
-    const wrapper = document.createElement("div");
-    wrapper.className = "input-group"; 
+  const wrapper = document.createElement("div");
+  wrapper.className = "input-group";
 
-    const label = document.createElement("label");
-    label.innerText = labelText;
-    label.setAttribute("for", id);
+  const label = document.createElement("label");
+  label.innerText = labelText;
+  label.setAttribute("for", id);
 
-    const select = document.createElement("select");
-    select.id = id;
-    select.name = id;
-    
-    // Default "Select" option
-    const defaultOption = document.createElement("option");
-    defaultOption.text = "Select Barangay";
-    defaultOption.value = "";
-    defaultOption.disabled = true;
-    defaultOption.selected = true;
-    select.appendChild(defaultOption);
+  const select = document.createElement("select");
+  select.id = id;
+  select.name = id;
+  select.disabled = true;
 
-    // Add Tagaytay Barangays
-    options.forEach(brgy => {
-        const option = document.createElement("option");
-        option.value = brgy;
-        option.text = brgy;
-        select.appendChild(option);
-    });
+  // Default "Select" option
+  const defaultOption = document.createElement("option");
+  defaultOption.text = "Select Barangay";
+  defaultOption.value = "";
+  defaultOption.disabled = true;
+  defaultOption.selected = true;
+  select.appendChild(defaultOption);
 
-    wrapper.appendChild(label);
-    wrapper.appendChild(select);
-    return wrapper;
+  // Add Tagaytay Barangays
+  options.forEach((brgy) => {
+    const option = document.createElement("option");
+    option.value = brgy;
+    option.text = brgy;
+    select.appendChild(option);
+  });
+
+  wrapper.appendChild(label);
+  wrapper.appendChild(select);
+  return wrapper;
 }
 
 // ================= INSERT FIELDS INTO PAGE =================
@@ -100,9 +107,11 @@ container.appendChild(createTextField("Name", "name"));
 container.appendChild(createTextField("Phone Number", "phone"));
 container.appendChild(createTextField("House No.", "houseno"));
 container.appendChild(createTextField("Street", "street"));
-container.appendChild(createSelectField("Barangay", "barangay", tagaytayBarangays));
-container.appendChild(createTextField("City", "city", true)); 
-container.appendChild(createTextField("Province", "province", true)); 
+container.appendChild(
+  createSelectField("Barangay", "barangay", tagaytayBarangays)
+);
+container.appendChild(createTextField("City", "city", true));
+container.appendChild(createTextField("Province", "province", true));
 
 // Now we can safely reference them
 const nameInput = document.getElementById("name");

@@ -132,6 +132,7 @@ import {
   ref,
   push,
   get,
+  runTransaction,
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
 
 import {
@@ -164,6 +165,37 @@ const db = getDatabase(app);
 const auth = getAuth(app);
 const ordersRef = ref(db, "Order");
 
+// ===================== ADDED: BARANGAY CONFIG & HELPER =====================
+const allowedBarangays = [
+  "Kaybagal Center",
+  "Kaybagal North",
+  "Kaybagal South",
+  "Maharlika East",
+  "Maharlika West",
+  "Maitim 2nd East",
+  "Maitim 2nd West",
+  "Patutong Malaki North",
+  "Patutong Malaki South",
+  "San Jose",
+  "Silang Crossing West",
+];
+
+function populateBarangays() {
+  const select = document.getElementById("barangay-select");
+  if (!select) return;
+
+  select.innerHTML =
+    '<option value="" disabled selected>Select Barangay</option>';
+
+  allowedBarangays.forEach((brgy) => {
+    const option = document.createElement("option");
+    option.value = brgy;
+    option.textContent = brgy;
+    select.appendChild(option);
+  });
+}
+populateBarangays(); // Run immediately
+
 // ===================== AUTH STATE TRACKER =====================
 let currentUser = null;
 
@@ -176,6 +208,7 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
+// ===================== MODIFIED: LOAD USER PROFILE =====================
 async function loadUserProfile() {
   if (!currentUser) return;
 
@@ -186,40 +219,40 @@ async function loadUserProfile() {
     if (snap.exists()) {
       const data = snap.data();
 
+      // Load Name
       document.getElementById("name").value =
         data.name && data.name !== "Not set"
           ? data.name
           : currentUser.email.split("@")[0];
 
+      // Load Phone
       document.getElementById("contact").value =
         data.phone && data.phone !== "Not set" ? data.phone : "";
 
-      if (data.address) {
+      // Load Address (NEW LOGIC for Split Inputs)
+      if (data.address && typeof data.address === "object") {
         const addr = data.address;
-        document.getElementById(
-          "address"
-        ).value = `${addr.houseno}, ${addr.street}, ${addr.barangay}, ${addr.city}, ${addr.province}`;
-      } else {
-        document.getElementById("address").value = "";
+        const safeVal = (val) => (val && val !== "Not set" ? val : "");
+
+        // Fill separate inputs
+        const houseInput = document.getElementById("house-no");
+        const streetInput = document.getElementById("street");
+        const barangaySelect = document.getElementById("barangay-select");
+
+        if (houseInput) houseInput.value = safeVal(addr.houseno);
+        if (streetInput) streetInput.value = safeVal(addr.street);
+
+        // Only select barangay if it's in our allowed list
+        if (barangaySelect && allowedBarangays.includes(addr.barangay)) {
+          barangaySelect.value = addr.barangay;
+        }
       }
     } else {
-      console.log("⚠️ No user profile found in Firestore.");
+      console.log("No user profile found in Firestore.");
     }
   } catch (err) {
     console.error("Error loading user profile:", err);
   }
-}
-
-function parseAddress(fullAddress) {
-  const parts = fullAddress.split(",").map((p) => p.trim());
-
-  return {
-    houseno: parts[0] || "",
-    street: parts[1] || "",
-    barangay: parts[2] || "",
-    city: parts[3] || "",
-    province: parts[4] || "",
-  };
 }
 
 // ===================== NAVIGATION HELPERS =====================
@@ -387,38 +420,48 @@ timePopupOkBtn.addEventListener("click", () => {
 
 // ===================== ORDER ID GENERATOR =====================
 async function generateOrderID() {
-  const ordersSnapshot = await get(ordersRef); // fetch data from Firebase
-  let lastID = 1000; // start from 1000 if no orders yet
+  const counterRef = ref(db, "OrderCounter/lastOrderID");
 
-  if (ordersSnapshot.exists()) {
-    const ordersData = ordersSnapshot.val();
-    const orderIDs = Object.values(ordersData).map(
-      (order) => order.orderID || 0
-    );
-    const maxID = Math.max(...orderIDs);
-    lastID = maxID;
-  }
+  const result = await runTransaction(counterRef, (current) => {
+    return (current || 1000) + 1; // start at 1001 if empty
+  });
 
-  return lastID + 1; // next order ID
+  return result.snapshot.val();
 }
 
-// ==================== SUBMIT HANDLER ====================
+// ==================== SUBMIT HANDLER (MODIFIED) ====================
 checkoutForm.addEventListener("submit", async (e) => {
   e.preventDefault();
 
   const orderID = await generateOrderID();
   const name = document.getElementById("name").value.trim();
-  const address = document.getElementById("address").value.trim();
   const contact = document.getElementById("contact").value.trim();
   const payment = document.getElementById("payment").value;
   const deliveryDate = document.getElementById("delivery-date").value;
   const deliveryTime = document.getElementById("delivery-time").value;
 
-  if (!name || !address || !contact || !payment) {
-    showTimePopup("Please fill out all fields.");
+  // --- NEW ADDRESS INPUTS ---
+  const houseNo = document.getElementById("house-no").value.trim();
+  const street = document.getElementById("street").value.trim();
+  const selectedBarangay = document.getElementById("barangay-select").value;
+
+  // 1. Basic Field Check
+  if (!name || !contact || !payment) {
+    showTimePopup("Please fill out all personal details.");
     return;
   }
 
+  // 2. Validate Address Info (Specifics)
+  if (!houseNo || !street) {
+    showTimePopup("Please fill out your House No. and Street.");
+    return;
+  }
+  if (!selectedBarangay || !allowedBarangays.includes(selectedBarangay)) {
+    showTimePopup("Please select a valid Barangay.");
+    return;
+  }
+
+  // --- TIME & DATE VALIDATION ---
   const now = new Date();
   const selectedDateTime = new Date(`${deliveryDate}T${deliveryTime}`);
 
@@ -454,7 +497,7 @@ checkoutForm.addEventListener("submit", async (e) => {
   // Get the user's current local date and time (when they clicked SUBMIT)
   const currentTime = new Date();
 
-  // Format nicely for saving (optional, but recommended)
+  // Format nicely for saving
   const userOrderDate = currentTime.toLocaleDateString("en-US", {
     year: "numeric",
     month: "2-digit",
@@ -466,12 +509,25 @@ checkoutForm.addEventListener("submit", async (e) => {
     second: "2-digit",
   });
 
+  // --- PREPARE ADDRESS DATA ---
+  // String format for Order (Admin/Rider view)
+  const fullAddressString = `House No. ${houseNo}, Steet. ${street}, Brgy. ${selectedBarangay}, Tagaytay, Cavite`;
+
+  // Object format for User Profile (Future Auto-fill)
+  const addressObject = {
+    houseno: houseNo,
+    street: street,
+    barangay: selectedBarangay,
+    city: "Tagaytay",
+    province: "Cavite",
+  };
+
   const orderData = {
     orderID,
     userId: currentUser.uid,
     userEmail: currentUser.email,
     name,
-    address,
+    address: fullAddressString, // SAVED AS STRING
     contact,
     deliveryDate,
     deliveryTime,
@@ -485,6 +541,7 @@ checkoutForm.addEventListener("submit", async (e) => {
   };
 
   try {
+    // Save to Realtime Database
     await push(ordersRef, orderData);
 
     /*   // ======================== EMAILJS ADMIN NOTIFICATION ========================
@@ -522,7 +579,6 @@ emailjs
 
     // Update user profile in Firestore
     const userRef = doc(fs, "users", currentUser.uid);
-    const parsedAddress = parseAddress(address);
 
     await setDoc(
       userRef,
@@ -530,7 +586,7 @@ emailjs
         email: currentUser.email,
         name,
         phone: contact,
-        address: parsedAddress, // store as object
+        address: addressObject, // store as object
       },
       { merge: true }
     );

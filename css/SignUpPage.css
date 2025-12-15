@@ -47,13 +47,21 @@ body {
   box-shadow: #0000003f 0px 6px 6px;
 }
 
-.logo {
-  text-decoration: none;
-  font-size: 20px;
-  font-weight: 700;
-  line-height: 26px;
+.logo-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.title-header {
+  font-size: 24px; /* Default Desktop Size */
+  font-weight: 600;
   color: #ffffff;
-  margin-left: 3px;
+}
+
+.logo img {
+  height: 5rem;
+  width: 6.5rem;
 }
 
 /* Registration Form */

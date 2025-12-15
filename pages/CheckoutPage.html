@@ -45,14 +45,29 @@
         </div>
       </div>
 
-      <div id="checkoutModal" class="modal">
+     <div id="checkoutModal" class="modal">
         <div class="modal-content">
           <span id="closeModal" class="close">&times;</span>
           <h3 class="deliv-details">Enter Delivery Details</h3>
 
           <form id="checkoutForm">
             <input type="text" id="name" placeholder="Name" required />
-            <input type="text" id="address" placeholder="Address" required />
+
+            <div class="address-group" style="margin-bottom: 15px; text-align: left;">
+                <label style="font-size: 0.9rem; font-weight: 600; color: #333; display: block; margin-bottom: 5px;">Delivery Address:</label>
+                
+                <select id="barangay-select" required style="width: 100%; padding: 10px; margin-bottom: 8px; border: 1px solid #ccc; border-radius: 5px;">
+                    <option value="" disabled selected>Select Barangay</option>
+                    </select>
+
+                <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                    <input type="text" id="house-no" placeholder="House/Unit No." required style="flex: 1; margin: 0;">
+                    <input type="text" id="street" placeholder="Street / Purok" required style="flex: 2; margin: 0;">
+                </div>
+
+                <input type="text" value="Tagaytay, Cavite" disabled 
+                       style="background-color: #eee; color: #555; cursor: not-allowed; width: 100%; margin: 0; border: 1px solid #ccc;">
+            </div>
             <input
               type="tel"
               id="contact"
