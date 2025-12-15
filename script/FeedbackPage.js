@@ -26,7 +26,7 @@ const db = getDatabase(app);
 
 // ===================== Utility Function =====================
 async function getOrderData(orderID) {
-  const ordersRef = ref(db, "Order");
+  const ordersRef = ref(db, "OrderHistory");
   const snapshot = await get(ordersRef);
 
   if (!snapshot.exists()) throw new Error("No orders in database.");
@@ -80,7 +80,7 @@ document.addEventListener("DOMContentLoaded", () => {
     star.addEventListener("click", () => {
       // Get value (1-5)
       currentRating = parseInt(star.getAttribute("data-value"));
-      
+
       // Update Colors
       stars.forEach((s, index) => {
         if (index < currentRating) {
@@ -121,7 +121,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     try {
       // ---------------- FETCH ORDER DATA ----------------
-      const orderRef = ref(db, "Order");
+      const orderRef = ref(db, "OrderHistory");
       const snapshot = await get(orderRef);
 
       if (!snapshot.exists()) throw new Error("No orders in database.");
@@ -156,11 +156,10 @@ document.addEventListener("DOMContentLoaded", () => {
         "Thank you! Your feedback has been submitted.";
       feedbackMessage.style.color = "green";
       feedbackText.value = "";
-      
+
       // NEW: Reset Stars
       currentRating = 0;
-      stars.forEach(s => s.classList.remove("active"));
-
+      stars.forEach((s) => s.classList.remove("active"));
     } catch (error) {
       feedbackMessage.textContent =
         "Error submitting feedback: " + error.message;

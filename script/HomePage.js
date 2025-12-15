@@ -694,9 +694,10 @@ function saveDismissedOrders() {
 function getStatusColor(status) {
   if (status === "ACCEPTED") return "#3cec18ff";
   if (status === "FOR DELIVERY") return "#14c0ebff";
+  if (status === "PREPARING") return "#cebb0fff";
   if (status === "CANCELLED") return "#e21d1dff";
   if (status === "DELIVERED") return "#5dec1bff";
-  if (status === "PENDING") return "#e9da11ff";
+  if (status === "PENDING") return "#dfd10dff";
 }
 
 function showOrUpdateOrderToast(order) {

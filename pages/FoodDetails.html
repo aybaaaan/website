@@ -22,14 +22,19 @@
 
           <div class="qty-section">
             <label for="qty">Quantity:</label>
-            <input type="number" id="qty" min="1" value="1" />
+            <div class="qty-display">
+              <input type="name" id="qty" min="1" value="1" />
+            </div>
+          </div>
+          <div class="qty-controls">
+            <button type="button" id="minusBtn" class="qty-btn">−</button>
+            <button type="button" id="plusBtn" class="qty-btn">+</button>
           </div>
 
           <button id="addBtn" class="order-btn">Add to Cart</button>
         </div>
       </div>
     </div>
-
     <script type="module" src="../script/FoodDetails.js"></script>
   </body>
 </html>
