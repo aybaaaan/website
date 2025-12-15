@@ -1,0 +1,62 @@
+/* ====== Responsive Media Queries ====== */
+
+/* Tablets and medium screens */
+@media (max-width: 768px) {
+  .info-container {
+    padding: 20px;
+    width: 95%;
+  }
+
+  .password-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .password-row input {
+    max-width: 100%;
+    max-height: 40px;
+  }
+
+  .change-pass-btn {
+    width: 100%;
+    margin-top: 0;
+  }
+
+  .button-group {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .button-group button {
+    width: 100%;
+  }
+}
+
+/* Small phones */
+@media (max-width: 480px) {
+  .header {
+    padding: 12px 20px;
+  }
+
+  .info-container h1 {
+    font-size: 24px;
+  }
+
+  .info-container p {
+    font-size: 15px;
+  }
+
+  .back-btn,
+  .change-pass-btn,
+  .button-group button {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .popup-message {
+    font-size: 14px;
+    min-width: 200px;
+    top: 60px;
+  }
+}

@@ -114,39 +114,54 @@ function renderPage() {
         })
       : "N/A";
 
-    if (
-      order.orders &&
-      Array.isArray(order.orders) &&
-      order.orders.length > 0
-    ) {
-      order.orders.forEach((item, index) => {
-        const row = document.createElement("tr");
-        row.innerHTML = `
-          <td>${index === 0 ? order.orderID : ""}</td>
-          <td>${index === 0 ? order.name || "Unknown" : ""}</td>
-          <td>${item.name}</td>
-          <td>${item.qty}</td>
-          <td>${(item.price * item.qty).toFixed(2)}</td>
-          <td>${
-            index === 0 ? (order.total ? order.total.toFixed(2) : "0.00") : ""
-          }</td>
-          <td>${index === 0 ? order.payment || "N/A" : ""}</td>
-          <td>${index === 0 ? formattedDate : ""}</td>
-        `;
-        tableBody.appendChild(row);
-      });
-    } else {
-      const row = document.createElement("tr");
-      row.innerHTML = `
-        <td>${order.orderID || "N/A"}</td>
-        <td>${order.name || "Unknown"}</td>
-        <td colspan="3">No items</td>
-        <td>${order.total ? order.total.toFixed(2) : "0.00"}</td>
-        <td>${order.payment || "N/A"}</td>
-        <td>${formattedDate}</td>
-      `;
-      tableBody.appendChild(row);
-    }
+    const items = Array.isArray(order.orders) ? order.orders : [];
+
+    // ✅ total qty & total amount FIX
+    const totalQty = items.reduce((sum, i) => sum + Number(i.qty || 0), 0);
+    const totalAmount = items.reduce(
+      (sum, i) => sum + Number(i.price || 0) * Number(i.qty || 0),
+      0
+    );
+
+    const row = document.createElement("tr");
+
+    row.innerHTML = `
+    <td>${order.orderID || "N/A"}</td>
+
+    <!-- 👇 hyperlink-style customer -->
+    <td>
+      <a href="#" 
+         class="customer-link"
+         data-order='${JSON.stringify(order).replace(/'/g, "&apos;")}'>
+         ${order.name || "Unknown"}
+      </a>
+    </td>
+
+    <!-- 👇 dropdown food items -->
+    <td>
+      <details>
+        <summary>${items.length} item(s)</summary>
+        <ul class="food-list">
+          ${items
+            .map(
+              (i) =>
+                `<li>${i.name} × ${i.qty} — ₱${(i.price * i.qty).toFixed(
+                  2
+                )}</li>`
+            )
+            .join("")}
+        </ul>
+      </details>
+    </td>
+
+    <td>${totalQty}</td>
+    <td>${totalAmount.toFixed(2)}</td>
+    <td>${order.total ? order.total.toFixed(2) : totalAmount.toFixed(2)}</td>
+    <td>${order.payment || "N/A"}</td>
+    <td>${formattedDate}</td>
+  `;
+
+    tableBody.appendChild(row);
   });
 
   const totalPages = Math.ceil(filteredOrders.length / ordersPerPage);
@@ -223,16 +238,30 @@ loadOrders();
 
 // EXPORT TO EXCEL PART
 document.getElementById("exportExcelBtn").addEventListener("click", () => {
-  const table = document.getElementById("salesReportTable");
+  const data = [];
 
-  // Convert the table to a worksheet
-  const worksheet = XLSX.utils.table_to_sheet(table);
+  filteredOrders.forEach((order) => {
+    const dateObj = order.orderDate ? new Date(order.orderDate) : null;
+    const formattedDate = dateObj ? dateObj.toLocaleDateString("en-PH") : "N/A";
 
-  // Create a workbook and append the worksheet
+    (order.orders || []).forEach((item) => {
+      data.push({
+        "Order ID": order.orderID || "N/A",
+        Customer: order.name || "Unknown",
+        Food: item.name,
+        Qty: item.qty,
+        "Item Total (₱)": (item.price * item.qty).toFixed(2),
+        "Order Total (₱)": order.total || "",
+        "Payment Method": order.payment || "N/A",
+        "Order Date": formattedDate,
+      });
+    });
+  });
+
+  const worksheet = XLSX.utils.json_to_sheet(data);
   const workbook = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(workbook, worksheet, "Sales Report");
 
-  // Save the Excel file
   XLSX.writeFile(workbook, "sales_report.xlsx");
 });
 
@@ -355,6 +384,62 @@ function getStartDate(range) {
 
   return new Date(0);
 }
+
+const modal = document.getElementById("orderModal");
+const modalBody = document.getElementById("orderModalBody");
+
+document.addEventListener("click", (e) => {
+  if (e.target.classList.contains("customer-link")) {
+    e.preventDefault();
+
+    const order = JSON.parse(e.target.dataset.order);
+    modalBody.innerHTML = "";
+
+    // ===== ORDER ID =====
+    document.getElementById("modalOrderID").textContent =
+      order.orderID || "N/A";
+
+    // ===== ORDER ITEMS =====
+    (order.orders || []).forEach((item) => {
+      const tr = document.createElement("tr");
+      const subtotal = Number(item.price) * Number(item.qty);
+
+      tr.innerHTML = `
+        <td>${item.name}</td>
+        <td>${item.qty}</td>
+        <td class="modal-subtotal">₱${subtotal.toFixed(2)}</td>
+      `;
+      modalBody.appendChild(tr);
+    });
+
+    // ===== ORDER SUMMARY =====
+    const total = order.total
+      ? Number(order.total)
+      : (order.orders || []).reduce(
+          (sum, i) => sum + Number(i.price) * Number(i.qty),
+          0
+        );
+
+    document.getElementById("modalTotal").textContent = total.toFixed(2);
+    document.getElementById("modalPayment").textContent =
+      order.payment || "N/A";
+
+    const dateObj = order.orderDate ? new Date(order.orderDate) : null;
+    document.getElementById("modalDate").textContent = dateObj
+      ? dateObj.toLocaleDateString("en-PH", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        })
+      : "N/A";
+
+    modal.style.display = "block";
+  }
+});
+
+document.getElementById("closeOrderModal").addEventListener("click", () => {
+  modal.style.display = "none";
+});
 
 // ============ BUTTON EVENTS ============
 document.getElementById("btn-today").addEventListener("click", () => {

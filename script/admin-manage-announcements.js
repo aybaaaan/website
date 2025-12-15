@@ -84,7 +84,7 @@ saveAnnouncementBtn.addEventListener("click", () => {
   const content = announcementContentInput.value.trim();
 
   if (!title || !content) {
-    alert("Please fill in both the title and content for the announcement.");
+    alert("Please fill in both the subject and content for the announcement.");
     return;
   }
 

@@ -11,7 +11,7 @@
   <body>
     <div class="background-image"></div>
     <div class="food-details-container">
-      <button href="" id="backBtn" class="back-btn">&larr; Back</button>
+      <button href="" id="backBtn" class="back-btn">❮ Back</button>
 
       <div class="food-details">
         <img id="foodImage" src="" alt="Food Item" class="food-img" />
@@ -22,7 +22,13 @@
 
           <div class="qty-section">
             <label for="qty">Quantity:</label>
-            <input type="number" id="qty" min="1" value="1" />
+            <div class="qty-display">
+              <input type="name" id="qty" min="1" value="1" />
+            </div>
+          </div>
+          <div class="qty-controls">
+            <button type="button" id="minusBtn" class="qty-btn">−</button>
+            <button type="button" id="plusBtn" class="qty-btn">+</button>
           </div>
 
           <button id="addBtn" class="order-btn">Add to Cart</button>

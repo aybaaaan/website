@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>My Information</title>
     <link rel="stylesheet" href="../css/MyInformationPage.css" />
+    <link rel="stylesheet" href="../responsive/MyInfoResponsive.css" />
   </head>
 
   <body>
@@ -28,8 +29,16 @@
 
     <!-- ===== My Information Section ===== -->
     <section class="info-container">
+      <button
+        onclick="window.location.href='../pages/HomePage.html#home'"
+        class="back-btn"
+      >
+        ❮
+      </button>
       <h1>My Information</h1>
-      <p><strong>Email:</strong> <span id="email"style="color: #a64d79;">Loading Email...</span></p>
+      <p>
+        Email: <span id="email" style="color: #a64d79">Loading Email...</span>
+      </p>
 
       <!--Password-->
       <div class="password-wrapper">
@@ -45,8 +54,12 @@
       <!-- Simple Password Modal -->
       <div id="changePasswordModal" class="modal" style="display: none">
         <div class="modal-content">
-          <label for="modalCurrentPass">Current Password</label>
-          <input type="password" id="modalCurrentPass" placeholder="Enter current password" />
+          <label for="modalCurrentPass">Current Password: </label>
+          <input
+            type="password"
+            id="modalCurrentPass"
+            placeholder="Enter current password"
+          />
           <p>Enter your new password (min 6 characters):</p>
           <input type="password" id="modalNewPass" placeholder="New Password" />
           <div class="modal-buttons">
@@ -59,12 +72,6 @@
       <div id="info-fields"></div>
 
       <div class="button-group">
-        <button
-          onclick="window.location.href='../pages/HomePage.html#home'"
-          class="back-btn"
-        >
-          ← Back
-        </button>
         <button id="editBtn">Edit Profile</button>
       </div>
     </section>

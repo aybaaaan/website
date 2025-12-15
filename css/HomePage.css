@@ -112,6 +112,7 @@ body {
 /* Cart Empty Popup */
 .popup-content {
   background: #fff;
+  color: #741b47;
   padding: 25px;
   border-radius: 10px;
   text-align: center;
@@ -125,7 +126,7 @@ body {
 }
 
 .popup-content button {
-  background-color: #c41414;
+  background-color: #a64d79;
   color: #faf9f9;
   border: none;
   padding: 10px 25px;
@@ -136,7 +137,8 @@ body {
 }
 
 .popup-content button:hover {
-  background-color: #ffb6b6;
+  background: #ead1dc;
+  color: #741b47;
   transform: scale(1.06);
 }
 
@@ -168,7 +170,7 @@ body {
 .announcement-float {
   position: fixed;
   bottom: 70px;
-  right: 24px;
+  right: 35px;
 
   width: 56px;
   height: 56px;
@@ -354,6 +356,7 @@ body {
   min-width: 18px;
   height: 18px;
   z-index: 10;
+  border: #741b47 1px solid;
 }
 
 
@@ -1065,80 +1068,179 @@ body {
 
 /* ======================================================= */
 /* 8. CART & TOASTS                                        */
-/* ======================================================= */
+
+/* =====================
+   CART SIDEBAR – SOFT & CALM
+   No bold reliance
+   ===================== */
+
 .cart-sidebar {
   position: fixed;
   top: 0;
   right: -400px;
   width: 350px;
-  height: 100%;
+  height: 100vh;
   background: #f7f2f6;
-  box-shadow: -4px 0 12px rgba(0, 0, 0, 0.3);
-  transition: right 0.3s ease-in-out;
-  z-index: 100;
+  border-left: 5px solid #a64d79;
+  box-shadow: -10px 0 30px rgba(76, 17, 48, 0.22);
+  transition: right 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1000;
   display: flex;
   flex-direction: column;
-  padding: 20px;
+  padding: 22px 20px;
 }
 
 .cart-sidebar.active {
   right: 0;
 }
 
-.cart-price {
-  padding: 10px 0px;
-  border-bottom: 2px solid #a64d79;
-}
-
+/* ===== Close Button ===== */
 .close-btn {
   background: none;
   border: none;
-  font-size: 34px;
-  font-weight: bold;
+  font-size: 30px;
+  font-weight: 400;
   color: #4c1130;
   align-self: flex-end;
   cursor: pointer;
 }
 
-.remove-btn {
-  background-color: #cc1313;
-  border: none;
-  border-radius: 10px;
-  margin-top: 10px;
-  padding: 6px 14px;
-  font-size: 13px;
-  font-weight: bold;
-  color: #ffffff;
-  cursor: pointer;
+.close-btn:hover {
+  color: #a64d79;
 }
 
+/* ===== Header ===== */
+.cart-sidebar h2 {
+  font-size: 21px;
+  font-weight: 500;
+  color: #741b47;
+  margin-bottom: 22px;
+  letter-spacing: 0.4px;
+  position: relative;
+}
+
+.cart-sidebar h2::after {
+  content: "";
+  display: block;
+  margin-top: 10px;
+  width: 129px;
+  height: 2px;
+  background-color: #a64d79;
+  border-radius: 3px;
+}
+
+/* ===== Cart Items ===== */
 #cartItems {
   flex: 1;
   overflow-y: auto;
-  list-style: symbols();
-  padding-left: 20px;
-  margin: 0;
+  list-style: none;
+  padding: 6px 4px;
+  margin-bottom: 18px;
 }
 
+/* Item Card */
 #cartItems li {
-  margin-bottom: 12px;
-  padding: 10px;
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  background: #ffffff;
+  color: #a64d79;
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 16px;
+  border-left: 4px solid #a64d79;
+  box-shadow: 0 6px 14px rgba(76, 17, 48, 0.12);
+  transition: transform 0.2s ease;
 }
 
-.checkout-btn {
-  width: 100%;
-  padding: 12px;
-  background: #741b47;
+#cartItems li:hover {
+  transform: translateY(-3px);
+}
+
+/* ===== Quantity Control ===== */
+.quantity-control {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 14px;
+}
+
+.qty-btn {
+  display: flex;
+  gap: 10px;
+}
+
+.increaseBtn,
+.decreaseBtn {
+  width: 30px;
+  height: 30px;
   border: none;
-  color: #fcfcfc;
-  font-size: 16px;
-  font-weight: bold;
-  border-radius: 8px;
+  border-radius: 50%;
+  background: #ead1dc;
+  color: #741b47;
+  font-size: 15px;
+  font-weight: 500;
   cursor: pointer;
 }
+
+.increaseBtn:hover,
+.decreaseBtn:hover {
+  background: #a64d79;
+  color: #ffffff;
+}
+
+/* ===== Remove Button ===== */
+.remove-btn {
+  background: transparent;
+  border: 1.6px solid #cc1313;
+  color: #cc1313;
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.remove-btn:hover {
+  background: #cc1313;
+  color: #ffffff;
+}
+
+/* ===== Total ===== */
+#cartTotal {
+  font-size: 15px;
+  font-weight: 500;
+  color: #4c1130;
+  padding: 14px 0;
+  border-top: 1.5px dashed #ead1dc;
+  margin-bottom: 18px;
+}
+
+/* ===== Checkout Button ===== */
+.checkout-btn {
+  width: 100%;
+  padding: 15px;
+  background-color: #741b47;
+  border: none;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 500;
+  border-radius: 16px;
+  cursor: pointer;
+  letter-spacing: 0.6px;
+  box-shadow: 0 10px 18px rgba(116, 27, 71, 0.32);
+}
+
+.checkout-btn:hover {
+  background-color: #a64d79;
+}
+
+/* ===== Mobile ===== */
+@media (max-width: 768px) {
+  .cart-sidebar {
+    width: 70%;
+    right: -100%;
+  }
+}
+
+
 
 .order-toast {
   display: flex;

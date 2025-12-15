@@ -51,13 +51,13 @@ function createTextField(labelText, id, disabled = true) {
 
 // ================= INSERT FIELDS INTO PAGE =================
 const container = document.getElementById("info-fields");
-container.appendChild(createTextField("Name", "name"));
-container.appendChild(createTextField("Phone Number", "phone"));
-container.appendChild(createTextField("House No.", "houseno"));
-container.appendChild(createTextField("Street", "street"));
-container.appendChild(createTextField("Barangay", "barangay"));
-container.appendChild(createTextField("City", "city", true)); // uneditable
-container.appendChild(createTextField("Province", "province", true)); // uneditable
+container.appendChild(createTextField("Name:", "name"));
+container.appendChild(createTextField("Phone Number:", "phone"));
+container.appendChild(createTextField("House No.:", "houseno"));
+container.appendChild(createTextField("Street:", "street"));
+container.appendChild(createTextField("Barangay:", "barangay"));
+container.appendChild(createTextField("City:", "city", true)); // uneditable
+container.appendChild(createTextField("Province:", "province", true)); // uneditable
 
 // Now we can safely reference them
 const nameInput = document.getElementById("name");
@@ -192,8 +192,10 @@ function showSuccess(msg) {
   setTimeout(() => errorMessage.classList.remove("show"), 3000);
 }
 
-import { EmailAuthProvider, reauthenticateWithCredential } 
-from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+import {
+  EmailAuthProvider,
+  reauthenticateWithCredential,
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 
 // ================= CHANGE PASSWORD VISIBILITY =================
 document.addEventListener("DOMContentLoaded", () => {
@@ -212,56 +214,60 @@ document.addEventListener("DOMContentLoaded", () => {
     modalNewPass.value = "";
   });
 
-modalSubmitBtn.addEventListener("click", async () => {
-  const user = auth.currentUser;
-  if (!user) return showError("You are not logged in.");
+  modalSubmitBtn.addEventListener("click", async () => {
+    const user = auth.currentUser;
+    if (!user) return showError("You are not logged in.");
 
-  const currentPass = document.getElementById("modalCurrentPass").value.trim();
-  const newPass = modalNewPass.value.trim();
+    const currentPass = document
+      .getElementById("modalCurrentPass")
+      .value.trim();
+    const newPass = modalNewPass.value.trim();
 
-  if (!currentPass) return showError("Please enter your current password.");
-  if (!newPass) return showError("Please enter a new password.");
+    if (!currentPass) return showError("Please enter your current password.");
+    if (!newPass) return showError("Please enter a new password.");
 
-  if (newPass.length < 6)
-    return showError("Password must be at least 6 characters.");
+    if (newPass.length < 6)
+      return showError("Password must be at least 6 characters.");
 
-  const uppercase = /[A-Z]/;
-  const number = /[0-9]/;
-  const symbol = /[!@#$%^&*(),.?\":{}|<>]/;
+    const uppercase = /[A-Z]/;
+    const number = /[0-9]/;
+    const symbol = /[!@#$%^&*(),.?\":{}|<>]/;
 
-  if (!uppercase.test(newPass))
-    return showError("Password must contain at least one uppercase letter.");
-  if (!number.test(newPass))
-    return showError("Password must contain at least one number.");
-  if (!symbol.test(newPass))
-    return showError("Password must contain at least one symbol.");
+    if (!uppercase.test(newPass))
+      return showError("Password must contain at least one uppercase letter.");
+    if (!number.test(newPass))
+      return showError("Password must contain at least one number.");
+    if (!symbol.test(newPass))
+      return showError("Password must contain at least one symbol.");
 
-  try {
-    // STEP 1: Re-authenticate user
-    const credential = EmailAuthProvider.credential(user.email, currentPass);
-    await reauthenticateWithCredential(user, credential);
+    try {
+      // STEP 1: Re-authenticate user
+      const credential = EmailAuthProvider.credential(user.email, currentPass);
+      await reauthenticateWithCredential(user, credential);
 
-    // STEP 2: Update password
-    await updatePassword(user, newPass);
+      // STEP 2: Update password
+      await updatePassword(user, newPass);
 
-    showSuccess("Password updated successfully!");
+      showSuccess("Password updated successfully!");
 
-    // Close modal + reset
-    changePasswordModal.style.display = "none";
-    modalCurrentPass.value = "";
-    modalNewPass.value = "";
-  } catch (error) {
-    console.error(error);
+      // Close modal + reset
+      changePasswordModal.style.display = "none";
+      modalCurrentPass.value = "";
+      modalNewPass.value = "";
+    } catch (error) {
+      console.error(error);
 
-    if (error.code === "auth/wrong-password") {
-      showError("Incorrect current password.");
-    } else if (error.code === "auth/too-many-requests") {
-      showError("Too many attempts. Please try again later.");
-    } else {
-      showError("Failed to update password. Please enter your current password.");
+      if (error.code === "auth/wrong-password") {
+        showError("Incorrect current password.");
+      } else if (error.code === "auth/too-many-requests") {
+        showError("Too many attempts. Please try again later.");
+      } else {
+        showError(
+          "Failed to update password. Please enter your current password."
+        );
+      }
     }
-  }
-});
+  });
 });
 
 // ================= HAMBURGER MENU =================
