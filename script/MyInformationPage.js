@@ -72,6 +72,8 @@ function createSelectField(labelText, id, options) {
     select.id = id;
     select.name = id;
     
+    select.disabled = true;
+    
     // Default "Select" option
     const defaultOption = document.createElement("option");
     defaultOption.text = "Select Barangay";
