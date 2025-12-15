@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin Dashboard</title>
     <link rel="stylesheet" href="../css/AdminPage.css" />
+    <link rel="stylesheet" href="../css/admin-orders-history.css" />
     <link rel="stylesheet" href="../responsive/AdminResponsive.css" />
   </head>
 
@@ -40,20 +41,48 @@
 
       <!-- Main content -->
       <main>
-        <!-- Orders -->
-        <h4 class="title-tag">Orders</h4>
-        <section id="section-orders">
-          <h4>Orders List</h4>
-          <div id="ordersContainer"></div>
-        </section>
-        <div class="pagination-controls">
-          <button id="prevPageOrders">Prev</button>
-          <span id="ordersPageInfo">Page 1</span>
-          <button id="nextPageOrders">Next</button>
-        </div>
+         <div class="filters">
+          <label>
+            Status:
+            <select id="filterStatus">
+              <option value="">All</option>
+              <option value="DELIVERED">Delivered</option>
+              <option value="CANCELLED">Cancelled</option>
+            </select>
+          </label>
 
+          <label>
+            Customer Name:
+            <input type="text" id="filterCustomer" placeholder="Enter customer name" />
+          </label>
 
-      </main>
+          <label>
+            Start Date:
+            <input type="date" id="filterStartDate" />
+          </label>
+
+          <label>
+            End Date:
+            <input type="date" id="filterEndDate" />
+          </label>
+          
+          </div>
+          <div class="filter-actions">
+            <button id="applyFilters">Apply Filters</button>
+            <button id="clearFilters">Clear Filters</button>
+          </div>
+
+          <div id="orderHistoryContainer">
+            <p>Loading archived orders...</p>
+          </div>
+
+          <div class="pagination">
+            <button id="prevPageHistory">Prev</button>
+            <span id="orderHistoryPageInfo"></span>
+            <button id="nextPageHistory">Next</button>
+          </div>
+
+    </main>
 
     <div id="logoutModal" class="modal">
       <div class="modal-content">
@@ -66,40 +95,7 @@
     </div>
 
 
-    <div id="customer-order-popup" class="modal">
-      <div class="modal-content">
-        <p id="customer-order-message"></p>
-        <div class="modal-actions">
-          <button id="close-customer-order">OK</button>
-        </div>
-      </div>
-    </div>
-
-    <div id="delete-confirm-modal" class="modal">
-      <div class="modal-content">
-        <p id="delete-confirm-message"></p>
-        <div class="modal-actions">
-          <button id="cancel-delete">Cancel</button>
-          <button id="confirm-delete">Delete</button>
-        </div>
-      </div>
-    </div>
-
-    <div id="status-confirm-modal" class="modal">
-      <div class="modal-content">
-        <p id="status-confirm-message"></p>
-        <div class="modal-buttons">
-          <button id="status-yes" class="btn-confirm">Yes</button>
-          <button id="status-cancel" class="btn-cancel">Cancel</button>
-        </div>
-      </div>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Chart.js library -->
-    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-    <!-- Excel export library -->
-    <script type="module" src="../script/admin-orders.js"></script>
+    <script type="module" src="../script/admin-orders-history.js"></script>
     <script src="../script/admin-common.js"></script>
   </body>
 </html>

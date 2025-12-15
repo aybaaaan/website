@@ -70,6 +70,7 @@ backBtn.addEventListener("click", (e) => {
 const qtyInput = document.getElementById("qty");
 const plusBtn = document.getElementById("plusBtn");
 const minusBtn = document.getElementById("minusBtn");
+const addBtn = document.getElementById("addBtn");
 
 // Handle + button
 plusBtn.addEventListener("click", () => {

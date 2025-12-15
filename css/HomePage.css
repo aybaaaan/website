@@ -359,7 +359,6 @@ body {
   border: #741b47 1px solid;
 }
 
-
 .action-btn {
   color: #4c1130;
   display: flex;
@@ -490,7 +489,7 @@ body {
 .carousel-item img {
   min-width: 100%;
   min-height: 100%;
-  height: max(1000px);
+  height: max(100%, 1400px);
   object-fit: cover;
 }
 
@@ -510,7 +509,7 @@ body {
 .carousel-item-caption-container {
   position: absolute;
   display: block;
-  top: 45%;
+  top: 60%;
   left: 30%;
   transform: translateX(-50%);
   color: #fff;
