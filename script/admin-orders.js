@@ -32,6 +32,8 @@ const firebaseConfig = {
 const ordersPerPageCards = 10;
 let currentPageCards = 1;
 let ordersArrayCards = [];
+let filteredOrdersCards = null;
+
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
@@ -75,14 +77,16 @@ onValue(ordersRef, (snapshot) => {
 function renderOrdersPage() {
   ordersContainer.innerHTML = "";
 
-  if (ordersArrayCards.length === 0) {
+  const sourceArray = filteredOrdersCards ?? ordersArrayCards;
+
+  if (sourceArray.length === 0) {
     ordersContainer.innerHTML = "<p>No orders found.</p>";
     return;
   }
 
   const startIndex = (currentPageCards - 1) * ordersPerPageCards;
   const endIndex = startIndex + ordersPerPageCards;
-  const pageOrders = ordersArrayCards.slice(startIndex, endIndex);
+  const pageOrders = sourceArray.slice(startIndex, endIndex);
 
   pageOrders.forEach((data) => {
     const row = document.createElement("div");
@@ -324,7 +328,7 @@ row.addEventListener("click", () => {
   });
 
   // ============ UPDATE PAGINATION INFO ============
-  const totalPages = Math.ceil(ordersArrayCards.length / ordersPerPageCards);
+  const totalPages = Math.ceil(sourceArray.length / ordersPerPageCards);
   document.getElementById(
     "ordersPageInfo"
   ).textContent = `Page ${currentPageCards} of ${totalPages}`;
@@ -342,12 +346,51 @@ document.getElementById("prevPageOrders").addEventListener("click", () => {
   }
 });
 document.getElementById("nextPageOrders").addEventListener("click", () => {
-  const totalPages = Math.ceil(ordersArrayCards.length / ordersPerPageCards);
+  const sourceArray = filteredOrdersCards ?? ordersArrayCards;
+const totalPages = Math.ceil(sourceArray.length / ordersPerPageCards);
+
   if (currentPageCards < totalPages) {
     currentPageCards++;
     renderOrdersPage();
   }
 });
+
+const searchNameInput = document.getElementById("searchName");
+const searchOrderIdInput = document.getElementById("searchOrderId");
+const searchOrdersBtn = document.getElementById("searchOrders");
+const clearFiltersBtn = document.getElementById("clearFilters");
+
+searchOrdersBtn.addEventListener("click", (e) => {
+  e.preventDefault();
+
+  const nameValue = searchNameInput.value.toLowerCase().trim();
+  const orderIdValue = searchOrderIdInput.value.toLowerCase().trim();
+
+  filteredOrdersCards = ordersArrayCards.filter((order) => {
+    const customerName = String(order.name || "").toLowerCase();
+    const orderID = String(order.orderID || "").toLowerCase();
+
+    return (
+      customerName.includes(nameValue) &&
+      orderID.includes(orderIdValue)
+    );
+  });
+
+  currentPageCards = 1;
+  renderOrdersPage();
+});
+
+clearFiltersBtn.addEventListener("click", (e) => {
+  e.preventDefault();
+
+  searchNameInput.value = "";
+  searchOrderIdInput.value = "";
+  filteredOrdersCards = null;
+
+  currentPageCards = 1;
+  renderOrdersPage();
+});
+
 
 // ORDER'S STATUS CONFIRMATION MODAL
 const statusConfirmModal = document.getElementById("status-confirm-modal");

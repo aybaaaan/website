@@ -1775,3 +1775,51 @@ details summary {
   50% { transform: scale(1.05); opacity: 0.85; }
   100% { transform: scale(1); opacity: 1; }
 }
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 10px;
+}
+
+.filters label {
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+
+.filters input {
+  margin-top: 4px;
+  padding: 6px 8px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Buttons */
+.filter-actions {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.filter-actions button {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+#searchOrders {
+  background-color: #a64d79;
+  color: #fff;
+}
+
+#clearFilters {
+  background-color: #ead1dc;
+  color: #4c1130;
+}

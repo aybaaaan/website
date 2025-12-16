@@ -29,11 +29,26 @@ body {
   flex-wrap: wrap;
 }
 
-.header .logo {
+.header {
   font-size: 22px;
   font-weight: bold;
 }
+.logo-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
 
+.title-header {
+  font-size: 24px; /* Default Desktop Size */
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.logo img {
+  height: 5rem;
+  width: 6.5rem;
+}
 .header .nav a {
   color: white;
   text-decoration: none;
@@ -62,6 +77,8 @@ body {
   margin-bottom: 30px;
   flex-wrap: wrap;
   gap: 15px;
+  justify-content: center;
+  margin-top: 20px;
 }
 
 .feedback-header h1 {
@@ -80,7 +97,8 @@ body {
 }
 
 .back-btn:hover {
-  background: #741b47;
+  background: #ead1dc;
+  color: #741b47;
 }
 
 /* ====== Feedback Card ====== */

@@ -32,9 +32,9 @@
 
         <a href="../pages/admin-dashboard.html"><button>Data Analytics</button></a>
         <a href="admin-orders.html" class="sidebar-link orders-link">
-  <span class="sidebar-text">Orders</span>
-  <span id="ordersBadge" class="orders-badge hidden">0</span>
-</a>
+        <span class="sidebar-text">Orders</span>
+        <span id="ordersBadge" class="orders-badge hidden">0</span>
+        </a>
 
         <a href="../pages/admin-manage-content.html"><button>Manage Contents</button></a>
         <a href="../pages/admin-manage-announcements.html"><button>Manage Announcements</button></a>
@@ -45,7 +45,33 @@
       <!-- Main content -->
       <main>
         <!-- Orders -->
+        
         <h4 class="title-tag">Orders</h4>
+        <div class="filters">
+  <label>
+    Customer Name:
+    <input
+      type="text"
+      id="searchName"
+      placeholder="Enter customer name"
+    />
+  </label>
+
+  <label>
+    Order ID:
+    <input
+      type="text"
+      id="searchOrderId"
+      placeholder="Enter order ID"
+    />
+  </label>
+</div>
+
+<div class="filter-actions">
+  <button id="searchOrders">Search</button>
+  <button id="clearFilters">Clear</button>
+</div>
+
         <section id="section-orders">
           <h4>Orders List</h4>
           <div id="ordersContainer"></div>

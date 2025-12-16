@@ -675,7 +675,7 @@ body {
 .menu-cards-container {
   overflow: hidden;
   width: 100%;
-  max-width: 900px;
+  max-width: 1200px;
   margin: 0 auto;
   position: relative;
   display: flex;
@@ -742,6 +742,7 @@ body {
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
+  text-align: left;
 }
 
 .card-bottom {
@@ -758,6 +759,7 @@ body {
   font-size: 20px;
   font-weight: 700;
   color: #a64d79;
+
 }
 
 .order-btn {

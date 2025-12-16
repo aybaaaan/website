@@ -16,6 +16,9 @@
   .footer {
     padding: 30px 40px;
   }
+  .menu-cards {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
 /* --- TABLET PORTRAIT / LARGE PHONES (Max Width: 768px) --- */
@@ -97,19 +100,49 @@
     font-size: 1.8rem;
   }
 
-  /* Menu */
-  .menu-cards {
-    gap: 15px;
-  }
-  .menu-card {
-    background: #fff;
-    width: 320px;
-    height: auto;
-  }
-  .menu-card img {
-    height: 55%;
+ .menu-card {
+    width: calc(50% - 20px);
+    max-width: 360px;
   }
 
+  /* Images */
+  .menu-card img {
+    height: 220px;
+  }
+
+  /* Content spacing */
+  .card-content {
+    padding: 12px;
+  }
+
+  /* Title */
+  .card-title {
+    font-size: 20px;
+  }
+
+  /* Description */
+  .card-desc {
+    font-size: 13.5px;
+    line-height: 1.35;
+    -webkit-line-clamp: 3;
+    text-align: left;
+  }
+
+  /* Bottom bar */
+  .card-bottom {
+    padding: 12px 14px;
+  }
+
+  /* Price */
+  .card-price {
+    font-size: 18px;
+  }
+
+  /* Button */
+  .order-btn {
+    font-size: 15px;
+    padding: 6px 24px;
+  }
   /* Reviews */
   .reviews-title {
     font-size: 32px;
@@ -180,6 +213,59 @@
   .action-btn {
     padding: 8px 10px;
   }
+   /* Card size */
+  .menu-card {
+    border-radius: 10px;
+    height: 350px;
+  }
+
+  /* Image */
+  .menu-card img {
+    height: 180px;
+  }
+
+  /* Content padding */
+  .card-content {
+    padding: 10px 8px;
+  }
+
+  /* Title */
+  /* Titles */
+  .card-title {
+    font-size: 16px;
+    margin-bottom: 4px;
+  }
+
+  /* Description */
+  .card-desc {
+    font-size: 10px;
+    line-height: 1.25;
+    text-align: left;
+    -webkit-line-clamp: 5;
+  }
+
+  /* Price */
+  .card-price {
+    font-size: 12px;
+  }
+
+  /* Order button */
+  .order-btn {
+    font-size: 13px;
+    padding: 4px 14px;
+    border-width: 1.5px;
+  }
+
+  /* Bottom spacing */
+  .card-bottom {
+    padding: 8px 10px;
+  }
+  .menu-cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* phones */
+  gap: 20px;
+  justify-items: center;
+}
 
   .carousel-item-caption-container {
     position: absolute;

@@ -437,6 +437,9 @@ function renderMenuByCategory(category) {
     const btn = document.createElement("button");
     btn.className = "order-btn";
     btn.textContent = "Order";
+    card.addEventListener("click", () => {
+      goToDetails(item.name, item.price || 0, item.url, item.desc);
+    });
     btn.addEventListener("click", () => {
       goToDetails(item.name, item.price || 0, item.url, item.desc);
     });

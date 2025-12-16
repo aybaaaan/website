@@ -120,6 +120,23 @@
   #orderModal .order-summary {
     grid-template-columns: 1fr;
   }
+  .orders-filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .orders-filters input,
+  .orders-filters button {
+    width: 100%;
+  }
+  .order-card {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+  }
+  .order-card-right {
+    align-items: flex-start;
+  }
 }
 
 /* Small Phones */
