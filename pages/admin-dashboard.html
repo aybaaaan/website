@@ -33,7 +33,11 @@
         <a href="../pages/admin-dashboard.html"
           ><button>Data Analytics</button></a
         >
-        <a href="../pages/admin-orders.html"><button>Orders</button></a>
+        <a href="admin-orders.html" class="sidebar-link orders-link">
+  <span class="sidebar-text">Orders</span>
+  <span id="ordersBadge" class="orders-badge hidden">0</span>
+</a>
+
         <a href="../pages/admin-manage-content.html"
           ><button>Manage Contents</button></a
         >
@@ -191,6 +195,6 @@
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <!-- Excel export library -->
     <script type="module" src="../script/admin-dashboard.js"></script>
-    <script src="../script/admin-common.js"></script>
+    <script type="module" src="../script/admin-common.js"></script>
   </body>
 </html>

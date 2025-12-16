@@ -536,7 +536,8 @@ checkoutForm.addEventListener("submit", async (e) => {
     total: parseFloat(totalEl.textContent),
     orderDate: userOrderDate,
     orderTime: userOrderTime,
-    timestamp: new Date(),
+    timestamp: Date.now(),
+    createdAt: Date.now(), // for sorting (newest first)
     status: "PENDING",
   };
 

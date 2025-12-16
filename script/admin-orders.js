@@ -41,10 +41,10 @@ const ordersRef = ref(db, "Order");
 const announcementRef = ref(db, "Announcements");
 
 const ordersContainer = document.getElementById("ordersContainer");
-
 // RENDER ORDERS
 onValue(ordersRef, (snapshot) => {
   ordersArrayCards = [];
+
   if (!snapshot.exists()) {
     ordersContainer.innerHTML = "<p>No orders found.</p>";
     return;
@@ -52,13 +52,25 @@ onValue(ordersRef, (snapshot) => {
 
   snapshot.forEach((child) => {
     const orderData = child.val();
-    orderData.key = child.key; // store key for actions
+    orderData.key = child.key;
+
+    // Default safety
+    if (orderData.isSeen === undefined) {
+      orderData.isSeen = false;
+    }
+
     ordersArrayCards.push(orderData);
   });
 
+  // ✅ SORT — NEWEST FIRST
+  ordersArrayCards.sort((a, b) => b.timestamp - a.timestamp);
+
   currentPageCards = 1;
   renderOrdersPage();
+
+
 });
+
 
 function renderOrdersPage() {
   ordersContainer.innerHTML = "";
@@ -120,7 +132,14 @@ function renderOrdersPage() {
     // ============ ROW INNER HTML ============
     row.innerHTML = `
       <div class="order-card-left">
-        <h2>${data.name || "Unknown"}</h2>
+        <h2>
+  ${data.name || "Unknown"}
+  ${
+    data.status === "PENDING"
+      ? '<span class="inline-new-badge">NEW</span>'
+      : ''
+  }
+  </h2>
         <p><strong>Address:</strong> ${
           typeof data.address === "string"
             ? data.address // If stored as plain text
@@ -159,7 +178,7 @@ function renderOrdersPage() {
   <span style="font-size: 18px; color: #a64d79; font-weight: bold;">
     ₱${data.total ? data.total.toFixed(2) : "0.00"}
   </span>
-</p>
+  </p>
 
         <p><strong>Delivery Date:</strong> ${deliveryDate}</p>
         <p><strong>Delivery Time:</strong> ${deliveryTime}</p>
@@ -179,6 +198,16 @@ function renderOrdersPage() {
           </select>
         </div>
     `;
+
+    // ✅ Mark order as seen when admin clicks the card
+row.addEventListener("click", () => {
+  if (data.isSeen === false) {
+    update(ref(db, `Order/${data.key}`), {
+      isSeen: true,
+    });
+  }
+});
+
 
     // ============ STATUS DROPDOWN ============
     const statusDropdown = row.querySelector(".order-status-dropdown");
