@@ -3,49 +3,51 @@
   /* Header Adjustments */
   .header {
     padding: 15px 20px;
-    
+
     /* Dito natin sila pinagdikit sa Left Side */
-    justify-content: flex-start; 
+    justify-content: flex-start;
     align-items: center;
-    
+
     /* Ito ang layo ng Hamburger sa Logo */
-    gap: 15px; 
+    gap: 15px;
   }
 
-  /* Logo Adjustments */
-  .logo {
-    font-size: 19px; /* Liitan konti para kasya sa phone */
-    text-align: left;
+  .logo img {
+    margin-left: 35px;
+    font-size: 24px;
+  }
+  .title-header {
+    font-size: 24px;
   }
 
   /* Show Hamburger */
   .hamburger {
-    display: block; 
+    display: block;
     cursor: pointer;
     z-index: 1001;
-    
+
     /* Magic code para mauna siya sa Logo visually */
-    order: -1; 
+    order: -1;
   }
 
   /* Mobile Navigation Menu */
   .nav {
     position: fixed;
     left: -100%; /* Nakatago sa kaliwa */
-    top: 60px;   /* Nasa ilalim ng header */
+    top: 60px; /* Nasa ilalim ng header */
     gap: 0;
     flex-direction: column;
     background-color: #741b47;
     width: 100%;
     text-align: center;
     transition: 0.3s;
-    box-shadow: 0 10px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
     z-index: 1000;
   }
 
   /* Active class para lumabas ang menu */
   .nav.active {
-    left: 0; 
+    left: 0;
   }
 
   .nav a {
@@ -67,11 +69,11 @@
 
   /* Layout Adjustments for Content */
   .checkout-container {
-    padding: 20px 10px; 
+    padding: 20px 10px;
   }
 
   .checkout-card {
-    padding: 15px; 
+    padding: 15px;
   }
 
   /* Make items stack vertically */
@@ -87,12 +89,12 @@
   }
 
   .quantity-control {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-top: 10px;
-  justify-content: space-between;
-}
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+    justify-content: space-between;
+  }
 
   .totals {
     text-align: left;
@@ -110,20 +112,21 @@
   .deliv-details {
     font-size: 20px;
   }
-  
+
   /* Buttons stacking */
   .actions-row {
     flex-direction: column;
     align-items: stretch;
     gap: 10px;
   }
-  
-  .addmore-btn, .proceed-btn {
+
+  .addmore-btn,
+  .proceed-btn {
     width: 100%;
   }
   .details {
-  width: 100%;
-}
+    width: 100%;
+  }
 }
 
 @media (max-width: 480px) {
@@ -132,10 +135,16 @@
     padding: 10px 15px;
   }
 
-  .logo {
-    font-size: 17px;
+  .logo-content {
+    width: 60%;
   }
-
+  .logo img {
+    height: 40px;
+    width: 50px;
+  }
+  .title-header {
+    font-size: 16px;
+  }
   .checkout-card {
     padding: 10px;
   }
@@ -144,12 +153,12 @@
     height: 120px;
   }
   .quantity-control {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  justify-content: space-between;
-}
-.details {
-  width: 100%;
-}
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: space-between;
+  }
+  .details {
+    width: 100%;
+  }
 }

@@ -132,6 +132,7 @@ import {
   ref,
   push,
   get,
+  runTransaction,
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
 
 import {
@@ -240,13 +241,24 @@ async function loadUserProfile() {
         }
       }
     } else {
-      console.log("⚠️ No user profile found in Firestore.");
+      console.log("No user profile found in Firestore.");
     }
   } catch (err) {
     console.error("Error loading user profile:", err);
   }
 }
 
+function parseAddress(fullAddress) {
+  const parts = fullAddress.split(",").map((p) => p.trim());
+
+  return {
+    houseno: parts[0] || "",
+    street: parts[1] || "",
+    barangay: parts[2] || "",
+    city: parts[3] || "",
+    province: parts[4] || "",
+  };
+}
 
 // ===================== NAVIGATION HELPERS =====================
 function goToMenuPage() {
@@ -413,19 +425,13 @@ timePopupOkBtn.addEventListener("click", () => {
 
 // ===================== ORDER ID GENERATOR =====================
 async function generateOrderID() {
-  const ordersSnapshot = await get(ordersRef); // fetch data from Firebase
-  let lastID = 1000; // start from 1000 if no orders yet
+  const counterRef = ref(db, "OrderCounter/lastOrderID");
 
-  if (ordersSnapshot.exists()) {
-    const ordersData = ordersSnapshot.val();
-    const orderIDs = Object.values(ordersData).map(
-      (order) => order.orderID || 0
-    );
-    const maxID = Math.max(...orderIDs);
-    lastID = maxID;
-  }
+  const result = await runTransaction(counterRef, (current) => {
+    return (current || 1000) + 1; // start at 1001 if empty
+  });
 
-  return lastID + 1; // next order ID
+  return result.snapshot.val();
 }
 
 // ==================== SUBMIT HANDLER (MODIFIED) ====================
@@ -460,6 +466,7 @@ checkoutForm.addEventListener("submit", async (e) => {
     return;
   }
 
+  // --- TIME & DATE VALIDATION ---
   // --- TIME & DATE VALIDATION ---
   const now = new Date();
   const selectedDateTime = new Date(`${deliveryDate}T${deliveryTime}`);
@@ -497,6 +504,7 @@ checkoutForm.addEventListener("submit", async (e) => {
   const currentTime = new Date();
 
   // Format nicely for saving
+  // Format nicely for saving
   const userOrderDate = currentTime.toLocaleDateString("en-US", {
     year: "numeric",
     month: "2-digit",
@@ -527,6 +535,7 @@ checkoutForm.addEventListener("submit", async (e) => {
     userEmail: currentUser.email,
     name,
     address: fullAddressString, // SAVED AS STRING
+    address: fullAddressString, // SAVED AS STRING
     contact,
     deliveryDate,
     deliveryTime,
@@ -535,11 +544,13 @@ checkoutForm.addEventListener("submit", async (e) => {
     total: parseFloat(totalEl.textContent),
     orderDate: userOrderDate,
     orderTime: userOrderTime,
-    timestamp: new Date(),
+    timestamp: Date.now(),
+    createdAt: Date.now(), // for sorting (newest first)
     status: "PENDING",
   };
 
   try {
+    // Save to Realtime Database
     // Save to Realtime Database
     await push(ordersRef, orderData);
 
@@ -583,6 +594,7 @@ checkoutForm.addEventListener("submit", async (e) => {
         email: currentUser.email,
         name,
         phone: contact,
+        address: addressObject, // store as object
         address: addressObject, // store as object
       },
       { merge: true }

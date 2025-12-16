@@ -29,9 +29,26 @@ body {
   flex-wrap: wrap;
 }
 
-.header .logo {
+.header {
   font-size: 22px;
   font-weight: bold;
+}
+
+.logo-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.title-header {
+  font-size: 24px; /* Default Desktop Size */
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.logo img {
+  height: 5rem;
+  width: 6.5rem;
 }
 
 .header .nav a {
@@ -272,7 +289,7 @@ body {
   border-radius: 6px;
   border: 1px solid #ccc;
   resize: vertical;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-size: 16px;
   height: 120px;
   min-height: 100px;

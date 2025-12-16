@@ -11,7 +11,8 @@
 }
 
 body {
-  background: url("https://imgs.search.brave.com/qwpZN5_Purot1GZWJoFNbNlNT1xNrco54atkeNOGNG8/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/cHJlbWl1bS1waG90/by90YWJsZS13aXRo/LW1hbnktcGxhdGVz/LWZvb2QtaW5jbHVk/aW5nLWZvb2QtZHJp/bmtzXzg2MjQ2Mi0x/MDM5MC5qcGc_c2Vt/dD1haXNfaHlicmlk/Jnc9NzQwJnE9ODA") no-repeat center center/cover;
+  background: url("https://imgs.search.brave.com/qwpZN5_Purot1GZWJoFNbNlNT1xNrco54atkeNOGNG8/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/cHJlbWl1bS1waG90/by90YWJsZS13aXRo/LW1hbnktcGxhdGVz/LWZvb2QtaW5jbHVk/aW5nLWZvb2QtZHJp/bmtzXzg2MjQ2Mi0x/MDM5MC5qcGc_c2Vt/dD1haXNfaHlicmlk/Jnc9NzQwJnE9ODA")
+    no-repeat center center/cover;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -50,13 +51,21 @@ body {
   box-shadow: #0000003f 0px 6px 6px;
 }
 
-.logo {
-  text-decoration: none;
-  font-size: 20px;
-  font-weight: 700;
-  line-height: 26px;
-  color: #f5f1f1;
-  margin-left: 3px;
+.logo-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.title-header {
+  font-size: 24px; /* Default Desktop Size */
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.logo img {
+  height: 5rem;
+  width: 6.5rem;
 }
 
 /* Popup Message (Success/Notification) */
@@ -309,7 +318,7 @@ input[type="password"]::-ms-reveal {
   color: #d8d8d6;
   font-size: 16px;
   font-weight: 400;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   line-height: 20px;
   transition: color 0.3s ease;
   cursor: pointer;

@@ -6,26 +6,6 @@
     <title>Feedback Page</title>
     <link rel="stylesheet" href="../css/FeedbackPage.css" />
     <link rel="stylesheet" href="../responsive/FeedbackResponsive.css" />
-    <style>
-      .rating-container {
-        display: flex;
-        gap: 10px;
-        margin: 10px 0;
-        justify-content: flex-start;
-      }
-      .star {
-        font-size: 30px;
-        color: #ccc;
-        cursor: pointer;
-        transition: color 0.2s;
-      }
-      .star.active {
-        color: #ffc107; /* Gold Color */
-      }
-      .star:hover {
-        transform: scale(1.1);
-      }
-    </style>
   </head>
   <body>
     <header class="header">
@@ -35,7 +15,10 @@
         <span></span>
       </div>
 
-      <div class="logo">Mediterranean In Velvet</div>
+      <div class="logo-content">
+        <div class="logo"><img src="../icons/logo.png" /></div>
+        <div class="title-header">Mediterranean in Velvet</div>
+      </div>
 
       <nav class="nav" id="nav-menu">
         <a href="../pages/HomePage.html#home">Home</a>
@@ -84,8 +67,7 @@
             </button>
           </div>
         </div>
-
-        </div>
+      </div>
     </div>
 
     <div id="feedbackModal" class="popup-overlay">

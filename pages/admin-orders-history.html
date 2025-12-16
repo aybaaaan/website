@@ -32,7 +32,11 @@
         <h3>Dashboard</h3>
 
         <a href="../pages/admin-dashboard.html"><button>Data Analytics</button></a>
-        <a href="../pages/admin-orders.html"><button>Orders</button></a>
+        <a href="admin-orders.html" class="sidebar-link orders-link">
+  <span class="sidebar-text">Orders</span>
+  <span id="ordersBadge" class="orders-badge hidden">0</span>
+</a>
+
         <a href="../pages/admin-manage-content.html"><button>Manage Contents</button></a>
         <a href="../pages/admin-manage-announcements.html"><button>Manage Announcements</button></a>
         <a href="../pages/admin-feedback.html"><button>Feedback</button></a>
@@ -96,6 +100,6 @@
 
 
     <script type="module" src="../script/admin-orders-history.js"></script>
-    <script src="../script/admin-common.js"></script>
+    <script type="module" src="../script/admin-common.js"></script>
   </body>
 </html>

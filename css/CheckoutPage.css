@@ -40,9 +40,26 @@ body::before {
   z-index: 10;
 }
 
-.header .logo {
+.header {
   font-size: 22px;
   font-weight: bold;
+}
+
+.logo-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.title-header {
+  font-size: 24px; /* Default Desktop Size */
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.logo img {
+  height: 5rem;
+  width: 6.5rem;
 }
 
 .header .nav a {

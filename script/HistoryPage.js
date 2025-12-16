@@ -148,20 +148,36 @@ onAuthStateChanged(auth, (user) => {
     }
 
     // 3. FETCH ORDERS AFTER IMAGES
-    const ordersRef = ref(db, "OrderHistory");
+    const ordersRef = ref(db, "Order");
+    const historyRef = ref(db, "OrderHistory");
+
+    let ordersData = {};
+    let historyData = {};
+
     onValue(ordersRef, (snapshot) => {
-      const data = snapshot.val();
+      ordersData = snapshot.val() || {};
+      renderCombinedOrders();
+    });
+
+    onValue(historyRef, (snapshot) => {
+      historyData = snapshot.val() || {};
+      renderCombinedOrders();
+    });
+
+    function renderCombinedOrders() {
       orderList.innerHTML = "";
 
-      if (!data) {
-        orderList.innerHTML = "<p>No orders found.</p>";
+      const allOrders = [
+        ...Object.values(ordersData),
+        ...Object.values(historyData),
+      ];
+
+      if (allOrders.length === 0) {
+        orderList.innerHTML = "<p>You have no past orders yet.</p>";
         return;
       }
 
-      // Filter orders belonging to the current user
-      const userOrders = Object.values(data).filter(
-        (order) => order.userId === user.uid
-      );
+      const userOrders = allOrders.filter((order) => order.userId === user.uid);
 
       if (userOrders.length === 0) {
         orderList.innerHTML = "<p>You have no past orders yet.</p>";
@@ -295,7 +311,7 @@ onAuthStateChanged(auth, (user) => {
           </div>
         `;
       });
-    });
+    }
   });
 });
 

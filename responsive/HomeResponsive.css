@@ -25,8 +25,11 @@
     padding: 15px 20px;
     justify-content: space-between;
   }
-  .logo {
-    margin-left: 40px;
+  .logo img {
+    margin-left: 35px;
+    font-size: 24px;
+  }
+  .title-header {
     font-size: 24px;
   }
   .hamburger {
@@ -147,13 +150,24 @@
     padding: 25px;
     font-size: 15px;
   }
+  .about-us-card {
+    padding: 30px 30px;
+    text-align: center; /* Center text on small screens for visual balance */
+  }
 }
 
 /* --- MOBILE PHONES (Max Width: 480px) --- */
 @media (max-width: 480px) {
   /* Header */
-  .logo {
-    font-size: 18px;
+  .logo-content {
+    width: 60%;
+  }
+  .logo img {
+    height: 40px;
+    width: 50px;
+  }
+  .title-header {
+    font-size: 16px;
   }
   .hamburger span {
     width: 24px;

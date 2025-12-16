@@ -33,7 +33,11 @@
         <a href="../pages/admin-dashboard.html"
           ><button>Data Analytics</button></a
         >
-        <a href="../pages/admin-orders.html"><button>Orders</button></a>
+        <a href="admin-orders.html" class="sidebar-link orders-link">
+  <span class="sidebar-text">Orders</span>
+  <span id="ordersBadge" class="orders-badge hidden">0</span>
+</a>
+
         <a href="../pages/admin-manage-content.html"
           ><button>Manage Contents</button></a
         >
@@ -142,7 +146,7 @@
       </div>
     </div>
 
-    <script src="../script/admin-common.js"></script>
+    <script type="module" src="../script/admin-common.js"></script>
     <script type="module" src="../script/admin-feedback.js"></script>
   </body>
 </html>

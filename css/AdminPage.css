@@ -845,6 +845,7 @@ section.active {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
   flex-wrap: wrap;
+  position: relative;
 }
 .orderNumber {
   font-size: 1.5rem;
@@ -1683,4 +1684,94 @@ details summary {
 #closeOrderModal:hover {
   background: #914068;
   transform: scale(1.05);
+}
+/* Orders sidebar link */
+/* Orders sidebar link – styled like other sidebar buttons */
+.orders-link {
+  width: 100%;
+  height: 45px;
+
+  background-color: #ead1dc;
+  color: #4c1130;
+
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 14px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 12px;
+  margin-bottom: 10px;
+
+  text-decoration: none;
+  cursor: pointer;
+
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+/* Hover – matches other buttons */
+.orders-link:hover {
+  background-color: #741b47;
+  color: #ead1dc;
+  transform: scale(1.03);
+}
+
+/* Orders text */
+.orders-link .sidebar-text {
+  pointer-events: none;
+}
+
+
+
+/* Orders notification badge */
+/* Orders badge */
+.orders-badge {
+  min-width: 20px;
+  height: 20px;
+
+  padding: 0 6px;
+  margin-left: 8px;
+
+  background: #e63946;
+  color: #fff;
+
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 20px;
+  text-align: center;
+
+  border-radius: 999px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  box-shadow: 0 0 0 2px #fff;
+}
+
+
+.orders-badge.hidden {
+  display: none;
+}
+/* ===== NEW ORDER BADGE ===== */
+/* ===== NEW ORDER BADGE ===== */
+/* Small inline NEW badge beside customer name */
+.inline-new-badge {
+  background: #ff4757;
+  color: white;
+  font-size: 11px;
+  font-weight: bold;
+  padding: 3px 6px;
+  border-radius: 6px;
+  margin-left: 8px;
+  vertical-align: middle;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.05); opacity: 0.85; }
+  100% { transform: scale(1); opacity: 1; }
 }

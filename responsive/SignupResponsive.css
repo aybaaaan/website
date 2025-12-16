@@ -2,6 +2,16 @@
    2. MOBILE SPECIFIC OVERRIDES (Max-width)
    ========================================= */
 @media (max-width: 768px) {
+  .logo-content {
+    width: 60%;
+  }
+  .logo img {
+    height: 40px;
+    width: 50px;
+  }
+  .title-header {
+    font-size: 16px;
+  }
   .footer {
     padding: 26px 45px 26px 67px;
   }
@@ -13,7 +23,6 @@
   }
 }
 
-
 /* =========================================
    3. TABLET SCREENS (Min-width: 768px)
    ========================================= */
@@ -22,11 +31,13 @@
     padding: 14px 32px;
   }
 
-  .logo {
-    font-size: 26px;
-    line-height: 33px;
+  .logo img {
+    margin-left: 35px;
+    font-size: 24px;
   }
-
+  .title-header {
+    font-size: 24px;
+  }
   .create-account-container {
     max-width: 500px;
     padding: 38px;
@@ -74,7 +85,6 @@
     margin: 42px;
   }
 }
-
 
 /* =========================================
    4. DESKTOP SCREENS (Min-width: 1024px)
