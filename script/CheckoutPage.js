@@ -168,27 +168,20 @@ const ordersRef = ref(db, "Order");
 
 // ===================== ADDED: BARANGAY CONFIG & HELPER =====================
 const allowedBarangays = [
-  "Kaybagal Center",
-  "Kaybagal North",
-  "Kaybagal South",
-  "Maharlika East",
-  "Maharlika West",
-  "Maitim 2nd East",
-  "Maitim 2nd West",
-  "Patutong Malaki North",
-  "Patutong Malaki South",
-  "San Jose",
-  "Silang Crossing West",
+  "Kaybagal Center", "Kaybagal North", "Kaybagal South",
+  "Maharlika East", "Maharlika West",
+  "Maitim 2nd East", "Maitim 2nd West",
+  "Patutong Malaki North", "Patutong Malaki South",
+  "San Jose", "Silang Crossing West"
 ];
 
 function populateBarangays() {
   const select = document.getElementById("barangay-select");
   if (!select) return;
+  
+  select.innerHTML = '<option value="" disabled selected>Select Barangay</option>';
 
-  select.innerHTML =
-    '<option value="" disabled selected>Select Barangay</option>';
-
-  allowedBarangays.forEach((brgy) => {
+  allowedBarangays.forEach(brgy => {
     const option = document.createElement("option");
     option.value = brgy;
     option.textContent = brgy;
@@ -231,21 +224,21 @@ async function loadUserProfile() {
         data.phone && data.phone !== "Not set" ? data.phone : "";
 
       // Load Address (NEW LOGIC for Split Inputs)
-      if (data.address && typeof data.address === "object") {
+      if (data.address && typeof data.address === 'object') {
         const addr = data.address;
-        const safeVal = (val) => (val && val !== "Not set" ? val : "");
+        const safeVal = (val) => (val && val !== "Not set") ? val : "";
 
         // Fill separate inputs
         const houseInput = document.getElementById("house-no");
         const streetInput = document.getElementById("street");
         const barangaySelect = document.getElementById("barangay-select");
 
-        if (houseInput) houseInput.value = safeVal(addr.houseno);
-        if (streetInput) streetInput.value = safeVal(addr.street);
-
+        if(houseInput) houseInput.value = safeVal(addr.houseno);
+        if(streetInput) streetInput.value = safeVal(addr.street);
+        
         // Only select barangay if it's in our allowed list
         if (barangaySelect && allowedBarangays.includes(addr.barangay)) {
-          barangaySelect.value = addr.barangay;
+            barangaySelect.value = addr.barangay;
         }
       }
     } else {
@@ -254,6 +247,18 @@ async function loadUserProfile() {
   } catch (err) {
     console.error("Error loading user profile:", err);
   }
+}
+
+function parseAddress(fullAddress) {
+  const parts = fullAddress.split(",").map((p) => p.trim());
+
+  return {
+    houseno: parts[0] || "",
+    street: parts[1] || "",
+    barangay: parts[2] || "",
+    city: parts[3] || "",
+    province: parts[4] || "",
+  };
 }
 
 // ===================== NAVIGATION HELPERS =====================
@@ -475,6 +480,7 @@ checkoutForm.addEventListener("submit", async (e) => {
   }
 
   // --- TIME & DATE VALIDATION ---
+  // --- TIME & DATE VALIDATION ---
   const now = new Date();
   const selectedDateTime = new Date(`${deliveryDate}T${deliveryTime}`);
 
@@ -511,6 +517,7 @@ checkoutForm.addEventListener("submit", async (e) => {
   const currentTime = new Date();
 
   // Format nicely for saving
+  // Format nicely for saving
   const userOrderDate = currentTime.toLocaleDateString("en-US", {
     year: "numeric",
     month: "2-digit",
@@ -528,11 +535,11 @@ checkoutForm.addEventListener("submit", async (e) => {
 
   // Object format for User Profile (Future Auto-fill)
   const addressObject = {
-    houseno: houseNo,
-    street: street,
-    barangay: selectedBarangay,
-    city: "Tagaytay",
-    province: "Cavite",
+      houseno: houseNo,
+      street: street,
+      barangay: selectedBarangay,
+      city: "Tagaytay",
+      province: "Cavite"
   };
 
   const orderData = {
@@ -540,6 +547,7 @@ checkoutForm.addEventListener("submit", async (e) => {
     userId: currentUser.uid,
     userEmail: currentUser.email,
     name,
+    address: fullAddressString, // SAVED AS STRING
     address: fullAddressString, // SAVED AS STRING
     contact,
     deliveryDate,
@@ -556,42 +564,41 @@ checkoutForm.addEventListener("submit", async (e) => {
 
   try {
     // Save to Realtime Database
+    // Save to Realtime Database
     await push(ordersRef, orderData);
 
-    /*   // ======================== EMAILJS ADMIN NOTIFICATION ========================
-const emailParams = {
-  orderID: orderID,
-  userEmail: currentUser.email,
-  name: name,
-  contact: contact,
-  address: address,
-  orderDate: userOrderDate,
-  orderTime: userOrderTime,
-  deliveryDate: deliveryDate,
-  deliveryTime: deliveryTime,
-  payment: payment,
-  status: "pending",
-  order_list: orders
-    .map(
-      item =>
-        `${item.name} (Qty: ${item.qty}) — ₱${(item.price * item.qty).toFixed(2)}`
-    )
-    .join("\n"),
-  total: totalEl.textContent
-};
+    /*======================== EMAILJS ADMIN NOTIFICATION ========================
+    const emailParams = {
+      orderID: orderID,
+      userEmail: currentUser.email,
+      name: name,
+      contact: contact,
+      address: fullAddressString, // Used the new complete address variable
+      orderDate: userOrderDate,
+      orderTime: userOrderTime,
+      deliveryDate: deliveryDate,
+      deliveryTime: deliveryTime,
+      payment: payment,
+      status: "pending",
+      order_list: orders
+        .map(
+          item =>
+            `${item.name} (Qty: ${item.qty}) — ₱${(item.price * item.qty).toFixed(2)}`
+        )
+        .join("\n"),
+      total: totalEl.textContent
+    };
 
-emailjs
-  .send("service_7vla50x", "template_s96a7yg", emailParams)
-  .then(() => {
-    console.log("📧 EmailJS: Admin notified successfully");
-  })
-  .catch((err) => {
-    console.error("❌ EmailJS failed:", err);
-  }); 
-// ========================================================================
+    emailjs
+      .send("service_7vla50x", "template_s96a7yg", emailParams)
+      .then(() => {
+        console.log("📧 EmailJS: Admin notified successfully");
+      })
+      .catch((err) => {
+        console.error("❌ EmailJS failed:", err);
+      }); 
 */
-
-    // Update user profile in Firestore
+    // Update user profile in Firestore with STRUCTURED ADDRESS
     const userRef = doc(fs, "users", currentUser.uid);
 
     await setDoc(
@@ -600,6 +607,7 @@ emailjs
         email: currentUser.email,
         name,
         phone: contact,
+        address: addressObject, // store as object
         address: addressObject, // store as object
       },
       { merge: true }
