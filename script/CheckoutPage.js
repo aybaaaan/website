@@ -247,7 +247,6 @@ async function loadUserProfile() {
   }
 }
 
-// Function parseAddress removed as we are now using structured objects
 
 // ===================== NAVIGATION HELPERS =====================
 function goToMenuPage() {
