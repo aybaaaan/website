@@ -13,7 +13,11 @@
     font-size: 16px;
   }
   .footer {
-    padding: 26px 45px 26px 67px;
+    padding: 20px;
+  }
+  .footer-logo img {
+    height: 7rem;
+    width: 10rem;
   }
 
   .footer-content {
@@ -85,7 +89,6 @@
     margin: 42px;
   }
 }
-
 /* =========================================
    4. DESKTOP SCREENS (Min-width: 1024px)
    ========================================= */
@@ -100,7 +103,7 @@
     margin-left: 4px;
   }
 
-  .create-account-container {
+  .login-account-container {
     max-width: 600px;
     padding: 48px;
     gap: 27px;
@@ -132,7 +135,7 @@
     margin-top: 34px;
   }
 
-  .signin-link {
+  .signup-link {
     font-size: 16px;
     line-height: 18px;
     margin-top: 14px;

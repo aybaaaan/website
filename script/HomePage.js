@@ -19,17 +19,6 @@ function goToDetails(name, price, img, desc) {
 }
 
 // ===================== MENU NAVIGATION =====================
-document.addEventListener("DOMContentLoaded", () => {
-  const params = new URLSearchParams(window.location.search);
-  const active = params.get("active");
-
-  if (active === "menu") {
-    const menuLink = document.querySelector(".nav-item[href='#menu']");
-    if (menuLink) {
-      menuLink.classList.add("active");
-    }
-  }
-});
 
 // ===================== FORMAT PRICE =====================
 function formatPHP(n) {

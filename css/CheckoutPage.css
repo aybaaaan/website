@@ -29,7 +29,7 @@ body::before {
 
 /* ====== Header ====== */
 .header {
-  background: #741b47;
+  background: linear-gradient(to right, #4c1130da, #741b47da);
   color: white;
   display: flex;
   justify-content: space-between;
@@ -293,7 +293,7 @@ body::before {
 /* ====== Footer ====== */
 .footer {
   text-align: center;
-  background: #741b47;
+  background: linear-gradient(to right, #4c1130da, #741b47da);
   color: white;
   padding: 14px;
   font-size: 14px;

@@ -39,6 +39,12 @@ body {
   align-items: center;
   gap: 12px;
 }
+.logo-content2 {
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
 
 .title-header {
   font-size: 24px; /* Default Desktop Size */

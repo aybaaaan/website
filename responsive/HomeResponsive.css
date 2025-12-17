@@ -29,8 +29,10 @@
     justify-content: space-between;
   }
   .logo img {
-    margin-left: 35px;
+    margin-left: 40px;
     font-size: 24px;
+    width: 70px;
+    height: 50px;
   }
   .title-header {
     font-size: 24px;
@@ -100,7 +102,7 @@
     font-size: 1.8rem;
   }
 
- .menu-card {
+  .menu-card {
     width: calc(50% - 20px);
     max-width: 360px;
   }
@@ -161,21 +163,14 @@
   }
 
   /* Footer & About */
+  .footer {
+    padding: 26px 45px 26px 67px;
+  }
+
   .footer-content {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    gap: 30px;
-    margin-left: 0;
+    gap: 20px;
   }
-  .footer-nav-menu,
-  .footer-social-contact {
-    align-items: center;
-  }
-  .footer-title-nav,
-  .footer-title {
-    text-align: center;
-  }
+
   .aboutus-title {
     font-size: 32px;
   }
@@ -213,7 +208,7 @@
   .action-btn {
     padding: 8px 10px;
   }
-   /* Card size */
+  /* Card size */
   .menu-card {
     border-radius: 10px;
     height: 350px;
@@ -261,11 +256,11 @@
     padding: 8px 10px;
   }
   .menu-cards {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr); /* phones */
-  gap: 20px;
-  justify-items: center;
-}
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* phones */
+    gap: 20px;
+    justify-items: center;
+  }
 
   .carousel-item-caption-container {
     position: absolute;
@@ -352,7 +347,14 @@
   .footer {
     padding: 20px;
   }
-  .footer-logo {
-    font-size: 30px;
+
+  .footer-content {
+    margin: 0;
+    font-size: 12px;
+    gap: 12px;
+  }
+  .footer-logo img {
+    height: 4rem;
+    width: 6rem;
   }
 }

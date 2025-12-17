@@ -53,6 +53,13 @@ body {
   gap: 12px;
 }
 
+.logo-content2 {
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
 .title-header {
   font-size: 24px; /* Default Desktop Size */
   font-weight: 600;
@@ -232,7 +239,7 @@ input[type="password"]::-ms-reveal {
   width: 100%;
   padding: 26px 45px 26px 67px;
   display: flex;
-  z-index: -1;
+  z-index: 10;
   background: linear-gradient(to right, #4c1130da, #741b47da);
   box-shadow: #0000003f 0px -6px 6px;
 }
@@ -243,14 +250,18 @@ input[type="password"]::-ms-reveal {
   align-items: flex-start;
   width: 100%;
   max-width: 1440px;
-  margin-left: -4%;
+  margin: 42px;
 }
 
-.footer-logo {
-  font-size: 25px;
-  font-weight: 700;
-  line-height: 26px;
-  color: #c27ba0;
+.footer-logo-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.footer-logo img {
+  height: 10rem;
+  width: 14rem;
 }
 
 .footer-title-nav,
@@ -263,49 +274,75 @@ input[type="password"]::-ms-reveal {
   margin-bottom: 8px;
 }
 
-.footer-nav-menu {
+.footer-nav-menu,
+.footer-social-contact {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  list-style: none;
-  padding: 0;
-  margin: 0;
 }
 
 .footer-nav-menu a {
   text-decoration: none;
-  color: #d8d8d6;
-  font-size: 16px;
-  font-weight: 400;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  line-height: 20px;
-  transition: color 0.3s ease;
-  cursor: pointer;
+  color: #ead1dc;
+  font-weight: 600;
+  position: relative;
+  transition: color 0.3s ease, transform 0.3s ease;
+  padding-right: 5px;
+  margin: 10px;
+}
+
+.footer-nav-menu a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 0%;
+  height: 2px;
+  background: #c27ba0;
+  transition: width 0.3s ease;
+  border-radius: 10px;
 }
 
 .footer-nav-menu a:hover {
-  color: #ffcf78;
+  color: #c27ba0;
+  transform: scale(1.1);
+}
+
+.footer-nav-menu a:hover::after {
+  width: 100%;
+}
+
+.footer-nav-menu a.active {
+  color: #c27ba0;
+  transform: scale(1.1);
+}
+
+.footer-nav-menu a.active::after {
+  width: 100%;
 }
 
 .footer-social-contact {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 8px;
-}
-
-.footer-social-contact .icons {
-  display: flex;
   gap: 12px;
 }
 
-.footer-social-contact img {
-  width: 24px;
-  height: auto;
-  cursor: pointer;
-  transition: transform 0.3s ease;
+.footer-info {
+  font-size: 16px;
+  color: #f0eaea;
+  line-height: 1.6;
+  max-width: 300px;
 }
 
-.footer-social-contact img:hover {
-  transform: scale(1.1);
+.footer-info-email p {
+  color: #ffffff;
+}
+.footer-info-contact p {
+  color: #ffffff;
+}
+
+.footer-info-email,
+.footer-info-contact {
+  color: #ead1dc;
+  font-weight: 600;
+  margin: 10px;
 }
