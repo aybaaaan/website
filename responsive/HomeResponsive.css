@@ -192,19 +192,51 @@
 /* --- MOBILE PHONES (Max Width: 480px) --- */
 @media (max-width: 480px) {
   /* Header */
+  .header {
+    padding: 8px 14px;
+  }
   .logo-content {
-    width: 60%;
+    width: 40%;
   }
   .logo img {
     height: 40px;
     width: 50px;
   }
   .title-header {
-    font-size: 16px;
+    font-size: 12px;
   }
   .hamburger span {
     width: 24px;
     height: 3px;
+  }
+    .nav-menu {
+    position: fixed;
+    top: 64px;
+    left: 0;
+    width: 100%;
+    flex-direction: column;
+    background: linear-gradient(to bottom, #4c1130, #741b47);
+    gap: 6px;
+    padding: 10px 0;
+    z-index: 999;
+  }
+
+  .nav-menu a {
+    font-size: 13px;        /* SMALLER TEXT */
+    padding: 8px 0;         /* LESS HEIGHT */
+    margin: 0;
+    text-align: center;
+  }
+
+  /* Remove hover scale on mobile */
+  .nav-menu a:hover,
+  .nav-menu a.active {
+    transform: none;
+  }
+
+  /* Underline thinner */
+  .nav-menu a::after {
+    height: 1px;
   }
   .header-actions {
     gap: 10px;
@@ -251,15 +283,14 @@
 
   /* Order button */
   .order-btn {
-    font-size: 13px;
-    padding: 4px 14px;
-    border-width: 1.5px;
+    display: none;
   }
 
   /* Bottom spacing */
   .card-bottom {
     padding: 8px 10px;
   }
+
   .menu-cards {
   display: grid;
   grid-template-columns: repeat(2, 1fr); /* phones */
@@ -355,4 +386,68 @@
   .footer-logo {
     font-size: 30px;
   }
+ .order-toast {
+    padding: 6px 8px 22px 8px;
+    border-radius: 5px;
+    font-size: 10px;
+    min-width: 140px;
+    min-height: 60px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+  }
+
+  .order-toast button {
+    padding: 4px 8px;
+    font-size: 10px;
+    bottom: 6px;
+    right: 8px;
+  }
+   .cart-sidebar h2 {
+    font-size: 15px;
+    margin-bottom: 10px;
+  }
+
+  /* ===== CART ITEMS ===== */
+  .cart-item {
+    padding: 8px 0;
+    gap: 8px;
+  }
+
+  .cart-item img {
+    width: 48px;
+    height: 48px;
+  }
+
+  .cart-item .details h4 {
+    font-size: 13px;
+    line-height: 1.2;
+  }
+
+  .cart-item .details p {
+    font-size: 11px;
+  }
+
+  /* ===== QUANTITY CONTROLS ===== */
+  .cart-qty button {
+    width: 22px;
+    height: 22px;
+    font-size: 12px;
+  }
+
+  .cart-qty span {
+    font-size: 11px;
+  }
+
+  /* ===== PRICE / TOTAL ===== */
+  .cart-price,
+  .cart-total {
+    font-size: 13px;
+  }
+
+  /* ===== BUTTONS ===== */
+  .checkout-btn,
+  .clear-cart-btn {
+    padding: 8px;
+    font-size: 13px;
+  }
+  
 }

@@ -333,10 +333,15 @@ body::before {
   padding: 46px;
   border-radius: 14px;
   width: 90%;
-  max-width: 550px;
+  max-width: 600px;
   position: relative;
   animation: fadeIn 0.3s ease-in-out;
+
+  /* ✅ FIX OVERFLOW */
+  max-height: 90vh;        /* never exceed viewport height */
+  overflow-y: auto;        /* scroll inside modal */
 }
+
 
 .modal-actions button {
   margin-top: 1rem;
@@ -394,6 +399,11 @@ body::before {
   flex-direction: column;
 }
 
+#checkoutForm label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #4c1130;
+}
 #checkoutForm button[type="submit"] {
   width: 100%;
   /* full width */

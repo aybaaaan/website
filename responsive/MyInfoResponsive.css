@@ -122,53 +122,112 @@
 
 /* Small phones */
 @media (max-width: 480px) {
-  .nav {
-    padding: 20px 0;
+  /* ===== Global ===== */
+  body {
+    line-height: 1.4;
   }
 
-  .nav a {
-    font-size: 17px;
-    padding: 14px 0;
-  }
-
-  .hamburger span {
-    width: 24px;
-    height: 3px;
-  }
-
+  /* ===== Header ===== */
   .header {
-    padding: 12px 20px;
+    padding: 8px 14px;
   }
 
-  .logo-content {
-    width: 60%;
-  }
   .logo img {
-    height: 40px;
-    width: 50px;
+    height: 3rem;
+    width: 4rem;
   }
+
   .title-header {
-    font-size: 16px;
-  }
-
-  .info-container h1 {
-    font-size: 24px;
-  }
-
-  .info-container p {
     font-size: 15px;
   }
 
-  .back-btn,
-  .change-pass-btn,
-  .button-group button {
-    font-size: 14px;
-    padding: 10px;
+  .header .nav a {
+    font-size: 13px;
+    margin-left: 12px;
   }
 
-  .popup-message {
+  /* ===== Info Container ===== */
+  .info-container {
+    width: 92%;
+    margin: 30px auto;
+    padding: 18px;
+    border-radius: 12px;
+  }
+
+  .info-container h1 {
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+
+  .info-container p,
+  .info-container label {
+    font-size: 13px;
+  }
+
+  .info-container input,
+  .info-container select {
+    padding: 9px 10px;
+    font-size: 13px;
+    margin-bottom: 14px;
+  }
+
+  /* ===== Buttons ===== */
+  .back-btn {
+    padding: 9px 14px;
     font-size: 14px;
+  }
+
+  button {
+    padding: 9px 16px;
+    font-size: 14px;
+  }
+
+  /* ===== Password Section ===== */
+  .password-row label {
+    font-size: 13px;
+  }
+
+  .password-row input {
+    height: 34px;
+    font-size: 13px;
+  }
+
+  .change-pass-btn {
+    height: 34px;
+    font-size: 12px;
+    margin-top: 0; /* remove desktop adjustment */
+  }
+
+  /* ===== Modal ===== */
+  .modal-content {
+    padding: 18px;
+  }
+
+  .modal-content p {
+    font-size: 14px;
+  }
+
+  .modal-content input {
+    font-size: 13px;
+    padding: 8px;
+  }
+
+  .modal-buttons button {
+    font-size: 13px;
+    padding: 8px;
+  }
+
+  /* ===== Popup Message ===== */
+  .popup-message {
+    top: 65px;
+    font-size: 13px;
+    padding: 10px 16px;
     min-width: 200px;
-    top: 60px;
+  }
+
+  /* ===== Footer ===== */
+  .footer {
+    font-size: 12px;
+    padding: 10px;
   }
 }
