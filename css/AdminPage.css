@@ -1147,7 +1147,6 @@ section.active {
 /* ===================================================
    LOGOUT CONFIRMATION MODAL
    =================================================== */
-
 .modal {
   display: none;
   position: fixed;
@@ -1159,6 +1158,8 @@ section.active {
   background-color: rgba(0, 0, 0, 0.4);
   justify-content: center;
   align-items: center;
+  overflow: auto;
+  padding: 20px; 
 }
 
 .modal-content {

@@ -333,3 +333,29 @@ hamburger.addEventListener("click", () => {
   hamburger.classList.toggle("active");
   navMenu.classList.toggle("active");
 });
+
+// ================= PASSWORD VISIBILITY TOGGLE (MODAL ONLY) =================
+const changePasswordBtn = document.getElementById("changePasswordBtn");
+const changePasswordModal = document.getElementById("changePasswordModal");
+
+changePasswordBtn.addEventListener("click", () => {
+  changePasswordModal.style.display = "flex";
+
+  // Add toggle functionality only when modal is shown
+  const passwordWrappers = changePasswordModal.querySelectorAll(".password-wrapper");
+
+  passwordWrappers.forEach((wrapper) => {
+    const input = wrapper.querySelector("input");
+    const icon = wrapper.querySelector("img");
+
+    // Prevent adding multiple event listeners
+    if (!icon.dataset.listener) {
+      icon.addEventListener("click", () => {
+        const isHidden = input.type === "password";
+        input.type = isHidden ? "text" : "password";
+        icon.src = isHidden ? "../icons/view.png" : "../icons/hide.png";
+      });
+      icon.dataset.listener = "true";
+    }
+  });
+});

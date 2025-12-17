@@ -202,12 +202,13 @@ body {
 
 .modal-content {
   background: #fff;
-  padding: 25px;
+  padding: 20px 25px;
   border-radius: 12px;
-  width: 90%;
-  max-width: 450px;
+  width: 450px;       /* slightly wider to fit labels/input in one line */
+  max-width: 90%;
   text-align: left;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  z-index: 10
 }
 
 .modal-content p {
@@ -367,4 +368,52 @@ input:disabled {
   font-size: 14px;
   font-weight: 600;
   margin-top: auto;
+}
+.password-wrapper img.toggle-icon {
+  width: 24px;      /* adjust width */
+  height: 24px;     /* adjust height */
+  cursor: pointer;  /* shows pointer on hover */
+  vertical-align: middle; /* aligns with input */
+  margin-left: 8px; /* spacing from input */
+}
+.password-wrapper {
+  display: flex;
+  flex-direction: column; /* label on top */
+  margin-bottom: 15px;
+}
+
+
+.input-with-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.input-with-icon input {
+  width: 100%;
+  padding-right: 35px;
+  box-sizing: border-box;
+}
+
+.input-with-icon img.toggle-icon {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+/* Input Field Eye Icon Design */
+input[type="password"]::-webkit-password-toggle-button,
+input[type="password"]::-ms-reveal {
+  display: none;
+  -webkit-appearance: none;
+}
+
+/*layering*/
+#changePasswordModal {
+    z-index: 50;
 }
