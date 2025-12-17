@@ -327,6 +327,106 @@ section.active {
   padding: 2px;
 }
 
+/* Modal overlay - covers the entire screen with a semi-transparent background */
+#cancel-reason-modal {
+  display: none; /* Hidden by default; use JavaScript to show it */
+  position: fixed;
+  z-index: 1000; /* High z-index to appear on top */
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black overlay */
+}
+
+/* Modal content - the actual dialog box */
+.modal-content {
+  background-color: #fff;
+  margin: 15% auto; /* Center vertically and horizontally */
+  padding: 20px;
+  border: 1px solid #888;
+  border-radius: 8px; /* Rounded corners */
+  width: 80%; /* Responsive width */
+  max-width: 500px; /* Max width for larger screens */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+}
+
+/* Close button (X) - positioned at the top-right of the modal */
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+}
+
+/* Heading styling */
+.modal-content h3 {
+  margin-top: 0;
+  color: #333;
+}
+
+/* Paragraph styling */
+.modal-content p {
+  margin-bottom: 15px;
+  color: #666;
+}
+
+/* Textarea styling */
+#cancel-reason-text {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 14px;
+  resize: vertical; /* Allow vertical resizing only */
+}
+
+/* Button container - flexbox for horizontal alignment */
+.modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px; /* Space between buttons */
+  margin-top: 20px;
+}
+
+/* Submit button styling */
+#cancel-reason-submit {
+  background-color: #dc3545; /* Red for cancel action */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+#cancel-reason-submit:hover {
+  background-color: #c82333; /* Darker red on hover */
+}
+
+/* Cancel button styling */
+#cancel-reason-cancel {
+  background-color: #6c757d; /* Gray for neutral action */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+#cancel-reason-cancel:hover {
+  background-color: #5a6268; /* Darker gray on hover */
+}
+
 .user-section,
 .data-section,
 .sales-report {
@@ -1159,7 +1259,7 @@ section.active {
   justify-content: center;
   align-items: center;
   overflow: auto;
-  padding: 20px; 
+  padding: 20px;
 }
 
 .modal-content {
@@ -1447,7 +1547,7 @@ section.active {
   align-items: flex-start;
   gap: 10px;
   margin: 20px 0;
-  flex-wrap: wrap; 
+  flex-wrap: wrap;
 }
 .rating-btn {
   padding: 8px 16px;
@@ -1458,7 +1558,8 @@ section.active {
   font-weight: 500;
   border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  transition: background-color 0.3s ease, color 0.3s ease,
+    border-color 0.3s ease;
 }
 
 .rating-btn:hover {
@@ -1760,8 +1861,6 @@ details summary {
   pointer-events: none;
 }
 
-
-
 /* Orders notification badge */
 /* Orders badge */
 .orders-badge {
@@ -1788,7 +1887,6 @@ details summary {
   box-shadow: 0 0 0 2px #fff;
 }
 
-
 .orders-badge.hidden {
   display: none;
 }
@@ -1808,9 +1906,18 @@ details summary {
 }
 
 @keyframes pulse {
-  0% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.05); opacity: 0.85; }
-  100% { transform: scale(1); opacity: 1; }
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.85;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 .filters {
@@ -1867,4 +1974,3 @@ details summary {
   transform: scale(1.03);
   background-color: #e0d9d9;
 }
-

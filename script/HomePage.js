@@ -745,53 +745,40 @@ function getStatusColor(status) {
 function showOrUpdateOrderToast(order) {
   const orderID = order.orderID;
   const status = order.status;
+
+  // Use statusTimestamp from admin update
+  const timestamp = order.statusTimestamp || order.timestamp || order.createdAt;
+
+  // Only show toast if this status change is newer than last dismissed
+  const lastDismissed = dismissedOrders[orderID]?.timestamp || 0;
+  if (timestamp <= lastDismissed) return;
+
   const container = document.getElementById("orderStatusToast");
   const color = getStatusColor(status);
 
-  // Use timestamp from admin update
-  const timestamp = order.statusTimestamp
-  ? new Date(order.statusTimestamp).toLocaleString("en-PH", {
-      dateStyle: "medium",
-      timeStyle: "short",
-    })
-  : new Date(order.timestamp || order.createdAt).toLocaleString("en-PH", {
-      dateStyle: "medium",
-      timeStyle: "short",
-    });
-
-
-  orderTimestamps[orderID] = timestamp;
-
-  if (dismissedOrders[orderID] === status) return;
-
   if (orderToasts[orderID]) {
-    // Update existing toast
     const toast = orderToasts[orderID];
     toast.querySelector(
       ".status-text"
     ).innerHTML = `UPDATE: OrderID ${orderID} status is now 
-   <span class="order-status" style="color:${color}">
-     ${status}
-   </span>`;
-    toast.querySelector(".status-text");
+      <span class="order-status" style="color:${color}">${status}</span>`;
     toast.querySelector(
       ".status-time"
-    ).textContent = `Status Updated: ${timestamp}`;
+    ).textContent = `Status Updated: ${new Date(timestamp).toLocaleString(
+      "en-PH"
+    )}`;
     orderStatuses[orderID] = status;
   } else {
-    // Create new toast
     const toast = document.createElement("div");
     toast.classList.add("order-toast");
     toast.innerHTML = `
       <div>
         <p class="status-text">
           UPDATE: OrderID ${orderID} status is now
-          <span class="order-status" style="color:${color}">
-            ${status}
-          </span>
+          <span class="order-status" style="color:${color}">${status}</span>
         </p>
         <small class="status-time" style="opacity:0.8;">
-          Status Updated: ${timestamp}
+          Status Updated: ${new Date(timestamp).toLocaleString("en-PH")}
         </small>
       </div>
       <button>OK</button>
@@ -802,7 +789,7 @@ function showOrUpdateOrderToast(order) {
     toast.querySelector("button").addEventListener("click", () => {
       toast.remove();
       orderToasts[orderID] = null;
-      dismissedOrders[orderID] = status;
+      dismissedOrders[orderID] = { status, timestamp }; // store timestamp too
       saveDismissedOrders();
     });
 

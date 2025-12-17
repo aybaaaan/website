@@ -48,29 +48,29 @@
         
         <h4 class="title-tag">Orders</h4>
         <div class="filters">
-  <label>
-    Customer Name:
-    <input
-      type="text"
-      id="searchName"
-      placeholder="Enter customer name"
-    />
-  </label>
+          <label>
+            Customer Name:
+            <input
+              type="text"
+              id="searchName"
+              placeholder="Enter customer name"
+            />
+          </label>
 
-  <label>
-    Order ID:
-    <input
-      type="text"
-      id="searchOrderId"
-      placeholder="Enter order ID"
-    />
-  </label>
-</div>
+          <label>
+            Order ID:
+            <input
+              type="text"
+              id="searchOrderId"
+              placeholder="Enter order ID"
+            />
+          </label>
+        </div>
 
-<div class="filter-actions">
-  <button id="searchOrders">Search</button>
-  <button id="clearFilters">Clear</button>
-</div>
+        <div class="filter-actions">
+          <button id="searchOrders">Search</button>
+          <button id="clearFilters">Clear</button>
+        </div>
 
         <section id="section-orders">
           <h4>Orders List</h4>
@@ -84,6 +84,20 @@
 
 
       </main>
+
+      <!-- CANCEL REASON MODAL -->
+<div id="cancel-reason-modal" class="modal">
+  <div class="modal-content">
+    <span id="close-cancel-reason" class="close">&times;</span>
+    <h3>Cancel Order Reason</h3>
+    <p>Please provide a reason for cancelling this order:</p>
+    <textarea id="cancel-reason-text" rows="4" placeholder="Enter reason here..."></textarea>
+    <div class="modal-buttons">
+      <button id="cancel-reason-submit">Submit</button>
+      <button id="cancel-reason-cancel">Cancel</button>
+    </div>
+  </div>
+</div>
 
     <div id="logoutModal" class="modal">
       <div class="modal-content">
