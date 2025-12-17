@@ -67,8 +67,27 @@ onValue(ordersRef, (snapshot) => {
   // ✅ SORT — NEWEST FIRST
   ordersArrayCards.sort((a, b) => b.timestamp - a.timestamp);
 
+  const sourceArray = filteredOrdersCards ?? ordersArrayCards;
+const totalPages = Math.ceil(sourceArray.length / ordersPerPageCards);
+
+if (currentPageCards > totalPages) {
   currentPageCards = 1;
-  renderOrdersPage();
+}
+
+
+  // 🔁 Re-apply filter after live update
+if (filteredOrdersCards !== null) {
+  filteredOrdersCards = ordersArrayCards.filter((order) => {
+    const customerName = String(order.name || "").toLowerCase();
+    const orderID = String(order.orderID || "").toLowerCase();
+
+    return (
+      customerName.includes(searchNameInput.value.toLowerCase().trim()) &&
+      orderID.includes(searchOrderIdInput.value.toLowerCase().trim())
+    );
+  });
+}
+renderOrdersPage();
 
 
 });
@@ -215,10 +234,9 @@ row.addEventListener("click", () => {
 
     // ============ STATUS DROPDOWN ============
     const statusDropdown = row.querySelector(".order-status-dropdown");
-    const status = (data.status || "PENDING").toUpperCase();
     const deleteBtn = row.querySelector(".delete-order-btn");
 
-    statusDropdown.value = status;
+    statusDropdown.value = (data.status || "PENDING").toUpperCase();
 
     const setTextColor = () => {
       switch (statusDropdown.value) {
@@ -250,7 +268,9 @@ row.addEventListener("click", () => {
       const userId = data.userId;
 
       const getMessage = (status) => {
-        switch (status.toLowerCase()) {
+        const normalized = status.toLowerCase().replace(/\s+/g, "");
+
+        switch (normalized) {
           case "accepted":
             return "Mark this order as Accepted?";
           case "preparing":
@@ -270,10 +290,11 @@ row.addEventListener("click", () => {
 
       showStatusConfirm(getMessage(newStatus), (confirmed) => {
         if (!confirmed) {
-          statusDropdown.value = status;
-          setTextColor();
-          return;
-        }
+  statusDropdown.value = (data.status || "PENDING").toUpperCase();
+  setTextColor();
+  return;
+}
+
 
         setTextColor();
 
@@ -287,6 +308,7 @@ row.addEventListener("click", () => {
           statusTimestamp: Date.now(),
         })
           .then(async () => {
+            
             if (upperStatus === "DELIVERED") {
               // Archive delivered order
               const orderSnapshot = await get(ref(db, `Order/${orderKey}`));

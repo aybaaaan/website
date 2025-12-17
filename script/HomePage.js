@@ -761,14 +761,15 @@ function showOrUpdateOrderToast(order) {
 
   // Use timestamp from admin update
   const timestamp = order.statusTimestamp
-    ? new Date(order.statusTimestamp).toLocaleString("en-PH", {
-        dateStyle: "medium",
-        timeStyle: "short",
-      })
-    : new Date().toLocaleString("en-PH", {
-        dateStyle: "medium",
-        timeStyle: "short",
-      });
+  ? new Date(order.statusTimestamp).toLocaleString("en-PH", {
+      dateStyle: "medium",
+      timeStyle: "short",
+    })
+  : new Date(order.timestamp || order.createdAt).toLocaleString("en-PH", {
+      dateStyle: "medium",
+      timeStyle: "short",
+    });
+
 
   orderTimestamps[orderID] = timestamp;
 

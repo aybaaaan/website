@@ -137,6 +137,14 @@
   .order-card-right {
     align-items: flex-start;
   }
+  .rating-filter {
+    gap: 8px;
+  }
+
+  .rating-btn {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
 }
 
 /* Small Phones */

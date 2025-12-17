@@ -1440,6 +1440,42 @@ section.active {
   max-height: 860px;
   overflow-y: auto;
 }
+.rating-filter {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 20px 0;
+  flex-wrap: wrap; 
+}
+.rating-btn {
+  padding: 8px 16px;
+  border: 1px solid #ddd;
+  background-color: #f9f9f9;
+  color: #333;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.rating-btn:hover {
+  background-color: #e0e0e0;
+  border-color: #ccc;
+}
+
+.rating-btn.active {
+  background-color: #a64d79;
+  color: #f8f8f8;
+  border-color: #a64d79;
+}
+
+.rating-btn.active:hover {
+  background-color: #ead1dc;
+  color: #4c1130;
+  border-color: #4c1130;
+}
 .admin-feedback-card {
   border-left: 5px solid #a64d79;
   background-color: #f8f8f8;
@@ -1818,8 +1854,16 @@ details summary {
   background-color: #a64d79;
   color: #fff;
 }
-
+#searchOrders:hover {
+  transform: scale(1.03);
+  background-color: #914068;
+}
 #clearFilters {
   background-color: #ead1dc;
   color: #4c1130;
 }
+#clearFilters:hover {
+  transform: scale(1.03);
+  background-color: #e0d9d9;
+}
+

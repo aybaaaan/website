@@ -184,10 +184,18 @@ onAuthStateChanged(auth, (user) => {
         return;
       }
 
-      // Sort orders by deliveryDate (latest first)
-      userOrders.sort(
-        (a, b) => new Date(b.deliveryDate) - new Date(a.deliveryDate)
-      );
+    userOrders.sort((a, b) => {
+  const timeA = a.timestamp?.seconds
+    ? a.timestamp.seconds * 1000
+    : new Date(a.timestamp || 0).getTime();
+
+  const timeB = b.timestamp?.seconds
+    ? b.timestamp.seconds * 1000
+    : new Date(b.timestamp || 0).getTime();
+
+  return timeB - timeA; // newest first
+});
+
 
       // --- START GROUPING LOGIC ---
       userOrders.forEach((order) => {

@@ -406,6 +406,7 @@ body {
   right: 0;
   top: 100%;
   background: #f7f2f6;
+  border: #a64d79 2px solid;
   min-width: 200px;
   box-shadow: 0px 8px 20px rgba(14, 13, 13, 0.1);
   border-radius: 8px;

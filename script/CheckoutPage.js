@@ -439,17 +439,7 @@ async function generateOrderID() {
 checkoutForm.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  if (isSubmittingOrder) return;
-  isSubmittingOrder = true;
-
-  // Disable submit button immediately
-  const submitBtn = checkoutForm.querySelector("button[type='submit']");
-    if (submitBtn) {
-    submitBtn.disabled = true;
-    submitBtn.textContent = "Placing Order...";
-    submitBtn.style.opacity = "0.7";
-    submitBtn.style.cursor = "not-allowed";
-  }
+  
 
   const orderID = await generateOrderID();
   const name = document.getElementById("name").value.trim();
@@ -513,6 +503,17 @@ checkoutForm.addEventListener("submit", async (e) => {
     return;
   }
 
+  if (isSubmittingOrder) return;
+  isSubmittingOrder = true;
+
+  // Disable submit button immediately
+  const submitBtn = checkoutForm.querySelector("button[type='submit']");
+    if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Placing Order...";
+    submitBtn.style.opacity = "0.7";
+    submitBtn.style.cursor = "not-allowed";
+  }
   // Get the user's current local date and time (when they clicked SUBMIT)
   const currentTime = new Date();
 
