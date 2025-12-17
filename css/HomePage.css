@@ -781,6 +781,7 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
   text-align: left;
+  margin-bottom: 15px;
 }
 
 .card-bottom {

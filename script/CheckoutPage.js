@@ -532,7 +532,7 @@ checkoutForm.addEventListener("submit", async (e) => {
 
   // --- PREPARE ADDRESS DATA ---
   // String format for Order (Admin/Rider view)
-  const fullAddressString = `House No. ${houseNo}, Steet. ${street}, Brgy. ${selectedBarangay}, Tagaytay, Cavite`;
+  const fullAddressString = `House No. ${houseNo}, Street. ${street}, Brgy. ${selectedBarangay}, Tagaytay, Cavite`;
 
   // Object format for User Profile (Future Auto-fill)
   const addressObject = {
