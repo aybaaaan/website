@@ -129,9 +129,30 @@ provinceInput.value = "Cavite";
 const emailEl = document.getElementById("email");
 const editBtn = document.getElementById("editBtn");
 
-// ================= PHONE ONLY VALIDATION =================
+// ================= PHONE ONLY VALIDATION + 11 DIGIT LIMIT =================
 phoneInput.addEventListener("input", (e) => {
-  e.target.value = e.target.value.replace(/\D/g, "");
+  // Remove non-digits
+  let value = e.target.value.replace(/\D/g, "");
+
+  // Limit to 11 digits
+  if (value.length > 11) {
+    value = value.slice(0, 11);
+  }
+
+  e.target.value = value;
+});
+
+// ================= PHONE ONLY VALIDATION + 11 DIGIT LIMIT =================
+housenoInput.addEventListener("input", (e) => {
+  // Remove non-digits
+  let value = e.target.value.replace(/\D/g, "");
+
+  // Limit to 4 digits
+  if (value.length > 4) {
+    value = value.slice(0, 4);
+  }
+
+  e.target.value = value;
 });
 
 // ================= AUTH STATE =================
@@ -193,6 +214,22 @@ editBtn.addEventListener("click", async () => {
     editBtn.textContent = "Save Changes";
     nameInput.focus();
   } else {
+    nameInput.disabled = false;
+    phoneInput.disabled = false;
+    housenoInput.disabled = false;
+    streetInput.disabled = false;
+    barangayInput.disabled = false;
+
+    if (
+      !nameInput.value.trim() ||
+      !phoneInput.value.trim() ||
+      !housenoInput.value.trim() ||
+      !streetInput.value.trim() ||
+      !barangayInput.value.trim()
+    ) {
+      return showError("Please fill out all required fields.");
+    }
+
     editing = false;
 
     nameInput.disabled = true;
@@ -342,7 +379,8 @@ changePasswordBtn.addEventListener("click", () => {
   changePasswordModal.style.display = "flex";
 
   // Add toggle functionality only when modal is shown
-  const passwordWrappers = changePasswordModal.querySelectorAll(".password-wrapper");
+  const passwordWrappers =
+    changePasswordModal.querySelectorAll(".password-wrapper");
 
   passwordWrappers.forEach((wrapper) => {
     const input = wrapper.querySelector("input");

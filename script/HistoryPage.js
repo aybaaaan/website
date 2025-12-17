@@ -184,18 +184,17 @@ onAuthStateChanged(auth, (user) => {
         return;
       }
 
-    userOrders.sort((a, b) => {
-  const timeA = a.timestamp?.seconds
-    ? a.timestamp.seconds * 1000
-    : new Date(a.timestamp || 0).getTime();
+      userOrders.sort((a, b) => {
+        const timeA = a.timestamp?.seconds
+          ? a.timestamp.seconds * 1000
+          : new Date(a.timestamp || 0).getTime();
 
-  const timeB = b.timestamp?.seconds
-    ? b.timestamp.seconds * 1000
-    : new Date(b.timestamp || 0).getTime();
+        const timeB = b.timestamp?.seconds
+          ? b.timestamp.seconds * 1000
+          : new Date(b.timestamp || 0).getTime();
 
-  return timeB - timeA; // newest first
-});
-
+        return timeB - timeA; // newest first
+      });
 
       userOrders.forEach((order) => {
         const displayDate = order.deliveryDate
@@ -289,7 +288,17 @@ onAuthStateChanged(auth, (user) => {
                 <div style="color: ${statusColor}; font-weight: 700; text-transform: uppercase; font-size: 14px;">
                     ${order.status || "pending"}
                 </div>
+
+                
             </div>
+
+            ${
+              order.status === "CANCELLED" && order.cancelReason
+                ? `<div class="cancel-reason">
+                    Reason: <p> ${order.cancelReason} </p>
+                  </div>`
+                : ""
+            }
 
             <div class="order-group-items">
                 ${itemsHtml}

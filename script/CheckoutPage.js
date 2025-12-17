@@ -14,8 +14,6 @@ const summaryTotal = document.getElementById("summaryTotal");
 // Payment info box
 const paymentInfo = document.getElementById("paymentInfo");
 
-// Delivery fee
-
 // Load orders from localStorage
 let orders = JSON.parse(localStorage.getItem("cart")) || [];
 let isSubmittingOrder = false;
@@ -119,13 +117,6 @@ if (hamburger && navMenu) {
   );
 }
 
-// ===================== MODAL LOGIC =====================
-const modal = document.getElementById("checkoutModal");
-const closeModal = document.getElementById("closeModal");
-const timeInput = document.getElementById("delivery-time");
-const checkoutForm = document.getElementById("checkoutForm");
-const dateInput = document.getElementById("delivery-date");
-
 // ===================== FIREBASE CONFIG =====================
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
 import {
@@ -168,20 +159,27 @@ const ordersRef = ref(db, "Order");
 
 // ===================== ADDED: BARANGAY CONFIG & HELPER =====================
 const allowedBarangays = [
-  "Kaybagal Center", "Kaybagal North", "Kaybagal South",
-  "Maharlika East", "Maharlika West",
-  "Maitim 2nd East", "Maitim 2nd West",
-  "Patutong Malaki North", "Patutong Malaki South",
-  "San Jose", "Silang Crossing West"
+  "Kaybagal Center",
+  "Kaybagal North",
+  "Kaybagal South",
+  "Maharlika East",
+  "Maharlika West",
+  "Maitim 2nd East",
+  "Maitim 2nd West",
+  "Patutong Malaki North",
+  "Patutong Malaki South",
+  "San Jose",
+  "Silang Crossing West",
 ];
 
 function populateBarangays() {
   const select = document.getElementById("barangay-select");
   if (!select) return;
-  
-  select.innerHTML = '<option value="" disabled selected>Select Barangay</option>';
 
-  allowedBarangays.forEach(brgy => {
+  select.innerHTML =
+    '<option value="" disabled selected>Select Barangay</option>';
+
+  allowedBarangays.forEach((brgy) => {
     const option = document.createElement("option");
     option.value = brgy;
     option.textContent = brgy;
@@ -224,21 +222,21 @@ async function loadUserProfile() {
         data.phone && data.phone !== "Not set" ? data.phone : "";
 
       // Load Address (NEW LOGIC for Split Inputs)
-      if (data.address && typeof data.address === 'object') {
+      if (data.address && typeof data.address === "object") {
         const addr = data.address;
-        const safeVal = (val) => (val && val !== "Not set") ? val : "";
+        const safeVal = (val) => (val && val !== "Not set" ? val : "");
 
         // Fill separate inputs
         const houseInput = document.getElementById("house-no");
         const streetInput = document.getElementById("street");
         const barangaySelect = document.getElementById("barangay-select");
 
-        if(houseInput) houseInput.value = safeVal(addr.houseno);
-        if(streetInput) streetInput.value = safeVal(addr.street);
-        
+        if (houseInput) houseInput.value = safeVal(addr.houseno);
+        if (streetInput) streetInput.value = safeVal(addr.street);
+
         // Only select barangay if it's in our allowed list
         if (barangaySelect && allowedBarangays.includes(addr.barangay)) {
-            barangaySelect.value = addr.barangay;
+          barangaySelect.value = addr.barangay;
         }
       }
     } else {
@@ -247,18 +245,6 @@ async function loadUserProfile() {
   } catch (err) {
     console.error("Error loading user profile:", err);
   }
-}
-
-function parseAddress(fullAddress) {
-  const parts = fullAddress.split(",").map((p) => p.trim());
-
-  return {
-    houseno: parts[0] || "",
-    street: parts[1] || "",
-    barangay: parts[2] || "",
-    city: parts[3] || "",
-    province: parts[4] || "",
-  };
 }
 
 // ===================== NAVIGATION HELPERS =====================
@@ -326,6 +312,13 @@ function showPopup(message, redirectUrl = null) {
   };
 }
 
+// ===================== MODAL LOGIC =====================
+const modal = document.getElementById("checkoutModal");
+const closeModal = document.getElementById("closeModal");
+const timeInput = document.getElementById("delivery-time");
+const checkoutForm = document.getElementById("checkoutForm");
+const dateInput = document.getElementById("delivery-date");
+
 // FOR DELIVERY DATE INPUT
 // Prevent users from choosing past dates
 const today = new Date();
@@ -358,6 +351,26 @@ dateInput.addEventListener("change", () => {
     timeInput.min = "09:00";
   }
 });
+
+function setDeliveryDateToday() {
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  const mm = String(today.getMonth() + 1).padStart(2, "0");
+  const dd = String(today.getDate()).padStart(2, "0");
+
+  const todayStr = `${yyyy}-${mm}-${dd}`;
+
+  // Set min date (already in your code, but safe to keep)
+  dateInput.min = todayStr;
+
+  // Auto-set value ONLY if empty
+  if (!dateInput.value) {
+    dateInput.value = todayStr;
+
+    // Trigger change event so time rules apply
+    dateInput.dispatchEvent(new Event("change"));
+  }
+}
 
 // ========== Login and Cart Validation ==========
 proceedBtn.addEventListener("click", async () => {
@@ -397,6 +410,12 @@ proceedBtn.addEventListener("click", async () => {
   // Update summary when modal shows
   summarySubtotal.textContent = subtotalEl.textContent;
   summaryTotal.textContent = parseFloat(totalEl.textContent).toFixed(2);
+
+  // OPEN MODAL
+  modal.style.display = "flex";
+
+  // AUTO-SET DELIVERY DATE TO TODAY
+  setDeliveryDateToday();
 });
 
 // ========== Modal Close Logic ==========
@@ -439,8 +458,6 @@ async function generateOrderID() {
 checkoutForm.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  
-
   const orderID = await generateOrderID();
   const name = document.getElementById("name").value.trim();
   const contact = document.getElementById("contact").value.trim();
@@ -469,7 +486,6 @@ checkoutForm.addEventListener("submit", async (e) => {
     return;
   }
 
-  // --- TIME & DATE VALIDATION ---
   // --- TIME & DATE VALIDATION ---
   const now = new Date();
   const selectedDateTime = new Date(`${deliveryDate}T${deliveryTime}`);
@@ -508,7 +524,7 @@ checkoutForm.addEventListener("submit", async (e) => {
 
   // Disable submit button immediately
   const submitBtn = checkoutForm.querySelector("button[type='submit']");
-    if (submitBtn) {
+  if (submitBtn) {
     submitBtn.disabled = true;
     submitBtn.textContent = "Placing Order...";
     submitBtn.style.opacity = "0.7";
@@ -536,11 +552,11 @@ checkoutForm.addEventListener("submit", async (e) => {
 
   // Object format for User Profile (Future Auto-fill)
   const addressObject = {
-      houseno: houseNo,
-      street: street,
-      barangay: selectedBarangay,
-      city: "Tagaytay",
-      province: "Cavite"
+    houseno: houseNo,
+    street: street,
+    barangay: selectedBarangay,
+    city: "Tagaytay",
+    province: "Cavite",
   };
 
   const orderData = {
@@ -548,7 +564,6 @@ checkoutForm.addEventListener("submit", async (e) => {
     userId: currentUser.uid,
     userEmail: currentUser.email,
     name,
-    address: fullAddressString, // SAVED AS STRING
     address: fullAddressString, // SAVED AS STRING
     contact,
     deliveryDate,
@@ -609,7 +624,6 @@ checkoutForm.addEventListener("submit", async (e) => {
         name,
         phone: contact,
         address: addressObject, // store as object
-        address: addressObject, // store as object
       },
       { merge: true }
     );
@@ -635,8 +649,8 @@ checkoutForm.addEventListener("submit", async (e) => {
     alert("Failed to place order. Please try again.");
 
     isSubmittingOrder = false;
-  const submitBtn = checkoutForm.querySelector("button[type='submit']");
-  if (submitBtn) submitBtn.disabled = false;
+    const submitBtn = checkoutForm.querySelector("button[type='submit']");
+    if (submitBtn) submitBtn.disabled = false;
   }
 });
 

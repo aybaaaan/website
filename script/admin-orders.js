@@ -34,7 +34,6 @@ let currentPageCards = 1;
 let ordersArrayCards = [];
 let filteredOrdersCards = null;
 
-
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 const dbFirestore = getFirestore(app);
@@ -68,30 +67,26 @@ onValue(ordersRef, (snapshot) => {
   ordersArrayCards.sort((a, b) => b.timestamp - a.timestamp);
 
   const sourceArray = filteredOrdersCards ?? ordersArrayCards;
-const totalPages = Math.ceil(sourceArray.length / ordersPerPageCards);
+  const totalPages = Math.ceil(sourceArray.length / ordersPerPageCards);
 
-if (currentPageCards > totalPages) {
-  currentPageCards = 1;
-}
-
+  if (currentPageCards > totalPages) {
+    currentPageCards = 1;
+  }
 
   // 🔁 Re-apply filter after live update
-if (filteredOrdersCards !== null) {
-  filteredOrdersCards = ordersArrayCards.filter((order) => {
-    const customerName = String(order.name || "").toLowerCase();
-    const orderID = String(order.orderID || "").toLowerCase();
+  if (filteredOrdersCards !== null) {
+    filteredOrdersCards = ordersArrayCards.filter((order) => {
+      const customerName = String(order.name || "").toLowerCase();
+      const orderID = String(order.orderID || "").toLowerCase();
 
-    return (
-      customerName.includes(searchNameInput.value.toLowerCase().trim()) &&
-      orderID.includes(searchOrderIdInput.value.toLowerCase().trim())
-    );
-  });
-}
-renderOrdersPage();
-
-
+      return (
+        customerName.includes(searchNameInput.value.toLowerCase().trim()) &&
+        orderID.includes(searchOrderIdInput.value.toLowerCase().trim())
+      );
+    });
+  }
+  renderOrdersPage();
 });
-
 
 function renderOrdersPage() {
   ordersContainer.innerHTML = "";
@@ -158,9 +153,7 @@ function renderOrdersPage() {
         <h2>
   ${data.name || "Unknown"}
   ${
-    data.status === "PENDING"
-      ? '<span class="inline-new-badge">NEW</span>'
-      : ''
+    data.status === "PENDING" ? '<span class="inline-new-badge">NEW</span>' : ""
   }
   </h2>
         <p><strong>Address:</strong> ${
@@ -223,14 +216,13 @@ function renderOrdersPage() {
     `;
 
     // ✅ Mark order as seen when admin clicks the card
-row.addEventListener("click", () => {
-  if (data.isSeen === false) {
-    update(ref(db, `Order/${data.key}`), {
-      isSeen: true,
+    row.addEventListener("click", () => {
+      if (data.isSeen === false) {
+        update(ref(db, `Order/${data.key}`), {
+          isSeen: true,
+        });
+      }
     });
-  }
-});
-
 
     // ============ STATUS DROPDOWN ============
     const statusDropdown = row.querySelector(".order-status-dropdown");
@@ -266,6 +258,7 @@ row.addEventListener("click", () => {
       const newStatus = statusDropdown.value;
       const orderKey = data.key;
       const userId = data.userId;
+      const previousStatus = data.status || "PENDING";
 
       const getMessage = (status) => {
         const normalized = status.toLowerCase().replace(/\s+/g, "");
@@ -282,19 +275,35 @@ row.addEventListener("click", () => {
           case "delivered":
             return "Mark this order as Delivered? This will remove it from the view.";
           case "cancelled":
-            return "Are you sure you want to Cancel this order? This will moved into the Archived Orders.";
+            return null; // We'll handle cancelled separately
           default:
             return "Update order status?";
         }
       };
+      if (newStatus.toUpperCase() === "CANCELLED") {
+        // Open cancel reason modal
+        pendingCancelOrder = { statusDropdown, previousStatus, orderKey, data };
+        cancelReasonText.value = ""; // clear previous input
+        cancelReasonModal.style.display = "flex";
+        return;
+      }
 
       showStatusConfirm(getMessage(newStatus), (confirmed) => {
         if (!confirmed) {
-  statusDropdown.value = (data.status || "PENDING").toUpperCase();
-  setTextColor();
-  return;
-}
+          statusDropdown.value = previousStatus.toUpperCase();
+          setTextColor();
+          return;
+        }
 
+        updateOrderStatus(newStatus, orderKey, userId);
+      });
+
+      showStatusConfirm(getMessage(newStatus), (confirmed) => {
+        if (!confirmed) {
+          statusDropdown.value = (data.status || "PENDING").toUpperCase();
+          setTextColor();
+          return;
+        }
 
         setTextColor();
 
@@ -308,7 +317,6 @@ row.addEventListener("click", () => {
           statusTimestamp: Date.now(),
         })
           .then(async () => {
-            
             if (upperStatus === "DELIVERED") {
               // Archive delivered order
               const orderSnapshot = await get(ref(db, `Order/${orderKey}`));
@@ -334,6 +342,72 @@ row.addEventListener("click", () => {
           })
           .catch(console.error);
       });
+    });
+
+    // CANCEL REASON MODAL
+    const cancelReasonModal = document.getElementById("cancel-reason-modal");
+    const cancelReasonText = document.getElementById("cancel-reason-text");
+    const closeCancelReason = document.getElementById("close-cancel-reason");
+    const cancelReasonSubmit = document.getElementById("cancel-reason-submit");
+    const cancelReasonCancel = document.getElementById("cancel-reason-cancel");
+
+    let pendingCancelOrder = null; // Store order data temporarily
+
+    // Close modal
+    closeCancelReason.addEventListener("click", () => {
+      cancelReasonModal.style.display = "none";
+      pendingCancelOrder = null;
+    });
+
+    cancelReasonCancel.addEventListener("click", () => {
+      cancelReasonModal.style.display = "none";
+      pendingCancelOrder = null;
+      // Reset dropdown back to previous status
+      if (pendingCancelOrder) {
+        const { statusDropdown, previousStatus } = pendingCancelOrder;
+        statusDropdown.value = previousStatus;
+        pendingCancelOrder = null;
+      }
+    });
+
+    window.addEventListener("click", (e) => {
+      if (e.target === cancelReasonModal)
+        cancelReasonModal.style.display = "none";
+    });
+
+    cancelReasonSubmit.addEventListener("click", async () => {
+      if (!pendingCancelOrder) return;
+
+      const reason = cancelReasonText.value.trim();
+      if (!reason) {
+        alert("Please enter a reason for cancellation.");
+        return;
+      }
+
+      const { orderKey, statusDropdown, previousStatus, data } =
+        pendingCancelOrder;
+
+      try {
+        // Archive order with reason
+        const orderSnapshot = await get(ref(db, `Order/${orderKey}`));
+        if (!orderSnapshot.exists()) return;
+
+        const orderData = orderSnapshot.val();
+        orderData.status = "CANCELLED";
+        orderData.cancelReason = reason; // Save reason
+        orderData.archivedAt = Date.now();
+
+        await push(ref(db, "OrderHistory"), orderData);
+        await remove(ref(db, `Order/${orderKey}`));
+
+        statusDropdown.value = "CANCELLED";
+        statusDropdown.style.color = "#cc3232";
+      } catch (error) {
+        console.error(error);
+      } finally {
+        cancelReasonModal.style.display = "none";
+        pendingCancelOrder = null;
+      }
     });
 
     // ============ FOOD TOGGLE ============
@@ -369,7 +443,7 @@ document.getElementById("prevPageOrders").addEventListener("click", () => {
 });
 document.getElementById("nextPageOrders").addEventListener("click", () => {
   const sourceArray = filteredOrdersCards ?? ordersArrayCards;
-const totalPages = Math.ceil(sourceArray.length / ordersPerPageCards);
+  const totalPages = Math.ceil(sourceArray.length / ordersPerPageCards);
 
   if (currentPageCards < totalPages) {
     currentPageCards++;
@@ -392,10 +466,7 @@ searchOrdersBtn.addEventListener("click", (e) => {
     const customerName = String(order.name || "").toLowerCase();
     const orderID = String(order.orderID || "").toLowerCase();
 
-    return (
-      customerName.includes(nameValue) &&
-      orderID.includes(orderIdValue)
-    );
+    return customerName.includes(nameValue) && orderID.includes(orderIdValue);
   });
 
   currentPageCards = 1;
@@ -412,7 +483,6 @@ clearFiltersBtn.addEventListener("click", (e) => {
   currentPageCards = 1;
   renderOrdersPage();
 });
-
 
 // ORDER'S STATUS CONFIRMATION MODAL
 const statusConfirmModal = document.getElementById("status-confirm-modal");
