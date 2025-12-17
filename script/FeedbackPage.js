@@ -24,28 +24,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-// ===================== Utility Function =====================
-async function getOrderData(orderID) {
-  const ordersRef = ref(db, "OrderHistory");
-  const snapshot = await get(ordersRef);
-
-  if (!snapshot.exists()) throw new Error("No orders in database.");
-
-  let foundOrder = null;
-
-  snapshot.forEach((childSnap) => {
-    const order = childSnap.val();
-    // Convert both to string to ensure comparison works
-    if (String(order.orderID) === String(orderID)) {
-      foundOrder = order;
-    }
-  });
-
-  if (!foundOrder) throw new Error("Order not found in database.");
-
-  return foundOrder;
-}
-
+// ===================== DOM ELEMENTS =====================
 document.addEventListener("DOMContentLoaded", () => {
   const feedbackText = document.getElementById("feedbackText");
   const feedbackItemNameEl = document.getElementById("feedbackItemName");
@@ -53,50 +32,59 @@ document.addEventListener("DOMContentLoaded", () => {
   const feedbackModal = document.getElementById("feedbackModal");
   const feedbackMessage = document.getElementById("feedbackMessage");
   const feedbackOkBtn = document.getElementById("feedbackOkBtn");
-
-  // ===================== NEW: STAR ELEMENTS =====================
   const stars = document.querySelectorAll(".star");
   let currentRating = 0;
 
-  // ===================== GET URL PARAMETERS =====================
+  // ===================== URL PARAMETERS =====================
   const urlParams = new URLSearchParams(window.location.search);
   const itemName = urlParams.get("item") || "Unknown Item";
-  const orderID = urlParams.get("orderID"); // Important to link order
+  const orderID = urlParams.get("orderID");
+  const mode = urlParams.get("mode") || "new";
 
-  // ===================== Hamburger Icon =====================
-  const hamburger = document.getElementById("hamburger");
-  const navMenu = document.getElementById("nav-menu");
-
-  hamburger.addEventListener("click", () => {
-    hamburger.classList.toggle("active");
-    navMenu.classList.toggle("active");
-  });
-
-  // Display item name in UI
   feedbackItemNameEl.textContent = itemName;
 
-  // ===================== NEW: STAR CLICK LOGIC =====================
+  // ===================== STAR LOGIC =====================
   stars.forEach((star) => {
     star.addEventListener("click", () => {
-      // Get value (1-5)
       currentRating = parseInt(star.getAttribute("data-value"));
-
-      // Update Colors
       stars.forEach((s, index) => {
-        if (index < currentRating) {
-          s.classList.add("active");
-        } else {
-          s.classList.remove("active");
-        }
+        if (index < currentRating) s.classList.add("active");
+        else s.classList.remove("active");
       });
     });
   });
+
+  // ===================== LOAD EXISTING FEEDBACK IF EDIT =====================
+  if (mode === "edit" && orderID) {
+    (async () => {
+      try {
+        const feedbackRef = ref(db, "Feedbacks");
+        const snapshot = await get(feedbackRef);
+
+        if (!snapshot.exists()) return;
+
+        snapshot.forEach((child) => {
+          const fb = child.val();
+          if (String(fb.orderID) === String(orderID)) {
+            feedbackText.value = fb.feedback || "";
+            currentRating = fb.rating || 0;
+
+            stars.forEach((s, index) => {
+              if (index < currentRating) s.classList.add("active");
+              else s.classList.remove("active");
+            });
+          }
+        });
+      } catch (error) {
+        console.error("Error fetching existing feedback:", error);
+      }
+    })();
+  }
 
   // ===================== SUBMIT FEEDBACK =====================
   submitBtn.addEventListener("click", async () => {
     const text = feedbackText.value.trim();
 
-    // NEW: Check if rating is selected
     if (currentRating === 0) {
       feedbackMessage.textContent = "Please select a star rating.";
       feedbackMessage.style.color = "red";
@@ -120,7 +108,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     try {
-      // ---------------- FETCH ORDER DATA ----------------
       const orderRef = ref(db, "OrderHistory");
       const snapshot = await get(orderRef);
 
@@ -140,24 +127,48 @@ document.addEventListener("DOMContentLoaded", () => {
         ? Object.values(orderData.orders).map((i) => i.name)
         : ["Unknown Items"];
 
-      // ---------------- SAVE FEEDBACK ----------------
-      const newFeedbackRef = push(ref(db, "Feedbacks"));
-      await set(newFeedbackRef, {
-        orderID: orderID,
-        customerName: customerName,
-        itemName: itemName,
-        feedback: text,
-        rating: currentRating, // NEW: Added rating here
-        timestamp: new Date().toLocaleString(),
-        foodItems: foodItems,
+      // Check if feedback exists
+      const feedbackRef = ref(db, "Feedbacks");
+      const snapshotFb = await get(feedbackRef);
+      let existingKey = null;
+
+      snapshotFb.forEach((child) => {
+        const fb = child.val();
+        if (String(fb.orderID) === String(orderID)) {
+          existingKey = child.key;
+        }
       });
 
-      feedbackMessage.textContent =
-        "Thank you! Your feedback has been submitted.";
+      if (existingKey) {
+        // UPDATE
+        await set(ref(db, `Feedbacks/${existingKey}`), {
+          orderID,
+          customerName,
+          itemName,
+          feedback: text,
+          rating: currentRating,
+          timestamp: new Date().toLocaleString(),
+          foodItems,
+        });
+        feedbackMessage.textContent = "Your feedback has been updated!";
+      } else {
+        // NEW
+        const newFeedbackRef = push(ref(db, "Feedbacks"));
+        await set(newFeedbackRef, {
+          orderID,
+          customerName,
+          itemName,
+          feedback: text,
+          rating: currentRating,
+          timestamp: new Date().toLocaleString(),
+          foodItems,
+        });
+        feedbackMessage.textContent =
+          "Thank you! Your feedback has been submitted.";
+      }
+
       feedbackMessage.style.color = "green";
       feedbackText.value = "";
-
-      // NEW: Reset Stars
       currentRating = 0;
       stars.forEach((s) => s.classList.remove("active"));
     } catch (error) {
@@ -167,6 +178,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     feedbackModal.style.display = "flex";
+
+    feedbackOkBtn.onclick = () => {
+      feedbackModal.style.display = "none";
+      window.location.href = "../pages/HistoryPage.html";
+    };
   });
 
   // ===================== CLOSE MODAL =====================

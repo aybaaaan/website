@@ -1,3 +1,15 @@
+document.addEventListener("DOMContentLoaded", () => {
+  const params = new URLSearchParams(window.location.search);
+  const active = params.get("active");
+
+  if (active === "menu") {
+    const menuLink = document.querySelector(".nav-item[href='#menu']");
+    if (menuLink) {
+      menuLink.classList.add("active");
+    }
+  }
+});
+
 // Import Firebase SDKs
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
 import {

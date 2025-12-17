@@ -18,7 +18,6 @@ import {
   getAuth,
   onAuthStateChanged,
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
-
 import {
   getFirestore,
   collection,
@@ -126,18 +125,14 @@ onAuthStateChanged(auth, (user) => {
   }
 
   // ==========================================================
-  //  FETCH LOGIC: IMAGES -> THEN ORDERS -> GROUPING
+  //  FETCH LOGIC: IMAGES -> THEN ORDERS -> FEEDBACKS -> GROUPING
   // ==========================================================
 
-  // 1. Storage for menu images
   let menuImages = {};
-
-  // 2. Fetch the "menu" node FIRST
   const menuRef = ref(db, "menu");
   onValue(menuRef, (menuSnapshot) => {
     const menuData = menuSnapshot.val();
 
-    // Reset and Populate image map
     menuImages = {};
     if (menuData) {
       Object.values(menuData).forEach((item) => {
@@ -147,12 +142,13 @@ onAuthStateChanged(auth, (user) => {
       });
     }
 
-    // 3. FETCH ORDERS AFTER IMAGES
     const ordersRef = ref(db, "Order");
     const historyRef = ref(db, "OrderHistory");
+    const feedbackRef = ref(db, "Feedbacks");
 
     let ordersData = {};
     let historyData = {};
+    let feedbackData = {};
 
     onValue(ordersRef, (snapshot) => {
       ordersData = snapshot.val() || {};
@@ -161,6 +157,11 @@ onAuthStateChanged(auth, (user) => {
 
     onValue(historyRef, (snapshot) => {
       historyData = snapshot.val() || {};
+      renderCombinedOrders();
+    });
+
+    onValue(feedbackRef, (snapshot) => {
+      feedbackData = snapshot.val() || {};
       renderCombinedOrders();
     });
 
@@ -178,7 +179,6 @@ onAuthStateChanged(auth, (user) => {
       }
 
       const userOrders = allOrders.filter((order) => order.userId === user.uid);
-
       if (userOrders.length === 0) {
         orderList.innerHTML = "<p>You have no past orders yet.</p>";
         return;
@@ -197,9 +197,7 @@ onAuthStateChanged(auth, (user) => {
 });
 
 
-      // --- START GROUPING LOGIC ---
       userOrders.forEach((order) => {
-        // A. Setup Order Details
         const displayDate = order.deliveryDate
           ? `${new Date(order.deliveryDate).toLocaleDateString("en-US", {
               year: "numeric",
@@ -214,40 +212,31 @@ onAuthStateChanged(auth, (user) => {
         else if (order.status === "CANCELLED") statusColor = "#cc3232";
         else if (order.status === "DELIVERED") statusColor = "#a64d79";
 
-        // B. Prepare Items List
         const itemsArray = order.orders ? Object.values(order.orders) : [];
         const reversedItems = itemsArray.reverse();
 
         let itemsHtml = "";
         let grandTotal = 0;
-        let itemNamesList = []; // Dito natin iipunin ang mga pangalan
+        let itemNamesList = [];
 
         reversedItems.forEach((item) => {
           const itemTotal = item.price * item.qty;
           grandTotal += itemTotal;
+          if (item.name) itemNamesList.push(item.name);
 
-          // I-save ang pangalan ng pagkain
-          if (item.name) {
-            itemNamesList.push(item.name);
-          }
-
-          // Image Logic
           let finalImageSrc = "https://via.placeholder.com/140x140";
-          if (menuImages[item.name]) {
-            finalImageSrc = menuImages[item.name];
-          } else {
+          if (menuImages[item.name]) finalImageSrc = menuImages[item.name];
+          else {
             const foundKey = Object.keys(menuImages).find(
               (k) => k.toLowerCase() === (item.name || "").toLowerCase()
             );
             if (foundKey) finalImageSrc = menuImages[foundKey];
           }
 
-          // Build row for each item
           itemsHtml += `
               <div class="order-item-row">
                   <img src="${finalImageSrc}" alt="${item.name}" 
                       style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px;">
-                  
                   <div class="order-info" style="flex: 1;">
                       <h3 style="font-size: 18px; margin-bottom: 5px;">${
                         item.name
@@ -262,8 +251,7 @@ onAuthStateChanged(auth, (user) => {
 
                   ${
                     order.status === "DELIVERED"
-                      ? `
-                  <button class="reorder-btn" 
+                      ? `<button class="reorder-btn" 
                       style="padding: 8px 15px; font-size: 14px; margin: 0;"
                       onclick="reorder('${item.name}', ${item.qty}, ${item.price})">
                       Reorder
@@ -274,13 +262,23 @@ onAuthStateChanged(auth, (user) => {
           `;
         });
 
-        // Combine item names for feedback (e.g., "Pita Bread, Garlic Sauce")
         const combinedItemNames = itemNamesList.join(", ");
 
-        // C. Build the MAIN CARD
+        // Check feedback
+        let hasFeedback = false;
+        let feedbackMode = "new";
+        if (feedbackData) {
+          Object.values(feedbackData).forEach((fb) => {
+            const fbID = fb.orderID || fb.orderId;
+            if (String(fbID) === String(order.orderID)) {
+              hasFeedback = true;
+              feedbackMode = "edit";
+            }
+          });
+        }
+
         orderList.innerHTML += `
           <div class="order-card" style="flex-direction: column; align-items: stretch; cursor: default;">
-            
             <div class="order-group-header">
                 <div>
                     <p style="font-weight: bold; color: #333; font-size: 16px;">Order ID: ${
@@ -304,15 +302,13 @@ onAuthStateChanged(auth, (user) => {
                     )}</span>
                 </div>
                 
-                <!-- Give Feedback only if delivered -->
                 ${
                   order.status === "DELIVERED"
-                    ? `
-                <button class="feedback-btn" onclick="window.location.href='/pages/FeedbackPage.html?item=${encodeURIComponent(
-                  combinedItemNames
-                )}&orderID=${order.orderID}'">
-                  Give Feedback
-                </button>`
+                    ? `<button class="feedback-btn" onclick="window.location.href='/pages/FeedbackPage.html?item=${encodeURIComponent(
+                        combinedItemNames
+                      )}&orderID=${order.orderID}&mode=${feedbackMode}'">
+                        ${hasFeedback ? "Edit Feedback" : "Give Feedback"}
+                    </button>`
                     : ``
                 }
             </div>
@@ -329,7 +325,6 @@ window.reorder = function (name, qty, price) {
   cart.push({ name, qty, price });
   localStorage.setItem("cart", JSON.stringify(cart));
 
-  // Show popup
   const popup = document.getElementById("reorderPopup");
   const message = document.getElementById("reorderMessage");
   const okBtn = document.getElementById("reorderOkBtn");
