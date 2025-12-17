@@ -1,210 +1,239 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="../css/HomePage.css" />
     <link rel="stylesheet" href="../responsive/HomeResponsive.css" />
     <title>Food Restaurant Home Page</title>
-</head>
+  </head>
 
-<div class="background-dim"></div>
+  <div class="background-dim"></div>
 
-<body>
+  <body>
     <div class="header-container">
-        <!-- ================= HEADER ================= -->
-        <header class="header">
-            <div class="header-content">
-                <div class="logo-content">
-                    <div class="logo"><img src="../icons/logo.png"></div>
-                    <div class="title-header">Mediterranean in Velvet</div>
-                </div>
+      <!-- ================= HEADER ================= -->
+      <header class="header">
+        <div class="header-content">
+          <div class="logo-content">
+            <a class="logo-content2" href="../pages/HomePage.html">
+              <div class="logo"><img src="../icons/logo.png" /></div>
+              <div class="title-header">Mediterranean in Velvet</div>
+            </a>
+          </div>
 
-                <nav class="nav-menu" id="nav-menu">
-                    <a href="#home" class="nav-item">Home</a>
-                    <a href="#menu" class="nav-item">Menu</a>
-                    <a href="#about-us" class="nav-item">About</a>
-                    <a href="#contact" class="nav-item">Contact</a>
-                </nav>
+          <nav class="nav-menu" id="nav-menu">
+            <a href="#home" class="nav-item">Home</a>
+            <a href="#menu" class="nav-item"><span>Menu</span></a>
+            <a href="#about-us" class="nav-item">About</a>
+            <a href="#contact" class="nav-item">Contact</a>
+          </nav>
 
-                <div class="hamburger" id="hamburger">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
+          <div class="hamburger" id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
 
-                <div class="header-actions">
-                    <button class="action-btn" onclick="toggleCart()">
-                        <img src ="/icons/cart.png">
-                        <span id="cartBadge" class="cart-badge">0</span>
-                    </button>
-                    <div class="account-dropdown">
-                        <button class="action-btn" id="accountBtn"><img src ="/icons/download.png"></button>
-                        <div id="accountMenu" class="dropdown-menu">
-                            <a href="../pages/MyInformationPage.html" class="my-info-link">My Information</a>
-                              <a href="../pages/HistoryPage.html" class="order-history">Order History</a>
-                            <a href="#" class="logout-option" id="logoutBtn">Log Out</a>
-                        </div>
-                    </div>
-                </div>
+          <div class="header-actions">
+            <button class="action-btn" onclick="toggleCart()">
+              <img src="/icons/cart.png" />
+              <span id="cartBadge" class="cart-badge">0</span>
+            </button>
+            <div class="account-dropdown">
+              <button class="action-btn" id="accountBtn">
+                <img src="/icons/download.png" />
+              </button>
+              <div id="accountMenu" class="dropdown-menu">
+                <a href="../pages/MyInformationPage.html" class="my-info-link"
+                  >My Information</a
+                >
+                <a href="../pages/HistoryPage.html" class="order-history"
+                  >Order History</a
+                >
+                <a href="#" class="logout-option" id="logoutBtn">Log Out</a>
+              </div>
             </div>
-        </header>
+          </div>
+        </div>
+      </header>
     </div>
     <!-- ================= HOME ================= -->
     <section class="home-section" id="home">
-    <div class="home-content">
-      <div class="carousel-container">
-
-        <div id="carousel"></div>
+      <div class="home-content">
+        <div class="carousel-container">
+          <div id="carousel"></div>
+        </div>
       </div>
-    </div>
 
-    <!-- Navigation arrows -->
-    <button id="prevSlide" class="carousel-nav carousel-prev" onclick="prevSlide()" aria-label="Previous image">‹</button>
-    <button id="nextSlide" class="carousel-nav carousel-next" onclick="nextSlide()" aria-label="Next image">›</button>
+      <!-- Navigation arrows -->
+      <button
+        id="prevSlide"
+        class="carousel-nav carousel-prev"
+        onclick="prevSlide()"
+        aria-label="Previous image"
+      >
+        ‹
+      </button>
+      <button
+        id="nextSlide"
+        class="carousel-nav carousel-next"
+        onclick="nextSlide()"
+        aria-label="Next image"
+      >
+        ›
+      </button>
 
-    <!-- Indicators -->
-    <div class="carousel-indicators" id="indicators"></div>
-  </section>
+      <!-- Indicators -->
+      <div class="carousel-indicators" id="indicators"></div>
+    </section>
 
     <!-- ================= MENU ================= -->
     <section id="menu" class="menu-section">
-        <h2 class="menu-title">Menu</h2>
+      <h2 class="menu-title">Menu</h2>
 
-    <!-- Category Toggle -->
-    <div class="menu-toggle">
+      <!-- Category Toggle -->
+      <div class="menu-toggle">
         <button id="btnMain" class="toggle-btn">Main Dishes</button>
         <button id="btnSide" class="toggle-btn">Side Dishes</button>
-    </div>
-    
-    <div class="menu-cards-container" id="menuCardsContainer">
+      </div>
+
+      <div class="menu-cards-container" id="menuCardsContainer">
         <div class="menu-cards" id="menuCards">
-            <!-- cards will be injected via JS -->
+          <!-- cards will be injected via JS -->
         </div>
-    </div>
+      </div>
     </section>
 
     <!-- ================= ABOUT ================= -->
     <section id="about-us" class="homepage-section">
-        <div class="about-us-card">
-        <h2 class = "aboutus-title">About Us</h2>
-            <p id="aboutUsContent">Loading...</p>
-        </div>
+      <div class="about-us-card">
+        <h2 class="aboutus-title">About Us</h2>
+        <p id="aboutUsContent">Loading...</p>
+      </div>
     </section>
 
     <!-- ================= REVIEWS ================= -->
     <section id="reviews" class="reviews-section">
-        <h2 class="reviews-title">What Our Customers Say 🡳</h2>
-        
-        <div class="reviews-container-wrapper">
-            <button class="review-nav prev" id="reviewPrevBtn">&#10094;</button>
-            
-            <div class="reviews-container" id="reviewsContainer">
-                <p style="text-align:center; width:100%; color:#666;">Loading reviews...</p>
-            </div>
+      <h2 class="reviews-title">What Our Customers Say 🡳</h2>
 
-            <button class="review-nav next" id="reviewNextBtn">&#10095;</button>
+      <div class="reviews-container-wrapper">
+        <button class="review-nav prev" id="reviewPrevBtn">&#10094;</button>
+
+        <div class="reviews-container" id="reviewsContainer">
+          <p style="text-align: center; width: 100%; color: #666">
+            Loading reviews...
+          </p>
         </div>
+
+        <button class="review-nav next" id="reviewNextBtn">&#10095;</button>
+      </div>
     </section>
 
-  <!-- Floating Announcement Button -->
-<div id="announcementFloatBtn" class="announcement-float">
-    <img src="/icons/megaphone.png" alt="Announcements">
-    <span id="announcementBadge" class="announcement-badge">!!</span>
-</div>
-
-    
-    <!-- ================= FOOTER / CONTACT ================= -->
-    <footer id ="contact" class="footer">
-        <div class="footer-content">
-            <div class="footer-logo-container">
-                <span class="footer-logo">LOGO</span>
-            </div>
-
-            <div class="footer-nav-menu">
-                <div class="footer-title-nav">Navigation</div>
-                <a href="#home" class="text-nav">Home</a>
-                <a href="#about" class="text-nav">About</a>
-                <a href="#menu" class="text-nav">Menu</a>
-                <a href="#contact" class="text-nav">Contact</a>
-            </div>
-
-
-            <div class="footer-social-contact">
-                <div class="footer-title">Social Media</div>
-                <div class="icons">
-                    <span class="footer-logo-social"><img
-                            src="https://www.freepnglogos.com/uploads/facebook-logo-icon/facebook-logo-icon-file-facebook-icon-svg-wikimedia-commons-4.png">
-                        <a href="#"></a></span>
-                    <span class="footer-logo-social"><img
-                            src="https://www.freepnglogos.com/uploads/instagram-icon/instagram-photo-logo-brand-1.png">
-                        <a href="#"></a></span>
-                    <span class="footer-logo-social"><img
-                            src="https://www.freepnglogos.com/uploads/twitter-x-logo-png/twitter-x-logo-png-9.png"> <a
-                            href="#"></a></span>
-                </div>
-            </div>
-        </div>
-    </footer>
+    <!-- Floating Announcement Button -->
+    <div id="announcementFloatBtn" class="announcement-float">
+      <img src="/icons/megaphone.png" alt="Announcements" />
+      <span id="announcementBadge" class="announcement-badge">!!</span>
     </div>
+
+    <!-- ================= FOOTER / CONTACT ================= -->
+    <footer id="contact" class="footer">
+      <div class="footer-content">
+        <div class="footer-logo-container">
+          <div class="footer-logo"><img src="../icons/logo.png" /></div>
+        </div>
+
+        <div class="footer-social-contact">
+          <div class="footer-title">Contact Us!</div>
+          <div class="footer-contact-info">
+            <div class="footer-info-email">
+              Email: <br />
+              <p>mediterraneaninvelvet@gmail.com</p>
+            </div>
+            <div class="footer-info-contact">
+              Contact No. <br />
+              <p>0909090909</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
 
     <!-- Cart Sidebar -->
     <div id="cartSidebar" class="cart-sidebar">
-        <button id="closeCart" class="close-btn">&times;</button>
-        <h2>Your Cart 🛒</h2>
-        <ul id="cartItems">
-            <li>No items in cart</li>
-        </ul>
-        <p id="cartTotal">Total: Php 0</p>
-        <button class="checkout-btn">Checkout</button>
+      <button id="closeCart" class="close-btn">&times;</button>
+      <h2>Your Cart 🛒</h2>
+      <ul id="cartItems">
+        <li>No items in cart</li>
+      </ul>
+      <p id="cartTotal">Total: Php 0</p>
+      <button class="checkout-btn">Checkout</button>
     </div>
     <div id="logoutPopup" class="popup-overlay">
-        <div class="popup-box">
-            <p>Are you sure you want to Log out?</p>
-            <div class="popup-actions">
-                <button id="confirmLogout" class="confirm-btn">Confirm</button>
-                <button id="cancelLogout" class="cancel-btn">Cancel</button>
-            </div>
+      <div class="popup-box">
+        <p>Are you sure you want to Log out?</p>
+        <div class="popup-actions">
+          <button id="confirmLogout" class="confirm-btn">Confirm</button>
+          <button id="cancelLogout" class="cancel-btn">Cancel</button>
         </div>
+      </div>
     </div>
     <!-- Order Status Toast Container -->
-    <div id="orderStatusToast" style="
+    <div
+      id="orderStatusToast"
+      style="
         position: fixed;
         top: 120px;
         left: 20px;
         z-index: 9999;
         display: flex;
         flex-direction: column-reverse;
-        gap: 10px;">
-    </div>
+        gap: 10px;
+      "
+    ></div>
 
     <!-- Empty Cart Popup -->
     <div id="emptyCartPopup" class="popup-overlay">
-    <div class="popup-content">
+      <div class="popup-content">
         <p>Your cart is empty! Please add items first.</p>
         <button id="emptyCartOkBtn">OK</button>
-    </div>
+      </div>
     </div>
 
     <div id="notification-popup" class="notification-popup hidden">
-        <p id="notification-message"></p>
+      <p id="notification-message"></p>
     </div>
 
     <!-- Announcement Toast Container and Modal -->
-    <div id="announcementToastContainer" style="position: fixed; bottom: 20px; right: 20px; z-index: 10000; display: flex; flex-direction: column; gap: 10px;"></div>
-        <div id="announcementModal">
-            <div class="popup-box announcement-box">
-                <div class="announcement-modal-header">
-                    Latest Announcements
-                    <span id="closeAnnouncementModal" style="float: right; cursor: pointer; font-size: 24px;">&times;</span>
-                </div>
-                <div id="announcement-modal-content" class="announcement-container">
-                    </div>
-
-            </div>
+    <div
+      id="announcementToastContainer"
+      style="
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 10000;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      "
+    ></div>
+    <div id="announcementModal">
+      <div class="popup-box announcement-box">
+        <div class="announcement-modal-header">
+          Latest Announcements
+          <span
+            id="closeAnnouncementModal"
+            style="float: right; cursor: pointer; font-size: 24px"
+            >&times;</span
+          >
         </div>
+        <div
+          id="announcement-modal-content"
+          class="announcement-container"
+        ></div>
+      </div>
+    </div>
 
-    <script type="module" src ="../script/HomePage.js"></script>
-</body>
+    <script type="module" src="../script/HomePage.js"></script>
+  </body>
 </html>

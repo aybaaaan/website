@@ -34,9 +34,9 @@
           ><button>Data Analytics</button></a
         >
         <a href="admin-orders.html" class="sidebar-link orders-link">
-  <span class="sidebar-text">Orders</span>
-  <span id="ordersBadge" class="orders-badge hidden">0</span>
-</a>
+          <span class="sidebar-text">Orders</span>
+          <span id="ordersBadge" class="orders-badge hidden">0</span>
+        </a>
 
         <a href="../pages/admin-manage-content.html"
           ><button>Manage Contents</button></a
@@ -52,10 +52,10 @@
 
       <!-- Main content -->
       <main>
+        <h4 class="title-tag">User Analytics</h4>
         <!-- User Analytics -->
         <section id="user-analytics" class="user-section">
           <div class="user-card">
-            <h4 class="title-tag">User Analytics</h4>
             <div class="user-chart">
               <!-- Login Analytics -->
               <div class="login-result-container">
@@ -70,15 +70,14 @@
           </div>
         </section>
 
+        <div class="title-tag">
+          Sales Report
+          <button class="exportBtn" id="exportExcelBtn">Export to Excel</button>
+        </div>
+
         <!-- Sales Report -->
         <div id="salesReportContainer" class="sales-report">
           <div class="card">
-            <div class="title-tag">
-              Sales Report
-              <button class="exportBtn" id="exportExcelBtn">
-                Export to Excel
-              </button>
-            </div>
             <div class="table-filters">
               <label>
                 From:
@@ -91,6 +90,11 @@
               </label>
 
               <button id="resetDateFilter">Reset</button>
+              <div class="expcon">
+                <button class="exportBtn" id="exportExcelBtn">
+                  Export to Excel
+                </button>
+              </div>
             </div>
 
             <table id="salesReportTable">
@@ -150,9 +154,9 @@
         </div>
 
         <!-- Data Analytics -->
+        <h4 class="title-tag">Data Analytics</h4>
         <section class="data-section" id="section-analytics">
           <div class="card">
-            <h4 class="title-tag">Data Analytics</h4>
             <div class="chart">
               <h2>Data Overview</h2>
 

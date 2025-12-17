@@ -19,17 +19,6 @@ function goToDetails(name, price, img, desc) {
 }
 
 // ===================== MENU NAVIGATION =====================
-document.addEventListener("DOMContentLoaded", () => {
-  const params = new URLSearchParams(window.location.search);
-  const active = params.get("active");
-
-  if (active === "menu") {
-    const menuLink = document.querySelector(".nav-item[href='#menu']");
-    if (menuLink) {
-      menuLink.classList.add("active");
-    }
-  }
-});
 
 // ===================== FORMAT PRICE =====================
 function formatPHP(n) {
@@ -745,12 +734,12 @@ function saveDismissedOrders() {
 }
 
 function getStatusColor(status) {
-  if (status === "ACCEPTED") return "#3cec18ff";
-  if (status === "FOR DELIVERY") return "#14c0ebff";
-  if (status === "PREPARING") return "#cebb0fff";
-  if (status === "CANCELLED") return "#e21d1dff";
-  if (status === "DELIVERED") return "#5dec1bff";
-  if (status === "PENDING") return "#dfd10dff";
+  if (status === "ACCEPTED") return "#a64d79";
+  if (status === "FOR DELIVERY") return "#a64d79";
+  if (status === "PREPARING") return "#a64d79";
+  if (status === "CANCELLED") return "#a64d79";
+  if (status === "DELIVERED") return "#a64d79";
+  if (status === "PENDING") return "#a64d79";
 }
 
 function showOrUpdateOrderToast(order) {

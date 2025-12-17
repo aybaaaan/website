@@ -14,7 +14,11 @@
   }
 
   .footer {
-    padding: 26px 45px 26px 67px;
+    padding: 20px;
+  }
+  .footer-logo img {
+    height: 7rem;
+    width: 10rem;
   }
 
   .footer-content {
