@@ -10,7 +10,10 @@
 
   <body>
     <header class="header">
-      <div class="logo">Mediterranean In Velvet</div>
+      <div class="logo-content">
+                    <div class="logo"><img src="../icons/logo.png"></div>
+                    <div class="title-header">Mediterranean in Velvet</div>
+                </div>
       
       <div class="hamburger" id="hamburger">
         <span class="bar"></span>
@@ -51,10 +54,11 @@
           <h3 class="deliv-details">Enter Delivery Details</h3>
 
           <form id="checkoutForm">
+            <label>▸Name:</label>
             <input type="text" id="name" placeholder="Name" required />
 
             <div class="address-group" style="margin-bottom: 15px; text-align: left;">
-                <label style="font-size: 0.9rem; font-weight: 600; color: #333; display: block; margin-bottom: 5px;">Delivery Address:</label>
+                <label>▸Delivery Address:</label>
                 
                 <select id="barangay-select" required style="width: 100%; padding: 10px; margin-bottom: 8px; border: 1px solid #ccc; border-radius: 5px;">
                     <option value="" disabled selected>Select Barangay</option>
@@ -76,13 +80,13 @@
               required
             />
 
-            <label for="delivery-date">Delivery Date:</label>
+            <label for="delivery-date">▸Delivery Date:</label>
             <input type="date" id="delivery-date" required min="" />
 
-            <label for="delivery-time">Delivery Time:</label>
+            <label for="delivery-time">▸Delivery Time:</label>
             <input type="time" id="delivery-time" required />
 
-            <label>Payment Method:</label>
+            <label>▸Payment Method:</label>
             <select id="payment" required>
               <option value="" disabled selected>Select Payment</option>
               <option value="CASH_ON_DELIVERY">Cash on Delivery</option>

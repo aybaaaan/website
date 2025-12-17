@@ -223,10 +223,10 @@ row.addEventListener("click", () => {
     const setTextColor = () => {
       switch (statusDropdown.value) {
         case "ACCEPTED":
-          statusDropdown.style.color = "#22b415ff";
+          statusDropdown.style.color = "#000";
           break;
         case "FOR DELIVERY":
-          statusDropdown.style.color = "#14c0ebff";
+          statusDropdown.style.color = "#3ac204ff";
           break;
         case "CANCELLED":
           statusDropdown.style.color = "#cc3232";
@@ -236,7 +236,7 @@ row.addEventListener("click", () => {
           break;
         case "PENDING":
         case "PREPARING":
-          statusDropdown.style.color = "#e9da11ff";
+          statusDropdown.style.color = "#e66920ff";
           break;
         default:
           statusDropdown.style.color = "#000";

@@ -52,7 +52,7 @@ body {
 
 /* Logout Popup Box */
 .popup-box {
-  background: #ffffff;
+  background: #f7f2f6;
   padding: 20px 24px;
   border-radius: 12px;
   box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.15);
@@ -64,7 +64,7 @@ body {
 .popup-box p {
   margin-bottom: 16px;
   font-size: 15px;
-  color: #333;
+  color: #741b47;
   font-weight: 600;
 }
 
@@ -87,14 +87,13 @@ body {
 }
 
 .confirm-btn:hover {
-  background: #a00f0f;
   transform: scale(1.03);
 }
 
 .cancel-btn {
   flex: 1;
   padding: 8px;
-  background: #c27ba0;
+  background: #a64d79;
   border: none;
   border-radius: 6px;
   color: #ffffff;
@@ -236,7 +235,7 @@ body {
   display: flex;
   justify-content: right;
   width: 100%;
-  padding: 16px 40px; /* Default Desktop Padding */
+  padding: 10px 20px; /* Default Desktop Padding */
   z-index: 5;
 }
 
@@ -420,7 +419,7 @@ body {
   position: absolute;
   right: 0;
   top: 100%;
-  background-color: #ffffff;
+  background: #f7f2f6;
   min-width: 200px;
   box-shadow: 0px 8px 20px rgba(14, 13, 13, 0.1);
   border-radius: 8px;
@@ -434,7 +433,7 @@ body {
   display: block;
   padding: 10px 18px;
   text-decoration: none;
-  color: #222222;
+  color: #741b47;
   font-size: 14px;
   font-weight: 500;
   transition: background 0.2s ease, color 0.2s ease;
@@ -442,15 +441,15 @@ body {
 }
 
 .dropdown-menu a:hover {
-  background-color: #ead1dc;
-  color: #111;
+  background: #ead1dc;
+  color: #741b47;
 }
 
 .dropdown-menu a:not(:last-child)::after {
   content: "";
   display: block;
   height: 1px;
-  background-color: #e098b4;
+  background-color: #a64d79;
   margin: 10px 0;
 }
 
@@ -1353,7 +1352,7 @@ body {
   flex-direction: column;
   justify-content: flex-start;
   background: #fff;
-  border: 1px solid #ddd;
+  border-left: #a64d79 3px solid;
   padding: 16px 18px 40px 18px;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
