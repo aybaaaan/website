@@ -212,6 +212,20 @@ main {
   background-color: #a12a2a;
 }
 
+.modal-delete {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.modal-delete.hidden {
+  display: none;
+}
+
 /* Pagination Styles */
 .pagination {
   margin-top: 25px;

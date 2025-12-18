@@ -52,24 +52,29 @@ onValue(loginsRef, (snapshot) => {
 });
 
 // ===== Orders =====
-const OrderRef = ref(db, "Order"); // your orders node
+const OrderRef = ref(db, "Order");
+const OrderHistoryRef = ref(db, "OrderHistory");
 
-onValue(OrderRef, (snapshot) => {
-  if (snapshot.exists()) {
-    const allOrders = Object.values(snapshot.val());
-    const totalOrders = allOrders.length;
+function updateTotalOrders() {
+  let total = 0;
 
-    const display = document.getElementById("orderResult");
-    display.innerHTML = `
-      <div class="orders-total-container">
-        <p class="orders-total">${totalOrders}</p>
-        <p class="orders-text">Orders</p>
-      </div>
-    `;
-  } else {
-    console.log("No orders found.");
-  }
-});
+  onValue(OrderRef, (snap) => {
+    total += snap.exists() ? Object.values(snap.val()).length : 0;
+
+    onValue(OrderHistoryRef, (histSnap) => {
+      total += histSnap.exists() ? Object.values(histSnap.val()).length : 0;
+
+      document.getElementById("orderResult").innerHTML = `
+        <div class="orders-total-container">
+          <p class="orders-total">${total}</p>
+          <p class="orders-text">Orders</p>
+        </div>
+      `;
+    });
+  });
+}
+
+updateTotalOrders();
 
 const ordersPerPage = 10;
 let currentPage = 1;
@@ -77,14 +82,20 @@ let ordersArray = []; // store all orders for pagination
 let filteredOrders = [];
 
 async function loadOrders() {
-  const snapshot = await get(ref(db, "Order"));
-  if (!snapshot.exists()) {
-    ordersArray = [];
-    renderPage();
-    return;
-  }
+  const [orderSnap, historySnap] = await Promise.all([
+    get(ref(db, "Order")),
+    get(ref(db, "OrderHistory")),
+  ]);
 
-  ordersArray = Object.values(snapshot.val());
+  const activeOrders = orderSnap.exists() ? Object.values(orderSnap.val()) : [];
+
+  const archivedOrders = historySnap.exists()
+    ? Object.values(historySnap.val())
+    : [];
+
+  // 🔥 MERGE BOTH
+  ordersArray = [...activeOrders, ...archivedOrders];
+
   filteredOrders = [...ordersArray];
   currentPage = 1;
   renderPage();
@@ -274,12 +285,18 @@ let currentType = "sales";
 
 // ============ FETCH SALES DATA ============
 async function getChartData(range, type = "sales") {
-  const snapshot = await get(ref(db, "Order"));
-  if (!snapshot.exists()) return { labels: [], data: [] };
+  const [orderSnap, historySnap] = await Promise.all([
+    get(ref(db, "Order")),
+    get(ref(db, "OrderHistory")),
+  ]);
 
-  const orders = snapshot.val();
-  const startDate = getStartDate(range); // day/week/month start
-  const counts = {}; // { "YYYY-MM-DD": totalRevenue }
+  const orders = {
+    ...(orderSnap.exists() ? orderSnap.val() : {}),
+    ...(historySnap.exists() ? historySnap.val() : {}),
+  };
+
+  const startDate = getStartDate(range);
+  const counts = {};
 
   for (const key in orders) {
     const order = orders[key];
@@ -288,18 +305,14 @@ async function getChartData(range, type = "sales") {
     const dateObj = new Date(order.orderDate);
     if (dateObj < startDate) continue;
 
-    // group by date string
-    const label = dateObj.toISOString().split("T")[0]; // "YYYY-MM-DD"
-
+    const label = dateObj.toISOString().split("T")[0];
     if (!counts[label]) counts[label] = 0;
 
     if (type === "sales") {
-      // sum price * quantity of all items
-      const totalSale = order.orders.reduce(
-        (sum, item) => sum + Number(item.price) * Number(item.qty),
+      counts[label] += order.orders.reduce(
+        (s, i) => s + Number(i.price) * Number(i.qty),
         0
       );
-      counts[label] += totalSale;
     } else if (type === "revenue") {
       counts[label] += Number(order.total) || 0;
     } else if (type === "orders") {
@@ -307,11 +320,8 @@ async function getChartData(range, type = "sales") {
     }
   }
 
-  // sort dates
-  const sortedLabels = Object.keys(counts).sort();
-  const chartData = sortedLabels.map((d) => counts[d]);
-
-  return { labels: sortedLabels, data: chartData };
+  const labels = Object.keys(counts).sort();
+  return { labels, data: labels.map((l) => counts[l]) };
 }
 
 // --- RENDER CHART ---

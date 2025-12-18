@@ -40,6 +40,12 @@ const filterEndDate = document.getElementById("filterEndDate");
 const applyFiltersBtn = document.getElementById("applyFilters");
 const clearFiltersBtn = document.getElementById("clearFilters");
 
+let orderToDelete = null;
+
+const deleteMessage = document.getElementById("deleteMessage");
+const confirmDeleteBtn = document.getElementById("confirm-delete");
+const cancelDeleteBtn = document.getElementById("cancel-delete");
+
 onValue(orderHistoryRef, (snapshot) => {
   ordersHistoryArray = [];
   if (!snapshot.exists()) {
@@ -145,19 +151,15 @@ function renderOrderHistoryPage() {
 
     const deleteWrapper = row.querySelector(`#delete-${data.key}`);
 
-    if (deleteWrapper && (data.status || "").toUpperCase() === "CANCELLED") {
+    if ((data.status || "").toUpperCase() === "CANCELLED") {
       deleteWrapper.style.display = "block";
 
       const deleteBtn = deleteWrapper.querySelector(".delete-btn");
 
       deleteBtn.addEventListener("click", () => {
-        if (
-          confirm(
-            `Are you sure you want to permanently delete order #${data.orderID}?`
-          )
-        ) {
-          remove(ref(db, `OrderHistory/${data.key}`)).catch(console.error);
-        }
+        orderToDelete = data;
+        deleteMessage.textContent = `Are you sure you want to permanently delete order #${data.orderID}?`;
+        deleteModal.classList.remove("hidden");
       });
     }
 
@@ -170,6 +172,20 @@ function renderOrderHistoryPage() {
   prevBtn.disabled = currentPageHistory === 1;
   nextBtn.disabled = currentPageHistory === totalPages;
 }
+
+confirmDeleteBtn.addEventListener("click", () => {
+  if (!orderToDelete) return;
+
+  remove(ref(db, `OrderHistory/${orderToDelete.key}`)).catch(console.error);
+
+  deleteModal.classList.add("hidden");
+  orderToDelete = null;
+});
+
+cancelDeleteBtn.addEventListener("click", () => {
+  deleteModal.classList.add("hidden");
+  orderToDelete = null;
+});
 
 prevBtn.addEventListener("click", () => {
   if (currentPageHistory > 1) {
@@ -206,12 +222,11 @@ function applyFilters() {
     if (startDateVal) match = match && order.archivedAt >= startDateVal;
     if (endDateVal) match = match && order.archivedAt <= endDateVal;
     if (orderIdVal)
-  match =
-    match &&
-    String(order.orderID || "")
-      .toLowerCase()
-      .includes(orderIdVal);
-
+      match =
+        match &&
+        String(order.orderID || "")
+          .toLowerCase()
+          .includes(orderIdVal);
 
     return match;
   });
