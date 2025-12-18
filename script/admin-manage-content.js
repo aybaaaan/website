@@ -11,15 +11,15 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyC7FLz6RyFhiNok82uPj3hs7Ev8r7UI3Ik",
-  authDomain: "mediterranean-in-velvet-10913.firebaseapp.com",
+  apiKey: "AIzaSyBSpMRcuO5iGPU2hXhnTOMjog29plJwU4U",
+  authDomain: "mediterranean-in-velvet-53036.firebaseapp.com",
   databaseURL:
-    "https://mediterranean-in-velvet-10913-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "mediterranean-in-velvet-10913",
-  storageBucket: "mediterranean-in-velvet-10913.firebasestorage.app",
-  messagingSenderId: "478608649838",
-  appId: "1:478608649838:web:cbe6ed90b718037244c07f",
-  measurementId: "G-T9TT5N8NJX",
+    "https://mediterranean-in-velvet-53036-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "mediterranean-in-velvet-53036",
+  storageBucket: "mediterranean-in-velvet-53036.firebasestorage.app",
+  messagingSenderId: "1062662016088",
+  appId: "1:1062662016088:web:007e0bf8a3e5d0094c8e2d",
+  measurementId: "G-TRP0RL8LRL",
 };
 
 const app = initializeApp(firebaseConfig);
