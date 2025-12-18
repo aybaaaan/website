@@ -233,20 +233,22 @@ function renderOrdersPage() {
     const setTextColor = () => {
       switch (statusDropdown.value) {
         case "ACCEPTED":
-          statusDropdown.style.color = "#000";
+          statusDropdown.style.color = "#3bc51fff";
           break;
         case "FOR DELIVERY":
-          statusDropdown.style.color = "#3ac204ff";
+          statusDropdown.style.color = "#1c7eceff";
           break;
         case "CANCELLED":
-          statusDropdown.style.color = "#cc3232";
+          statusDropdown.style.color = "#e41912ff";
           break;
         case "DELIVERED":
-          statusDropdown.style.color = "#a64d79";
+          statusDropdown.style.color = "#3bc51fff";
           break;
         case "PENDING":
+          statusDropdown.style.color = "#c97200ff";
+          break;
         case "PREPARING":
-          statusDropdown.style.color = "#e66920ff";
+          statusDropdown.style.color = "#c9bb00ff";
           break;
         default:
           statusDropdown.style.color = "#000";
@@ -328,7 +330,6 @@ function renderOrdersPage() {
 
               await push(ref(db, "OrderHistory"), orderData);
               await remove(ref(db, `Order/${orderKey}`));
-              
             }
           })
           .catch(console.error);
@@ -351,74 +352,70 @@ function renderOrdersPage() {
     });
 
     cancelReasonCancel.addEventListener("click", () => {
-  if (pendingCancelOrder) {
-    const { statusDropdown, previousStatus } = pendingCancelOrder;
-    statusDropdown.value = previousStatus.toUpperCase();
-  }
+      if (pendingCancelOrder) {
+        const { statusDropdown, previousStatus } = pendingCancelOrder;
+        statusDropdown.value = previousStatus.toUpperCase();
+      }
 
-  cancelReasonModal.style.display = "none";
-  pendingCancelOrder = null;
-});
-
-
-    window.addEventListener("click", (e) => {
-  if (e.target === cancelReasonModal) {
-    if (pendingCancelOrder) {
-      const { statusDropdown, previousStatus } = pendingCancelOrder;
-      statusDropdown.value = previousStatus.toUpperCase();
-    }
-
-    cancelReasonModal.style.display = "none";
-    pendingCancelOrder = null;
-  }
-});
-
-
-    cancelReasonSubmit.addEventListener("click", async () => {
-  if (!pendingCancelOrder) return;
-
-  const reason = cancelReasonText.value.trim();
-  if (!reason) {
-    alert("Please enter a reason for cancellation.");
-    return;
-  }
-
-  const { orderKey } = pendingCancelOrder;
-  const orderRef = ref(db, `Order/${orderKey}`);
-
-  try {
-    // 1️⃣ Get order data
-    const orderSnapshot = await get(orderRef);
-    if (!orderSnapshot.exists()) return;
-
-    const orderData = orderSnapshot.val();
-
-    // 2️⃣ Update status FIRST (for customer toast)
-    await update(orderRef, {
-      status: "CANCELLED",
-      statusTimestamp: Date.now(),
-      cancelReason: reason,
+      cancelReasonModal.style.display = "none";
+      pendingCancelOrder = null;
     });
 
-    // 3️⃣ Archive immediately
-    orderData.status = "CANCELLED";
-    orderData.statusTimestamp = Date.now();
-    orderData.cancelReason = reason;
-    orderData.archivedAt = Date.now();
+    window.addEventListener("click", (e) => {
+      if (e.target === cancelReasonModal) {
+        if (pendingCancelOrder) {
+          const { statusDropdown, previousStatus } = pendingCancelOrder;
+          statusDropdown.value = previousStatus.toUpperCase();
+        }
 
-    await push(ref(db, "OrderHistory"), orderData);
+        cancelReasonModal.style.display = "none";
+        pendingCancelOrder = null;
+      }
+    });
 
-    // 4️⃣ Remove from active orders
-    await remove(orderRef);
+    cancelReasonSubmit.addEventListener("click", async () => {
+      if (!pendingCancelOrder) return;
 
-  } catch (error) {
-    console.error("Cancel failed:", error);
-  } finally {
-    cancelReasonModal.style.display = "none";
-    pendingCancelOrder = null;
-  }
-});
+      const reason = cancelReasonText.value.trim();
+      if (!reason) {
+        alert("Please enter a reason for cancellation.");
+        return;
+      }
 
+      const { orderKey } = pendingCancelOrder;
+      const orderRef = ref(db, `Order/${orderKey}`);
+
+      try {
+        // 1️⃣ Get order data
+        const orderSnapshot = await get(orderRef);
+        if (!orderSnapshot.exists()) return;
+
+        const orderData = orderSnapshot.val();
+
+        // 2️⃣ Update status FIRST (for customer toast)
+        await update(orderRef, {
+          status: "CANCELLED",
+          statusTimestamp: Date.now(),
+          cancelReason: reason,
+        });
+
+        // 3️⃣ Archive immediately
+        orderData.status = "CANCELLED";
+        orderData.statusTimestamp = Date.now();
+        orderData.cancelReason = reason;
+        orderData.archivedAt = Date.now();
+
+        await push(ref(db, "OrderHistory"), orderData);
+
+        // 4️⃣ Remove from active orders
+        await remove(orderRef);
+      } catch (error) {
+        console.error("Cancel failed:", error);
+      } finally {
+        cancelReasonModal.style.display = "none";
+        pendingCancelOrder = null;
+      }
+    });
 
     // ============ FOOD TOGGLE ============
     const foodToggle = row.querySelector(".food-toggle");

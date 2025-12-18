@@ -348,7 +348,9 @@ dateInput.addEventListener("change", () => {
     timeInput.min = minTime;
   } else {
     // If another day, reset min
-    timeInput.min = "09:00";
+    timeInput.min = "08:00";
+    timeInput.max = "21:00";
+    timeInput.step = 900; // 15 minutes (optional)
   }
 });
 
@@ -374,6 +376,17 @@ function setDeliveryDateToday() {
 
 // ========== Login and Cart Validation ==========
 proceedBtn.addEventListener("click", async () => {
+  const now = new Date();
+  const currentHour = now.getHours();
+
+  // If today and already past 9 PM
+  if (currentHour >= 21) {
+    showTimePopup(
+      "Ordering is closed for today. Our delivery time is from 8:00 AM to 9:00 PM. Please order again tomorrow."
+    );
+    return;
+  }
+
   if (!currentUser) {
     if (modal) modal.style.display = "none";
     showPopup(
@@ -487,7 +500,6 @@ checkoutForm.addEventListener("submit", async (e) => {
   }
 
   // --- TIME & DATE VALIDATION ---
-  const now = new Date();
   const selectedDateTime = new Date(`${deliveryDate}T${deliveryTime}`);
 
   if (!deliveryDate || !deliveryTime) {
@@ -495,11 +507,13 @@ checkoutForm.addEventListener("submit", async (e) => {
     return;
   }
 
-  // can't choose past dates/times
-  if (selectedDateTime < now) {
-    showTimePopup(
-      "Please choose a valid delivery time (cannot be in the past)."
-    );
+  const now = new Date();
+  const hour = selectedDateTime.getHours();
+  const isToday = selectedDateTime.toDateString() === now.toDateString();
+
+  // 1️⃣ Past time check
+  if (selectedDateTime <= now) {
+    showTimePopup("Please choose a delivery time later than the current time.");
     return;
   }
 
@@ -512,10 +526,17 @@ checkoutForm.addEventListener("submit", async (e) => {
     return;
   }
 
+  // 2️⃣ After 9PM — stop all orders today
+  if (isToday && now.getHours() >= 21) {
+    showTimePopup(
+      "Ordering is closed for today. Please select tomorrow's date."
+    );
+    return;
+  }
+
   // only between 9 AM and 8 PM
-  const hour = selectedDateTime.getHours();
-  if (hour < 9 || hour > 20) {
-    showTimePopup("Delivery time must be between 9:00 AM and 8:00 PM.");
+  if (hour < 8 || hour >= 21) {
+    showTimePopup("Delivery time must be between 8:00 AM and 9:00 PM.");
     return;
   }
 
@@ -583,7 +604,7 @@ checkoutForm.addEventListener("submit", async (e) => {
     // Save to Realtime Database
     await push(ordersRef, orderData);
 
-    /*======================== EMAILJS ADMIN NOTIFICATION ========================
+    // ======================== EMAILJS ADMIN NOTIFICATION ========================
     const emailParams = {
       orderID: orderID,
       userEmail: currentUser.email,
@@ -598,11 +619,13 @@ checkoutForm.addEventListener("submit", async (e) => {
       status: "pending",
       order_list: orders
         .map(
-          item =>
-            `${item.name} (Qty: ${item.qty}) — ₱${(item.price * item.qty).toFixed(2)}`
+          (item) =>
+            `${item.name} (Qty: ${item.qty}) — ₱${(
+              item.price * item.qty
+            ).toFixed(2)}`
         )
         .join("\n"),
-      total: totalEl.textContent
+      total: totalEl.textContent,
     };
 
     emailjs
@@ -612,8 +635,8 @@ checkoutForm.addEventListener("submit", async (e) => {
       })
       .catch((err) => {
         console.error("❌ EmailJS failed:", err);
-      }); 
-*/
+      });
+    //
     // Update user profile in Firestore with STRUCTURED ADDRESS
     const userRef = doc(fs, "users", currentUser.uid);
 

@@ -734,12 +734,12 @@ function saveDismissedOrders() {
 }
 
 function getStatusColor(status) {
-  if (status === "ACCEPTED") return "#a64d79";
-  if (status === "FOR DELIVERY") return "#a64d79";
-  if (status === "PREPARING") return "#a64d79";
-  if (status === "CANCELLED") return "#a64d79";
-  if (status === "DELIVERED") return "#a64d79";
-  if (status === "PENDING") return "#a64d79";
+  if (status === "ACCEPTED") return "#3bc51fff";
+  if (status === "FOR DELIVERY") return "#1c7eceff";
+  if (status === "PREPARING") return "#c9bb00ff";
+  if (status === "CANCELLED") return "#e41912ff";
+  if (status === "DELIVERED") return "#3bc51fff";
+  if (status === "PENDING") return "#c97200ff";
 }
 
 function showOrUpdateOrderToast(order) {
@@ -787,17 +787,16 @@ function showOrUpdateOrderToast(order) {
     setTimeout(() => toast.classList.add("show"), 10);
 
     toast.querySelector("button").addEventListener("click", () => {
-  toast.remove();
-  orderToasts[orderID] = null;
+      toast.remove();
+      orderToasts[orderID] = null;
 
-  dismissedOrders[orderID] = {
-    status: order.status,
-    timestamp: order.statusTimestamp
-  };
+      dismissedOrders[orderID] = {
+        status: order.status,
+        timestamp: order.statusTimestamp,
+      };
 
-  saveDismissedOrders();
-});
-
+      saveDismissedOrders();
+    });
 
     orderToasts[orderID] = toast;
     orderStatuses[orderID] = status;
@@ -813,10 +812,7 @@ onValue(ref(db, "OrderHistory"), (snapshot) => {
   const orders = Object.values(snapshot.val());
 
   orders.forEach((order) => {
-    if (
-      order.userId === user.uid &&
-      order.status === "CANCELLED"
-    ) {
+    if (order.userId === user.uid && order.status === "CANCELLED") {
       const dismissed = dismissedOrders[order.orderID];
 
       // 🚫 If user already clicked OK, do nothing
@@ -834,7 +830,6 @@ onValue(ref(db, "OrderHistory"), (snapshot) => {
   });
 });
 
-
 onValue(ref(db, "Order"), (snapshot) => {
   const data = snapshot.val();
   if (!data) return;
@@ -849,15 +844,11 @@ onValue(ref(db, "Order"), (snapshot) => {
   userOrders.forEach((order) => {
     const dismissed = dismissedOrders[order.orderID];
 
-if (
-  dismissed &&
-  dismissed.status !== order.status
-) {
-  // Status changed → allow new toast
-  delete dismissedOrders[order.orderID];
-  saveDismissedOrders();
-}
-
+    if (dismissed && dismissed.status !== order.status) {
+      // Status changed → allow new toast
+      delete dismissedOrders[order.orderID];
+      saveDismissedOrders();
+    }
 
     if (orderStatuses[order.orderID] !== order.status) {
       showOrUpdateOrderToast(order);
