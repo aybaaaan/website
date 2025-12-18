@@ -1421,26 +1421,26 @@ section.active {
   background: #be2b1b;
 }
 #status-cancel {
+  background: #d63422;
+  color: #fff;
+  font-weight: 500
+}
+
+#status-cancel:hover {
+  background: #fff8f7;
+  color: #c62828;
+}
+
+#status-yes {
   background: #a64d79;
   color: #fff;
   font-weight: 500;
 }
 
-#status-cancel:hover {
+#status-yes:hover {
   background: #ead1dc;
   color: #4c1130;
   transform: scale(1.03);
-}
-
-#status-yes {
-  background: #d63422;
-  color: #fff;
-  font-weight: 500;
-}
-
-#status-yes:hover {
-  background: #fff8f7;
-  color: #c62828;
 }
 
 .modal-content p {
