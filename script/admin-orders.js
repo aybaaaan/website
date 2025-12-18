@@ -328,16 +328,7 @@ function renderOrdersPage() {
 
               await push(ref(db, "OrderHistory"), orderData);
               await remove(ref(db, `Order/${orderKey}`));
-            } else if (upperStatus === "CANCELLED") {
-              const orderSnapshot = await get(ref(db, `Order/${orderKey}`));
-              if (!orderSnapshot.exists()) return;
-
-              const orderData = orderSnapshot.val();
-              orderData.status = "CANCELLED";
-              orderData.archivedAt = Date.now();
-
-              await push(ref(db, "OrderHistory"), orderData);
-              await remove(ref(db, `Order/${orderKey}`));
+              
             }
           })
           .catch(console.error);
@@ -360,55 +351,74 @@ function renderOrdersPage() {
     });
 
     cancelReasonCancel.addEventListener("click", () => {
-      cancelReasonModal.style.display = "none";
-      pendingCancelOrder = null;
-      // Reset dropdown back to previous status
-      if (pendingCancelOrder) {
-        const { statusDropdown, previousStatus } = pendingCancelOrder;
-        statusDropdown.value = previousStatus;
-        pendingCancelOrder = null;
-      }
-    });
+  if (pendingCancelOrder) {
+    const { statusDropdown, previousStatus } = pendingCancelOrder;
+    statusDropdown.value = previousStatus.toUpperCase();
+  }
+
+  cancelReasonModal.style.display = "none";
+  pendingCancelOrder = null;
+});
+
 
     window.addEventListener("click", (e) => {
-      if (e.target === cancelReasonModal)
-        cancelReasonModal.style.display = "none";
-    });
+  if (e.target === cancelReasonModal) {
+    if (pendingCancelOrder) {
+      const { statusDropdown, previousStatus } = pendingCancelOrder;
+      statusDropdown.value = previousStatus.toUpperCase();
+    }
+
+    cancelReasonModal.style.display = "none";
+    pendingCancelOrder = null;
+  }
+});
+
 
     cancelReasonSubmit.addEventListener("click", async () => {
-      if (!pendingCancelOrder) return;
+  if (!pendingCancelOrder) return;
 
-      const reason = cancelReasonText.value.trim();
-      if (!reason) {
-        alert("Please enter a reason for cancellation.");
-        return;
-      }
+  const reason = cancelReasonText.value.trim();
+  if (!reason) {
+    alert("Please enter a reason for cancellation.");
+    return;
+  }
 
-      const { orderKey, statusDropdown, previousStatus, data } =
-        pendingCancelOrder;
+  const { orderKey } = pendingCancelOrder;
+  const orderRef = ref(db, `Order/${orderKey}`);
 
-      try {
-        // Archive order with reason
-        const orderSnapshot = await get(ref(db, `Order/${orderKey}`));
-        if (!orderSnapshot.exists()) return;
+  try {
+    // 1️⃣ Get order data
+    const orderSnapshot = await get(orderRef);
+    if (!orderSnapshot.exists()) return;
 
-        const orderData = orderSnapshot.val();
-        orderData.status = "CANCELLED";
-        orderData.cancelReason = reason; // Save reason
-        orderData.archivedAt = Date.now();
+    const orderData = orderSnapshot.val();
 
-        await push(ref(db, "OrderHistory"), orderData);
-        await remove(ref(db, `Order/${orderKey}`));
-
-        statusDropdown.value = "CANCELLED";
-        statusDropdown.style.color = "#cc3232";
-      } catch (error) {
-        console.error(error);
-      } finally {
-        cancelReasonModal.style.display = "none";
-        pendingCancelOrder = null;
-      }
+    // 2️⃣ Update status FIRST (for customer toast)
+    await update(orderRef, {
+      status: "CANCELLED",
+      statusTimestamp: Date.now(),
+      cancelReason: reason,
     });
+
+    // 3️⃣ Archive immediately
+    orderData.status = "CANCELLED";
+    orderData.statusTimestamp = Date.now();
+    orderData.cancelReason = reason;
+    orderData.archivedAt = Date.now();
+
+    await push(ref(db, "OrderHistory"), orderData);
+
+    // 4️⃣ Remove from active orders
+    await remove(orderRef);
+
+  } catch (error) {
+    console.error("Cancel failed:", error);
+  } finally {
+    cancelReasonModal.style.display = "none";
+    pendingCancelOrder = null;
+  }
+});
+
 
     // ============ FOOD TOGGLE ============
     const foodToggle = row.querySelector(".food-toggle");

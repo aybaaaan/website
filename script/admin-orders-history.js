@@ -34,6 +34,7 @@ const nextBtn = document.getElementById("nextPageHistory");
 
 const filterStatus = document.getElementById("filterStatus");
 const filterCustomer = document.getElementById("filterCustomer");
+const filterOrderId = document.getElementById("filterOrderId");
 const filterStartDate = document.getElementById("filterStartDate");
 const filterEndDate = document.getElementById("filterEndDate");
 const applyFiltersBtn = document.getElementById("applyFilters");
@@ -188,6 +189,7 @@ nextBtn.addEventListener("click", () => {
 function applyFilters() {
   const statusVal = filterStatus.value.toUpperCase();
   const customerVal = filterCustomer.value.toLowerCase();
+  const orderIdVal = filterOrderId.value.toLowerCase();
   const startDateVal = filterStartDate.value
     ? new Date(filterStartDate.value).setHours(0, 0, 0, 0)
     : null;
@@ -203,6 +205,13 @@ function applyFilters() {
       match = match && order.name.toLowerCase().includes(customerVal);
     if (startDateVal) match = match && order.archivedAt >= startDateVal;
     if (endDateVal) match = match && order.archivedAt <= endDateVal;
+    if (orderIdVal)
+  match =
+    match &&
+    String(order.orderID || "")
+      .toLowerCase()
+      .includes(orderIdVal);
+
 
     return match;
   });
@@ -216,6 +225,7 @@ applyFiltersBtn.addEventListener("click", applyFilters);
 clearFiltersBtn.addEventListener("click", () => {
   filterStatus.value = "";
   filterCustomer.value = "";
+  filterOrderId.value = "";
   filterStartDate.value = "";
   filterEndDate.value = "";
   filteredOrders = [...ordersHistoryArray];

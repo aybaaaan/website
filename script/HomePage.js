@@ -787,16 +787,53 @@ function showOrUpdateOrderToast(order) {
     setTimeout(() => toast.classList.add("show"), 10);
 
     toast.querySelector("button").addEventListener("click", () => {
-      toast.remove();
-      orderToasts[orderID] = null;
-      dismissedOrders[orderID] = { status, timestamp }; // store timestamp too
-      saveDismissedOrders();
-    });
+  toast.remove();
+  orderToasts[orderID] = null;
+
+  dismissedOrders[orderID] = {
+    status: order.status,
+    timestamp: order.statusTimestamp
+  };
+
+  saveDismissedOrders();
+});
+
 
     orderToasts[orderID] = toast;
     orderStatuses[orderID] = status;
   }
 }
+
+onValue(ref(db, "OrderHistory"), (snapshot) => {
+  if (!snapshot.exists()) return;
+
+  const user = auth.currentUser;
+  if (!user) return;
+
+  const orders = Object.values(snapshot.val());
+
+  orders.forEach((order) => {
+    if (
+      order.userId === user.uid &&
+      order.status === "CANCELLED"
+    ) {
+      const dismissed = dismissedOrders[order.orderID];
+
+      // 🚫 If user already clicked OK, do nothing
+      if (
+        dismissed &&
+        dismissed.status === "CANCELLED" &&
+        dismissed.timestamp === order.statusTimestamp
+      ) {
+        return;
+      }
+
+      // 🔥 SHOW PERMANENT CANCELLED TOAST
+      showOrUpdateOrderToast(order);
+    }
+  });
+});
+
 
 onValue(ref(db, "Order"), (snapshot) => {
   const data = snapshot.val();
@@ -810,13 +847,17 @@ onValue(ref(db, "Order"), (snapshot) => {
   const userOrders = Object.values(data).filter((o) => o.userId === user.uid);
 
   userOrders.forEach((order) => {
-    if (
-      dismissedOrders[order.orderID] &&
-      dismissedOrders[order.orderID] !== order.status
-    ) {
-      delete dismissedOrders[order.orderID];
-      saveDismissedOrders();
-    }
+    const dismissed = dismissedOrders[order.orderID];
+
+if (
+  dismissed &&
+  dismissed.status !== order.status
+) {
+  // Status changed → allow new toast
+  delete dismissedOrders[order.orderID];
+  saveDismissedOrders();
+}
+
 
     if (orderStatuses[order.orderID] !== order.status) {
       showOrUpdateOrderToast(order);
