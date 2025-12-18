@@ -631,10 +631,10 @@ checkoutForm.addEventListener("submit", async (e) => {
     emailjs
       .send("service_7vla50x", "template_s96a7yg", emailParams)
       .then(() => {
-        console.log("📧 EmailJS: Admin notified successfully");
+        console.log("EmailJS: Admin notified successfully");
       })
       .catch((err) => {
-        console.error("❌ EmailJS failed:", err);
+        console.error("EmailJS failed:", err);
       });
     //
     // Update user profile in Firestore with STRUCTURED ADDRESS
