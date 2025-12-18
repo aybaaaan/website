@@ -186,7 +186,7 @@ function renderOrdersPage() {
       </div>
 
       <div class="order-card-right">
-        <h6 class= "orderNumber"><strong>Order #: ${
+        <h6 class= "orderNumber"><strong>Order ID: ${
           data.orderID || "N/A"
         }  </strong></h6>
         <p>

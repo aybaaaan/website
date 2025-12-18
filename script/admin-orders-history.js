@@ -107,7 +107,7 @@ function renderOrderHistoryPage() {
 
     row.innerHTML = `
           <div class ="nameid"><h2 class="name">${data.name || "Unknown"}</h2>
-          <p class="orderid"><strong>Order #:</strong> ${
+          <p class="orderid"><strong>Order ID:</strong> ${
             data.orderID || "N/A"
           }</p>
           
@@ -158,7 +158,7 @@ function renderOrderHistoryPage() {
 
       deleteBtn.addEventListener("click", () => {
         orderToDelete = data;
-        deleteMessage.textContent = `Are you sure you want to permanently delete order #${data.orderID}?`;
+        deleteMessage.textContent = `Are you sure you want to permanently delete order ID: ${data.orderID}?`;
         deleteModal.classList.remove("hidden");
       });
     }
