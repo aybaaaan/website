@@ -363,13 +363,13 @@ proceedBtn.addEventListener("click", async () => {
   const now = new Date();
   const currentHour = now.getHours();
 
-  /* If today and already past 9 PM
+  // If today and already past 9 PM
   if (currentHour >= 21) {
     showTimePopup(
       "Ordering is closed for today. Our delivery time is from 8:00 AM to 9:00 PM. Please order again tomorrow."
     );
     return;
-  }*/
+  }
 
   if (!currentUser) {
     if (modal) modal.style.display = "none";
