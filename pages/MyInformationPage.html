@@ -6,6 +6,7 @@
     <title>My Information</title>
     <link rel="stylesheet" href="../css/MyInformationPage.css" />
     <link rel="stylesheet" href="../responsive/MyInfoResponsive.css" />
+    <link rel="icon" type="image/x-icon" href="/icons/favicon.ico" />
   </head>
 
   <body>
@@ -57,41 +58,52 @@
       </div>
 
       <!-- Simple Password Modal -->
-<div id="changePasswordModal" class="modal" style="display: none">
-  <div class="modal-content">
-    <div class="password-wrapper">
-      <label for="modalCurrentPass">Current Password: </label>
-      <div class="input-with-icon">
-        <input
-          type="password"
-          id="modalCurrentPass"
-          placeholder="Enter current password"
-        />
-        <img src="../icons/hide.png" alt="toggle password" class="toggle-icon" />
+      <div id="changePasswordModal" class="modal" style="display: none">
+        <div class="modal-content">
+          <div class="password-wrapper">
+            <label for="modalCurrentPass">Current Password: </label>
+            <div class="input-with-icon">
+              <input
+                type="password"
+                id="modalCurrentPass"
+                placeholder="Enter current password"
+              />
+              <img
+                src="../icons/hide.png"
+                alt="toggle password"
+                class="toggle-icon"
+              />
+            </div>
+          </div>
+
+          <div class="password-wrapper">
+            <label for="modalNewPass">New Password: </label>
+            <div class="input-with-icon">
+              <input
+                type="password"
+                id="modalNewPass"
+                placeholder="New Password"
+              />
+              <img
+                src="../icons/hide.png"
+                alt="toggle password"
+                class="toggle-icon"
+              />
+            </div>
+          </div>
+
+          <div class="modal-buttons">
+            <button id="modalSubmitBtn">Change Password</button>
+            <button id="modalCancelBtn">Cancel</button>
+          </div>
+        </div>
       </div>
-    </div>
-
-    <div class="password-wrapper">
-      <label for="modalNewPass">New Password: </label>
-      <div class="input-with-icon">
-        <input type="password" id="modalNewPass" placeholder="New Password" />
-        <img src="../icons/hide.png" alt="toggle password" class="toggle-icon" />
-      </div>
-    </div>
-
-    <div class="modal-buttons">
-      <button id="modalSubmitBtn">Change Password</button>
-      <button id="modalCancelBtn">Cancel</button>
-    </div>
-  </div>
-</div>
-
 
       <div id="info-fields"></div>
 
       <div class="button-group">
         <button id="editBtn">Edit Profile</button>
-        <button id="cancelBtn" style="display: none;">Cancel</button>
+        <button id="cancelBtn" style="display: none">Cancel</button>
       </div>
     </section>
 
