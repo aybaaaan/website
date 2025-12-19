@@ -351,12 +351,29 @@ button {
   color: #ffffff;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
 }
+.cancelBtn {
+  background: #a64d79;
+  color: #ffffff;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+}
 
 #editBtn:hover,
-#saveBtn:hover {
+#saveBtn:hover, #cancelBtn {
   background: #ead1dc;
   color: #741b47;
   transform: translateY(-2px);
+}
+
+#cancelBtn {
+  background: #ead1dc;
+  color: #741b47;
+  transform: translateY(-2px);
+}
+
+#cancelBtn:hover {
+  background: #a64d79;
+  color: #ffffff;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
 }
 
 /* Disabled input look */

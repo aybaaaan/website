@@ -14,15 +14,14 @@ import {
 
 // ================= CONFIG =================
 const firebaseConfig = {
-  apiKey: "AIzaSyBSpMRcuO5iGPU2hXhnTOMjog29plJwU4U",
-  authDomain: "mediterranean-in-velvet-53036.firebaseapp.com",
-  databaseURL:
-    "https://mediterranean-in-velvet-53036-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "mediterranean-in-velvet-53036",
-  storageBucket: "mediterranean-in-velvet-53036.firebasestorage.app",
-  messagingSenderId: "1062662016088",
-  appId: "1:1062662016088:web:007e0bf8a3e5d0094c8e2d",
-  measurementId: "G-TRP0RL8LRL",
+  apiKey: "AIzaSyC7FLz6RyFhiNok82uPj3hs7Ev8r7UI3Ik",
+  authDomain: "mediterranean-in-velvet-10913.firebaseapp.com",
+  databaseURL: "https://mediterranean-in-velvet-10913-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "mediterranean-in-velvet-10913",
+  storageBucket: "mediterranean-in-velvet-10913.firebasestorage.app",
+  messagingSenderId: "478608649838",
+  appId: "1:478608649838:web:cbe6ed90b718037244c07f",
+  measurementId: "G-T9TT5N8NJX"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -128,11 +127,30 @@ provinceInput.value = "Cavite";
 
 const emailEl = document.getElementById("email");
 const editBtn = document.getElementById("editBtn");
+const cancelBtn = document.getElementById("cancelBtn");
+let originalData = {};
 
 // ================= PHONE ONLY VALIDATION + 11 DIGIT LIMIT =================
+// ================= PH PHONE NUMBER (LOCKED 09 PREFIX) =================
+phoneInput.addEventListener("keydown", (e) => {
+  const cursorPos = phoneInput.selectionStart;
+
+  // Prevent deleting the "09"
+  if (
+    (e.key === "Backspace" || e.key === "Delete") &&
+    cursorPos <= 2
+  ) {
+    e.preventDefault();
+  }
+});
+
 phoneInput.addEventListener("input", (e) => {
-  // Remove non-digits
   let value = e.target.value.replace(/\D/g, "");
+
+  // Always enforce 09 prefix
+  if (!value.startsWith("09")) {
+    value = "09" + value.replace(/^0+/, "").replace(/^9/, "");
+  }
 
   // Limit to 11 digits
   if (value.length > 11) {
@@ -140,6 +158,12 @@ phoneInput.addEventListener("input", (e) => {
   }
 
   e.target.value = value;
+});
+
+phoneInput.addEventListener("focus", () => {
+  if (!phoneInput.value) {
+    phoneInput.value = "09";
+  }
 });
 
 // ================= PHONE ONLY VALIDATION + 11 DIGIT LIMIT =================
@@ -173,7 +197,9 @@ onAuthStateChanged(auth, async (user) => {
     const address = data.address || {};
 
     nameInput.value = data.name || user.email.split("@")[0];
-    phoneInput.value = data.phone || "Not set";
+    const phone = data.phone || "";
+    phoneInput.value = phone.startsWith("09") ? phone : "09";
+
     housenoInput.value = address.houseno || "Not set";
     streetInput.value = address.street || "Not set";
     barangayInput.value = address.barangay || "Not set";
@@ -199,69 +225,107 @@ let editing = false;
 
 editBtn.addEventListener("click", async () => {
   const user = auth.currentUser;
-  if (!user) return showSuccess("You are not logged in.");
+  if (!user) return showError("You are not logged in.");
 
+  // ================= ENTER EDIT MODE =================
   if (!editing) {
     editing = true;
 
+    // Store original values
+    originalData = {
+      name: nameInput.value,
+      phone: phoneInput.value,
+      houseno: housenoInput.value,
+      street: streetInput.value,
+      barangay: barangayInput.value,
+    };
+
+    // Enable fields
     nameInput.disabled = false;
     phoneInput.disabled = false;
     housenoInput.disabled = false;
     streetInput.disabled = false;
     barangayInput.disabled = false;
 
-    // city and province remain disabled
     editBtn.textContent = "Save Changes";
+    cancelBtn.style.display = "inline-block";
     nameInput.focus();
-  } else {
-    nameInput.disabled = false;
-    phoneInput.disabled = false;
-    housenoInput.disabled = false;
-    streetInput.disabled = false;
-    barangayInput.disabled = false;
-
-    if (
-      !nameInput.value.trim() ||
-      !phoneInput.value.trim() ||
-      !housenoInput.value.trim() ||
-      !streetInput.value.trim() ||
-      !barangayInput.value.trim()
-    ) {
-      return showError("Please fill out all required fields.");
-    }
-
-    editing = false;
-
-    nameInput.disabled = true;
-    phoneInput.disabled = true;
-    housenoInput.disabled = true;
-    streetInput.disabled = true;
-    barangayInput.disabled = true;
-
-    // city and province remain disabled
-    editBtn.textContent = "Edit Profile";
-
-    const userRef = doc(db, "users", user.uid);
-    await setDoc(
-      userRef,
-      {
-        email: user.email,
-        name: nameInput.value.trim() || user.email.split("@")[0],
-        phone: phoneInput.value.trim() || "Not set",
-        address: {
-          houseno: housenoInput.value.trim() || "Not set",
-          street: streetInput.value.trim() || "Not set",
-          barangay: barangayInput.value.trim() || "Not set",
-          city: "Tagaytay",
-          province: "Cavite",
-        },
-      },
-      { merge: true }
-    );
-
-    showSuccess("Profile updated successfully!");
+    return;
   }
+
+  // ================= SAVE CHANGES =================
+  if (
+    !nameInput.value.trim() ||
+    !phoneInput.value.trim() ||
+    !housenoInput.value.trim() ||
+    !streetInput.value.trim() ||
+    !barangayInput.value.trim()
+  ) {
+    return showError("Please fill out all required fields.");
+  }
+
+  // PH phone validation
+  if (!/^09\d{9}$/.test(phoneInput.value)) {
+    return showError(
+      "Phone number must start with 09 and contain exactly 11 digits."
+    );
+  }
+
+  editing = false;
+
+  // Disable fields
+  nameInput.disabled = true;
+  phoneInput.disabled = true;
+  housenoInput.disabled = true;
+  streetInput.disabled = true;
+  barangayInput.disabled = true;
+
+  editBtn.textContent = "Edit Profile";
+  cancelBtn.style.display = "none";
+
+  const userRef = doc(db, "users", user.uid);
+  await setDoc(
+    userRef,
+    {
+      email: user.email,
+      name: nameInput.value.trim(),
+      phone: phoneInput.value.trim(),
+      address: {
+        houseno: housenoInput.value.trim(),
+        street: streetInput.value.trim(),
+        barangay: barangayInput.value.trim(),
+        city: "Tagaytay",
+        province: "Cavite",
+      },
+    },
+    { merge: true }
+  );
+
+  showSuccess("Profile updated successfully!");
 });
+cancelBtn.addEventListener("click", () => {
+  // Restore original values
+  nameInput.value = originalData.name;
+  phoneInput.value = originalData.phone;
+  housenoInput.value = originalData.houseno;
+  streetInput.value = originalData.street;
+  barangayInput.value = originalData.barangay;
+
+  // Disable fields again
+  nameInput.disabled = true;
+  phoneInput.disabled = true;
+  housenoInput.disabled = true;
+  streetInput.disabled = true;
+  barangayInput.disabled = true;
+
+  // Reset buttons
+  editing = false;
+  editBtn.textContent = "Edit Profile";
+  cancelBtn.style.display = "none";
+
+  showSuccess("Changes cancelled.");
+});
+
 
 // Password Elements
 const passwordInput = document.getElementById("password");

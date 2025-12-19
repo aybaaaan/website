@@ -140,15 +140,14 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBSpMRcuO5iGPU2hXhnTOMjog29plJwU4U",
-  authDomain: "mediterranean-in-velvet-53036.firebaseapp.com",
-  databaseURL:
-    "https://mediterranean-in-velvet-53036-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "mediterranean-in-velvet-53036",
-  storageBucket: "mediterranean-in-velvet-53036.firebasestorage.app",
-  messagingSenderId: "1062662016088",
-  appId: "1:1062662016088:web:007e0bf8a3e5d0094c8e2d",
-  measurementId: "G-TRP0RL8LRL",
+  apiKey: "AIzaSyC7FLz6RyFhiNok82uPj3hs7Ev8r7UI3Ik",
+  authDomain: "mediterranean-in-velvet-10913.firebaseapp.com",
+  databaseURL: "https://mediterranean-in-velvet-10913-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "mediterranean-in-velvet-10913",
+  storageBucket: "mediterranean-in-velvet-10913.firebasestorage.app",
+  messagingSenderId: "478608649838",
+  appId: "1:478608649838:web:cbe6ed90b718037244c07f",
+  measurementId: "G-T9TT5N8NJX"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -327,7 +326,7 @@ const mm = String(today.getMonth() + 1).padStart(2, "0");
 const dd = String(today.getDate()).padStart(2, "0");
 dateInput.min = `${yyyy}-${mm}-${dd}`;
 
-// Prevent past times for today's date
+//Prevent past times for today's date
 dateInput.addEventListener("change", () => {
   const selectedDate = new Date(dateInput.value);
   const now = new Date();
@@ -336,22 +335,7 @@ dateInput.addEventListener("change", () => {
   timeInput.value = "";
 
   // If user picks today, limit times
-  if (
-    selectedDate.getFullYear() === now.getFullYear() &&
-    selectedDate.getMonth() === now.getMonth() &&
-    selectedDate.getDate() === now.getDate()
-  ) {
-    // Set minimum time to current time (rounded to next 15 minutes)
-    const minutes = Math.ceil(now.getMinutes() / 15) * 15;
-    now.setMinutes(minutes);
-    const minTime = now.toTimeString().slice(0, 5);
-    timeInput.min = minTime;
-  } else {
-    // If another day, reset min
-    timeInput.min = "08:00";
-    timeInput.max = "21:00";
-    timeInput.step = 900; // 15 minutes (optional)
-  }
+  
 });
 
 function setDeliveryDateToday() {
@@ -379,13 +363,13 @@ proceedBtn.addEventListener("click", async () => {
   const now = new Date();
   const currentHour = now.getHours();
 
-  // If today and already past 9 PM
+  /* If today and already past 9 PM
   if (currentHour >= 21) {
     showTimePopup(
       "Ordering is closed for today. Our delivery time is from 8:00 AM to 9:00 PM. Please order again tomorrow."
     );
     return;
-  }
+  }*/
 
   if (!currentUser) {
     if (modal) modal.style.display = "none";
