@@ -332,7 +332,7 @@ dateInput.addEventListener("change", () => {
   const now = new Date();
 
   // Reset time input
-  timeInput.value = "";
+  populateTimeOptions();
 
   // If user picks today, limit times
   
@@ -363,13 +363,13 @@ proceedBtn.addEventListener("click", async () => {
   const now = new Date();
   const currentHour = now.getHours();
 
-  /* If today and already past 9 PM
+  //If today and already past 9 PM
   if (currentHour >= 21) {
     showTimePopup(
       "Ordering is closed for today. Our delivery time is from 8:00 AM to 9:00 PM. Please order again tomorrow."
     );
     return;
-  }*/
+  }
 
   if (!currentUser) {
     if (modal) modal.style.display = "none";
@@ -413,6 +413,7 @@ proceedBtn.addEventListener("click", async () => {
 
   // AUTO-SET DELIVERY DATE TO TODAY
   setDeliveryDateToday();
+  populateTimeOptions();
 });
 
 // ========== Modal Close Logic ==========
@@ -423,6 +424,55 @@ closeModal.addEventListener("click", () => {
 window.addEventListener("click", (e) => {
   if (e.target === modal) modal.style.display = "none";
 });
+
+function populateTimeOptions() {
+  const timeSelect = document.getElementById("delivery-time");
+  if (!timeSelect) return;
+
+  timeSelect.innerHTML = '<option value="" disabled selected>Select time</option>';
+
+  if (!dateInput.value) return;
+
+  const now = new Date();
+  const selectedDateStr = dateInput.value; 
+  const isToday = selectedDateStr === now.toISOString().split('T')[0];
+
+  // Operating Hours: 8:00 AM (8) to 9:00 PM (21)
+  for (let h = 8; h <= 21; h++) {
+    for (let m = 0; m < 60; m += 10) {
+      if (h === 21 && m > 0) break; // Hanggang 9:00 PM lang
+
+      const hourStr = String(h).padStart(2, "0");
+      const minStr = String(m).padStart(2, "0");
+      const timeValue = `${hourStr}:${minStr}`;
+
+      const option = document.createElement("option");
+      option.value = timeValue;
+      
+      // 12-hour format display
+      const ampm = h >= 12 ? 'PM' : 'AM';
+      const displayHour = h > 12 ? h - 12 : (h === 0 ? 12 : h);
+      option.textContent = `${displayHour}:${minStr} ${ampm}`;
+
+      // VALIDATION LOGIC
+      if (isToday) {
+        // Kunin ang current time components para sa comparison
+        const currentHour = now.getHours();
+        const currentMinute = now.getMinutes();
+
+        // I-disable kung ang oras sa loop ay mas maaga sa oras ngayon
+        if (h < currentHour || (h === currentHour && m <= currentMinute)) {
+          option.disabled = true; // Unclickable requirement
+          option.style.color = "#ccc"; 
+          option.textContent += " (Unavailable)"; 
+        }
+      }
+      timeSelect.appendChild(option);
+    }
+  }
+}
+
+
 
 // ==================== INVALID DELIVERY TIME POPUP ====================
 const timePopup = document.getElementById("timePopup");
@@ -589,7 +639,7 @@ checkoutForm.addEventListener("submit", async (e) => {
     await push(ordersRef, orderData);
 
     // ======================== EMAILJS ADMIN NOTIFICATION ========================
-    const emailParams = {
+    /*const emailParams = {
       orderID: orderID,
       userEmail: currentUser.email,
       name: name,
@@ -633,7 +683,7 @@ checkoutForm.addEventListener("submit", async (e) => {
         address: addressObject, // store as object
       },
       { merge: true }
-    );
+    );*/
 
     // FOR DELIVERY DATE INPUT
     // Prevent users from choosing past dates

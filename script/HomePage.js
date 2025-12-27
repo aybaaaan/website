@@ -288,12 +288,13 @@ import {
 const firebaseConfig = {
   apiKey: "AIzaSyC7FLz6RyFhiNok82uPj3hs7Ev8r7UI3Ik",
   authDomain: "mediterranean-in-velvet-10913.firebaseapp.com",
-  databaseURL: "https://mediterranean-in-velvet-10913-default-rtdb.asia-southeast1.firebasedatabase.app",
+  databaseURL:
+    "https://mediterranean-in-velvet-10913-default-rtdb.asia-southeast1.firebasedatabase.app",
   projectId: "mediterranean-in-velvet-10913",
   storageBucket: "mediterranean-in-velvet-10913.firebasestorage.app",
   messagingSenderId: "478608649838",
   appId: "1:478608649838:web:cbe6ed90b718037244c07f",
-  measurementId: "G-T9TT5N8NJX"
+  measurementId: "G-T9TT5N8NJX",
 };
 
 const app = initializeApp(firebaseConfig);
@@ -406,31 +407,82 @@ function renderMenuByCategory(category) {
       : allMenuItems.filter((item) => item.category === category);
 
   filteredItems.forEach((item) => {
+    // 1. Check kung "disabled" ang status mula sa Firebase
+    const isOutOfStock = item.status === "disabled";
+
     const card = document.createElement("div");
     card.className = "menu-card";
 
+    // 2. Gawing unclickable at lagyan ng visual indicator kung out of stock
+    if (isOutOfStock) {
+      card.classList.add("out-of-stock-card");
+      card.style.pointerEvents = "none"; // Requirement: Unclickable
+    }
+
     card.innerHTML = `
-      <img src="${item.url}" alt="${item.name}">
-      <div class="card-content">
+      <div class="image-wrapper" style="position: relative; overflow: hidden; border-radius: 8px;">
+        <img src="${item.url}" alt="${item.name}" style="${
+      isOutOfStock ? "filter: sepia(60%) contrast(80%) grayscale(40%);" : ""
+    }">
+        
+        ${
+          isOutOfStock
+            ? `
+          <div class="not-available-overlay" style="
+            position: absolute; 
+            top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.2); 
+            display: flex; align-items: center; justify-content: center;
+          ">
+            <div style="
+              background: #a64d7aec;
+              color: #fae0f6ff; 
+              padding: 10px 20px; 
+              font-weight: bold; 
+              border-radius: 4px;
+              box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            ">Not Available</div>
+          </div>
+        `
+            : ""
+        }
+      </div>
+      <div class="card-content" style="${isOutOfStock ? "opacity: 0.8;" : ""}">
         <h3 class="card-title">${item.name}</h3>
         <p class="card-desc">${item.desc}</p>
         <div class="card-bottom">
-          <span class="card-price">₱${item.price || 0}.00</span>
+          <span class="card-price" style="${
+            isOutOfStock ? "text-decoration: line-through; color: #999;" : ""
+          }">₱${item.price || 0}.00</span>
         </div>
       </div>
     `;
 
-    // Create the Order button dynamically
+    // Click event para sa details (Gagana lang kung hinde out of stock)
+    if (!isOutOfStock) {
+      card.addEventListener("click", () => {
+        goToDetails(item.name, item.price || 0, item.url, item.desc);
+      });
+    }
+
     const cardBottom = card.querySelector(".card-bottom");
     const btn = document.createElement("button");
     btn.className = "order-btn";
-    btn.textContent = "Order";
-    card.addEventListener("click", () => {
-      goToDetails(item.name, item.price || 0, item.url, item.desc);
-    });
-    btn.addEventListener("click", () => {
-      goToDetails(item.name, item.price || 0, item.url, item.desc);
-    });
+
+    // 3. I-disable ang button at palitan ang text kung unavailable
+    if (isOutOfStock) {
+      btn.textContent = "Unavailable";
+      btn.disabled = true;
+      btn.style.background = "#8e9eab"; // solid background color
+      btn.style.color = "#ffffff"; // text color
+      btn.style.border = "1px solid #8e9eab"; // optional: match border to background or keep default
+    } else {
+      btn.textContent = "Order";
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation(); // Iwasan ang double trigger sa card click
+        goToDetails(item.name, item.price || 0, item.url, item.desc);
+      });
+    }
 
     cardBottom.appendChild(btn);
     menuContainer.appendChild(card);

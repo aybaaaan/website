@@ -1974,3 +1974,42 @@ details summary {
   transform: scale(1.03);
   background-color: #e0d9d9;
 }
+
+
+/* Base styles for status buttons */
+.btn-enable, .btn-disable {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out; /* Smooth transition for hover */
+    color: white;
+}
+
+/* Enable Button (Green) */
+.btn-enable {
+    background-color: #27ae60;
+}
+
+.btn-enable:hover {
+    background-color: #2ecc71; /* Lighter green on hover */
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+/* Disable Button (Orange) */
+.btn-disable {
+    background-color: #e67e22;
+}
+
+.btn-disable:hover {
+    background-color: #f39c12; /* Lighter orange on hover */
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+/* Click effect for both */
+.btn-enable:active, .btn-disable:active {
+    transform: translateY(0);
+}

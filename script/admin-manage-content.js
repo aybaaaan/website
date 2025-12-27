@@ -36,14 +36,12 @@ let editKey = null;
 let base64Image = "";
 const fileInput = document.getElementById("imageFile");
 const preview = document.getElementById("preview");
-
 const priceInput = document.getElementById("imagePrice");
 
-// Make sure only numbers and one decimal point are allowed
 priceInput.addEventListener("input", (e) => {
   e.target.value = e.target.value
-    .replace(/[^\d.]/g, "") // allow only digits and a single dot
-    .replace(/(\..*?)\..*/g, "$1"); // prevent multiple dots
+    .replace(/[^\d.]/g, "") 
+    .replace(/(\..*?)\..*/g, "$1"); 
 });
 
 // OPEN ADD ITEM MODAL
@@ -59,22 +57,12 @@ window.openAddModal = (section = "menu") => {
   document.getElementById("modalTitle").innerText = "Add Item";
   document.getElementById("itemModal").style.display = "block";
 
-  // Show or hide price input depending on section
-  const priceField =
-    document.getElementById("imagePrice").closest(".input-group") ||
-    document.getElementById("imagePrice");
-  if (section === "menu") {
-    priceField.style.display = "block";
-  } else {
-    priceField.style.display = "none";
-  }
+  const priceField = document.getElementById("imagePrice").closest(".input-group") || document.getElementById("imagePrice");
+  priceField.style.display = section === "menu" ? "block" : "none";
 };
 
-// CLOSE ITEM MODAL
-window.closeModal = () =>
-  (document.getElementById("itemModal").style.display = "none");
+window.closeModal = () => (document.getElementById("itemModal").style.display = "none");
 
-// IMAGE PREVIEW HANDLER
 fileInput.addEventListener("change", (e) => {
   const file = e.target.files[0];
   if (file) {
@@ -87,21 +75,20 @@ fileInput.addEventListener("change", (e) => {
   }
 });
 
-// SAVE ITEM (ADD OR EDIT)
+// SAVE ITEM
 document.getElementById("saveItem").addEventListener("click", () => {
   const name = document.getElementById("imageName").value.trim();
   const desc = document.getElementById("imageDesc").value.trim();
   const price = document.getElementById("imagePrice").value.trim();
-  const category = document.getElementById("itemCategory")?.value || "main"; // default to main
+  const category = document.getElementById("itemCategory")?.value || "main";
 
   if (!base64Image || !name || !desc || (currentSection === "menu" && !price)) {
-    showFillFieldsModal();
+    alert("Please fill all fields");
     return;
   }
 
   const sectionRef = currentSection === "menu" ? menuRef : homeRef;
 
-  // Build the data object
   const itemData = {
     url: base64Image,
     name,
@@ -109,12 +96,14 @@ document.getElementById("saveItem").addEventListener("click", () => {
     price,
   };
 
-  // Only add category for menu section
   if (currentSection === "menu") {
     itemData.category = category;
+    // Default status para sa bagong items
+    if (!editKey) {
+        itemData.status = "enabled"; 
+    }
   }
 
-  // Save to Firebase (update or push)
   if (editKey) {
     update(ref(db, `${currentSection}/${editKey}`), itemData);
   } else {
@@ -136,15 +125,8 @@ window.editItem = (section, key, url, name, desc, price) => {
   base64Image = url;
   document.getElementById("itemModal").style.display = "block";
 
-  // Show or hide price input depending on section
-  const priceField =
-    document.getElementById("imagePrice").closest(".input-group") ||
-    document.getElementById("imagePrice");
-  if (section === "menu") {
-    priceField.style.display = "block";
-  } else {
-    priceField.style.display = "none";
-  }
+  const priceField = document.getElementById("imagePrice").closest(".input-group") || document.getElementById("imagePrice");
+  priceField.style.display = section === "menu" ? "block" : "none";
 };
 
 // DELETE ITEM
@@ -152,14 +134,10 @@ let pendingDelete = { section: null, key: null };
 window.deleteItem = (section, key) => {
   pendingDelete.section = section;
   pendingDelete.key = key;
-
-  document.getElementById("delete-confirm-message").innerText =
-    "Are you sure you want to delete this item?";
-
   document.getElementById("delete-confirm-modal").style.display = "flex";
 };
 
-// RENDER MENU AND HOME ITEMS
+// RENDER ITEMS
 function renderItems(refPath, container) {
   onValue(refPath, (snapshot) => {
     container.innerHTML = "";
@@ -170,61 +148,61 @@ function renderItems(refPath, container) {
       const itemWrapper = document.createElement("div");
       itemWrapper.classList.add("item-wrapper");
 
-      // IMAGE BOX (just the image)
+      // Visual feedback kung disabled ang item
+      if (refPath.key === "menu" && item.status === "disabled") {
+        itemWrapper.style.opacity = "0.6";
+      }
+
       const box = document.createElement("div");
       box.classList.add("picture-box");
-      box.innerHTML = `
-      <img src="${item.url}" alt="${item.name}">
-      `;
+      box.innerHTML = `<img src="${item.url}" alt="${item.name}">`;
 
-      // DETAILS (outside the picture-box)
       const details = document.createElement("div");
       details.classList.add("item-details");
 
       if (refPath.key === "menu") {
         const categoryName = getCategoryName(item.category);
-        // Show price for menu items
+        const displayStatus = item.status === "disabled" ? 
+          `<span style="color:#e67e22; font-weight:bold; font-size:12px; margin-left:5px;">[OUT OF STOCK]</span>` : "";
+        
         details.innerHTML = `
-    <p class="item-name">${item.name}</p>
-    <p class="item-desc"><strong>Description:</strong> ${item.desc}</p>
-    <p class="item-price">₱${item.price || 0}</p>
-    <p class="item-category"> • ${categoryName}</p>
-  `;
+          <p class="item-name">${item.name}${displayStatus}</p>
+          <p class="item-desc"><strong>Description:</strong> ${item.desc}</p>
+          <p class="item-price">₱${item.price || 0}</p>
+          <p class="item-category"> • ${categoryName}</p>
+        `;
       } else {
-        // Hide price for homepage items
         details.innerHTML = `
-    <p class="item-name">${item.name}</p>
-    <p class="item-desc"><strong>Description:</strong> ${item.desc}</p>
-  `;
+          <p class="item-name">${item.name}</p>
+          <p class="item-desc"><strong>Description:</strong> ${item.desc}</p>
+        `;
       }
 
-      // append everything in order
-      itemWrapper.appendChild(details);
-
-      // then append itemWrapper to container
-
-      // BUTTONS CONTAINER
       const buttonsDiv = document.createElement("div");
       buttonsDiv.classList.add("buttons");
 
-      // EDIT BUTTON FOR MAIN CONTENT
+      // EDIT BUTTON
       const editBtn = document.createElement("button");
       editBtn.classList.add("btn-edit");
       editBtn.textContent = "Edit";
+      editBtn.addEventListener("click", () => editItem(refPath.key, key, item.url, item.name, item.desc, item.price));
 
-      // store safely
-      editBtn.dataset.ref = refPath.key;
-      editBtn.dataset.key = key;
-      editBtn.dataset.url = item.url;
-      editBtn.dataset.name = item.name;
-      editBtn.dataset.desc = item.desc;
-      editBtn.dataset.price = item.price || 0;
-
-      // event listener
-      editBtn.addEventListener("click", (e) => {
-        const d = e.currentTarget.dataset;
-        editItem(d.ref, d.key, d.url, d.name, d.desc, d.price);
-      });
+      // TOGGLE STATUS BUTTON (MENU ONLY)
+      if (refPath.key === "menu") {
+        const toggleBtn = document.createElement("button");
+        const isCurrentlyEnabled = item.status !== "disabled";
+        
+        toggleBtn.textContent = isCurrentlyEnabled ? "Disable" : "Enable";
+        
+        // DITO IA-APPLY ANG CLASS PARA SA HOVER EFFECTS
+        toggleBtn.className = isCurrentlyEnabled ? "btn-disable" : "btn-enable";
+        
+        toggleBtn.addEventListener("click", () => {
+            const newStatus = isCurrentlyEnabled ? "disabled" : "enabled";
+            update(ref(db, `menu/${key}`), { status: newStatus });
+        });
+        buttonsDiv.appendChild(toggleBtn);
+      }
 
       // DELETE BUTTON
       const delBtn = document.createElement("button");
@@ -232,15 +210,15 @@ function renderItems(refPath, container) {
       delBtn.textContent = "Delete";
       delBtn.addEventListener("click", () => deleteItem(refPath.key, key));
 
-      // append buttons
-      buttonsDiv.append(editBtn, delBtn);
+      buttonsDiv.appendChild(editBtn);
+      buttonsDiv.appendChild(delBtn);
 
+      itemWrapper.appendChild(details);
       itemWrapper.appendChild(box);
       itemWrapper.appendChild(buttonsDiv);
       container.appendChild(itemWrapper);
     });
 
-    // ADD BUTTON
     const plus = document.createElement("div");
     plus.classList.add("picture-box", "plus");
     plus.innerText = "+";
@@ -252,135 +230,60 @@ function renderItems(refPath, container) {
 renderItems(menuRef, menuGrid);
 renderItems(homeRef, homeGrid);
 
-const deleteConfirmModal = document.getElementById("delete-confirm-modal");
-const cancelDelete = document.getElementById("cancel-delete");
-
-cancelDelete.addEventListener("click", () => {
-  deleteConfirmModal.style.display = "none";
-  orderKeyToDelete = null;
-});
-
-window.addEventListener("click", (e) => {
-  if (e.target === deleteConfirmModal)
-    deleteConfirmModal.style.display = "none";
+// CONFIRM DELETE
+document.getElementById("confirm-delete").addEventListener("click", () => {
+  if (!pendingDelete.section || !pendingDelete.key) return;
+  remove(ref(db, `${pendingDelete.section}/${pendingDelete.key}`))
+    .then(() => { document.getElementById("delete-confirm-modal").style.display = "none"; });
 });
 
 document.getElementById("cancel-delete").addEventListener("click", () => {
   document.getElementById("delete-confirm-modal").style.display = "none";
 });
 
-// DELETE CONFIRMATION FOR ITEM (CONTENTS) DELETION
-document.getElementById("confirm-delete").addEventListener("click", () => {
-  if (!pendingDelete.section || !pendingDelete.key) return;
-
-  remove(ref(db, `${pendingDelete.section}/${pendingDelete.key}`))
-    .then(() => {
-      document.getElementById("delete-confirm-modal").style.display = "none";
-    })
-    .catch((error) => {
-      console.error("Delete failed:", error);
-    });
-});
-
-// ========== MENU CATEGORY TOGGLE ==========
-// default
-let currentCategory = "main";
-
-document.getElementById("btnMain").addEventListener("click", () => {
-  currentCategory = "main";
-  updateToggleUI();
-  renderMenu();
-});
-
-document.getElementById("btnSide").addEventListener("click", () => {
-  currentCategory = "side";
-  updateToggleUI();
-});
-
+// CATEGORY UTILS
 function getCategoryName(category) {
-  switch (category) {
-    case "main":
-      return "Main Dish";
-    case "side":
-      return "Side Dish";
-    default:
-      return category; // fallback, e.g., "all"
-  }
+  return category === "main" ? "Main Dish" : (category === "side" ? "Side Dish" : category);
+}
+
+// TOGGLE UI LOGIC
+let currentCategory = "main";
+const btnMain = document.getElementById("btnMain");
+const btnSide = document.getElementById("btnSide");
+
+if(btnMain && btnSide) {
+    btnMain.addEventListener("click", () => { currentCategory = "main"; updateToggleUI(); });
+    btnSide.addEventListener("click", () => { currentCategory = "side"; updateToggleUI(); });
 }
 
 function updateToggleUI() {
-  document
-    .querySelectorAll(".toggle-btn")
-    .forEach((btn) => btn.classList.remove("active"));
-
+  document.querySelectorAll(".toggle-btn").forEach((btn) => btn.classList.remove("active"));
   const label = document.getElementById("menuCategoryLabel");
-
-  switch (currentCategory) {
-    case "main":
-      document.getElementById("btnMain").classList.add("active");
-      label.textContent = "Main Dish"; // Friendly name
-      break;
-    case "side":
-      document.getElementById("btnSide").classList.add("active");
-      label.textContent = "Side Dish"; // Friendly name
-      break;
+  if (currentCategory === "main") {
+    btnMain?.classList.add("active");
+    if(label) label.textContent = "Main Dish";
+  } else {
+    btnSide?.classList.add("active");
+    if(label) label.textContent = "Side Dish";
   }
 }
 
-// ========== ABOUT US SECTION ==========
-
-// REFERENCES FOR ABOUT US SECTION
-
-// ========== ABOUT US SECTION ==========
-
+// ABOUT US logic
 const aboutUsRef = ref(db, "aboutUs");
-const aboutUsPreview = document.getElementById("aboutUsPreview");
-
-const saveBtn = document.getElementById("aboutUs-save-btn");
-const cancelBtn = document.getElementById("aboutUs-cancel-btn");
-
-console.log("✅ admin-manage-content.js loaded");
-
-const editAboutUsBtn = document.getElementById("editAboutUsBtn");
 const aboutUsModal = document.getElementById("aboutUsModal");
 const aboutUsContent = document.getElementById("aboutUsContent");
 
-if (!editAboutUsBtn) {
-  console.error("❌ Edit About Us button not found");
-} else {
-  editAboutUsBtn.addEventListener("click", () => {
-    console.log("✏️ Edit About Us clicked");
+document.getElementById("editAboutUsBtn")?.addEventListener("click", async () => {
+    const snapshot = await get(aboutUsRef);
+    aboutUsContent.value = snapshot.exists() ? snapshot.val().content : "";
     aboutUsModal.style.display = "flex";
-  });
-}
-
-// realtime preview
-onValue(aboutUsRef, (snapshot) => {
-  aboutUsPreview.textContent = snapshot.exists() ? snapshot.val().content : "";
 });
 
-// open modal
-editAboutUsBtn.addEventListener("click", async () => {
-  const snapshot = await get(aboutUsRef);
-  aboutUsContent.value = snapshot.exists() ? snapshot.val().content : "";
-  aboutUsModal.style.display = "flex";
+document.getElementById("aboutUs-save-btn")?.addEventListener("click", async () => {
+    await update(aboutUsRef, { content: aboutUsContent.value.trim() });
+    aboutUsModal.style.display = "none";
 });
 
-// save
-saveBtn.addEventListener("click", async () => {
-  const newContent = aboutUsContent.value.trim();
-  if (!newContent) return alert("Please fill in the About Us text.");
-
-  await update(aboutUsRef, { content: newContent });
-  aboutUsModal.style.display = "none";
-});
-
-// cancel
-cancelBtn.addEventListener("click", () => {
-  aboutUsModal.style.display = "none";
-});
-
-// click outside modal
-aboutUsModal.addEventListener("click", (e) => {
-  if (e.target === aboutUsModal) aboutUsModal.style.display = "none";
+document.getElementById("aboutUs-cancel-btn")?.addEventListener("click", () => {
+    aboutUsModal.style.display = "none";
 });
