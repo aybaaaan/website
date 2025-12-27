@@ -370,6 +370,7 @@ proceedBtn.addEventListener("click", async () => {
     );
     return;
   }
+  
 
   if (!currentUser) {
     if (modal) modal.style.display = "none";
