@@ -78,6 +78,21 @@
     height: 18vh;
     width: 18vh;
   }
+
+  .table-filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .table-filters label {
+    margin-bottom: 0.5rem;
+  }
+
+  #dateFrom,
+  #dateTo {
+    margin-left: 0;
+    margin-top: 0.5rem;
+  }
   .orderResult {
     height: auto;
     min-height: 200px;
@@ -99,10 +114,10 @@
     font-size: 40px;
   }
   .chart-controls button {
-    padding: 6px 10px;  /* smaller padding */
-    font-size: 14px;    /* smaller text */
+    padding: 6px 10px; /* smaller padding */
+    font-size: 14px; /* smaller text */
   }
-   #orderModal .modal-content {
+  #orderModal .modal-content {
     width: 90%;
     padding: 20px;
   }
@@ -211,7 +226,7 @@
   .chart-controls button {
     padding: 5px 8px;
     font-size: 12px;
-    flex: 1 1 auto;  /* allow buttons to stretch if needed */
+    flex: 1 1 auto; /* allow buttons to stretch if needed */
   }
   #orderModal .modal-content {
     width: 95%;

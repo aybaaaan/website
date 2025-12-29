@@ -629,6 +629,54 @@ body {
   transform: scale(1.1);
 }
 
+.best-sellers-section {
+  padding: 60px 20px;
+  background: #faf7f2;
+  text-align: center;
+}
+
+.best-sellers-title {
+  font-size: 32px;
+  margin-bottom: 30px;
+  font-weight: 600;
+}
+
+.best-sellers-container {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.best-seller-card {
+  background: #fff;
+  border-radius: 12px;
+  width: 260px;
+  padding: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease;
+}
+
+.best-seller-card:hover {
+  transform: translateY(-5px);
+}
+
+.best-seller-card img {
+  width: 100%;
+  border-radius: 10px;
+  height: 170px;
+  object-fit: cover;
+}
+
+.best-seller-card h3 {
+  margin: 12px 0 6px;
+}
+
+.best-seller-card p {
+  font-size: 14px;
+  color: #666;
+}
+
 /* ======================================================= */
 /* 5. MENU SECTION                                         */
 /* ======================================================= */

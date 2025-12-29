@@ -13,12 +13,13 @@ import {
 const firebaseConfig = {
   apiKey: "AIzaSyC7FLz6RyFhiNok82uPj3hs7Ev8r7UI3Ik",
   authDomain: "mediterranean-in-velvet-10913.firebaseapp.com",
-  databaseURL: "https://mediterranean-in-velvet-10913-default-rtdb.asia-southeast1.firebasedatabase.app",
+  databaseURL:
+    "https://mediterranean-in-velvet-10913-default-rtdb.asia-southeast1.firebasedatabase.app",
   projectId: "mediterranean-in-velvet-10913",
   storageBucket: "mediterranean-in-velvet-10913.firebasestorage.app",
   messagingSenderId: "478608649838",
   appId: "1:478608649838:web:cbe6ed90b718037244c07f",
-  measurementId: "G-T9TT5N8NJX"
+  measurementId: "G-T9TT5N8NJX",
 };
 
 const app = initializeApp(firebaseConfig);
@@ -86,15 +87,21 @@ async function loadOrders() {
     get(ref(db, "OrderHistory")),
   ]);
 
-  const activeOrders = orderSnap.exists() ? Object.values(orderSnap.val()) : [];
-
-  const archivedOrders = historySnap.exists()
-    ? Object.values(historySnap.val())
+  const activeOrders = orderSnap.exists()
+    ? Object.values(orderSnap.val()).map((o) => ({
+        ...o,
+        status: (o.status || "pending").toLowerCase(),
+      }))
     : [];
 
-  // 🔥 MERGE BOTH
-  ordersArray = [...activeOrders, ...archivedOrders];
+  const archivedOrders = historySnap.exists()
+    ? Object.values(historySnap.val()).map((o) => ({
+        ...o,
+        status: (o.status || "delivered").toLowerCase(),
+      }))
+    : [];
 
+  ordersArray = [...activeOrders, ...archivedOrders];
   filteredOrders = [...ordersArray];
   currentPage = 1;
   renderPage();
@@ -168,6 +175,13 @@ function renderPage() {
     <td>${totalAmount.toFixed(2)}</td>
     <td>${order.total ? order.total.toFixed(2) : totalAmount.toFixed(2)}</td>
     <td>${order.payment || "N/A"}</td>
+
+    <td>
+      <span class="status-badge ${order.status}">
+        ${order.status || "pending"}
+      </span>
+    </td>
+
     <td>${formattedDate}</td>
   `;
 
@@ -185,28 +199,34 @@ function renderPage() {
     currentPage === totalPages;
 }
 
-function applyDateFilter() {
+function applyFilters() {
   const fromVal = document.getElementById("dateFrom").value;
   const toVal = document.getElementById("dateTo").value;
+  const statusVal = document.getElementById("statusFilter").value;
 
   filteredOrders = ordersArray.filter((order) => {
     if (!order.orderDate) return false;
 
     const d = new Date(order.orderDate);
-
-    // Normalize order date (LOCAL, date-only)
     const orderDay = new Date(d.getFullYear(), d.getMonth(), d.getDate());
 
+    // FROM date
     if (fromVal) {
       const [fy, fm, fd] = fromVal.split("-").map(Number);
-      const from = new Date(fy, fm - 1, fd); // ✅ LOCAL date
+      const from = new Date(fy, fm - 1, fd);
       if (orderDay < from) return false;
     }
 
+    // TO date
     if (toVal) {
       const [ty, tm, td] = toVal.split("-").map(Number);
-      const to = new Date(ty, tm - 1, td); // ✅ LOCAL date
+      const to = new Date(ty, tm - 1, td);
       if (orderDay > to) return false;
+    }
+
+    // STATUS filter
+    if (statusVal !== "all" && order.status !== statusVal) {
+      return false;
     }
 
     return true;
@@ -216,12 +236,18 @@ function applyDateFilter() {
   renderPage();
 }
 
-document.getElementById("dateFrom").addEventListener("change", applyDateFilter);
-document.getElementById("dateTo").addEventListener("change", applyDateFilter);
+document.getElementById("dateFrom").addEventListener("change", applyFilters);
+document.getElementById("dateTo").addEventListener("change", applyFilters);
+
+document
+  .getElementById("statusFilter")
+  .addEventListener("change", applyFilters);
 
 document.getElementById("resetDateFilter").addEventListener("click", () => {
   document.getElementById("dateFrom").value = "";
   document.getElementById("dateTo").value = "";
+  document.getElementById("statusFilter").value = "all";
+
   filteredOrders = [...ordersArray];
   currentPage = 1;
   renderPage();
@@ -289,26 +315,41 @@ async function getChartData(range, type = "sales") {
     get(ref(db, "OrderHistory")),
   ]);
 
-  const orders = {
-    ...(orderSnap.exists() ? orderSnap.val() : {}),
-    ...(historySnap.exists() ? historySnap.val() : {}),
-  };
+  // 🔥 Normalize ACTIVE orderss
+  const activeOrders = orderSnap.exists()
+    ? Object.values(orderSnap.val()).map((o) => ({
+        ...o,
+        status: (o.status || "pending").toLowerCase(),
+      }))
+    : [];
+
+  // 🔥 Normalize HISTORY orders
+  const historyOrders = historySnap.exists()
+    ? Object.values(historySnap.val()).map((o) => ({
+        ...o,
+        status: (o.status || "delivered").toLowerCase(),
+      }))
+    : [];
+
+  const orders =
+    type === "cancelled"
+      ? historyOrders // cancelled ONLY comes from history
+      : [...activeOrders, ...historyOrders];
 
   const startDate = getStartDate(range);
   const counts = {};
 
-  for (const key in orders) {
-    const order = orders[key];
-    if (!order.orderDate || !order.orders) continue;
+  orders.forEach((order) => {
+    if (!order.orderDate) return;
 
     const dateObj = new Date(order.orderDate);
-    if (dateObj < startDate) continue;
+    if (dateObj < startDate) return;
 
     const label = dateObj.toISOString().split("T")[0];
     if (!counts[label]) counts[label] = 0;
 
     if (type === "sales") {
-      counts[label] += order.orders.reduce(
+      counts[label] += (order.orders || []).reduce(
         (s, i) => s + Number(i.price) * Number(i.qty),
         0
       );
@@ -316,8 +357,12 @@ async function getChartData(range, type = "sales") {
       counts[label] += Number(order.total) || 0;
     } else if (type === "orders") {
       counts[label] += 1;
+    } else if (type === "cancelled") {
+      if (order.status === "cancelled") {
+        counts[label] += 1;
+      }
     }
-  }
+  });
 
   const labels = Object.keys(counts).sort();
   return { labels, data: labels.map((l) => counts[l]) };
@@ -332,6 +377,7 @@ async function renderChart() {
   if (currentType === "sales") datasetLabel = "Sales (₱)";
   else if (currentType === "orders") datasetLabel = "Number of Orders";
   else if (currentType === "revenue") datasetLabel = "Revenue (₱)";
+  else if (currentType === "cancelled") datasetLabel = "Cancelled Orders";
 
   if (chart) {
     chart.data.labels = res.labels;

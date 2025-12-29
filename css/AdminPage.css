@@ -458,6 +458,44 @@ section.active {
   cursor: pointer;
 }
 
+/* Style for the select dropdown */
+#statusFilter {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+  min-width: 120px;
+}
+
+/* Style for date inputs */
+#dateFrom,
+#dateTo {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  font-size: 1rem;
+  margin-left: 0.5rem;
+}
+
+/* Hover effects for better interactivity */
+#statusFilter:hover,
+#dateFrom:hover,
+#dateTo:hover {
+  border-color: #007bff;
+}
+
+/* Focus states for accessibility */
+#statusFilter:focus,
+#dateFrom:focus,
+#dateTo:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
 #btn-logins-today,
 #btn-logins-week,
 #btn-logins-month {
@@ -1423,7 +1461,7 @@ section.active {
 #status-cancel {
   background: #d63422;
   color: #fff;
-  font-weight: 500
+  font-weight: 500;
 }
 
 #status-cancel:hover {
@@ -1975,41 +2013,42 @@ details summary {
   background-color: #e0d9d9;
 }
 
-
 /* Base styles for status buttons */
-.btn-enable, .btn-disable {
-    padding: 6px 12px;
-    border: none;
-    border-radius: 4px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease-in-out; /* Smooth transition for hover */
-    color: white;
+.btn-enable,
+.btn-disable {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out; /* Smooth transition for hover */
+  color: white;
 }
 
 /* Enable Button (Green) */
 .btn-enable {
-    background-color: #27ae60;
+  background-color: #27ae60;
 }
 
 .btn-enable:hover {
-    background-color: #2ecc71; /* Lighter green on hover */
-    transform: translateY(-2px);
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  background-color: #2ecc71; /* Lighter green on hover */
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 /* Disable Button (Orange) */
 .btn-disable {
-    background-color: #e67e22;
+  background-color: #e67e22;
 }
 
 .btn-disable:hover {
-    background-color: #f39c12; /* Lighter orange on hover */
-    transform: translateY(-2px);
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  background-color: #f39c12; /* Lighter orange on hover */
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 /* Click effect for both */
-.btn-enable:active, .btn-disable:active {
-    transform: translateY(0);
+.btn-enable:active,
+.btn-disable:active {
+  transform: translateY(0);
 }

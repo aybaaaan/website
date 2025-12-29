@@ -20,12 +20,13 @@ import {
 const firebaseConfig = {
   apiKey: "AIzaSyC7FLz6RyFhiNok82uPj3hs7Ev8r7UI3Ik",
   authDomain: "mediterranean-in-velvet-10913.firebaseapp.com",
-  databaseURL: "https://mediterranean-in-velvet-10913-default-rtdb.asia-southeast1.firebasedatabase.app",
+  databaseURL:
+    "https://mediterranean-in-velvet-10913-default-rtdb.asia-southeast1.firebasedatabase.app",
   projectId: "mediterranean-in-velvet-10913",
   storageBucket: "mediterranean-in-velvet-10913.firebasestorage.app",
   messagingSenderId: "478608649838",
   appId: "1:478608649838:web:cbe6ed90b718037244c07f",
-  measurementId: "G-T9TT5N8NJX"
+  measurementId: "G-T9TT5N8NJX",
 };
 
 const ordersPerPageCards = 10;
@@ -39,6 +40,13 @@ const dbFirestore = getFirestore(app);
 
 const ordersRef = ref(db, "Order");
 const announcementRef = ref(db, "Announcements");
+
+const STATUS_FLOW = {
+  PENDING: ["ACCEPTED", "CANCELLED"],
+  ACCEPTED: ["PREPARING", "FOR DELIVERY", "DELIVERED"],
+  PREPARING: ["FOR DELIVERY", "DELIVERED"],
+  "FOR DELIVERY": ["DELIVERED"],
+};
 
 const ordersContainer = document.getElementById("ordersContainer");
 // RENDER ORDERS
@@ -203,14 +211,7 @@ function renderOrdersPage() {
           }">Update Status:</label>
           <select class="order-status-dropdown" id="status-dropdown-${
             data.key
-          }">
-            <option value="ACCEPTED">Accepted</option>
-            <option value="PREPARING">Preparing</option>
-            <option value="FOR DELIVERY">For Delivery</option>
-            <option value="CANCELLED">Cancelled</option>
-            <option value="DELIVERED">Delivered</option>
-            <option value="PENDING">Pending</option>
-          </select>
+          }"></select>
         </div>
     `;
 
@@ -226,6 +227,28 @@ function renderOrdersPage() {
     // ============ STATUS DROPDOWN ============
     const statusDropdown = row.querySelector(".order-status-dropdown");
     const deleteBtn = row.querySelector(".delete-order-btn");
+
+    const currentStatus = (data.status || "PENDING").toUpperCase();
+
+    statusDropdown.innerHTML = "";
+
+    // Show current status (disabled)
+    const currentOption = document.createElement("option");
+    currentOption.value = currentStatus;
+    currentOption.textContent = currentStatus;
+    currentOption.disabled = true;
+    currentOption.selected = true;
+    statusDropdown.appendChild(currentOption);
+
+    // Allowed next steps
+    const nextStatuses = STATUS_FLOW[currentStatus] || [];
+
+    nextStatuses.forEach((status) => {
+      const option = document.createElement("option");
+      option.value = status;
+      option.textContent = status;
+      statusDropdown.appendChild(option);
+    });
 
     statusDropdown.value = (data.status || "PENDING").toUpperCase();
 
@@ -282,21 +305,33 @@ function renderOrdersPage() {
         }
       };
       if (newStatus.toUpperCase() === "CANCELLED") {
-        // Open cancel reason modal
-        pendingCancelOrder = { statusDropdown, previousStatus, orderKey, data };
-        cancelReasonText.value = ""; // clear previous input
+        pendingCancelOrder = {
+          statusDropdown,
+          previousStatus: previousStatus.toUpperCase(),
+          orderKey,
+          data,
+        };
+        // IMPORTANT: revert immediately
+        statusDropdown.value = previousStatus.toUpperCase();
+        setTextColor();
+
+        cancelReasonText.value = "";
         cancelReasonModal.style.display = "flex";
         return;
       }
 
-      showStatusConfirm(getMessage(newStatus), (confirmed) => {
-        if (!confirmed) {
-          statusDropdown.value = previousStatus.toUpperCase();
-          setTextColor();
-          return;
-        }
+      // Revert immediately before confirmation
+      statusDropdown.value = previousStatus.toUpperCase();
+      setTextColor();
 
-        updateOrderStatus(newStatus, orderKey, userId);
+      showStatusConfirm(getMessage(newStatus), (confirmed) => {
+        if (!confirmed) return;
+
+        // Only update DB if confirmed
+        update(ref(db, `Order/${orderKey}`), {
+          status: newStatus.toUpperCase(),
+          statusTimestamp: Date.now(),
+        });
       });
 
       showStatusConfirm(getMessage(newStatus), (confirmed) => {
