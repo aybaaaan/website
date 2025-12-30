@@ -1534,3 +1534,36 @@ body {
   border-radius: 4px;
   margin-left: 8px;
 }
+.best-seller-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: linear-gradient(
+    120deg,
+    #f0b113 30%,
+    #ffd86b 50%,
+    #f0b113 70%
+  );
+  color: #4c3011;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 6px 12px;
+  border-radius: 20px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+  z-index: 5;
+
+  background-size: 200% 100%;
+  animation: bestSellerShine 2.8s infinite ease-in-out;
+}
+@keyframes bestSellerShine {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+

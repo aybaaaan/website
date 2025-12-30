@@ -297,8 +297,43 @@ const firebaseConfig = {
   measurementId: "G-T9TT5N8NJX",
 };
 
+// ===================== BEST SELLER LOGIC =====================
+let bestSellerMap = {};        // itemName -> total qty sold
+let currentCategory = "main"; // track current menu tab
+
+
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
+
+const orderHistoryRef = ref(db, "OrderHistory");
+
+// Listen for changes in order history to update best-seller data
+onValue(orderHistoryRef, (snapshot) => {
+  bestSellerMap = {};
+
+  if (!snapshot.exists()) return;
+
+  snapshot.forEach((child) => {
+    const order = child.val();
+
+    // ✅ COUNT DELIVERED ONLY
+    if (order.status !== "DELIVERED") return;
+
+    if (Array.isArray(order.orders)) {
+      order.orders.forEach((item) => {
+        if (!item.name || !item.qty) return;
+
+        bestSellerMap[item.name] =
+          (bestSellerMap[item.name] || 0) + item.qty;
+      });
+    }
+  });
+
+  // Re-render menu to apply badges
+  renderMenuByCategory(currentCategory);
+});
+
+
 const announcementRef = ref(db, "Announcements");
 
 let currentSlide = 0;
@@ -406,9 +441,12 @@ function renderMenuByCategory(category) {
       ? allMenuItems
       : allMenuItems.filter((item) => item.category === category);
 
+  // Get top best sellers
+  const topBestSellers = getTopBestSellers();
   filteredItems.forEach((item) => {
     // 1. Check kung "disabled" ang status mula sa Firebase
     const isOutOfStock = item.status === "disabled";
+    const isBestSeller = topBestSellers.includes(item.name);
 
     const card = document.createElement("div");
     card.className = "menu-card";
@@ -424,6 +462,10 @@ function renderMenuByCategory(category) {
         <img src="${item.url}" alt="${item.name}" style="${
       isOutOfStock ? "filter: sepia(60%) contrast(80%) grayscale(40%);" : ""
     }">
+    
+    ${isBestSeller ? `
+    <div class="best-seller-badge">⭐ Best Seller</div>
+  ` : ""}
         
         ${
           isOutOfStock
@@ -488,14 +530,27 @@ function renderMenuByCategory(category) {
     menuContainer.appendChild(card);
   });
 }
+
+//getting top best sellers
+function getTopBestSellers(limit = 3) {
+  return Object.entries(bestSellerMap)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, limit)
+    .map(([name]) => name);
+}
+
+
 // Event listeners for toggle buttons
 document.getElementById("btnMain").addEventListener("click", () => {
+  currentCategory = "main";
   renderMenuByCategory("main");
 });
 
 document.getElementById("btnSide").addEventListener("click", () => {
+  currentCategory = "side";
   renderMenuByCategory("side");
 });
+
 
 // ===================== NEW: ANNOUNCEMENT LOGIC FUNCTIONS =====================
 
